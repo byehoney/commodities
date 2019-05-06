@@ -5,6 +5,8 @@ import store from './store/index'
 import filters from './filters/index'
 import wechat from '@/common/wechat/index'
 import DrawerLayout from 'vue-drawer-layout'
+import AwesomePicker from 'vue-awesome-picker';
+Vue.use(AwesomePicker);
 Vue.use(DrawerLayout)
 import { Tabbar, TabItem ,TabContainer, TabContainerItem} from 'mint-ui';
 Vue.component(Tabbar.name, Tabbar);
