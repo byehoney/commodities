@@ -15,6 +15,45 @@ const router = new Router({
             }
         },
         {
+            path: '/choose',
+            name: 'choose',
+            // route level code-splitting
+            // this generates a separate chunk (about.[hash].js) for this route
+            // which is lazy-loaded when the route is visited.
+            component: () =>
+                    import(/* webpackChunkName: "choose" */ './views/Choose.vue'),
+            meta: {
+                auth: false,
+                keepAlive: true
+            }
+        },
+        {
+            path: '/shopcar',
+            name: 'shopcar',
+            // route level code-splitting
+            // this generates a separate chunk (about.[hash].js) for this route
+            // which is lazy-loaded when the route is visited.
+            component: () =>
+                    import(/* webpackChunkName: "shopcar" */ './views/ShopCar.vue'),
+            meta: {
+                auth: false,
+                keepAlive: true
+            }
+        },
+        {
+            path: '/my',
+            name: 'my',
+            // route level code-splitting
+            // this generates a separate chunk (about.[hash].js) for this route
+            // which is lazy-loaded when the route is visited.
+            component: () =>
+                    import(/* webpackChunkName: "my" */ './views/My.vue'),
+            meta: {
+                auth: false,
+                keepAlive: true
+            }
+        },
+        {
             path: '/about',
             name: 'about',
             // route level code-splitting
@@ -50,7 +89,6 @@ const router = new Router({
 
 // 全局路由钩子函数 对全局有效
 router.beforeEach((to, from, next) => {
-    console.log(to)
     let auth = to.meta.auth
     let token = store.getters['login/token'];
 

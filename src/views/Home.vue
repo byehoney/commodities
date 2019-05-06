@@ -1,44 +1,18 @@
 <template>
-  <div class="home">
-    <div id="nav">
-      <div>扫一扫</div>
-      <div>
-        <input type="text">
-      </div>
-      <div>分享</div>
-    </div>
-    <mt-tabbar v-model="selected">
-      <mt-tab-item id="外卖" route="/">
-        <img slot="icon" src="../assets/logo.png">
-        首页
-      </mt-tab-item>
-      <mt-tab-item id="订单" routw="/about">
-        <img slot="icon" src="../assets/pwd_ico.png">
-        选品
-      </mt-tab-item>
-      <mt-tab-item id="发现" route="/login">
-        <img slot="icon" src="../assets/logo.png">
-        购物车
-      </mt-tab-item>
-      <mt-tab-item id="我的">
-        <img slot="icon" src="../assets/phone_ico.png">
-        我的
-      </mt-tab-item>
-    </mt-tabbar>
-  </div>
+  <DrawerLeft />
 </template>
-
 <script>
 // @ is an alias to /src
+import DrawerLeft from '@/components/DrawerLeft'
 export default {
   name: "home",
   data(){
-      return{
-          selected:""
-      }
+    return{
+      
+    }
   },
   components: {
-    
+    DrawerLeft
   },
   async created() {
     // try {

@@ -7,16 +7,20 @@
       <div class="text">This is drawer</div>
     </div>
     <div class="content" slot="content">
-      <div class="text">This is content.</div>
+      <TabBarBottom/>
     </div>
   </vue-drawer-layout>
 </template>
 <script>
+import TabBarBottom from '@/components/TabBarBottom'
 export default {
     data(){
         return{
-
+            
         }
+    },
+    components:{
+        TabBarBottom
     },
     methods:{
         handleMaskClick(){

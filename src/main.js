@@ -6,7 +6,7 @@ import filters from './filters/index'
 import wechat from '@/common/wechat/index'
 import DrawerLayout from 'vue-drawer-layout'
 Vue.use(DrawerLayout)
-import { Tabbar, TabItem } from 'mint-ui';
+import { Tabbar, TabItem ,TabContainer, TabContainerItem} from 'mint-ui';
 Vue.component(Tabbar.name, Tabbar);
 Vue.component(TabItem.name, TabItem);
 Vue.use(wechat);

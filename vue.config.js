@@ -123,7 +123,7 @@ module.exports = {
             }
         }
     },
-    lintOnSave: true, // default false
+    lintOnSave: false, // default false
     // 打包时不生成.map文件
     productionSourceMap: false,
     devServer: {
