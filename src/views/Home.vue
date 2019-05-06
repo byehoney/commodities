@@ -8,15 +8,15 @@
       <div>分享</div>
     </div>
     <mt-tabbar v-model="selected">
-      <mt-tab-item id="外卖">
+      <mt-tab-item id="外卖" route="/">
         <img slot="icon" src="../assets/logo.png">
         首页
       </mt-tab-item>
-      <mt-tab-item id="订单">
+      <mt-tab-item id="订单" routw="/about">
         <img slot="icon" src="../assets/pwd_ico.png">
         选品
       </mt-tab-item>
-      <mt-tab-item id="发现">
+      <mt-tab-item id="发现" route="/login">
         <img slot="icon" src="../assets/logo.png">
         购物车
       </mt-tab-item>
