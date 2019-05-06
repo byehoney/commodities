@@ -1,14 +1,14 @@
 <template>
     <mt-tabbar v-model="selected" fixed>
-        <mt-tab-item id="home" route="/">
+        <mt-tab-item id="home">
             <img slot="icon" :src="selected==='home'?tabs[0][1]:tabs[0][0]">
             首页
         </mt-tab-item>
-        <mt-tab-item id="choose" routw="/about">
+        <mt-tab-item id="choose">
             <img slot="icon" :src="selected==='choose'?tabs[1][1]:tabs[1][0]">
             选品
         </mt-tab-item>
-        <mt-tab-item id="shopcar" route="/login">
+        <mt-tab-item id="shopcar">
             <img slot="icon" :src="selected==='shopcar'?tabs[2][1]:tabs[2][0]">
             购物车
         </mt-tab-item>
@@ -22,14 +22,20 @@
 export default {
     data(){
         return{
+            selected:this.curTab,
             tabs:[
                 [require('../images/home_grey.png'),require('../images/home_act.png')],
                 [require('../images/top_grey.png'),require('../images/top_act.png')],
                 [require('../images/earn_grey.png'),require('../images/earn_act.png')],
                 [require('../images/my_grey.png'),require('../images/my_act.png')]
             ],
-            selected:'home'
         }
+    },
+    props:{
+        curTab: String,
+    },
+    activated(){
+        this.selected = this.curTab;
     },
     created(){
         
@@ -39,9 +45,10 @@ export default {
     },
     watch:{
         selected(newValue,oldValue){
+            console.log(this)
             switch(newValue){
-                case 'home':
-                    this.$router.push('/home');
+                case 'home':   
+                    this.$router.push('/');
                 break;
                 case 'choose':
                     this.$router.push('/choose');
@@ -52,9 +59,9 @@ export default {
                 case 'my':
                     this.$router.push('/my');
                 break;
-
+                default:
+                    this.$router.push('/');
             }
-            console.log(newValue,oldValue)
         }
     }
 }

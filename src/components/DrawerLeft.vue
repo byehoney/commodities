@@ -7,7 +7,7 @@
       <div class="text">This is drawer</div>
     </div>
     <div class="content" slot="content">
-      <TabBarBottom/>
+      <TabBarBottom curTab="home" />
     </div>
   </vue-drawer-layout>
 </template>

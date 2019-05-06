@@ -6,9 +6,18 @@ import filters from './filters/index'
 import wechat from '@/common/wechat/index'
 import DrawerLayout from 'vue-drawer-layout'
 Vue.use(DrawerLayout)
-import { Tabbar, TabItem ,TabContainer, TabContainerItem} from 'mint-ui';
+import { 
+    Tabbar, 
+    TabItem ,
+    Picker,
+    Cell,
+    Popup 
+} from 'mint-ui';
 Vue.component(Tabbar.name, Tabbar);
 Vue.component(TabItem.name, TabItem);
+Vue.component(Picker.name, Picker);
+Vue.component(Cell.name, Cell);
+Vue.component(Popup.name, Popup);
 Vue.use(wechat);
 // 注入全局过滤器
 Object.keys(filters).forEach(item => {
