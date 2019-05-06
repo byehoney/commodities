@@ -1,28 +1,52 @@
 <template>
-    <div class="home">
-        <DrawerLeft />
+  <div class="home">
+    <div id="nav">
+      <div>扫一扫</div>
+      <div>
+        <input type="text">
+      </div>
+      <div>分享</div>
     </div>
+    <mt-tabbar v-model="selected">
+      <mt-tab-item id="外卖">
+        <img slot="icon" src="../assets/logo.png">
+        首页
+      </mt-tab-item>
+      <mt-tab-item id="订单">
+        <img slot="icon" src="../assets/logo.png">
+        选品
+      </mt-tab-item>
+      <mt-tab-item id="发现">
+        <img slot="icon" src="../assets/logo.png">
+        购物车
+      </mt-tab-item>
+      <mt-tab-item id="我的">
+        <img slot="icon" src="../assets/phone_ico.png">
+        我的
+      </mt-tab-item>
+    </mt-tabbar>
+  </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue';
-import DrawerLeft from '@/components/DrawerLeft.vue';
-import { getIndex } from 'api/index';
 export default {
-    name: 'home',
-    components: {
-        HelloWorld,
-        DrawerLeft
-    },
-    async created() {
-        try {
-            await getIndex({ pageSiza: 100, num: 10 });
-        } catch (err) {
-        }
-    },
-    mounted() {},
-
-    methods: {}
+  name: "home",
+  data(){
+      return{
+          selected:""
+      }
+  },
+  components: {
+    
+  },
+  async created() {
+    // try {
+    //     await getIndex({ pageSiza: 100, num: 10 });
+    // } catch (err) {
+    // }
+  },
+  mounted() {},
+  methods: {}
 };
 </script>
