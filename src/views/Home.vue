@@ -13,7 +13,7 @@
         首页
       </mt-tab-item>
       <mt-tab-item id="订单">
-        <img slot="icon" src="../assets/logo.png">
+        <img slot="icon" src="../assets/pwd_ico.png">
         选品
       </mt-tab-item>
       <mt-tab-item id="发现">
