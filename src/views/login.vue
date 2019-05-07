@@ -13,6 +13,8 @@
         </div>
         <div class="btnBox">
         <button @click="loginBtn" class="loginBtn">登录</button>
+        <!-- 未来的用户注册的角色选择功能 -->
+        <CheckUser></CheckUser>
 
         </div>
     </section>
@@ -26,6 +28,7 @@ import {
 import {
     Toast
 } from 'mint-ui';
+import CheckUser from "../components/CheckUser"
 export default {
     name: 'login',
     data() {
@@ -34,7 +37,7 @@ export default {
             password: ''
         };
     },
-    components: {},
+    components: {CheckUser},
     created() {},
     mounted() {},
     methods: {
