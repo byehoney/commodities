@@ -4,8 +4,10 @@ import router from './router'
 import store from './store/index'
 import filters from './filters/index'
 import wechat from '@/common/wechat/index'
+import VeLine from 'v-charts/lib/line.common'
 import DrawerLayout from 'vue-drawer-layout'
 import AwesomePicker from 'vue-awesome-picker';
+Vue.component(VeLine.name, VeLine)
 Vue.use(AwesomePicker);
 Vue.use(DrawerLayout)
 import { 
