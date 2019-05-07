@@ -45,7 +45,6 @@ export default {
     },
     watch:{
         selected(newValue,oldValue){
-            console.log(this)
             switch(newValue){
                 case 'home':   
                     this.$router.push('/');
