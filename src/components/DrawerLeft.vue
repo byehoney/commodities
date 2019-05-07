@@ -7,6 +7,9 @@
       <div class="text">This is drawer</div>
     </div>
     <div class="content" slot="content">
+      <div class="main">
+        <router-link to="/search">搜索</router-link>
+      </div>
       <TabBarBottom curTab="home" />
     </div>
   </vue-drawer-layout>
