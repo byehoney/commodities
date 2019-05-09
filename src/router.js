@@ -11,6 +11,7 @@ const router = new Router({
             name: 'home',
             component: Home,
             meta: {
+                title:'首页',
                 auth: false, // 是否需要登录
                 keepAlive: true // 是否缓存组件
             }
@@ -105,7 +106,9 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
     let auth = to.meta.auth
     let token = store.getters['login/token'];
-
+    if (to.meta.title) {
+        document.title = to.meta.title;
+    }
     if (auth) { // 需要登录
         if (token) {
             next()
