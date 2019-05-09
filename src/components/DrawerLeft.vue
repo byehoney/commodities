@@ -8,7 +8,7 @@
     </div>
     <div class="content" slot="content">
       <div class="main">
-        <router-link to="/search">搜索</router-link>
+        <router-link to="/search"></router-link>
       </div>
       <TabBarBottom curTab="home" />
     </div>
