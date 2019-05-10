@@ -16,8 +16,10 @@ import {
     Picker,
     Cell,
     Popup,
-    Button
+    Button,
+    InfiniteScroll
 } from 'mint-ui';
+Vue.use(InfiniteScroll);
 Vue.component(Tabbar.name, Tabbar);
 Vue.component(TabItem.name, TabItem);
 Vue.component(Picker.name, Picker);
