@@ -9,15 +9,6 @@ import DrawerLayout from 'vue-drawer-layout'
 import AwesomePicker from 'vue-awesome-picker';
 Vue.use(AwesomePicker);
 Vue.use(DrawerLayout)
-import { 
-    Tabbar, 
-    TabItem ,
-    Picker,
-    Cell,
-    Popup,
-    Button,
-    
-} from 'mint-ui';
 
 import { Tabbar, TabItem ,Picker,Cell,Popup,Button,InfiniteScroll,Swipe, SwipeItem} from 'mint-ui';
 Vue.use(InfiniteScroll);
