@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
-import List from './views/List.vue'
 import store from 'store/index'
 Vue.use(Router)
 const router = new Router({
@@ -22,6 +21,11 @@ const router = new Router({
             name: "list",
             component: () =>
                 import(/* webpackChunkName: "choose" */ './views/List.vue')
+        }, {
+            path: "/detail",
+            name: "detail",
+            component: () =>
+                import(/* webpackChunkName: "choose" */ './views/Detail.vue')
         },
         {
             path: '/choose',
