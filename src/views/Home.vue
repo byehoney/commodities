@@ -1,17 +1,7 @@
 <template>
   <div >
     <!-- 烟花头开始 -->
-    <div class="header">
-      <div class="header_logo">
-        <img src="../images/home/logo.png">
-      </div>
-      <div class="header_input">
-        <input type="text" placeholder="请输入烟花名称" value>
-      </div>
-      <div class="header_search">
-        <img src="../images/home/sousuo.png">
-      </div>
-    </div>
+    <LocalHeader/>
     <!-- 烟花头结束 -->
     <!-- 轮播图 -->
     <div class="loop_pic">
@@ -86,6 +76,7 @@
 // @ is an alias to /src
 import DrawerLeft from "@/components/DrawerLeft";
 import TabBarBottom from "@/components/TabBarBottom"
+import LocalHeader from "@/components/Header"
 export default {
   name: "home",
   data() {
@@ -93,7 +84,8 @@ export default {
   },
   components: {
     DrawerLeft,
-    TabBarBottom
+    TabBarBottom,
+    LocalHeader
   },
   async created() {
     // try {

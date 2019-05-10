@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
+import List from './views/List.vue'
 import store from 'store/index'
 Vue.use(Router)
 const router = new Router({
@@ -11,10 +12,16 @@ const router = new Router({
             name: 'home',
             component: Home,
             meta: {
-                title:'首页',
+                title: '首页',
                 auth: false, // 是否需要登录
                 keepAlive: true // 是否缓存组件
             }
+        }, {
+
+            path: "/list",
+            name: "list",
+            component: () =>
+                import(/* webpackChunkName: "choose" */ './views/List.vue')
         },
         {
             path: '/choose',
@@ -23,7 +30,7 @@ const router = new Router({
             // this generates a separate chunk (about.[hash].js) for this route
             // which is lazy-loaded when the route is visited.
             component: () =>
-                    import(/* webpackChunkName: "choose" */ './views/Choose.vue'),
+                import(/* webpackChunkName: "choose" */ './views/Choose.vue'),
             meta: {
                 auth: false,
                 keepAlive: true
@@ -36,7 +43,7 @@ const router = new Router({
             // this generates a separate chunk (about.[hash].js) for this route
             // which is lazy-loaded when the route is visited.
             component: () =>
-                    import(/* webpackChunkName: "shopcar" */ './views/ShopCar.vue'),
+                import(/* webpackChunkName: "shopcar" */ './views/ShopCar.vue'),
             meta: {
                 auth: false,
                 keepAlive: true
@@ -49,7 +56,7 @@ const router = new Router({
             // this generates a separate chunk (about.[hash].js) for this route
             // which is lazy-loaded when the route is visited.
             component: () =>
-                    import(/* webpackChunkName: "my" */ './views/My.vue'),
+                import(/* webpackChunkName: "my" */ './views/My.vue'),
             meta: {
                 auth: false,
                 keepAlive: true
@@ -62,7 +69,7 @@ const router = new Router({
             // this generates a separate chunk (about.[hash].js) for this route
             // which is lazy-loaded when the route is visited.
             component: () =>
-                    import(/* webpackChunkName: "search" */ './views/Search.vue'),
+                import(/* webpackChunkName: "search" */ './views/Search.vue'),
             meta: {
                 auth: false,
                 keepAlive: true
@@ -75,7 +82,7 @@ const router = new Router({
             // this generates a separate chunk (about.[hash].js) for this route
             // which is lazy-loaded when the route is visited.
             component: () =>
-                    import(/* webpackChunkName: "about" */ './views/About.vue'),
+                import(/* webpackChunkName: "about" */ './views/About.vue'),
             meta: {
                 auth: true,
                 keepAlive: true
@@ -85,7 +92,7 @@ const router = new Router({
             path: '/login',
             name: 'login',
             component: () =>
-                    import(/* webpackChunkName: "login" */ './views/login.vue'),
+                import(/* webpackChunkName: "login" */ './views/login.vue'),
             meta: {
                 auth: false,
                 keepAlive: true
