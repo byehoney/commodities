@@ -10,12 +10,12 @@
       <div class="main">
         <router-link to="/search"></router-link>
       </div>
-      <TabBarBottom curTab="home" />
+      <!-- <TabBarBottom curTab="home" /> -->
     </div>
   </vue-drawer-layout>
 </template>
 <script>
-import TabBarBottom from '@/components/TabBarBottom'
+// import TabBarBottom from '@/components/TabBarBottom'
 export default {
     data(){
         return{
@@ -23,7 +23,7 @@ export default {
         }
     },
     components:{
-        TabBarBottom
+        // TabBarBottom
     },
     methods:{
         handleMaskClick(){

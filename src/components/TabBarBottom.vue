@@ -1,5 +1,5 @@
 <template>
-    <mt-tabbar v-model="selected" fixed>
+    <mt-tabbar v-model="selected" fixed class="bar">
         <mt-tab-item id="home">
             <img slot="icon" :src="selected==='home'?tabs[0][1]:tabs[0][0]">
             首页
@@ -24,10 +24,10 @@ export default {
         return{
             selected:this.curTab,
             tabs:[
-                [require('../images/home_grey.png'),require('../images/home_act.png')],
-                [require('../images/top_grey.png'),require('../images/top_act.png')],
-                [require('../images/earn_grey.png'),require('../images/earn_act.png')],
-                [require('../images/my_grey.png'),require('../images/my_act.png')]
+                [require('../images/home/shouye.png'),require('../images/home/shouye.png')],
+                [require('../images/home/liebiao.png'),require('../images/home/liebiao.png')],
+                [require('../images/home/shop.png'),require('../images/home/shop.png')],
+                [require('../images/home/my.png'),require('../images/home/my.png')]
             ],
         }
     },
@@ -69,5 +69,10 @@ export default {
    .mint-tabbar>.mint-tab-item.is-selected {
         background-color: #eaeaea;
         color: green;
+    }
+    .bar{
+        height: 98px;
+        background: #cc5145;
+        color:#fff
     }
 </style>
