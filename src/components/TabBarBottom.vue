@@ -1,5 +1,5 @@
 <template>
-    <mt-tabbar v-model="selected" fixed class="bar">
+    <mt-tabbar v-model="selected" fixed class="bar mybar">
         <mt-tab-item id="home">
             <img slot="icon" :src="selected==='home'?tabs[0][1]:tabs[0][0]">
             首页
@@ -24,10 +24,10 @@ export default {
         return{
             selected:this.curTab,
             tabs:[
-                [require('../images/home/shouye.png'),require('../images/home/shouye.png')],
-                [require('../images/home/liebiao.png'),require('../images/home/liebiao.png')],
-                [require('../images/home/shop.png'),require('../images/home/shop.png')],
-                [require('../images/home/my.png'),require('../images/home/my.png')]
+                [require('../images/home_sel.png'),require('../images/home_grey.png')],
+                [require('../images/choose_sel.png'),require('../images/choose_grey.png')],
+                [require('../images/shopcar_sel.png'),require('../images/shopcar_grey.png')],
+                [require('../images/my_sel.png'),require('../images/my_grey.png')]
             ],
         }
     },
@@ -67,12 +67,31 @@ export default {
 </script>
 <style scoped lang="scss">
    .mint-tabbar>.mint-tab-item.is-selected {
-        background-color: #eaeaea;
-        color: green;
+        background:linear-gradient(182deg,rgba(245,81,81,0.89) 0%,rgba(195,41,24,1) 100%);
+        color:#fff;
     }
     .bar{
         height: 98px;
-        background: #cc5145;
-        color:#fff
+        background:linear-gradient(182deg,rgba(245,81,81,0.89) 0%,rgba(195,41,24,1) 100%);
+        color:#fff;
+        font-size:22px;
+        font-family:'MicrosoftYaHei';
+        color:rgba(255,255,255,1);
+        line-height:29px;
+        letter-spacing:2px;
+    }
+    .mint-tab-item{
+        padding: 21px 0 16px;
+    }
+    .mint-tab-item-icon {
+        width: 100%;
+        height: 100%;
+        margin: 0 auto 10px;
+        display: flex;
+        justify-content: center;
+    }
+    .mint-tab-item-icon>*{
+        width: 29px!important;
+        height: 28px!important;
     }
 </style>

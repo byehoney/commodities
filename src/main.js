@@ -8,6 +8,7 @@ import VeLine from 'v-charts/lib/line.common'
 import DrawerLayout from 'vue-drawer-layout'
 import AwesomePicker from 'vue-awesome-picker';
 import "normalize.css"
+import "@/style/reset.scss"
 Vue.use(AwesomePicker);
 Vue.use(DrawerLayout)
 
