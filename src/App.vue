@@ -10,4 +10,7 @@
 <style lang="scss">
 @import "./node_modules/normalize.css/normalize";
 @import "style/common.scss";
+#app{
+    background: #e5e5e5
+}
 </style>
