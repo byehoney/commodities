@@ -9,23 +9,34 @@
     </div>
     <div class="detail_content">
       <div class="detail_content_one">
-        <div class="detail_content_title">星星闪耀</div>
-        <div class="detail_content_tag">
-          <span>
-            <img src="../images/detail_xing.png">
-          </span>
-          <span>
-            <img src="../images/detail_sale.png">
-          </span>
-        </div>
-        <div class="detail_content_price">
+        <div class="detail_content_one_left">
           <ul>
-            <li>原价：4590</li>
-            <li>¥3200</li>
+            <li>$50</li>
+            <li>
+              <p>$50</p>
+              <p>仅剩50件</p>
+            </li>
+            <li>限购999件</li>
+          </ul>
+        </div>
+        <div class="detail_content_one_right">
+          <ul>
+            <li>
+              <span>
+                <img src="../images/clock.png">
+              </span>
+              <span>限时秒杀</span>
+            </li>
+            <li>
+              <span>10</span>:
+              <span>10</span>:
+              <span>10</span>
+            </li>
           </ul>
         </div>
       </div>
       <div class="detail_content_two">
+        <div class="detail_content_title">星星闪耀</div>
         <div class="detail_content_two_left">
           <ul>
             <li>
@@ -120,9 +131,8 @@
             <span>单品合集：</span>
             <span>¥3200</span>
           </div>
-         
         </div>
-         <div class="detail_popup_num_shop">立即购买</div>
+        <div class="detail_popup_num_shop">立即购买</div>
       </mt-popup>
     </div>
   </div>
@@ -205,24 +215,82 @@ a {
   background: #fff;
   padding: 24px 46px;
 }
+.detail_content_one {
+  min-height: 117px;
+  background: #c32918;
+  padding: 0;
+}
+.detail_content_one_left {
+  width: 480px;
+  float: left;
+}
+.detail_content_one_left ul li {
+  width: 110px;
+  float: left;
+  font-size: 22px;
+  margin-left: 46px;
+  color: #fff;
+}
+.detail_content_one_left ul li:nth-of-type(1) {
+  font-size: 50px;
+  margin-top: 30px;
+}
+.detail_content_one_left ul li:nth-of-type(2) {
+  margin-top: 15px;
+}
+.detail_content_one_left ul li:nth-of-type(2) p {
+  line-height: 45px;
+}
+.detail_content_one_left ul li:nth-of-type(3) {
+  margin-top: 45px;
+  width: 120px;
+}
+.detail_content_one_right {
+  width: 260px;
+  min-height: 117px;
+  float: right;
+  background: url("../images/detail_flash.png") no-repeat top;
+  background-size: 100%;
+  line-height: 0;
+}
+.detail_content_one_right ul li {
+  margin-left: 60px;
+  font-size: 30px;
+  color: #fff;
+  margin-top: 20px;
+}
+.detail_content_one_right span {
+  display: inline-block;
+  font-size: 0.3rem
+}
+.detail_content_one_right ul li span:nth-of-type(1) {
+  width: 26px;
+  height: 26px;
+  margin-right: 10px;
+  font-size: 40px;
+}
+.detail_content_one_right span img {
+  width: 100%;
+  vertical-align: middle;
+  /* margin-right:10px; */
+}
+.detail_content_one_right ul li:nth-of-type(2) {
+  margin-left: 80px;
+}
+.detail_content_one_right ul li:nth-of-type(2) span {
+  display: inline-block;
+  width: 33px;
+  height: 33px;
+  line-height: 33px;
+  text-align: center;
+  font-size: 22px;
+  background: #db9d53;
+}
+
 .detail_content_title {
   font-size: 34px;
   color: #333;
-}
-.detail_content_tag {
-  height: 43px;
-  line-height: 43px;
-  margin-bottom: 20px;
-}
-.detail_content_tag span {
-  display: inline-block;
-  width: 60px;
-  height: 30px;
-  margin-right: 10px;
-}
-.detail_content_tag span img {
-  width: 100%;
-  vertical-align: top;
+  margin-bottom: 27px;
 }
 .detail_content_price {
   min-height: 61px;
@@ -377,7 +445,6 @@ span {
   border-bottom: 3px dashed #ccc;
   line-height: 88px;
   margin-bottom: 24px;
-  
 }
 .detail_popup_num_shop {
   position: fixed;
@@ -387,6 +454,6 @@ span {
   color: #fff;
   background: #c32918;
   width: 750px;
-  font-size:30px
+  font-size: 30px;
 }
 </style>

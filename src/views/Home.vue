@@ -60,7 +60,7 @@
         </div>
       </div>
     </div>
-    <!-- 精品推荐 -->
+    <!-- 限时秒杀 -->
     <div class="special">
       <div class="special_header">
         <span></span>
