@@ -12,7 +12,7 @@ import "@/style/reset.scss"
 Vue.use(AwesomePicker);
 Vue.use(DrawerLayout)
 
-import { Tabbar, TabItem ,Picker,Cell,Popup,Button,InfiniteScroll,Swipe, SwipeItem} from 'mint-ui';
+import { Tabbar,Toast, TabItem ,Picker,Cell,Popup,Button,InfiniteScroll,Swipe, SwipeItem} from 'mint-ui';
 Vue.use(InfiniteScroll);
 Vue.component(VeLine.name, VeLine)
 Vue.component(Tabbar.name, Tabbar);
@@ -23,6 +23,7 @@ Vue.component(Popup.name, Popup);
 Vue.component(Button.name, Button);
 Vue.component(Swipe.name, Swipe);
 Vue.component(SwipeItem.name, SwipeItem);
+Vue.use(Toast)
 Vue.use(wechat);
 // 注入全局过滤器
 Object.keys(filters).forEach(item => {
