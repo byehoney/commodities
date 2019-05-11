@@ -67,12 +67,12 @@ export default {
 </script>
 <style scoped lang="scss">
    .mint-tabbar>.mint-tab-item.is-selected {
-        background:linear-gradient(182deg,rgba(245,81,81,0.89) 0%,rgba(195,41,24,1) 100%);
+        background:linear-gradient(182deg,rgba(245,81,81,0.9) 0%,rgba(195,41,24,1) 100%);
         color:#fff;
     }
     .bar{
         height: 98px;
-        background:linear-gradient(182deg,rgba(245,81,81,0.89) 0%,rgba(195,41,24,1) 100%);
+        background:linear-gradient(182deg,rgba(245,81,81,1) 0%,rgba(195,41,24,1) 100%);
         color:#fff;
         font-size:22px;
         font-family:'MicrosoftYaHei';
