@@ -64,11 +64,11 @@
     <div class="special">
       <div class="special_header">
         <span></span>
-        <span>今日特价</span>
+        <span>限时秒杀</span>
       </div>
       <div class="special_content"></div>
     </div>
-    <DrawerLeft/>
+    <!-- <DrawerLeft/> -->
     <TabBarBottom/>
   </div>
 </template>

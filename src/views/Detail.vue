@@ -110,9 +110,9 @@
             <div class="detail_popup_num_left">购买数量</div>
             <div class="detail_popup_num_right">
               <ul>
-                <li></li>
-                <li></li>
-                <li></li>
+                <li @click="reduce">-</li>
+                <li>{{shopnum}}</li>
+                <li @click="add">+</li>
               </ul>
             </div>
           </div>
@@ -148,6 +148,12 @@ export default {
     },
     handlerClick() {
       this.popupVisible = true;
+    },
+    add(){
+        this.shopnum += 1;
+    },
+    reduce(){
+        this.shopnum ==0?this.shopnum=0:this.shopnum--
     }
   }
 };
@@ -376,6 +382,7 @@ span {
   border-top: 3px dashed #ccc;
   border-bottom: 3px dashed #ccc;
   line-height: 88px;
+  min-height: 88px;
   margin-bottom: 24px;
   
 }
@@ -388,5 +395,24 @@ span {
   background: #c32918;
   width: 750px;
   font-size:30px
+}
+.detail_popup_num_left{
+    float: left;
+}
+.detail_popup_num_right{
+    float: right;
+    width: 180px;
+    height:50px;
+}
+.detail_popup_num_right ul li{
+    float: left;
+    width: 50px;
+    height:50px;
+    border:1px solid #ccc;
+    line-height: 50px;
+    margin-top:15px;
+    text-align:center;
+    cursor: pointer;
+
 }
 </style>

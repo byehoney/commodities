@@ -31,6 +31,11 @@ const router = new Router({
             name: "flashdetail",
             component: () =>
                 import(/* webpackChunkName: "choose" */ './views/FlashDetail.vue') 
+        },{
+            path: "/watch",
+            name: "watch",
+            component: () =>
+                import(/* webpackChunkName: "choose" */ './views/watch.vue') 
         },
         {
             path: '/choose',

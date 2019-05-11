@@ -1,24 +1,60 @@
 <template>
-    <div class="header">
-      <div class="header_logo">
-        <img src="../images/home/logo.png">
-      </div>
-      <div class="header_input">
-        <input type="text" placeholder="请输入烟花名称" value>
-      </div>
-      <div class="header_search">
-        <img src="../images/home/sousuo.png">
-      </div>
+  <div class="header">
+    <div class="header_logo" v-if="showlogo">
+      <img src="../images/home/logo.png">
     </div>
+    <div class="header_input">
+      <input type="text" v-model="searchStr" placeholder="请输入烟花名称">
+    </div>
+    <div class="header_search" v-if="showlogo">
+      <img src="../images/change.png">
+    </div>
+    <div class="header_search_copy" v-else>
+      <ul>
+        <li @click="SearchVal">搜索</li>
+        <li>取消</li>
+      </ul>
+    </div>
+  </div>
 </template>
 
 <script>
 export default {
-
-}
+  props: ["data"],
+  data() {
+    return {
+      showlogo: true,
+      searchStr: ""
+    };
+  },
+  methods: {
+    SearchVal(){
+      this.$emit("receve",this.searchStr.trim())
+    }
+  },
+  mounted() {
+    console.log(this.data);
+    if (this.data == "search") {
+      this.showlogo = false;
+    } else {
+      this.showlogo = true;
+    }
+  }
+};
 </script>
 
 <style scoped>
+* {
+  margin: 0;
+  padding: 0;
+}
+ul li {
+  list-style: none;
+}
+a {
+  text-decoration: none;
+  color: #333;
+}
 .header {
   width: 708px;
   height: 60px;
@@ -59,5 +95,12 @@ export default {
 }
 .header_search img {
   width: 100%;
+}
+.header_search_copy ul li {
+  float: left;
+  color: #fff;
+  font-size: 28px;
+  margin-top: 15px;
+  margin-left: 22px;
 }
 </style>
