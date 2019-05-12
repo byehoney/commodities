@@ -2,6 +2,7 @@
   <div>
     <LocalHeader :data="search" @receve="getval"/>
     <div class="history_wrap">
+        <!-- 历史搜索 -->
       <div class="history_list">
         <h3>
           <span>历史搜索</span>
@@ -17,6 +18,7 @@
         </ul>
         <div style="clear:both"></div>
       </div>
+      <!-- 热门搜索 -->
       <div class="history_new">
         <h3>
           <span style="color:#c32918">热门搜索</span>

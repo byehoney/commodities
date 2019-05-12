@@ -7,7 +7,9 @@
     <div class="detail_loop">
       <div class="detsil_loop_center"></div>
     </div>
+
     <div class="detail_content">
+        <!-- 价格栏位 -->
       <div class="detail_content_one">
         <div class="detail_content_title">星星闪耀</div>
         <div class="detail_content_tag">
@@ -25,6 +27,7 @@
           </ul>
         </div>
       </div>
+      <!-- 所在地区 -->
       <div class="detail_content_two">
         <div class="detail_content_two_left">
           <ul>
@@ -47,6 +50,7 @@
         </div>
         <div style="clear:both"></div>
       </div>
+      <!-- 商品信息栏位 -->
       <div class="detail_content_three">
         <div class="detail_content_three_header">
           <span></span>

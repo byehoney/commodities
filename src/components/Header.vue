@@ -91,7 +91,7 @@ a {
   width: 34px;
   height: 34px;
   float: right;
-  margin-top: 15px;
+  margin-top: 10px;
 }
 .header_search img {
   width: 100%;
