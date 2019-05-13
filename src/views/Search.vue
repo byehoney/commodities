@@ -3,7 +3,7 @@
     <LocalHeader :data="search" @receve="getval"/>
     <div class="history_wrap">
         <!-- 历史搜索 -->
-      <div class="history_list">
+      <div class="history_list" v-if="HistoryList.length">
         <h3>
           <span>历史搜索</span>
           <span @click="delSearch(index)">
@@ -19,7 +19,7 @@
         <div style="clear:both"></div>
       </div>
       <!-- 热门搜索 -->
-      <div class="history_new">
+      <div class="history_new" v-if="hotList.length">
         <h3>
           <span style="color:#c32918">热门搜索</span>
         </h3>
@@ -39,6 +39,7 @@ export default {
   data() {
     return {
       HistoryList: [],
+      hotList:[],
       timer: null,
       D: 0,
       H: 0,
@@ -58,9 +59,7 @@ export default {
     // this.countTime();
   },
   mounted() {
-    this.getval();
-  
-    
+     
   },
   methods: {
     getval(newval) {
@@ -84,12 +83,13 @@ export default {
         this.HistoryList.pop();
       }
       localStorage.setItem("HistoryList", JSON.stringify(this.HistoryList));
-        this.findMost(this.HistoryList)
+      // this.findMost(this.HistoryList)
     },
     delSearch() {
       //   this.HistoryList.splice(index, 1);
       //   localStorage.setItem("HistoryList", JSON.stringify(this.HistoryList));
-      this.HistoryList = "";
+      localStorage.removeItem('HistoryList');
+      this.HistoryList = [];
     },
     countTime() {
       this.timer = setInterval(() => {

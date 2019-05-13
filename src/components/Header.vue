@@ -12,7 +12,7 @@
     <div class="header_search_copy" v-else>
       <ul>
         <li @click="SearchVal">搜索</li>
-        <li>取消</li>
+        <li @click="cancelSearch">取消</li>
       </ul>
     </div>
   </div>
@@ -29,11 +29,15 @@ export default {
   },
   methods: {
     SearchVal(){
-      this.$emit("receve",this.searchStr.trim())
+      if(this.searchStr.trim()){
+        this.$emit("receve",this.searchStr.trim())
+      }
+    },
+    cancelSearch(){
+      this.$router.history.push('/');
     }
   },
   mounted() {
-    console.log(this.data);
     if (this.data == "search") {
       this.showlogo = false;
     } else {
