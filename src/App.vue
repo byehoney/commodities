@@ -6,7 +6,20 @@
         <router-view v-if="!$route.meta.keepAlive"></router-view>
     </div>
 </template>
-
+<script>
+export default {
+    data () {
+        return {
+            theme: 'red'
+        }
+    },
+     computed: {
+        themeClass() {
+            return `theme-${this.theme}`;
+        }
+    },
+}
+</script>
 <style lang="scss">
 @import "./node_modules/normalize.css/normalize";
 @import "style/common.scss";
