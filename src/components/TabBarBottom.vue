@@ -72,7 +72,7 @@ export default {
     }
     .bar{
         height: 98px;
-        background:linear-gradient(182deg,rgba(245,81,81,1) 0%,rgba(195,41,24,1) 100%);
+        background:linear-gradient(to right, #FF6238ed , #FF1240);
         color:#fff;
         font-size:22px;
         font-family:'MicrosoftYaHei';
