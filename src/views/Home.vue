@@ -337,6 +337,7 @@ a {
   float: left;
   background:#eee;
   margin-right:12px;
+  border-radius: 10px;
 }
 .special_content div:nth-of-type(3){
   margin-right: 0

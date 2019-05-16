@@ -6,7 +6,7 @@
     <div class="header_input">
       <input type="text" v-model="searchStr" placeholder="请输入烟花名称">
     </div>
-    <div class="header_search" v-if="showlogo">
+    <div class="header_search" v-if="showlogo" @click="showcode">
       <img src="../images/home/home_list.png">
     </div>
     <div class="header_search_copy" v-else>
@@ -15,16 +15,37 @@
         <li @click="cancelSearch">取消</li>
       </ul>
     </div>
+    <div class="tips" v-show="hide">
+      <ul>
+        <li @click="change">
+          <span>
+            <img src="../images/change.png"/>
+          </span>
+          <span>门店切换</span>
+        </li>
+        <li>
+          <span>
+            <img src="../images/saoma.png"/>
+          </span>
+          <span class="remove">扫码文案</span>
+        </li>
+      </ul>
+    </div>
+    <!-- 侧滑 -->
+    <DrawRight v-show="rightWinShow"/>
   </div>
 </template>
 
 <script>
+import DrawRight from "./DrawerRight"
 export default {
   props: ["data"],
   data() {
     return {
       showlogo: true,
-      searchStr: ""
+      searchStr: "",
+      hide:"",
+      rightWinShow:false
     };
   },
   methods: {
@@ -35,6 +56,12 @@ export default {
     },
     cancelSearch(){
       this.$router.history.push('/');
+    },
+    showcode(){
+      this.hide=!this.hide
+    },
+    change(){
+      this.rightWinShow=!this.rightWinShow
     }
   },
   mounted() {
@@ -43,22 +70,15 @@ export default {
     } else {
       this.showlogo = true;
     }
+  },
+  components:{
+    DrawRight
   }
 };
 </script>
 
 <style scoped>
-* {
-  margin: 0;
-  padding: 0;
-}
-ul li {
-  list-style: none;
-}
-a {
-  text-decoration: none;
-  color: #333;
-}
+
 .header {
   width: 708px;
   height: 60px;
@@ -110,5 +130,40 @@ a {
   font-size: 28px;
   margin-top: 15px;
   margin-left: 22px;
+}
+.tips{
+  width: 300px;
+  height: 264px;
+  background: #4a4a4a;
+  position: absolute;
+  right: 0;
+  top:100px;
+  color:#fff;
+}
+.tips ul li{
+  height: 135px;
+  line-height: 135px;
+  font-size: 30px;
+}
+.tips ul li span{
+  display: inline-block;
+}
+.tips ul li span:nth-of-type(1){
+  width:60px;
+  height: 60px;
+  margin-right:7px;
+  margin-left: 34px;
+}
+.tips ul li span img{
+  width:100%;
+  vertical-align: middle
+}
+.tips ul li span:nth-of-type(2){
+  width:197px;
+  border-bottom:1px solid #666666;
+  text-indent: 30px;
+}
+.tips ul li span.remove{
+  border-bottom: none
 }
 </style>
