@@ -1,51 +1,55 @@
 <template>
-  <div >
+  <div>
     <!-- 烟花头开始 -->
     <LocalHeader/>
     <!-- 烟花头结束 -->
     <!-- 轮播图 -->
     <div class="loop_pic">
-      <mt-swipe :auto="4000">
-        <mt-swipe-item class="item"></mt-swipe-item>
-        <mt-swipe-item class="item"></mt-swipe-item>
-        <mt-swipe-item class="item"></mt-swipe-item>
-      </mt-swipe>
-    </div>
-    <!-- 轮播图 -->
-    <div class="classify">
-      <div class="classify_header">
-        <span></span>
-        <span>热门分类</span>
+      <div>
+        <mt-swipe :auto="4000" :show-indicators="false">
+          <mt-swipe-item class="item">1</mt-swipe-item>
+          <mt-swipe-item class="item">2</mt-swipe-item>
+          <mt-swipe-item class="item">3</mt-swipe-item>
+        </mt-swipe>
       </div>
-      <div class="classify_content">
-        <ul>
-          <li>
-            <a href="javascript:void(0)">
-              <img src="../images/home/home_menu.png">
-              <span>组合烟花</span>
-            </a>
-          </li>
-          <li>
-            <a href="javascript:void(0)">
-              <img src="../images/home/home_menu1.png">
-              <span>喜庆鞭炮</span>
-            </a>
-          </li>
-          <li>
-            <a href="javascript:void(0)">
-              <img src="../images/home/home_menu2.png">
-              <span>日景烟花</span>
-            </a>
-          </li>
-          <li>
-            <a href="javascript:void(0)">
-              <img src="../images/home/home_menu3.png">
-              <span>冷烟花</span>
-            </a>
-          </li>
-        </ul>
+      <!-- 轮播图 -->
+
+      <div class="classify">
+        <div class="classify_header">
+          <span></span>
+          <span>热门分类</span>
+        </div>
+        <div class="classify_content">
+          <ul>
+            <li>
+              <a href="javascript:void(0)">
+                <img src="../images/home/home_menu.png">
+                <span>组合烟花</span>
+              </a>
+            </li>
+            <li>
+              <a href="javascript:void(0)">
+                <img src="../images/home/home_menu1.png">
+                <span>喜庆鞭炮</span>
+              </a>
+            </li>
+            <li>
+              <a href="javascript:void(0)">
+                <img src="../images/home/home_menu2.png">
+                <span>日景烟花</span>
+              </a>
+            </li>
+            <li>
+              <a href="javascript:void(0)">
+                <img src="../images/home/home_menu3.png">
+                <span>冷烟花</span>
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
+
     <!-- 热门分类 -->
     <div class="recommond">
       <div class="recommond_header">
@@ -54,9 +58,12 @@
       </div>
       <div class="recommond_content">
         <div class="recommond_left"></div>
+        <div class="recommond_center">
+           <div class="recommond_center_top"></div>
+           <div class="recommond_center_bottom"></div>
+        </div>
         <div class="recommond_right">
-          <div class="recommond_right_top"></div>
-          <div class="recommond_right_bottom"></div>
+         
         </div>
       </div>
     </div>
@@ -75,8 +82,8 @@
 <script>
 // @ is an alias to /src
 import DrawerLeft from "@/components/DrawerLeft";
-import TabBarBottom from "@/components/TabBarBottom"
-import LocalHeader from "@/components/Header"
+import TabBarBottom from "@/components/TabBarBottom";
+import LocalHeader from "@/components/Header";
 export default {
   name: "home",
   data() {
@@ -112,7 +119,7 @@ a {
 .header {
   width: 708px;
   height: 60px;
-  background: #c32918;
+  /* background: #c32918; */
   font-size: 25px;
   padding: 20px 21px;
 }
@@ -152,13 +159,14 @@ a {
 }
 .loop_pic {
   width: 750px;
-  height: 300px;
+  height: 613px;
   margin-bottom: 15px;
   /* background: #ccc; */
+  position: relative;
 }
 .item {
   width: 100%;
-  height: 300px;
+  height: 613px;
 }
 .item:nth-of-type(1) {
   background: #f00;
@@ -173,11 +181,14 @@ a {
   width: 100%;
 }
 .classify {
-  width: 660px;
-  min-height: 300px;
+  width: 580px;
+  min-height: 276px;
   background: #f8f8f8;
-  padding: 22px 45px;
+  padding: 34px 40px;
   margin-bottom: 15px;
+  position: absolute;
+  left:45px;
+  bottom:14px;
 }
 .classify_header,
 .recommond_header,
@@ -202,7 +213,7 @@ a {
   font-size: 26px;
   float: left;
   text-align: center;
-  margin-right: 59px;
+  margin-right: 40px;
 }
 .classify_content ul li:last-child {
   margin-right: 0;
@@ -212,51 +223,57 @@ a {
   margin-bottom: 33px;
 }
 .recommond {
-  width: 750px;
-  min-height: 425px;
+  width: 590px;
+  min-height: 322px;
   background: #f8f8f8;
+  padding: 30px 80px;
 }
 .recommond_header {
-  padding-left: 45px;
-  padding-top: 12px;
+
   margin-bottom: 22px;
 }
 .recommond_content {
-  padding: 0 28px;
+
 }
 .recommond_left {
-  width: 322px;
-  min-height: 322px;
+  width: 194px;
+  min-height: 194px;
+  border: 8px solid #ebebeb;
+  border-radius: 10px;
   background: #fff;
-  margin-right: 20px;
+  margin-right: 13px;
   float: left;
 }
+.recommond_center{
+  float: left;
+  margin-right:14px;
+}
+.recommond_center_top{
+  margin-bottom:12px;
+}
+.recommond_center_top,.recommond_center_bottom{
+  width:137px;
+  height: 98px;
+  background: #ebebeb
+}
 .recommond_right {
-  width: 348px;
-  min-height: 322px;
-  float: right;
+  width: 208px;
+  min-height: 208px;
+  float: left;
+  background: #ebebeb;
 }
-.recommond_right_top {
-  width: 100%;
-  min-height: 160px;
-  background: #fff;
-  margin-bottom: 16px;
-}
-.recommond_right_bottom {
-  width: 100%;
-  min-height: 145px;
-  background: #fff;
-}
-.special{
-  background: #f8f8f8
+
+.special {
+  min-height: 357px;
+  background: #f8f8f8;
 }
 .special_header {
   padding-left: 45px;
   padding-top: 12px;
   margin-bottom: 22px;
 }
-.special_content{
+.special_content {
   min-height: 241px;
-  background: #fff
+  background: #fff;
 }
 </style>

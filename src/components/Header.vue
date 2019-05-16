@@ -7,7 +7,7 @@
       <input type="text" v-model="searchStr" placeholder="请输入烟花名称">
     </div>
     <div class="header_search" v-if="showlogo">
-      <img src="../images/change.png">
+      <img src="../images/home/home_list.png">
     </div>
     <div class="header_search_copy" v-else>
       <ul>
@@ -62,7 +62,7 @@ a {
 .header {
   width: 708px;
   height: 60px;
-  background: #c32918;
+  background: linear-gradient(to right, #FF6238ed , #FF1240);
   font-size: 25px;
   padding: 20px 21px;
 }
@@ -92,10 +92,10 @@ a {
   background: #fff;
 }
 .header_search {
-  width: 34px;
-  height: 34px;
+  width: 17px;
+  height: 58px;
   float: right;
-  margin-top: 10px;
+  margin-top: 5px;
 }
 .header_search img {
   width: 100%;
