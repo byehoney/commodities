@@ -41,37 +41,47 @@
             </div>
         </div>
         <div class="my_list">
-            <div class="list_item">
-                <div class="left">
-                     <div class="line"></div>
-                     <div class="list_text">基础信息</div>
+            <router-link class="list_nav" tag="div" to="/baseInfo">
+                <div class="list_item">
+                    <div class="left">
+                        <div class="line"></div>
+                        <div class="list_text">基础信息</div>
+                    </div>
+                    <img src="../images/arrow_right.png" class="list_icon" alt="">
                 </div>
-                <img src="../images/arrow_right.png" class="list_icon" alt="">
-            </div>
-            <div class="list_item">
-                <div class="left">
-                    <div class="line"></div>
-                    <div class="list_text">收货地址</div>
+            </router-link>
+            <router-link class="list_nav" tag="div" to="/address">
+                <div class="list_item">
+                    <div class="left">
+                        <div class="line"></div>
+                        <div class="list_text">收货地址</div>
+                    </div>
+                    <img src="../images/arrow_right.png" class="list_icon" alt="">
                 </div>
-                <img src="../images/arrow_right.png" class="list_icon" alt="">
-            </div>
-            <div class="list_item">
-                <div class="left">
-                    <div class="line"></div>
-                    <div class="list_text">密码修改</div>
+            </router-link>
+            <router-link class="list_nav" tag="div" to="/modiPass">
+                <div class="list_item">
+                    <div class="left">
+                        <div class="line"></div>
+                        <div class="list_text">密码修改</div>
+                    </div>
+                    <img src="../images/arrow_right.png" class="list_icon" alt="">
                 </div>
-                <img src="../images/arrow_right.png" class="list_icon" alt="">
-            </div>
+            </router-link>
         </div>
+        <div class="login_btn" v-if="user&&token" @click="logOut">退出登陆</div>
+        <div class="login_btn" v-else>登陆</div>
         <!-- <ve-line :data="chartData"></ve-line>
         <CityPicker /> -->
         <TabBarBottom curTab="my"/>
     </div>
 </template>
 <script>
-import TabBarBottom from '@/components/TabBarBottom'
+import { mapState ,mapMutations} from 'vuex';
+import TabBarBottom from '@/components/TabBarBottom';
 // import CityPicker from '@/components/CityPicker'
 export default {
+    name:'my',
     data(){
         return{
             // chartData: {
@@ -86,6 +96,18 @@ export default {
             //     ]
             // }
         }
+    },
+    computed:{
+        ...mapState('login', ['user', 'token'])
+    },
+    methods:{
+        ...mapMutations('login',['LOGOUT']),
+        logOut(){
+            this.LOGOUT({
+               $router:this.$router,
+           })
+        }
+
     },
     components:{
         TabBarBottom,
@@ -207,6 +229,10 @@ export default {
         flex-direction: column;
         align-items: center;
         background: #fff;
+        .list_nav{
+            width: 100%;
+            height: 100%;
+        }
         .list_item{
             display: flex;
             justify-content: space-between;
@@ -214,7 +240,6 @@ export default {
             width: 95%;
             margin-left: 5%;
             border-bottom: 2px solid #ebebeb;
-            flex: 1;
             height: 115px;
             .left{
                 display: flex;
@@ -238,5 +263,17 @@ export default {
                 margin-right: 37px;
             }
         }
+    }
+    .login_btn{
+        width: 90%;
+        height: 98px;
+        line-height: 98px;
+        text-align: center;
+        background-color: #9b9b9b;
+        margin: 43px auto 243px;
+        border-radius: 8px;
+        font-size:30px;
+        color:rgba(255,255,255,1);
+        letter-spacing:3px;
     }
 </style>

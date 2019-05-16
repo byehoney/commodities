@@ -14,6 +14,18 @@ export default {
             state.user = userDate;
             localStorage.setItem('token', userDate.token)
             localStorage.setItem('userDate', JSON.stringify(userDate))
+        },
+        [type.LOGOUT](state,payload){
+            state.token='';
+            state.user={};
+            localStorage.removeItem('token');
+            localStorage.removeItem('userDate');
+            payload.$router.replace({path:'/'})
+        },
+        [type.SETATV](state,payload){
+            state.user.portrait=payload;
+            let userDate = state.user;
+            localStorage.setItem('userDate', JSON.stringify(userDate))
         }
     },
     actions: {
@@ -35,6 +47,13 @@ export default {
                         path: redirect
                     })
                 }, 3000);
+            } catch (error) {
+
+            }
+        },
+        async setAtv(state, atv) {
+            try {
+                state.commit(type.SETATV,atv)
             } catch (error) {
 
             }

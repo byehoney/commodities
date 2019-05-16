@@ -72,7 +72,7 @@ const router = new Router({
             component: () =>
                 import(/* webpackChunkName: "my" */ './views/My.vue'),
             meta: {
-                auth: false,
+                auth: true,
                 keepAlive: true
             }
         },
@@ -100,6 +100,45 @@ const router = new Router({
             meta: {
                 auth: true,
                 keepAlive: true
+            }
+        },
+        {
+            path: '/baseInfo',
+            name: 'baseInfo',
+            // route level code-splitting
+            // this generates a separate chunk (about.[hash].js) for this route
+            // which is lazy-loaded when the route is visited.
+            component: () =>
+                import(/* webpackChunkName: "baseInfo" */ './views/BaseInfo.vue'),
+            meta: {
+                auth: true,
+                keepAlive: false
+            }
+        },
+        {
+            path: '/address',
+            name: 'address',
+            // route level code-splitting
+            // this generates a separate chunk (about.[hash].js) for this route
+            // which is lazy-loaded when the route is visited.
+            component: () =>
+                import(/* webpackChunkName: "address" */ './views/Address.vue'),
+            meta: {
+                auth: true,
+                keepAlive: false
+            }
+        },
+        {
+            path: '/modiPass',
+            name: 'modiPass',
+            // route level code-splitting
+            // this generates a separate chunk (about.[hash].js) for this route
+            // which is lazy-loaded when the route is visited.
+            component: () =>
+                import(/* webpackChunkName: "modiPass" */ './views/ModiPass.vue'),
+            meta: {
+                auth: true,
+                keepAlive: false
             }
         },
         {
