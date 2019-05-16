@@ -5,19 +5,24 @@
     <!-- 烟花头结束 -->
     <!-- 轮播图 -->
     <div class="loop_pic">
-      <div>
-        <mt-swipe :auto="4000" :show-indicators="false">
-          <mt-swipe-item class="item">1</mt-swipe-item>
-          <mt-swipe-item class="item">2</mt-swipe-item>
-          <mt-swipe-item class="item">3</mt-swipe-item>
-        </mt-swipe>
-      </div>
+      <!-- <div> -->
+      <mt-swipe :auto="4000" :show-indicators="false">
+        <mt-swipe-item class="item">1</mt-swipe-item>
+        <mt-swipe-item class="item">2</mt-swipe-item>
+        <mt-swipe-item class="item">3</mt-swipe-item>
+      </mt-swipe>
+      <!-- </div> -->
       <!-- 轮播图 -->
 
       <div class="classify">
         <div class="classify_header">
-          <span></span>
-          <span>热门分类</span>
+          <div class="classify_header_left">
+            <span></span>
+            <span>热门分类</span>
+          </div>
+          <div class="classify_header_right">
+            <img src="../images/home_header_class.png"/>
+          </div>
         </div>
         <div class="classify_content">
           <ul>
@@ -59,21 +64,30 @@
       <div class="recommond_content">
         <div class="recommond_left"></div>
         <div class="recommond_center">
-           <div class="recommond_center_top"></div>
-           <div class="recommond_center_bottom"></div>
+          <div class="recommond_center_top"></div>
+          <div class="recommond_center_bottom"></div>
         </div>
-        <div class="recommond_right">
-         
-        </div>
+        <div class="recommond_right"></div>
       </div>
     </div>
     <!-- 限时秒杀 -->
     <div class="special">
-      <div class="special_header">
-        <span></span>
-        <span>限时秒杀</span>
+      <div class="special_wrap">
+        <div class="special_header">
+          <span></span>
+          <span>限时秒杀</span>
+          <span>
+            <div>10</div>:
+            <div>10</div>:
+            <div>10</div>
+          </span>
+        </div>
+        <div class="special_content">
+           <div class="special_content_left"></div>
+           <div class="special_content_center"></div>
+           <div class="special_content_right"></div>
+        </div>
       </div>
-      <div class="special_content"></div>
     </div>
     <!-- <DrawerLeft/> -->
     <TabBarBottom/>
@@ -177,34 +191,53 @@ a {
 .item:nth-of-type(3) {
   background: #f00;
 }
+.loop_pic{
+  margin-top:80px;
+}
 .loop_pic img {
   width: 100%;
 }
 .classify {
-  width: 580px;
-  min-height: 276px;
+  width: 658px;
+  min-height: 344px;
   background: #f8f8f8;
-  padding: 34px 40px;
   margin-bottom: 15px;
   position: absolute;
-  left:45px;
-  bottom:14px;
+  left: 45px;
+  bottom: 14px;
 }
 .classify_header,
 .recommond_header,
 .special_header {
+  height: 98px;
+  line-height: 98px;
   font-size: 28px;
   color: #333;
   margin-bottom: 45px;
+  padding-left: 40px;
+  border-bottom: 1px solid #ebebeb;
 }
 .classify_header span:nth-of-type(1),
 .recommond_header span:nth-of-type(1),
 .special_header span:nth-of-type(1) {
-  background: url("../images/home/block.png") no-repeat center;
+  background: url("../images/home/block.png") center 5px no-repeat;
   display: inline-block;
   width: 10px;
   height: 25px;
   margin-right: 8px;
+}
+.classify_header_left{
+  width: 134px;
+  float: left;
+}
+.classify_header_right{
+  float:right;
+  width:41px;
+  height: 9px;
+  margin-right:29px;
+}
+.classify_header_right img{
+   width: 100%;
 }
 .classify_content ul li {
   width: 115px;
@@ -213,27 +246,28 @@ a {
   font-size: 26px;
   float: left;
   text-align: center;
-  margin-right: 40px;
+  margin-left: 40px;
 }
 .classify_content ul li:last-child {
   margin-right: 0;
+
 }
 .classify_content ul li img {
   width: 100%;
   margin-bottom: 33px;
 }
 .recommond {
-  width: 590px;
-  min-height: 322px;
-  background: #f8f8f8;
-  padding: 30px 80px;
+  width: 750px;
+  min-height: 382px;
+  background: #fff;
+  margin-bottom: 15px;
 }
 .recommond_header {
-
+  padding-left:85px;
   margin-bottom: 22px;
 }
-.recommond_content {
-
+.recommond_content{
+  padding:36px 82px 42px 86px;
 }
 .recommond_left {
   width: 194px;
@@ -244,36 +278,67 @@ a {
   margin-right: 13px;
   float: left;
 }
-.recommond_center{
+.recommond_center {
   float: left;
-  margin-right:14px;
+  margin-right: 14px;
 }
-.recommond_center_top{
-  margin-bottom:12px;
+.recommond_center_top {
+  margin-bottom: 12px;
 }
-.recommond_center_top,.recommond_center_bottom{
-  width:137px;
+.recommond_center_top,
+.recommond_center_bottom {
+  width: 137px;
   height: 98px;
-  background: #ebebeb
+  background: #ebebeb;
+  border-radius: 10px;
 }
 .recommond_right {
   width: 208px;
   min-height: 208px;
   float: left;
   background: #ebebeb;
+  border-radius: 10px;
 }
 
 .special {
+  width: 750px;
   min-height: 357px;
-  background: #f8f8f8;
+  background: #fff;
+  margin-bottom:98px;
 }
+
 .special_header {
-  padding-left: 45px;
-  padding-top: 12px;
+  padding-left:85px;
   margin-bottom: 22px;
 }
+.special_header span:nth-of-type(3) {
+  color: #ed5f45;
+  margin-left: 8px;
+}
+.special_header span:nth-of-type(3) div {
+  display: inline-block;
+  width: 33px;
+  height: 33px;
+  color: #fff;
+  background: #ed5f45;
+  text-align: center;
+  line-height: 33px;
+  font-size: 18px;
+  margin-right: 8px;
+}
+
 .special_content {
-  min-height: 241px;
   background: #fff;
+  padding:36px 82px 42px 86px;
+}
+.special_content div{
+  width:186px;
+  height: 186px;
+  float: left;
+  background:#eee;
+  margin-right:12px;
+}
+.special_content div:nth-of-type(3){
+  margin-right: 0
 }
 </style>

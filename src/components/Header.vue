@@ -65,6 +65,10 @@ a {
   background: linear-gradient(to right, #FF6238ed , #FF1240);
   font-size: 25px;
   padding: 20px 21px;
+  position:fixed;
+  top:0;
+  left:0;
+  z-index:1000;
 }
 .header_logo {
   width: 105px;
