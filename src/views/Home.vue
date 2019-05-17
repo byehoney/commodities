@@ -90,7 +90,7 @@
       </div>
     </div>
     <!-- <DrawerLeft/> -->
-    <TabBarBottom/>
+    <TabBarBottom curTab="home" />
   </div>
 </template>
 <script>

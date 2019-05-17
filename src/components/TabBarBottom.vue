@@ -66,13 +66,16 @@ export default {
 }
 </script>
 <style scoped lang="scss">
+    .mint-tabbar>.mint-tab-item{
+        color: #fff;
+         background:linear-gradient(182deg,rgba(245,81,81,0.9) 0%,rgba(195,41,24,1) 100%);
+    }
    .mint-tabbar>.mint-tab-item.is-selected {
         background:linear-gradient(182deg,rgba(245,81,81,0.9) 0%,rgba(195,41,24,1) 100%);
         color:#fff;
     }
     .bar{
         height: 98px;
-        background:linear-gradient(to right, #FF6238ed , #FF1240);
         color:#fff;
         font-size:22px;
         font-family:'MicrosoftYaHei';
