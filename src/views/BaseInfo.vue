@@ -1,7 +1,8 @@
 <template>
     <div class="baseContainer">
+        <TopNav/>
         <div class="baseBox">
-            <div class="baseItem">
+            <div class="baseItem atv">
                 <div class="left">头像</div>
                 <div class="right">
                     <div class="atv_box">
@@ -13,25 +14,29 @@
                    <img src="../images/arrow_right.png" class="right_icon" alt="">
                 </div>
             </div>
-            <div class="baseItem">
-                <div class="left">姓名</div>
-                <div class="right">
-                    <div class="right_text">
-                        张建
+            <router-link to="/modiName" tag="div">
+                <div class="baseItem">
+                    <div class="left">姓名</div>
+                    <div class="right">
+                        <div class="right_text">
+                            张建
+                        </div>
+                    <img src="../images/arrow_right.png" class="right_icon" alt="">
                     </div>
-                   <img src="../images/arrow_right.png" class="right_icon" alt="">
                 </div>
-            </div>
-            <div class="baseItem">
-                <div class="left">手机</div>
-                <div class="right">
-                    <div class="right_text">
-                        13333333333
+            </router-link>
+            <router-link to="/modiTel" tag="div">
+                <div class="baseItem">
+                    <div class="left">手机</div>
+                    <div class="right">
+                        <div class="right_text">
+                            13333333333
+                        </div>
+                    <img src="../images/arrow_right.png" class="right_icon" alt="">
                     </div>
-                   <img src="../images/arrow_right.png" class="right_icon" alt="">
                 </div>
-            </div>
-            <div class="baseItem">
+            </router-link>
+            <div class="baseItem noBorder">
                 <div class="left">所属门店</div>
                 <div class="right">
                     <div class="right_text">
@@ -40,7 +45,8 @@
                    <img src="../images/arrow_right.png" class="right_icon" alt="">
                 </div>
             </div>
-            <div class="baseItem">
+            <div class="line"></div>
+            <div class="baseItem noBorder">
                 <div class="left">添加关联门店</div>
                 <div class="right">
                    <img src="../images/arrow_right.png" class="right_icon" alt="">
@@ -51,6 +57,7 @@
 </template>
 <script>
 import { mapState ,mapActions } from 'vuex';
+import TopNav from '@/components/TopNav.vue';
 export default {
     data(){
         return{
@@ -58,6 +65,9 @@ export default {
             size: 0,
             limit:6, //限制图片上传的数量
         }
+    },
+    components:{
+        TopNav
     },
     computed:{
         ...mapState('login',['user','token'])
@@ -143,8 +153,11 @@ export default {
 }
 </script>
 <style lang="scss">
+    html{
+        background-color: #ebebeb;
+    }
     .baseContainer {
-
+        background-color: #fff;
         .baseBox{
             display: flex;
             flex-direction: column;
@@ -152,8 +165,35 @@ export default {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
+                margin-left: 5%;
+                padding:36px 47px 41px 0;  
+                border-bottom: 2px solid #D8d8d8;
+                &.noBorder{
+                    border:none;
+                }
+                &.atv{
+                    padding:30px 47px 30px 0;
+                }
+                .left{
+                    font-size:26px;
+                    color:rgba(102,102,102,1);
+                    line-height:35px;
+                    letter-spacing:3px;
+                }
                 .right{
                     display: flex;
+                    align-items: center;
+                    .right_text{
+                        font-size:26px;
+                        color:rgba(153,153,153,1);
+                        line-height:35px;
+                        letter-spacing:3px;
+                        margin-right: 30px;
+                    }
+                    .right_icon{
+                        width: 17px;
+                        height: 30px;
+                    }
                     .atv_box{
                         width:126px;
                         height:126px;
@@ -188,6 +228,11 @@ export default {
                         }
                     }
                 }
+            }
+            .line{
+                width: 100%;
+                height: 10px;
+                background-color: #ebebeb;
             }
         }
     }

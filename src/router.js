@@ -112,7 +112,8 @@ const router = new Router({
                 import(/* webpackChunkName: "baseInfo" */ './views/BaseInfo.vue'),
             meta: {
                 auth: true,
-                keepAlive: false
+                keepAlive: false,
+                title: '个人中心',
             }
         },
         {
@@ -139,6 +140,34 @@ const router = new Router({
             meta: {
                 auth: true,
                 keepAlive: false
+            }
+        },
+        {
+            path: '/modiTel',
+            name: 'modiTel',
+            // route level code-splitting
+            // this generates a separate chunk (about.[hash].js) for this route
+            // which is lazy-loaded when the route is visited.
+            component: () =>
+                import(/* webpackChunkName: "modiTel" */ './views/ModiTel.vue'),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title:'更换手机号'
+            }
+        },
+        {
+            path: '/modiName',
+            name: 'modiName',
+            // route level code-splitting
+            // this generates a separate chunk (about.[hash].js) for this route
+            // which is lazy-loaded when the route is visited.
+            component: () =>
+                import(/* webpackChunkName: "modiName" */ './views/ModiName.vue'),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title:'修改姓名'
             }
         },
         {

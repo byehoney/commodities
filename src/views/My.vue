@@ -1,16 +1,25 @@
 <template>
     <div class="myContainer">
         <div class="info_area">
-            <img src="../images/my_kf.png" class="kf_icon" alt="">
+            <!-- <div class="topArea">
+                <div class="scroe">
+
+                </div> -->
+                <img src="../images/my_kf.png" class="kf_icon" alt="">
+            <!-- </div> -->
             <div class="user_info">
                 <div class="atv_box">
-                    <img src="../images/shopcar.png" class="atv" alt="">
+                    <img src="../images/shopcar.png" class="atv" alt="" style="display:none">
+                    <div class="default">
+                        <img src="../images/defaultAtv.png" class="atv" alt="">
+                    </div>
                 </div>
-                <div class="user_msg">
+                <div class="user_msg" style="display:none">
                     <div class="user_name">张建</div>
                     <div class="user_tel">133****1568</div>
                     <div class="user_add">沈阳市 铁西区肇工北街4甲1号15门</div>
                 </div>
+                <div class="loginBtn"><router-link to="/login">点击登录</router-link></div>
             </div>
         </div>
         <div class="op_area">
@@ -116,6 +125,9 @@ export default {
 }
 </script>
 <style lang="scss">
+    html{
+        background-color: #ebebeb;
+    }
     .info_area{
         display: flex;
         flex-direction: column;
@@ -130,6 +142,26 @@ export default {
             margin-right: 47px;
 
         }
+        .loginBtn{
+            width:178px;
+            height:46px;
+            background:linear-gradient(85deg,rgba(255,98,56,1) 0%,rgba(255,18,64,1) 100%);
+            border-radius:23px;
+            border:2px solid rgba(255,255,255,1);
+            line-height: 46px;
+            text-align: center;
+            font-size:26px;
+            line-height:35px;
+            letter-spacing:3px;
+            align-self: center;
+            a{
+                color:rgba(255,255,255,1);
+                display: inline-block;
+                width: 100%;
+                height: 100%;
+                line-height: 46px;
+            }
+        }
         .user_info{
             display: flex;
             .atv_box{
@@ -142,6 +174,19 @@ export default {
                 align-items: center;
                 margin-left: 80px;
                 margin-right: 43px;
+                .default{
+                    width:118px;
+                    height:118px;
+                    border-radius: 50%;
+                    background:linear-gradient(135deg,rgba(147,147,147,1) 0%,rgba(201,201,201,1) 100%);
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    .atv{
+                        width: 76px;
+                        height: 76px;
+                    }
+                }
                 .atv{
                     width:118px;
                     height:118px;
@@ -270,7 +315,7 @@ export default {
         line-height: 98px;
         text-align: center;
         background-color: #9b9b9b;
-        margin: 43px auto 243px;
+        margin: 43px auto 200px;
         border-radius: 8px;
         font-size:30px;
         color:rgba(255,255,255,1);
