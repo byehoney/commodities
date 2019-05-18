@@ -203,6 +203,12 @@ const router = new Router({
             }
         },
         {
+             path:"/classify",
+             name:"classify",
+             component:()=>
+             import("./views/Classify.vue")
+        },
+        {
             path: '*', // 未匹配到路由时重定向
             redirect: '/',
             meta: {
