@@ -21,7 +21,9 @@
             <span>热门分类</span>
           </div>
           <div class="classify_header_right">
-            <img src="../images/home_header_class.png"/>
+            <router-link to="/classify">
+              <img src="../images/home_header_class.png">
+            </router-link>
           </div>
         </div>
         <div class="classify_content">
@@ -83,9 +85,9 @@
           </span>
         </div>
         <div class="special_content">
-           <div class="special_content_left"></div>
-           <div class="special_content_center"></div>
-           <div class="special_content_right"></div>
+          <div class="special_content_left"></div>
+          <div class="special_content_center"></div>
+          <div class="special_content_right"></div>
         </div>
       </div>
     </div>
@@ -191,8 +193,8 @@ a {
 .item:nth-of-type(3) {
   background: #f00;
 }
-.loop_pic{
-  margin-top:80px;
+.loop_pic {
+  margin-top: 80px;
 }
 .loop_pic img {
   width: 100%;
@@ -226,18 +228,18 @@ a {
   height: 25px;
   margin-right: 8px;
 }
-.classify_header_left{
+.classify_header_left {
   width: 134px;
   float: left;
 }
-.classify_header_right{
-  float:right;
-  width:41px;
+.classify_header_right {
+  float: right;
+  width: 41px;
   height: 9px;
-  margin-right:29px;
+  margin-right: 29px;
 }
-.classify_header_right img{
-   width: 100%;
+.classify_header_right img {
+  width: 100%;
 }
 .classify_content ul li {
   width: 115px;
@@ -250,7 +252,6 @@ a {
 }
 .classify_content ul li:last-child {
   margin-right: 0;
-
 }
 .classify_content ul li img {
   width: 100%;
@@ -263,11 +264,11 @@ a {
   margin-bottom: 15px;
 }
 .recommond_header {
-  padding-left:85px;
+  padding-left: 85px;
   margin-bottom: 22px;
 }
-.recommond_content{
-  padding:36px 82px 42px 86px;
+.recommond_content {
+  padding: 36px 82px 42px 86px;
 }
 .recommond_left {
   width: 194px;
@@ -304,11 +305,11 @@ a {
   width: 750px;
   min-height: 357px;
   background: #fff;
-  margin-bottom:98px;
+  margin-bottom: 98px;
 }
 
 .special_header {
-  padding-left:85px;
+  padding-left: 85px;
   margin-bottom: 22px;
 }
 .special_header span:nth-of-type(3) {
@@ -329,17 +330,17 @@ a {
 
 .special_content {
   background: #fff;
-  padding:36px 82px 42px 86px;
+  padding: 36px 82px 42px 86px;
 }
-.special_content div{
-  width:186px;
+.special_content div {
+  width: 186px;
   height: 186px;
   float: left;
-  background:#eee;
-  margin-right:12px;
+  background: #eee;
+  margin-right: 12px;
   border-radius: 10px;
 }
-.special_content div:nth-of-type(3){
-  margin-right: 0
+.special_content div:nth-of-type(3) {
+  margin-right: 0;
 }
 </style>
