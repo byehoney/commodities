@@ -138,7 +138,7 @@ const router = new Router({
             component: () =>
                 import(/* webpackChunkName: "modiPass" */ './views/ModiPass.vue'),
             meta: {
-                auth: true,
+                auth: false,
                 keepAlive: false
             }
         },
@@ -168,6 +168,28 @@ const router = new Router({
                 auth: true,
                 keepAlive: false,
                 title:'修改姓名'
+            }
+        },
+        {
+            path: '/register',
+            name: 'register',
+            component: () =>
+                import(/* webpackChunkName: "register" */ './views/Register.vue'),
+            meta: {
+                auth: false,
+                keepAlive: false,
+                title:'用户注册'
+            }
+        },
+        {
+            path: '/registerActor',
+            name: 'registerActor',
+            component: () =>
+                import(/* webpackChunkName: "registerActor" */ './views/RegisterActor.vue'),
+            meta: {
+                auth: false,
+                keepAlive: false,
+                title:'用户注册'
             }
         },
         {

@@ -1,123 +1,116 @@
 <template>
-    <section class="login">
-        <div class="top">
-            您好，请登录
+    <div class="login_area">
+        <img src="../images/login_logo.png" class="logo_icon" alt="">
+        <input class="name" type="text" placeholder="请输入您的手机号" v-model="username" autocomplete="off">
+        <input class="pas" type="password" placeholder="请输入密码" v-model="password" autocomplete="off">
+        <div class="login_btn" @click="loginBtn">登录</div>
+        <div class="more_fun">
+            <router-link to="/register" replace>手机快速注册</router-link>
+            <router-link to="/modiPass" replace>忘记密码？</router-link>
         </div>
-        <div class="list userNameBox">
-            <i></i>
-            <input type="text" placeholder="账号" v-model="username" autocomplete='off'>
-        </div>
-        <div class="list passwordBox">
-            <i></i>
-            <input type="password" placeholder="密码" v-model="password" autocomplete='off'>
-        </div>
-        <div class="btnBox">
-        <button @click="loginBtn" class="loginBtn">登录</button>
-        <!-- 未来的用户注册的角色选择功能 -->
-        <CheckUser></CheckUser>
-
-        </div>
-    </section>
+        <!-- <CheckUser></CheckUser> -->
+    </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import {
-    mapActions
-} from 'vuex';
-import {
-    Toast
-} from 'mint-ui';
-import CheckUser from "../components/CheckUser"
+import { mapActions } from "vuex";
+import { Toast } from "mint-ui";
+import CheckUser from "../components/CheckUser";
 export default {
-    name: 'login',
-    data() {
-        return {
-            username: '',
-            password: ''
-        };
-    },
-    components: {CheckUser},
-    created() {},
-    mounted() {},
-    methods: {
-        ...mapActions('login', ['login']),
-        loginBtn() {
-            if (this.username === '' || this.password === '') {
-                Toast({
-                    message: '请输入账号或密码',
-                    position: 'middle',
-                    duration: 2000
-                });
-            } else {
-                this.login({
-                    username: this.username,
-                    password: this.password,
-                    $router: this.$router,
-                    $route: this.$route
-                });
-            }
+  name: "login",
+  data() {
+    return {
+      username: "",
+      password: ""
+    };
+  },
+  components: { CheckUser },
+  created() {},
+  mounted() {},
+  methods: {
+    ...mapActions("login", ["login"]),
+    loginBtn() {
+        let reg = /^1[345678]\d{9}$/;
+        if (this.username.trim() === "" || this.password.trim() === "") {
+            Toast({
+                message: "请输入账号或密码",
+                position: "middle",
+                duration: 2000
+            });
+        }else if(!reg.test(this.password.trim())){
+            Toast({
+                message: "请输入正确的手机号",
+                position: "middle",
+                duration: 2000
+            });
+        }else {
+            this.login({
+            username: this.username,
+            password: this.password,
+            $router: this.$router,
+            $route: this.$route
+            });
         }
     }
+  }
 };
 </script>
 <style scoped lang="scss">
-    .login {
-        .top {
-            @include line-height(345px, 345px);
-            font-size: 60px;
-            padding-left: 45px;
-            text-align: left;
+    .login_area{
+        width: 100vw;
+        height: 100vh;
+        background-color:#e4393c; 
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background: url('../images/login_bg.jpg') no-repeat 0 0;
+        background-size: cover;
+        .logo_icon{
+            width: 200px;
+            height: 112px;
+            padding-top: 137px;
+            margin-bottom: 143px;
         }
-        .list {
-            height: 100px;
-            margin: 0 45px 2px 45px;
-            border-bottom: 1PX solid #dcdcdc;
-            position: relative;
-            input {
-                width: 100%;
-                display: block;
-                box-sizing: border-box;
-                @include line-height(100px, 100px);
-                font-size: 28px;
-                border: none;
-                padding-left: 60px;
-            }
-            i {
-                position: absolute;
-                display: block;
+        .name,.pas{
+            display: block;
+            width:576px;
+            height:98px;
+            background:rgba(255,255,255,1);
+            border-radius:4px;
+            border:1px solid;
+            border-image:linear-gradient(85deg, rgba(255,98,56,1), rgba(255,18,64,1)) 1 1;
+            font-size:30px;
+            color:#333;
+            // color:rgba(235,235,235,1);
+            line-height:98px;
+            letter-spacing:3px;
+            padding-left: 16px;
+            margin-bottom: 40px;
+        }
+        .login_btn{
+            width: 576px;
+            height: 98px;
+            line-height: 98px;
+            text-align: center;
+            background-color: #ffbe50;
+            font-size:36px;
+            color:rgba(255,255,255,1);
+            letter-spacing:3px;
+            margin-top: 75px;
+        }
+        .more_fun{
+            width: 576px;
+            margin:20px auto 0;
+            display: flex;
+            justify-content: space-between;
+            a,span{
+                font-size:26px;
+                color:rgba(235,235,235,1);
+                line-height:35px;
+                letter-spacing:2px;
             }
         }
-        .userNameBox {
-            i {
-                width: 24px;
-                top: 34px;
-                height: 36px;
-                background: url('~assets/phone_ico.png') no-repeat left center;
-                background-size: contain;
-            }
-        }
-        .passwordBox {
-            i {
-                width: 24px;
-                top: 34px;
-                height: 36px;
-                background: url('~assets/pwd_ico.png') no-repeat left center;
-                background-size: contain;
-            }
-        }
-        .btnBox{
-         margin: 68px 45px 0 45px;
-        .loginBtn {
-            @include line-height(90px,
-            90px);
-            font-size:32px;
-            border-radius: 90px;
-            background: linear-gradient(to right,#f9d191,#f9b490);
-            border:none;
-            display:block;
-            width:100%;
-            color:#fff;
-        } }
     }
 </style>
+

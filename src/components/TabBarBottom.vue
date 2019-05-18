@@ -68,7 +68,7 @@ export default {
 <style scoped lang="scss">
     .mint-tabbar>.mint-tab-item{
         color: #fff;
-         background:linear-gradient(182deg,rgba(245,81,81,0.9) 0%,rgba(195,41,24,1) 100%);
+        background:linear-gradient(182deg,rgba(245,81,81,0.9) 0%,rgba(195,41,24,1) 100%);
     }
    .mint-tabbar>.mint-tab-item.is-selected {
         background:linear-gradient(182deg,rgba(245,81,81,0.9) 0%,rgba(195,41,24,1) 100%);
@@ -79,9 +79,9 @@ export default {
         color:#fff;
         font-size:22px;
         font-family:'MicrosoftYaHei';
-        color:rgba(255,255,255,1);
         line-height:29px;
         letter-spacing:2px;
+        background:linear-gradient(182deg,rgba(245,81,81,0.9) 0%,rgba(195,41,24,1) 100%);
     }
     .mint-tab-item{
         padding: 21px 0 16px;
