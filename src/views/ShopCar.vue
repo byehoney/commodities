@@ -1,12 +1,16 @@
 <template>
     <div>
-        <!-- <Car></Car> -->
-        <TabBarBottom curTab="shopcar"/>
+        <ShopCarHeader/>
+        <ShopCarList/>
+        <ShopCarFooter/>
+        <!-- <TabBarBottom curTab="shopcar"/> -->
     </div>
 </template>
 <script>
 import TabBarBottom from '@/components/TabBarBottom'
-import Car from "@/components/car"
+import ShopCarList from '@/components/ShopCarList'
+import ShopCarHeader from '@/components/ShopCarHeader'
+import ShopCarFooter from '@/components/ShopCarFooter'
 export default {
     data(){
         return{
@@ -14,8 +18,9 @@ export default {
         }
     },
     components:{
-        TabBarBottom,
-        Car
+        ShopCarList,
+        ShopCarHeader,
+        ShopCarFooter
     }
 }
 </script>
