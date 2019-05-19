@@ -1,0 +1,217 @@
+<!--创建新门店-->
+<template>
+    <div class="creatContainer">
+        <TopNav></TopNav>
+        <div class="progress">
+            <div class="state">
+                <img src="../images/shopcar.png" class="stateIcon" alt="">
+                <p class="stateText">门店信息</p>
+            </div>
+            <div class="divide"></div>
+            <div class="state">
+                <img src="../images/shopcar.png" class="stateIcon" alt="">
+                <p class="stateText">人员信息</p>
+            </div>
+            <div class="divide"></div>
+            <div class="state">
+                <img src="../images/shopcar.png" class="stateIcon" alt="">
+                <p class="stateText">资质信息</p>
+            </div>
+        </div>
+        <div class="info_area">
+            <div class="info_box">
+                <div class="info_item">
+                    <div class="left">门店名称</div>
+                    <input type="text" v-model="shop" placeholder="输入门店名称" class="input">
+                </div>
+                <div class="info_item" @click="handlerArea">
+                    <div class="left">所在地区</div>
+                    <div class="right">
+                        <span>{{sel_value}}</span>
+                        <img src="../images/arrow_right.png" alt="">
+                    </div>
+                </div>
+                <div class="info_item">
+                    <div class="left">注册地址</div>
+                    <input type="text" v-model="addr" placeholder="输入注册地址" class="input">
+                </div>
+                <div class="info_item">
+                    <div class="left">推荐码</div>
+                    <input type="text" v-model="code" placeholder="输入推荐码" class="input">
+                </div>
+            </div>
+        </div>
+        <CityPicker :areaVisible="popupVisible" :setArea="handleSetArea" :cancel="handleCancel"></CityPicker>
+        <div class="nextBtn" @click="goNext">下一步</div>
+    </div>
+</template>
+<script>
+import { Toast } from "mint-ui";
+import TopNav from '@/components/TopNav'
+import CityPicker from '@/components/CityPicker'
+export default {
+    data(){
+        return{
+            popupVisible:false,
+            set_value:'',//滑动变化值
+            sel_value:'请选择地区',//选择的值
+            shop:'',
+            addr:'',
+            code:''
+        }
+    },
+    components:{
+        TopNav,
+        CityPicker
+    },
+    methods:{
+        handlerArea(){
+            this.popupVisible = !this.popupVisible;
+        },
+        handleSetArea(value){
+            this.sel_value = value;
+            this.popupVisible = false;
+        },
+        handleCancel(){
+            this.popupVisible = false;
+        },
+        goNext(){
+            let reg = /^1[345678]\d{9}$/; 
+            if(!this.shop){
+                Toast({
+                    message: "请输入店铺名称",
+                    position: "middle",
+                    duration: 2000
+                });
+            }else if(this.sel_value=='请选择地区'){
+                Toast({
+                    message: "请选择所在地区",
+                    position: "middle",
+                    duration: 2000
+                });
+            }else if(!this.addr){
+                Toast({
+                    message: "请输入注册地址",
+                    position: "middle",
+                    duration: 2000
+                });
+            }else if(!reg.test(this.code.trim())){
+                Toast({
+                    message: "请输入正确的推荐码",
+                    position: "middle",
+                    duration: 2000
+                });
+            }else{
+                
+            }
+        }
+    }
+}
+</script>
+<style lang="scss" scoped>
+    .creatContainer{
+        width: 100vw;
+        height: 100vh;
+        background:rgba(235,235,235,1);
+        .nav{
+            border-bottom: 2px solid #ebebeb;
+        }
+        .progress{
+            padding-top: .92rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 184px;
+            background-color: #fff;
+            .state{
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                .stateIcon{
+                    width: 80px;
+                    height: 80px;
+                    margin-bottom: 5px;
+                }
+                .stateText{
+                    font-size:22px;
+                    color:rgba(255,0,0,1);
+                    line-height:29px;
+                }
+            }
+            .divide{
+                width:190px;
+                height:3px;
+                background:rgba(153,153,153,1);
+                border-radius:2px;
+                position: relative;
+                top: -10px;
+            }
+        }
+        .info_area{
+            width: 100%;
+            background-color: #fff;
+            margin-top: 10px;
+            .info_box{
+                margin-left: 39px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                .info_item{
+                    width: 100%;
+                    display: flex;
+                    justify-content: space-between;
+                    height: 112px;
+                    border-bottom: 2px solid #ebebeb;
+                    .left{
+                        font-size:26px;
+                        color:rgba(102,102,102,1);
+                        line-height:112px;
+                        letter-spacing:1px;
+                    }
+                    .input{
+                        width:374px;
+                        height:100px;
+                        font-size:26px;
+                        color:#333;
+                        line-height:100px;
+                        letter-spacing:3px;
+                        border: none;
+                        outline: none;
+                        margin-right: 41px;
+                        text-align: right;
+                    }
+                    .right{
+                        display: flex;
+                        align-items: center;
+                        span{
+                            font-size:26px;
+                            color:rgba(153,153,153,1);
+                            line-height:35px;
+                            letter-spacing:3px;
+                        }
+                        img{
+                            width: 17px;
+                            height: 30px;
+                            margin-right: 41px;
+                            margin-left: 10px;
+                        }
+                    }
+                }
+            }
+        }
+        .nextBtn{
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100vw;
+            height: 98px;
+            line-height: 98px;
+            text-align: center;
+            font-size:36px;
+            color:rgba(255,255,255,1);
+            letter-spacing:3px;
+            background-color: #666;
+            margin: 0 auto;
+        }
+    }
+</style>

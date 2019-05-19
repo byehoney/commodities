@@ -22,7 +22,7 @@
             <mt-picker :slots="slots" @change="onValuesChange" showToolbar>
                 <div class="barContent">
                     <div @click="handleCancel" class="cancel">取消</div>
-                    <div class="tip"></div>
+                    <div class="tip">请选择</div>
                     <div @click="handleConfirm" class="sure">确认</div>
                 </div>
             </mt-picker>
@@ -166,6 +166,10 @@ export default {
             background-color: #666;
             margin: 0 auto;
         }
+        .picker-toolbar{
+            height: 96px;
+            border-bottom: 2px solid #ebebeb;
+        }
         .barContent{
             width: 100%;
             height: 100%;
@@ -181,13 +185,28 @@ export default {
                 justify-content: center;
                 align-items: center;
                 padding:0 30px;
+                font-size:26px;
+                color:rgba(102,102,102,1);
+                letter-spacing:2px;
             }
             .sure{
-                color:#3089dc;
+                color:#FF0000;
+            }
+            .tip{
+                font-size:30px;
+                color:rgba(51,51,51,1);
+                letter-spacing:3px;
             }
         }
         .slot1{
             width: 100vw;
+            .picker-item{
+                font-size:30px;
+                color:rgba(51,51,51,1);
+                height: 78px;
+                line-height:78px;
+                letter-spacing:3px;
+            }
         }
     }
 </style>

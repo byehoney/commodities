@@ -193,6 +193,83 @@ const router = new Router({
             }
         },
         {
+            path: '/joinShop',
+            name: 'joinShop',
+            component: () =>
+                import(/* webpackChunkName: "joinShop" */ './views/JoinShop.vue'),
+            meta: {
+                auth: false,
+                keepAlive: false,
+                title:'加入门店'
+            }
+        },
+        {
+            path: '/creatNewShop',
+            name: 'creatNewShop',
+            component: () =>
+                import(/* webpackChunkName: "creatNewShop" */ './views/CreatNewShop.vue'),
+            meta: {
+                auth: false,
+                keepAlive: false,
+                title:'创建新门店'
+            }
+        },
+        {
+            path: '/salerInfo',
+            name: 'salerInfo',
+            component: () =>
+                import(/* webpackChunkName: "salerInfo" */ './views/SalerInfo.vue'),
+            meta: {
+                auth: false,
+                keepAlive: false,
+                title:'人员信息'
+            }
+        },
+        {
+            path: '/intelInfo',
+            name: 'intelInfo',
+            component: () =>
+                import(/* webpackChunkName: "intelInfo" */ './views/IntelInfo.vue'),
+            meta: {
+                auth: false,
+                keepAlive: false,
+                title:'资质信息'
+            }
+        },
+        {
+            path: '/businessScope',
+            name: 'businessScope',
+            component: () =>
+                import(/* webpackChunkName: "businessScope" */ './views/BusinessScope.vue'),
+            meta: {
+                auth: false,
+                keepAlive: false,
+                title:'经营范围'
+            }
+        },
+        {
+            path: '/pcLogin',
+            name: 'pcLogin',
+            component: () =>
+                import(/* webpackChunkName: "pcLogin" */ './views/PcLogin.vue'),
+            meta: {
+                auth: false,
+                keepAlive: false,
+                title:'PC登录'
+            }
+        },
+        {
+            path: '/forgetPas',
+            name: 'forgetPas',
+            component: () =>
+                import(/* webpackChunkName: "forgetPas" */ './views/ForgetPas.vue'),
+            meta: {
+                auth: false,
+                keepAlive: false,
+                title:'忘记密码'
+            }
+        },
+        {
             path: '/login',
             name: 'login',
             component: () =>

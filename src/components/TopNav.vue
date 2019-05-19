@@ -33,6 +33,7 @@ export default {
         position: fixed;
         top: 0;
         left: 0;
+        z-index: 1000;
         .leftIcon{
             width: 17px;
             height: 30px;
