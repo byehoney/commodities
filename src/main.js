@@ -12,7 +12,11 @@ import "@/style/reset.scss"
 Vue.use(AwesomePicker);
 Vue.use(DrawerLayout)
 
+<<<<<<< Updated upstream
 import { Tabbar,Toast,Radio,TabItem ,Picker,Cell,Popup,Button,InfiniteScroll,Swipe, SwipeItem} from 'mint-ui';
+=======
+import {Header, Tabbar,Toast, TabItem ,Picker,Cell,Popup,Button,InfiniteScroll,Swipe, SwipeItem} from 'mint-ui';
+>>>>>>> Stashed changes
 Vue.use(InfiniteScroll);
 Vue.component(Radio.name, Radio);
 Vue.component(VeLine.name, VeLine)
@@ -24,7 +28,12 @@ Vue.component(Popup.name, Popup);
 Vue.component(Button.name, Button);
 Vue.component(Swipe.name, Swipe);
 Vue.component(SwipeItem.name, SwipeItem);
+<<<<<<< Updated upstream
 Vue.component(Popup.name, Popup);
+=======
+Vue.component(Header.name, Header);
+Vue.use(Toast)
+>>>>>>> Stashed changes
 Vue.use(wechat);
 // 注入全局过滤器
 Object.keys(filters).forEach(item => {
