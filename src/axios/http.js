@@ -101,4 +101,20 @@ function post (url, params) {
     //  或者return axios.post();
 }
 
-export { get, post }
+//上传图片的方法
+function upload(Url, data,handle) {
+    let instance = axios.create({
+        withCredentials: false,
+        baseURL: '',
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    });
+    instance.post(Url, data).then(res => {
+        handle(res.data);
+    }).catch(error => {
+        console.log(error)
+    })
+};
+export { get, post ,upload}
+
