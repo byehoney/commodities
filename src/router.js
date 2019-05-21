@@ -125,7 +125,7 @@ const router = new Router({
             component: () =>
                 import(/* webpackChunkName: "address" */ './views/Address.vue'),
             meta: {
-                auth: true,
+                auth: false,
                 keepAlive: false
             }
         },
@@ -267,6 +267,17 @@ const router = new Router({
                 auth: false,
                 keepAlive: false,
                 title:'忘记密码'
+            }
+        },
+        {
+            path: '/addNewAdr',
+            name: 'addNewAdr',
+            component: () =>
+                import(/* webpackChunkName: "addNewAdr" */ './views/AddNewAdr.vue'),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title:'新增收货地址'
             }
         },
         {
