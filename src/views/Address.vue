@@ -80,16 +80,39 @@ export default {
             padding-top: 92px;
             .addItem{
                 display: flex;
-                justify-content: space-between;
                 align-items: center;
+                background-color: #fff;
+                padding:38px 40px 54px 0;
                 .check_icon{
                     width: 40px;
                     height: 40px;
+                    margin-left: 39px;
+                    margin-right: 29px;
                 }
                 .addContent{
                     display: flex;
                     flex-direction: column;
                     justify-content: center;
+                    width: 541px;
+                    flex: 1;
+                    .top{
+                        font-size:26px;
+                        color:rgba(102,102,102,1);
+                        line-height:35px;
+                        letter-spacing:3px;
+                    }
+                    .bottom{
+                        font-size:24px;
+                        color:rgba(102,102,102,1);
+                        line-height:31px;
+                        letter-spacing:3px;
+                    }
+                }
+                .edit{
+                    font-size:24px;
+                    color:rgba(153,153,153,1);
+                    line-height:31px;
+                    letter-spacing:1px;
                 }
             }
         }

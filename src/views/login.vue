@@ -38,7 +38,8 @@ export default {
                 position: "middle",
                 duration: 2000
             });
-        }else if(!reg.test(this.password.trim())){
+        }else if(!reg.test(this.username.trim())){
+            console.log()
             Toast({
                 message: "请输入正确的手机号",
                 position: "middle",

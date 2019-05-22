@@ -1,6 +1,11 @@
 <template>
     <div class="addContainer">
-        <TopNav></TopNav>
+        <!-- <TopNav></TopNav> -->
+        <div class="nav">
+            <img @click="goBack" src="../images/leftArrow.png" class="leftIcon" alt="">
+            <span class="title">我的收货地址</span>
+            <span class="btn" v-if="showDel" @click="delAdd">删除</span>
+        </div>
         <div class="addArea">
             <div class="addItem">
                 <div class="left">
@@ -46,6 +51,7 @@ import CityPicker from "@/components/CityPicker";
 export default {
     data(){
         return{
+            showDel:false,//是否显示删除按钮
             areaVisible:false,
             set_value: "", //滑动变化值
             sel_value: "", //选择的值
@@ -108,7 +114,40 @@ export default {
     height: 100vh;
     background:rgba(235,235,235,1);
     .nav{
+        width: 100%;
+        height: 88px;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #fff;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1000;
         border-bottom: 2px solid #ebebeb;
+        .leftIcon{
+            width: 17px;
+            height: 30px;
+            position: absolute;
+            top: 29px;
+            left: 30px;
+        }
+        .title{
+            font-size: 30px;
+        }
+        .btn{
+            width:133px;
+            height:35px;
+            font-size:24px;
+            color:rgba(153,153,153,1);
+            line-height:35px;
+            letter-spacing:2px;
+            position: absolute;
+            top: 26px;
+            right: 41px;
+            text-align: right;
+        }
     }
     .addArea{
         padding-top: 92px;
