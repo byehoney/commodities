@@ -281,6 +281,28 @@ const router = new Router({
             }
         },
         {
+            path: '/refuseList',
+            name: 'refuseList',
+            component: () =>
+                import(/* webpackChunkName: "refuseList" */ './views/RefuseList.vue'),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title:'厂家拒开列表'
+            }
+        },
+        {
+            path: '/myOrders',
+            name: 'myOrders',
+            component: () =>
+                import(/* webpackChunkName: "myOrders" */ './views/MyOrders.vue'),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title:'我的订单'
+            }
+        },
+        {
             path: '/login',
             name: 'login',
             component: () =>
