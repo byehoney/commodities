@@ -13,7 +13,7 @@
             infinite-scroll-distance="10"
         >
             <li v-for="(item,index) in list" :key="index" class="listItem">
-                <div class="listInner">
+                <div class="listInner" v-if="actIndex==0">
                     <div class="top">
                         <div class="topInfo">
                             <div class="orderNum">订单号：990789789889</div>
@@ -37,6 +37,29 @@
                             <span>付款码</span>
                         </div>
                         <router-link class="goDetail" to="/">查看详情</router-link>
+                    </div>
+                </div>
+                <div class="listInner" v-if="actIndex==3">
+                    <div class="top">
+                        <div class="topInfo">
+                            <div class="orderNum">订单号：990789789889</div>
+                            <div class="orderState">待评价</div>
+                        </div>
+                        <div class="topImgs">
+                            <img src="../images/shopcar.png" alt="">
+                            <img src="../images/shopcar.png" alt="">
+                            <img src="../images/shopcar.png" alt="">
+                            <img src="../images/shopcar.png" alt="">
+                        </div>
+                        <div class="topDetail">
+                            <div class="total">共120件商品</div>
+                            <div class="name">金额：</div>
+                            <div class="num">￥68.95</div>
+                        </div>
+                    </div>
+                    <div class="bottom">
+                        <router-link class="goEva" to="/">评价</router-link>
+                        <router-link class="hasEva" to="/">已评价</router-link>
                     </div>
                 </div>
             </li>
@@ -205,6 +228,30 @@ export default {
                             background-color: #9b9b9b;
                             text-align: center;
                             border-radius: 5px;
+                        }
+                        .goEva{
+                            width: 128px;
+                            height: 64px;
+                            border:2px solid #d0021b;
+                            border-radius: 50px;
+                            line-height: 64px;
+                            font-size:24px;
+                            color:rgba(208,2,27,1);
+                            letter-spacing:1px;
+                            display: block;
+                            text-align: center;
+                        }
+                        .hasEva{
+                            width: 128px;
+                            height: 64px;
+                            border:2px solid #797979;
+                            border-radius: 50px;
+                            line-height: 64px;
+                            font-size:24px;
+                            color:rgba(102,102,102,1);
+                            letter-spacing:1px;
+                            display: block;
+                            text-align: center;
                         }
                     }
                 }

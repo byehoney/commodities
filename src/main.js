@@ -11,8 +11,9 @@ import "normalize.css"
 import "@/style/reset.scss"
 Vue.use(AwesomePicker);
 Vue.use(DrawerLayout)
-import {Header, Tabbar,Toast, TabItem ,Picker,Cell,Popup,Button,InfiniteScroll,Swipe, SwipeItem} from 'mint-ui';
+import {Header, Tabbar,Toast,Field, TabItem ,Picker,Cell,Popup,Button,InfiniteScroll,Swipe, SwipeItem} from 'mint-ui';
 Vue.use(InfiniteScroll);
+Vue.component(Field.name, Field);
 Vue.component(VeLine.name, VeLine)
 Vue.component(Tabbar.name, Tabbar);
 Vue.component(TabItem.name, TabItem);

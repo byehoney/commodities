@@ -303,6 +303,28 @@ const router = new Router({
             }
         },
         {
+            path: '/hasEva',
+            name: 'hasEva',
+            component: () =>
+                import(/* webpackChunkName: "hasEva" */ './views/HasEva.vue'),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title:'已评价'
+            }
+        },
+        {
+            path: '/evaForOrder',
+            name: 'evaForOrder',
+            component: () =>
+                import(/* webpackChunkName: "evaForOrder" */ './views/EvaForOrder.vue'),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title:'评价晒单'
+            }
+        },
+        {
             path: '/login',
             name: 'login',
             component: () =>
