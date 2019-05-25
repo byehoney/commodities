@@ -325,6 +325,39 @@ const router = new Router({
             }
         },
         {
+            path: '/viewLogist',
+            name: 'viewLogist',
+            component: () =>
+                import(/* webpackChunkName: "viewLogist" */ './views/ViewLogist.vue'),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title:'订单物流'
+            }
+        },
+        {
+            path: '/waiteGet',
+            name: 'waiteGet',
+            component: () =>
+                import(/* webpackChunkName: "waiteGet" */ './views/WaiteGet.vue'),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title:'待收货'
+            }
+        },
+        {
+            path: '/orderDetail',
+            name: 'orderDetail',
+            component: () =>
+                import(/* webpackChunkName: "orderDetail" */ './views/OrderDetail.vue'),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title:'订单详情'
+            }
+        },
+        {
             path: '/login',
             name: 'login',
             component: () =>

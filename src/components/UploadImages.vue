@@ -1,31 +1,22 @@
 <template>
   <div class="avatar">
-    <div class="hasPic" v-if="imgUrls.length>0" v-for="(item,index) in imgUrls">
-      <img class="seledPic" ref="picture" :src="item?item:require('../../static/Images/imagebj.jpg')" name="avatar" @click="bigImg(index)">
-      <img class="delect" src="../../static/Images/del.png" @click="delect(index)">
-    </div>
-    <div class="imgMask" v-if="showBigImg" @click.stop="showBigImg=!showBigImg">
-      <div class="showImg">
-        <mt-swipe :auto="0" :show-indicators="false" @change="handleChange" :continuous="false" :defaultIndex="num">
-          <mt-swipe-item v-for="(item,index) in imgUrls" :key="item.id">
-            <div class="num"  >{{index+1+'/'+imgUrls.length}}</div>
-            <img :src="imgUrls[index]" class="img"/>
-          </mt-swipe-item>
-        </mt-swipe>
-
+    <template v-if="imgUrls.length>0">
+      <div class="hasPic"  v-for="(item,index) in imgUrls" :key="index">
+        <img class="seledPic" ref="picture" :src="item?item:require('../images/upload_icon.png')" name="avatar" @click="bigImg(index)">
+        <img class="delect" src="../images/close.png" @click="delect(index)">
       </div>
-    </div>
+    </template>
     <div class="selPic"  v-if="imgUrls.length<6">
-      <img src="../../static/Images/imagebj.jpg" name="avatar">
-      <span>{{pictureNums}}</span>
-      <input type="file" maxlength="" class="input-file" multiple="multiple" name="avatar" ref="avatarInput" @change="changeImage($event)" accept="image/gif,image/jpeg,image/jpg,image/png">
+      <img src="../images/upload_icon.png" name="avatar">
+      <!-- <span>{{pictureNums}}</span> -->
+      <input type="file" maxlength="" class="input-file" multiple="multiple" name="avatar" ref="avatarInput" @change="changeImage($event)" accept="image/*">
     </div>
   </div>
 </template>
 <script>
-import {MessageBox, Toast} from 'mint-ui'
-import {Swipe, SwipeItem} from 'mint-ui'
-import 'mint-ui/lib/style.css'
+// import {MessageBox, Toast} from 'mint-ui'
+// import {Swipe, SwipeItem} from 'mint-ui'
+// import 'mint-ui/lib/style.css'
 export default {
   name: 'upload',
   data () {
@@ -41,8 +32,9 @@ export default {
       showBg: false
     }
   },
-  props: ['uploadType', 'imgUrl'],
+  props: ['uploadType', 'imgUrl','setList'],
   created () {
+    console.log(this)
     this.avatar = this.imgUrl
   },
   methods: {
@@ -58,6 +50,7 @@ export default {
           reader.onload = function (e) {
             console.log(this.result)
             that.imgUrls.push(this.result)
+            that.setList(that.imgUrls)
           }
         }
         // 剩余张数
@@ -86,7 +79,7 @@ export default {
   }
 }
 </script>
-<style  scope>
+<style lang="scss"  scoped>
   .avatar {
     width: 100%;
     display: flex;
@@ -95,14 +88,14 @@ export default {
   }
   .hasPic{
     position: relative;
-    width: 4.5625rem;
-    height:4.5625rem;
-    margin-left: 10px;
-    margin-bottom: 10px;
+    width: 168px;
+    height:124px;
+    margin-right: 30px;
+    margin-bottom: 30px;
   }
   .input-file {
-    width: 4.5625rem;
-    height: 4.5625rem;
+    width: 168px;
+    height: 124px;
     background: red;
     opacity: 0;
   }
@@ -117,29 +110,34 @@ export default {
   }
   .delect{
     position: absolute;
-    top: -5px;
-    right: -2px;
-    width: 15px;
-    height: 15px;
+    top: -10px;
+    right: -10px;
+    width: 30px;
+    height: 30px;
   }
   .selPic{
     margin-left: 10px;
     margin-bottom: 10px;
     position: relative;
-    width: 4.5625rem;
-    height:4.5625rem;
+    width:168px;
+    height:124px;
+    border-radius:12px;
+    border:2px solid rgba(235,235,235,1);
+    display: flex;
+    justify-content: center;
+    align-items: center; 
   }
   .selPic img{
-    position: absolute;
-    width: 4.5625rem;
-    height: 4.5625rem;
-    top: 0px;
-    left: 0px;
+    // position: absolute;
+    width: 87px;
+    height: 63px;
+    // top: 0px;
+    // left: 0px;
   }
   .selPic span{
     position: absolute;
     bottom: .9rem;
-    width:4.5625rem;
+    width:168px;
     color: #c4c3c3;
     font-size: .75rem;
     left:0px;
@@ -147,8 +145,13 @@ export default {
   }
   .selPic input{
     position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    font-size: 0;
     top: 0px;
     left: 0px;
+    z-index: 100;
   }
   .imgMask{
     position: absolute;
