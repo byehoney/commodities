@@ -9,23 +9,26 @@
     </div>
 
     <div class="detail_content">
-        <!-- 价格栏位 -->
+      <!-- 价格栏位 -->
       <div class="detail_content_one">
         <div class="detail_content_title">星星闪耀</div>
-        <div class="detail_content_tag">
-          <span>
-            <img src="../images/detail_xing.png">
-          </span>
-          <span>
-            <img src="../images/detail_sale.png">
-          </span>
+        <div class="detail_content_content">
+          <div class="detail_content_tag">
+            <span>
+              <img src="../images/detail_xing.png">
+            </span>
+            <span>
+              <img src="../images/detail_sale.png">
+            </span>
+            <div class="detail_content_price">
+              <ul>
+                <li>原价：4590</li>
+              </ul>
+            </div>
+          </div>
         </div>
-        <div class="detail_content_price">
-          <ul>
-            <li>原价：4590</li>
-            <li>¥3200</li>
-          </ul>
-        </div>
+        <div class="newprice">¥3200</div>
+        <div style="clear:both"></div>
       </div>
       <!-- 所在地区 -->
       <div class="detail_content_two">
@@ -39,14 +42,23 @@
               <span>销量：</span>
               <span>22</span>
             </li>
+          </ul>
+        </div>
+        <div style="clear:both"></div>
+        <div class="detail_content_add">
+          <ul>
             <li>
-              <span>库存：</span>
-              <span>22</span>
+              <span>优惠</span>
+              <span>优惠相关文案展示内容</span>
+            </li>
+             <li>
+              <span>活动</span>
+              <span>满88员，省10元</span>
             </li>
           </ul>
         </div>
         <div class="detail_content_two_right">
-          <img src="../images/detail_shop.png">
+          <!-- <img src="../images/detail_shop.png"> -->
         </div>
         <div style="clear:both"></div>
       </div>
@@ -124,9 +136,8 @@
             <span>单品合集：</span>
             <span>¥3200</span>
           </div>
-         
         </div>
-         <div class="detail_popup_num_shop">立即购买</div>
+        <div class="detail_popup_num_shop">立即购买</div>
       </mt-popup>
     </div>
   </div>
@@ -153,11 +164,11 @@ export default {
     handlerClick() {
       this.popupVisible = true;
     },
-    add(){
-        this.shopnum += 1;
+    add() {
+      this.shopnum += 1;
     },
-    reduce(){
-        this.shopnum ==0?this.shopnum=0:this.shopnum--
+    reduce() {
+      this.shopnum == 0 ? (this.shopnum = 0) : this.shopnum--;
     }
   }
 };
@@ -252,14 +263,29 @@ a {
   float: right;
 }
 .detail_content_two_left {
-  width: 480px;
+  width: 610px;
   font-size: 22px;
   color: #999999;
   float: left;
   line-height: 39px;
 }
+.detail_content_two_left ul li{
+  float: left;
+}
+.detail_content_two_left ul li:nth-of-type(2){
+  float: right;
+}
 .detail_content_two_left span:nth-of-type(2) {
   color: #c32918;
+
+}
+.detail_content_add ul li{
+  line-height: 30px;
+  color:#666
+}
+.detail_content_add ul li span:nth-of-type(1){
+  color:#ff0000;
+  margin-right:25px;
 }
 .detail_content_two_right {
   width: 173px;
@@ -303,9 +329,6 @@ a {
   height: 100px;
   line-height: 100px;
   display: flex;
-}
-.footer_guide a span:nth-of-type(2) {
-  /* background:#c32918 */
 }
 .guide_item {
   display: flex;
@@ -379,6 +402,15 @@ span {
   width: 100%;
   vertical-align: middle;
 }
+.detail_content_content {
+  float: left;
+}
+.newprice{
+  float:right;
+  font-size: 50px;
+  color:#ff0000;
+  margin-top:30px;
+}
 .detail_popup_price {
   margin-bottom: 24px;
 }
@@ -388,7 +420,6 @@ span {
   line-height: 88px;
   min-height: 88px;
   margin-bottom: 24px;
-  
 }
 .detail_popup_num_shop {
   position: fixed;
@@ -398,25 +429,24 @@ span {
   color: #fff;
   background: #c32918;
   width: 750px;
-  font-size:30px
+  font-size: 30px;
 }
-.detail_popup_num_left{
-    float: left;
+.detail_popup_num_left {
+  float: left;
 }
-.detail_popup_num_right{
-    float: right;
-    width: 180px;
-    height:50px;
+.detail_popup_num_right {
+  float: right;
+  width: 180px;
+  height: 50px;
 }
-.detail_popup_num_right ul li{
-    float: left;
-    width: 50px;
-    height:50px;
-    border:1px solid #ccc;
-    line-height: 50px;
-    margin-top:15px;
-    text-align:center;
-    cursor: pointer;
-
+.detail_popup_num_right ul li {
+  float: left;
+  width: 50px;
+  height: 50px;
+  border: 1px solid #ccc;
+  line-height: 50px;
+  margin-top: 15px;
+  text-align: center;
+  cursor: pointer;
 }
 </style>
