@@ -9,23 +9,26 @@
     </div>
 
     <div class="detail_content">
-        <!-- 价格栏位 -->
+      <!-- 价格栏位 -->
       <div class="detail_content_one">
         <div class="detail_content_title">星星闪耀</div>
-        <div class="detail_content_tag">
-          <span>
-            <img src="../images/detail_xing.png">
-          </span>
-          <span>
-            <img src="../images/detail_sale.png">
-          </span>
+        <div class="detail_content_content">
+          <div class="detail_content_tag">
+            <span>
+              <img src="../images/detail_xing.png">
+            </span>
+            <span>
+              <img src="../images/detail_sale.png">
+            </span>
+            <div class="detail_content_price">
+              <ul>
+                <li>原价：4590</li>
+              </ul>
+            </div>
+          </div>
         </div>
-        <div class="detail_content_price">
-          <ul>
-            <li>原价：4590</li>
-            <li>¥3200</li>
-          </ul>
-        </div>
+        <div class="newprice">¥3200</div>
+        <div style="clear:both"></div>
       </div>
       <!-- 所在地区 -->
       <div class="detail_content_two">
@@ -39,14 +42,23 @@
               <span>销量：</span>
               <span>22</span>
             </li>
+          </ul>
+        </div>
+        <div style="clear:both"></div>
+        <div class="detail_content_add">
+          <ul>
             <li>
-              <span>库存：</span>
-              <span>22</span>
+              <span>优惠</span>
+              <span>优惠相关文案展示内容</span>
+            </li>
+            <li>
+              <span>活动</span>
+              <span>满88员，省10元</span>
             </li>
           </ul>
         </div>
         <div class="detail_content_two_right">
-          <img src="../images/detail_shop.png">
+          <!-- <img src="../images/detail_shop.png"> -->
         </div>
         <div style="clear:both"></div>
       </div>
@@ -83,20 +95,28 @@
         </div>
       </div>
       <!-- 底部 -->
-      <div class="footer_guide">
-        <a href="javascript:;" class="guide_item">
-          <!-- <span>1</span> -->
-          <span class="shop_car">
-            <img src="../images/shopcar.png">
-            <p class="badge">{{shopnum}}</p>
-          </span>
-        </a>
-        <a href="javascript:;" class="guide_item">
-          <span @click="addshop">加入购物车</span>
-        </a>
-        <a href="javascript:;" class="guide_item">
-          <span @click="handlerClick">立即购买</span>
-        </a>
+      <div class="footer_guide fix">
+        <div class="footer_guide_left fix">
+          <ul>
+            <li>
+              <img src="../images/shopcar.png">
+              <p class="badge">{{shopnum}}</p>
+            </li>
+            <li>
+              <img src="../images/kefu.png">
+            </li>
+          </ul>
+        </div>
+        <div class="footer_guide_right fix">
+          <ul>
+            <li>
+              <span @click="addshop">加入购物车</span>
+            </li>
+            <li>
+              <span @click="handlerClick">立即购买</span>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
     <!-- popup弹出框 -->
@@ -124,9 +144,8 @@
             <span>单品合集：</span>
             <span>¥3200</span>
           </div>
-         
         </div>
-         <div class="detail_popup_num_shop">立即购买</div>
+        <div class="detail_popup_num_shop">立即购买</div>
       </mt-popup>
     </div>
   </div>
@@ -153,11 +172,11 @@ export default {
     handlerClick() {
       this.popupVisible = true;
     },
-    add(){
-        this.shopnum += 1;
+    add() {
+      this.shopnum += 1;
     },
-    reduce(){
-        this.shopnum ==0?this.shopnum=0:this.shopnum--
+    reduce() {
+      this.shopnum == 0 ? (this.shopnum = 0) : this.shopnum--;
     }
   }
 };
@@ -248,18 +267,32 @@ a {
 }
 .detail_content_price ul li:nth-of-type(2) {
   font-size: 28px;
-  color: #c32918;
+  color: #ff0000;
   float: right;
 }
 .detail_content_two_left {
-  width: 480px;
+  width: 610px;
   font-size: 22px;
   color: #999999;
   float: left;
   line-height: 39px;
 }
+.detail_content_two_left ul li {
+  float: left;
+}
+.detail_content_two_left ul li:nth-of-type(2) {
+  float: right;
+}
 .detail_content_two_left span:nth-of-type(2) {
-  color: #c32918;
+  color: #ff0000;
+}
+.detail_content_add ul li {
+  line-height: 30px;
+  color: #666;
+}
+.detail_content_add ul li span:nth-of-type(1) {
+  color: #ff0000;
+  margin-right: 25px;
 }
 .detail_content_two_right {
   width: 173px;
@@ -290,9 +323,9 @@ a {
 .detail_content_three_desc ul li {
   margin-bottom: 30px;
 }
-
+/* 底部样式 */
 .footer_guide {
-  border-top: 1px soild #e4e4e4;
+  border-top: 5px solid #e4e4e4;
   position: fixed;
   z-index: 100;
   left: 0;
@@ -300,44 +333,55 @@ a {
   bottom: 1px;
   background-color: #fff;
   width: 100%;
-  height: 100px;
-  line-height: 100px;
-  display: flex;
+  height: 95px;
+  line-height: 95px;
 }
-.footer_guide a span:nth-of-type(2) {
-  /* background:#c32918 */
+.footer_guide_left{
+    width:262px;
+    float: left;
+    min-height: 100px;
 }
-.guide_item {
-  display: flex;
-  flex: 1;
-  text-align: center;
-  flex-direction: column;
-  align-items: center;
-  color: #999999;
-  background: #c32918;
-  color: #fff;
+.footer_guide_left ul li{
+  width: 62px;
+  height: 62px;
+  float: left;
+  margin-left:49px;
 }
-.guide_item:nth-of-type(1) {
-  background: #fff;
+.footer_guide_left ul li:nth-of-type(1){
+  position: relative;
 }
-.guide_item:nth-of-type(2) {
-  background: #f6bf64;
+.footer_guide_left ul li:nth-of-type(2){
+  width: 49px;
+  height: 62px;
+  float: left;
+}
+.footer_guide_left ul li img,.footer_guide_right ul li img{
+  width:100%;
+}
+.footer_guide_right{
+    width:488px;
+    float: left;
+    text-align:center;
+    color:#fff;
+}
+.footer_guide_right ul li{
+  width:244px;
+  height:100px;
+  line-height: 50px;
+  float: left;
+  background: url("../images/resultgray.png") no-repeat top;
+  background-size: 100%;
+}
+.footer_guide_right ul li:nth-of-type(2){
+  background: url("../images/result.png") no-repeat top;
+  background-size: 100%
 }
 .on {
   color: #02a774;
 }
 span {
+  display: inline-block;
   font-size: 12px;
-  /* color:#f00 */
-}
-.shop_car {
-  width: 62px;
-  height: 62px;
-  margin-top: 19px;
-  position: relative;
-}
-.shop_car img {
-  width: 100%;
 }
 .badge {
   width: 29px;
@@ -346,9 +390,13 @@ span {
   border-radius: 50%;
   background: #f00;
   position: absolute;
-  top: -10px;
+  z-index:100;
+  top: 10px;
   right: -8px;
   font-size: 12px;
+  text-align: center;
+  color:#fff;
+  line-height: 29px;
 }
 .iconfont {
   font-size: 22px;
@@ -379,6 +427,15 @@ span {
   width: 100%;
   vertical-align: middle;
 }
+.detail_content_content {
+  float: left;
+}
+.newprice {
+  float: right;
+  font-size: 50px;
+  color: #ff0000;
+  margin-top: 30px;
+}
 .detail_popup_price {
   margin-bottom: 24px;
 }
@@ -388,7 +445,6 @@ span {
   line-height: 88px;
   min-height: 88px;
   margin-bottom: 24px;
-  
 }
 .detail_popup_num_shop {
   position: fixed;
@@ -398,25 +454,24 @@ span {
   color: #fff;
   background: #c32918;
   width: 750px;
-  font-size:30px
+  font-size: 30px;
 }
-.detail_popup_num_left{
-    float: left;
+.detail_popup_num_left {
+  float: left;
 }
-.detail_popup_num_right{
-    float: right;
-    width: 180px;
-    height:50px;
+.detail_popup_num_right {
+  float: right;
+  width: 180px;
+  height: 50px;
 }
-.detail_popup_num_right ul li{
-    float: left;
-    width: 50px;
-    height:50px;
-    border:1px solid #ccc;
-    line-height: 50px;
-    margin-top:15px;
-    text-align:center;
-    cursor: pointer;
-
+.detail_popup_num_right ul li {
+  float: left;
+  width: 50px;
+  height: 50px;
+  border: 1px solid #ccc;
+  line-height: 50px;
+  margin-top: 15px;
+  text-align: center;
+  cursor: pointer;
 }
 </style>
