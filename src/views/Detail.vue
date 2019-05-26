@@ -51,7 +51,7 @@
               <span>优惠</span>
               <span>优惠相关文案展示内容</span>
             </li>
-             <li>
+            <li>
               <span>活动</span>
               <span>满88员，省10元</span>
             </li>
@@ -95,20 +95,28 @@
         </div>
       </div>
       <!-- 底部 -->
-      <div class="footer_guide">
-        <a href="javascript:;" class="guide_item">
-          <!-- <span>1</span> -->
-          <span class="shop_car">
-            <img src="../images/shopcar.png">
-            <p class="badge">{{shopnum}}</p>
-          </span>
-        </a>
-        <a href="javascript:;" class="guide_item">
-          <span @click="addshop">加入购物车</span>
-        </a>
-        <a href="javascript:;" class="guide_item">
-          <span @click="handlerClick">立即购买</span>
-        </a>
+      <div class="footer_guide fix">
+        <div class="footer_guide_left fix">
+          <ul>
+            <li>
+              <img src="../images/shopcar.png">
+              <p class="badge">{{shopnum}}</p>
+            </li>
+            <li>
+              <img src="../images/kefu.png">
+            </li>
+          </ul>
+        </div>
+        <div class="footer_guide_right fix">
+          <ul>
+            <li>
+              <span @click="addshop">加入购物车</span>
+            </li>
+            <li>
+              <span @click="handlerClick">立即购买</span>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
     <!-- popup弹出框 -->
@@ -259,7 +267,7 @@ a {
 }
 .detail_content_price ul li:nth-of-type(2) {
   font-size: 28px;
-  color: #c32918;
+  color: #ff0000;
   float: right;
 }
 .detail_content_two_left {
@@ -269,23 +277,22 @@ a {
   float: left;
   line-height: 39px;
 }
-.detail_content_two_left ul li{
+.detail_content_two_left ul li {
   float: left;
 }
-.detail_content_two_left ul li:nth-of-type(2){
+.detail_content_two_left ul li:nth-of-type(2) {
   float: right;
 }
 .detail_content_two_left span:nth-of-type(2) {
-  color: #c32918;
-
+  color: #ff0000;
 }
-.detail_content_add ul li{
+.detail_content_add ul li {
   line-height: 30px;
-  color:#666
+  color: #666;
 }
-.detail_content_add ul li span:nth-of-type(1){
-  color:#ff0000;
-  margin-right:25px;
+.detail_content_add ul li span:nth-of-type(1) {
+  color: #ff0000;
+  margin-right: 25px;
 }
 .detail_content_two_right {
   width: 173px;
@@ -316,9 +323,9 @@ a {
 .detail_content_three_desc ul li {
   margin-bottom: 30px;
 }
-
+/* 底部样式 */
 .footer_guide {
-  border-top: 1px soild #e4e4e4;
+  border-top: 5px solid #e4e4e4;
   position: fixed;
   z-index: 100;
   left: 0;
@@ -326,41 +333,55 @@ a {
   bottom: 1px;
   background-color: #fff;
   width: 100%;
-  height: 100px;
-  line-height: 100px;
-  display: flex;
+  height: 95px;
+  line-height: 95px;
 }
-.guide_item {
-  display: flex;
-  flex: 1;
-  text-align: center;
-  flex-direction: column;
-  align-items: center;
-  color: #999999;
-  background: #c32918;
-  color: #fff;
+.footer_guide_left{
+    width:262px;
+    float: left;
+    min-height: 100px;
 }
-.guide_item:nth-of-type(1) {
-  background: #fff;
+.footer_guide_left ul li{
+  width: 62px;
+  height: 62px;
+  float: left;
+  margin-left:49px;
 }
-.guide_item:nth-of-type(2) {
-  background: #f6bf64;
+.footer_guide_left ul li:nth-of-type(1){
+  position: relative;
+}
+.footer_guide_left ul li:nth-of-type(2){
+  width: 49px;
+  height: 62px;
+  float: left;
+}
+.footer_guide_left ul li img,.footer_guide_right ul li img{
+  width:100%;
+}
+.footer_guide_right{
+    width:488px;
+    float: left;
+    text-align:center;
+    color:#fff;
+}
+.footer_guide_right ul li{
+  width:244px;
+  height:100px;
+  line-height: 50px;
+  float: left;
+  background: url("../images/resultgray.png") no-repeat top;
+  background-size: 100%;
+}
+.footer_guide_right ul li:nth-of-type(2){
+  background: url("../images/result.png") no-repeat top;
+  background-size: 100%
 }
 .on {
   color: #02a774;
 }
 span {
+  display: inline-block;
   font-size: 12px;
-  /* color:#f00 */
-}
-.shop_car {
-  width: 62px;
-  height: 62px;
-  margin-top: 19px;
-  position: relative;
-}
-.shop_car img {
-  width: 100%;
 }
 .badge {
   width: 29px;
@@ -369,9 +390,13 @@ span {
   border-radius: 50%;
   background: #f00;
   position: absolute;
-  top: -10px;
+  z-index:100;
+  top: 10px;
   right: -8px;
   font-size: 12px;
+  text-align: center;
+  color:#fff;
+  line-height: 29px;
 }
 .iconfont {
   font-size: 22px;
@@ -405,11 +430,11 @@ span {
 .detail_content_content {
   float: left;
 }
-.newprice{
-  float:right;
+.newprice {
+  float: right;
   font-size: 50px;
-  color:#ff0000;
-  margin-top:30px;
+  color: #ff0000;
+  margin-top: 30px;
 }
 .detail_popup_price {
   margin-bottom: 24px;

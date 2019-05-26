@@ -8,7 +8,8 @@
       <div class="detsil_loop_center"></div>
     </div>
     <div class="detail_content">
-      <div class="detail_content_one">
+      <!-- 限时秒杀广告栏位 -->
+      <div class="detail_content_one fix">
         <div class="detail_content_one_left">
           <ul>
             <li>$50</li>
@@ -35,28 +36,58 @@
           </ul>
         </div>
       </div>
-      <div class="detail_content_two">
+      <div class="detail_content_two fix">
         <div class="detail_content_title">星星闪耀</div>
+        <div class="detail_content_content">
+          <div class="detail_content_tag">
+            <span>
+              <img src="../images/detail_xing.png">
+            </span>
+            <span>
+              <img src="../images/detail_sale.png">
+            </span>
+          </div>
+        </div>
         <div class="detail_content_two_left">
           <ul>
-            <li>
-              <span>所在地区：</span>
-              <span>北京</span>
-            </li>
             <li>
               <span>销量：</span>
               <span>22</span>
             </li>
             <li>
-              <span>库存：</span>
-              <span>22</span>
+              <span>所在地区：</span>
+              <span>北京</span>
             </li>
           </ul>
         </div>
-        <div class="detail_content_two_right">
-          <img src="../images/detail_shop.png">
+      </div>
+      <!-- 标题主要内容结束 -->
+      <!-- 库存 -->
+      <div class="storesave fix">
+        <div class="storesave_left">
+          <ul>
+            <li></li>
+            <li>限时限量 疯狂抢购</li>
+          </ul>
         </div>
-        <div style="clear:both"></div>
+        <div class="storesave_right">
+          <ul>
+            <li>库存：</li>
+            <li>999</li>
+          </ul>
+        </div>
+      </div>
+      <div class="storesave_list  fix">
+        <ul>
+          <li>优惠</li>
+          <li>优惠文案相关展示内容</li>
+        </ul>
+      </div>
+      <div class="storesave_list bd fix">
+        <ul>
+          <li>活动</li>
+          <li>满88 减40</li>
+        </ul>
       </div>
       <div class="detail_content_three">
         <div class="detail_content_three_header">
@@ -90,20 +121,28 @@
         </div>
       </div>
       <!-- 底部 -->
-      <div class="footer_guide">
-        <a href="javascript:;" class="guide_item">
-          <!-- <span>1</span> -->
-          <span class="shop_car">
-            <img src="../images/shopcar.png">
-            <p class="badge">{{shopnum}}</p>
-          </span>
-        </a>
-        <a href="javascript:;" class="guide_item">
-          <span @click="addshop">加入购物车</span>
-        </a>
-        <a href="javascript:;" class="guide_item">
-          <span @click="handlerClick">立即购买</span>
-        </a>
+      <div class="footer_guide fix">
+        <div class="footer_guide_left fix">
+          <ul>
+            <li>
+              <img src="../images/shopcar.png">
+              <p class="badge">{{shopnum}}</p>
+            </li>
+            <li>
+              <img src="../images/kefu.png">
+            </li>
+          </ul>
+        </div>
+        <div class="footer_guide_right fix">
+          <ul>
+            <li>
+              <span @click="addshop">加入购物车</span>
+            </li>
+            <li>
+              <span @click="handlerClick">立即购买</span>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
     <!-- popup弹出框 -->
@@ -178,7 +217,7 @@ a {
 .detail_header {
   width: 750px;
   min-height: 100px;
-  background: #c32918;
+  background: linear-gradient(to right,#ff6238,#ff1240);
   font-size: 30px;
   line-height: 100px;
   position: relative;
@@ -211,13 +250,12 @@ a {
 .detail_content_one,
 .detail_content_two,
 .detail_content_three {
-  margin-bottom: 6px;
   background: #fff;
   padding: 24px 46px;
 }
 .detail_content_one {
   min-height: 117px;
-  background: #c32918;
+  background: linear-gradient(to right,#ff6238,#ff1240);
   padding: 0;
 }
 .detail_content_one_left {
@@ -261,7 +299,7 @@ a {
 }
 .detail_content_one_right span {
   display: inline-block;
-  font-size: 0.3rem
+  font-size: 0.3rem;
 }
 .detail_content_one_right ul li span:nth-of-type(1) {
   width: 26px;
@@ -290,7 +328,74 @@ a {
 .detail_content_title {
   font-size: 34px;
   color: #333;
-  margin-bottom: 27px;
+}
+.detail_content_content {
+  width: 750px;
+  height: 70px;
+}
+.detail_content_tag {
+  height: 43px;
+  line-height: 43px;
+}
+.detail_content_tag span {
+  display: inline-block;
+  width: 60px;
+  height: 30px;
+  margin-right: 10px;
+}
+.detail_content_tag span img {
+  width: 100%;
+}
+/* 库存 */
+.storesave {
+  width: 656px;
+  min-height: 70px;
+  background: #ffefef;
+  line-height: 70px;
+  color: #ff0000;
+  padding: 0 47px;
+  font-size: 24px;
+}
+.storesave_left,
+.storesave_right {
+  float: left;
+}
+.storesave_left ul li,
+.storesave_right ul li {
+  float: left;
+}
+.storesave_right ul li:nth-of-type(1) {
+  color: #999;
+}
+.storesave_left ul li:nth-of-type(1) {
+  width: 44px;
+  height: 44px;
+  background: url("../images/miao.png") no-repeat center center;
+  background-size: 100% 100%;
+  margin-right: 24px;
+  margin-top: 10px;
+}
+.storesave_right {
+  float: right;
+}
+.storesave_list {
+  min-height: 70px;
+  background: #fff;
+  line-height: 70px;
+  border-bottom: 1px solid #ededed;
+}
+.bd{
+  margin-bottom:5px;
+  border-bottom: none
+}
+.storesave_list ul li {
+  float: left;
+  font-size: 22px;
+  color: #666;
+  margin-left: 49px;
+}
+.storesave_list ul li:nth-of-type(1) {
+  color: #ff0000;
 }
 .detail_content_price {
   min-height: 61px;
@@ -306,25 +411,17 @@ a {
 }
 .detail_content_price ul li:nth-of-type(2) {
   font-size: 28px;
-  color: #c32918;
+  color: #ff0000;
   float: right;
 }
 .detail_content_two_left {
   width: 480px;
   font-size: 22px;
   color: #999999;
-  float: left;
   line-height: 39px;
 }
 .detail_content_two_left span:nth-of-type(2) {
-  color: #c32918;
-}
-.detail_content_two_right {
-  width: 173px;
-  float: left;
-}
-.detail_content_two_right img {
-  width: 100%;
+  color: #ff0000;
 }
 .detail_content_three {
   min-height: 648px;
@@ -349,8 +446,9 @@ a {
   margin-bottom: 30px;
 }
 
+/* 底部样式 */
 .footer_guide {
-  border-top: 1px soild #e4e4e4;
+  border-top: 5px solid #e4e4e4;
   position: fixed;
   z-index: 100;
   left: 0;
@@ -358,44 +456,56 @@ a {
   bottom: 1px;
   background-color: #fff;
   width: 100%;
-  height: 100px;
-  line-height: 100px;
-  display: flex;
+  height: 95px;
+  line-height: 95px;
 }
-.footer_guide a span:nth-of-type(2) {
-  /* background:#c32918 */
+.footer_guide_left {
+  width: 262px;
+  float: left;
+  min-height: 100px;
 }
-.guide_item {
-  display: flex;
-  flex: 1;
+.footer_guide_left ul li {
+  width: 62px;
+  height: 62px;
+  float: left;
+  margin-left: 49px;
+}
+.footer_guide_left ul li:nth-of-type(1) {
+  position: relative;
+}
+.footer_guide_left ul li:nth-of-type(2) {
+  width: 49px;
+  height: 62px;
+  float: left;
+}
+.footer_guide_left ul li img,
+.footer_guide_right ul li img {
+  width: 100%;
+}
+.footer_guide_right {
+  width: 488px;
+  float: left;
   text-align: center;
-  flex-direction: column;
-  align-items: center;
-  color: #999999;
-  background: #c32918;
   color: #fff;
 }
-.guide_item:nth-of-type(1) {
-  background: #fff;
+.footer_guide_right ul li {
+  width: 244px;
+  height: 100px;
+  line-height: 50px;
+  float: left;
+  background: url("../images/resultgray.png") no-repeat top;
+  background-size: 100%;
 }
-.guide_item:nth-of-type(2) {
-  background: #f6bf64;
+.footer_guide_right ul li:nth-of-type(2) {
+  background: url("../images/result.png") no-repeat top;
+  background-size: 100%;
 }
 .on {
   color: #02a774;
 }
 span {
+  display: inline-block;
   font-size: 12px;
-  /* color:#f00 */
-}
-.shop_car {
-  width: 62px;
-  height: 62px;
-  margin-top: 19px;
-  position: relative;
-}
-.shop_car img {
-  width: 100%;
 }
 .badge {
   width: 29px;
@@ -404,9 +514,13 @@ span {
   border-radius: 50%;
   background: #f00;
   position: absolute;
-  top: -10px;
+  z-index: 100;
+  top: 10px;
   right: -8px;
   font-size: 12px;
+  text-align: center;
+  color: #fff;
+  line-height: 29px;
 }
 .iconfont {
   font-size: 22px;
@@ -437,6 +551,15 @@ span {
   width: 100%;
   vertical-align: middle;
 }
+.detail_content_content {
+  float: left;
+}
+.newprice {
+  float: right;
+  font-size: 50px;
+  color: #ff0000;
+  margin-top: 30px;
+}
 .detail_popup_price {
   margin-bottom: 24px;
 }
@@ -444,6 +567,7 @@ span {
   border-top: 3px dashed #ccc;
   border-bottom: 3px dashed #ccc;
   line-height: 88px;
+  min-height: 88px;
   margin-bottom: 24px;
 }
 .detail_popup_num_shop {
@@ -455,5 +579,23 @@ span {
   background: #c32918;
   width: 750px;
   font-size: 30px;
+}
+.detail_popup_num_left {
+  float: left;
+}
+.detail_popup_num_right {
+  float: right;
+  width: 180px;
+  height: 50px;
+}
+.detail_popup_num_right ul li {
+  float: left;
+  width: 50px;
+  height: 50px;
+  border: 1px solid #ccc;
+  line-height: 50px;
+  margin-top: 15px;
+  text-align: center;
+  cursor: pointer;
 }
 </style>
