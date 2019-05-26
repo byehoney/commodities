@@ -3,18 +3,18 @@
         <TopNav></TopNav>
         <div class="progress">
             <div class="state">
-                <img src="../images/shopcar.png" class="stateIcon" alt="">
+                <img src="../images/md_icon_act.png" class="stateIcon" alt="">
                 <p class="stateText">门店信息</p>
             </div>
             <div class="divide"></div>
             <div class="state">
-                <img src="../images/shopcar.png" class="stateIcon" alt="">
+                <img src="../images/user_icon_act.png" class="stateIcon" alt="">
                 <p class="stateText">人员信息</p>
             </div>
             <div class="divide"></div>
             <div class="state">
-                <img src="../images/shopcar.png" class="stateIcon" alt="">
-                <p class="stateText">资质信息</p>
+                <img src="../images/intel_icon_grey.png" class="stateIcon" alt="">
+                <p class="stateText grey">资质信息</p>
             </div>
         </div>
         <div class="info_area">
@@ -31,14 +31,14 @@
         </div>
         <div class="card_box">
             <div class="card_item">
-                <div class="top">
+                <div class="top z">
                     <img :src="imgStrZ" alt="" class="cardImg">
                     <input @change="fileChange($event,'Z')" type="file" id="upload_file" class="upload_file"  accept="image/*"/>
                 </div>
                 <div class="bottom">身份证头像面</div>
             </div>
             <div class="card_item">
-                <div class="top">
+                <div class="top f">
                     <img :src="imgStrF" alt="" class="cardImg">
                     <input @change="fileChange($event,'F')" type="file" id="upload_file" class="upload_file"  accept="image/*"/>
                 </div>
@@ -192,6 +192,9 @@ export default {
                     font-size:22px;
                     color:rgba(255,0,0,1);
                     line-height:29px;
+                    &.grey{
+                        color: #999;
+                    }
                 }
             }
             .divide{
@@ -208,6 +211,7 @@ export default {
             flex-direction: column;
             width: 100%;
             background-color: #fff;
+            margin-top: 10px;
             .info_list{
                 margin-left: 39px;
                 display: flex;
@@ -260,9 +264,17 @@ export default {
                 .top{
                     width:292px;
                     height:166px;
-                    background:linear-gradient(85deg,rgba(255,98,56,1) 0%,rgba(255,18,64,1) 100%);
+                    // background:linear-gradient(85deg,rgba(255,98,56,1) 0%,rgba(255,18,64,1) 100%);
                     border-radius:10px;
                     position: relative;
+                    &.z{
+                        background: url('../images/id_card_z.png') no-repeat 0 0;
+                        background-size: 100% 100%;
+                    }
+                    &.f{
+                        background: url('../images/id_card_f.png') no-repeat 0 0;
+                        background-size: 100% 100%;
+                    }
                     .cardImg{
                         position: absolute;
                         top: 0;

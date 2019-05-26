@@ -4,18 +4,18 @@
         <TopNav></TopNav>
         <div class="progress">
             <div class="state">
-                <img src="../images/shopcar.png" class="stateIcon" alt="">
+                <img src="../images/md_icon_act.png" class="stateIcon" alt="">
                 <p class="stateText">门店信息</p>
             </div>
             <div class="divide"></div>
             <div class="state">
-                <img src="../images/shopcar.png" class="stateIcon" alt="">
-                <p class="stateText">人员信息</p>
+                <img src="../images/user_icon_grey.png" class="stateIcon" alt="">
+                <p class="stateText grey">人员信息</p>
             </div>
             <div class="divide"></div>
             <div class="state">
-                <img src="../images/shopcar.png" class="stateIcon" alt="">
-                <p class="stateText">资质信息</p>
+                <img src="../images/intel_icon_grey.png" class="stateIcon" alt="">
+                <p class="stateText grey">资质信息</p>
             </div>
         </div>
         <div class="info_area">
@@ -136,6 +136,9 @@ export default {
                     font-size:22px;
                     color:rgba(255,0,0,1);
                     line-height:29px;
+                    &.grey{
+                        color:rgba(153,153,153,1);
+                    }
                 }
             }
             .divide{

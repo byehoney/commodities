@@ -3,17 +3,17 @@
         <TopNav></TopNav>
         <div class="progress">
             <div class="state">
-                <img src="../images/shopcar.png" class="stateIcon" alt="">
+                <img src="../images/md_icon_act.png" class="stateIcon" alt="">
                 <p class="stateText">门店信息</p>
             </div>
             <div class="divide"></div>
             <div class="state">
-                <img src="../images/shopcar.png" class="stateIcon" alt="">
+                <img src="../images/user_icon_act.png" class="stateIcon" alt="">
                 <p class="stateText">人员信息</p>
             </div>
             <div class="divide"></div>
             <div class="state">
-                <img src="../images/shopcar.png" class="stateIcon" alt="">
+                <img src="../images/intel_icon_act.png" class="stateIcon" alt="">
                 <p class="stateText">资质信息</p>
             </div>
         </div>
