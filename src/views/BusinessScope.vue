@@ -1,21 +1,23 @@
 <template>
     <div class="scopeContainer">
         <TopNav></TopNav>
-        <div class="title">《XX商品经营许可证》</div>
+        <!-- <div class="title">《XX商品经营许可证》</div> -->
         <div class="scopeBox">
             <div class="scopeList">
-                <div class="scopeItem" v-for="(item,index) in dataList" :key="index" @click="selItem(index)">
-                    <span>{{item.title}}</span>
-                    <img class="sel" v-if="item.isActive" src="../images/selected.jpg" alt="">
+                <div class="scopeItem" v-for="(item,index) in dataList" :key="index" @click="selItem(index,item.scopeCode)">
+                    <span>{{item.scopeName}}</span>
+                    <img class="sel" v-if="item.gxStatus=='勾选'" src="../images/xuanze.png" alt="">
                 </div>
             </div>
         </div>
-        <div class="nextBtn">完成</div>
+        <div class="nextBtn" @click="confirm">完成</div>
     </div>
 </template>
 <script>
 import { Toast } from "mint-ui";
 import TopNav from '@/components/TopNav'
+import {getRangeList} from '@/api/index'
+import {mapMutations} from 'vuex'
 export default {
     data(){
         return{
@@ -26,17 +28,27 @@ export default {
     components:{
         TopNav,
     },
-    mounted(){
-        let dataSource = [{title:'烟花制剂'},{title:'XXXXXXXXX制剂'}];
-        dataSource.map((item,index)=>{
-            item.isActive = false;
-        })
-        this.dataList = dataSource;
+    async mounted(){
+        let res = await getRangeList();
+        this.dataList = res.data.list;
     },
     methods:{
-        selItem(index){
-            this.dataList[index].isActive = !this.dataList[index].isActive;
-            this.selList = this.dataList;
+        ...mapMutations('register',['saveRange']),
+        selItem(index,scopeCode){
+            if(this.dataList[index].gxStatus=='勾选'){
+                this.$set(this.dataList[index],'gxStatus','不勾选')
+            }else{
+                this.$set(this.dataList[index],'gxStatus','勾选')
+            }  
+        },
+        confirm(){
+            this.dataList.map((item,index)=>{
+                if(item.gxStatus=='勾选'){
+                    this.selList.push(item.scopeCode);
+                }
+            })
+            this.saveRange(this.selList);
+            console.log(this.$store)
         }
     }
 }
@@ -46,6 +58,9 @@ export default {
     width: 100vw;
     min-height: 100vh;
     background:rgba(235,235,235,1);
+    .nav{
+        border-bottom: 2px solid #ebebeb;
+    }
     .title{
         width:280px;
         height:91px;
@@ -60,6 +75,7 @@ export default {
     .scopeBox{
         width: 100%;
         background-color: #fff;
+        margin-bottom: 100px;
         .scopeList{
             margin-left: 39px;
             .scopeItem{

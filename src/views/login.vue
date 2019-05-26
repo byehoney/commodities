@@ -1,7 +1,7 @@
 <template>
     <div class="login_area">
         <img src="../images/login_logo.png" class="logo_icon" alt="">
-        <input class="name" type="text" placeholder="请输入您的手机号" v-model="username" autocomplete="off">
+        <input class="name" type="tel" maxlength="11" placeholder="请输入您的手机号" v-model="username" autocomplete="off">
         <input class="pas" type="password" placeholder="请输入密码" v-model="password" autocomplete="off">
         <div class="login_btn" @click="loginBtn">登录</div>
         <div class="more_fun">
@@ -60,12 +60,13 @@ export default {
 <style scoped lang="scss">
     .login_area{
         width: 100vw;
-        height: 100vh;
+        min-height: 100vh;
         background-color:#e4393c; 
         display: flex;
         flex-direction: column;
         align-items: center;
         background: url('../images/login_bg.jpg') no-repeat 0 0;
+        background-attachment: fixed;
         background-size: cover;
         .logo_icon{
             width: 200px;

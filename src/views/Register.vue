@@ -2,7 +2,7 @@
     <div class="reg_container">
         <TopNav></TopNav>  
         <div class="reg_area">
-            <input class="tel" type="text" maxlength="11" v-model="tel" autocomplete="false" placeholder="请输入您的手机号">
+            <input class="tel" type="tel" maxlength="11" v-model="tel" autocomplete="false" placeholder="请输入您的手机号">
             <div class="msg_area">
                 <input class="yzm" type="text" v-model="yzm" autocomplete="false" placeholder="请输入验证码">
                 <div class="yzm_btn" @click="sendMsg">{{msgStr}}</div>

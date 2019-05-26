@@ -19,11 +19,14 @@
         </div>
         <div class="info_area">
             <div class="info_list">
-                <div class="info_item">
+                <div class="info_item" @click="selProperties">
                     <div class="left">经营性质</div>
-                    <input type="text" v-model="itel" class="input" placeholder="请输入经营性质" autocomplete="false">
+                    <div class="properties">
+                        <span>{{sel_value}}</span>
+                        <img class="right_icon" src="../images/arrow_right.png" alt="">
+                    </div>
                 </div>
-                <div class="info_item noBorder">
+                <div class="info_item noBorder" @click="selRange">
                     <div class="left">经营范围</div>
                     <img src="../images/arrow_right.png" alt="">
                 </div>
@@ -52,33 +55,83 @@
                 <div class="sure" @click="closeTip">确认</div>
             </div>
         </div>
+        <mt-popup
+            v-model="popupVisible"
+            position="bottom"
+        >
+            <mt-picker value-key="businessName" :slots="slots" @change="onValuesChange" showToolbar>
+                <div class="barContent">
+                    <div @click="handleCancel" class="cancel">取消</div>
+                    <div class="tip">请选择</div>
+                    <div @click="handleConfirm" class="sure">确认</div>
+                </div>
+            </mt-picker>
+        </mt-popup>
     </div>
 </template>
 <script>
 import Vue from 'vue'
 import { Toast } from "mint-ui";
 import TopNav from '@/components/TopNav'
+import {getPropertyList,getIntelList} from '@/api/index'
 export default {
     data(){
         return{
             itel:'',
             itelList:[],//资质列表
             showTip:false,
+            popupVisible:false,
+            set_value:'',//滑动变化值
+            sel_value:'请选择',//选择的值  经营性质
+            businessCode:'',//经营性质编码
+            setCode:'',
+            slots: [
+                {
+                    flex: 1,
+                    values: [],
+                    className: 'slot1',
+                    textAlign: 'center'
+                }   
+            ]
         }
     },
     components:{
         TopNav,
     },
-    mounted(){
-        let dataList = [{id:1},{id:2}];
-        dataList.map((item,index)=>{
-            item.imgStr = '';
-        })
-        this.itelList=dataList;
+    async mounted(){
+        let res = await getPropertyList();
+        this.$set(this.slots[0],'values',res.data.list);
     },
     methods: {
+        onValuesChange(picker, values){
+            if(!values.length||!values[0]){
+                return
+            }
+            this.set_value = values[0].businessName;
+            this.setCode = values[0].businessCode;
+        },
+        selProperties(){
+            this.popupVisible = !this.popupVisible;
+        },
+        handleCancel(){
+            this.popupVisible = false
+        },
+        handleConfirm() {
+            this.popupVisible = false;
+            this.sel_value = this.set_value;
+            this.businessCode = this.setCode;
+            console.log(this.businessCode)
+            this.reqList();
+        },
+        async reqList(){
+            let intelList = await getIntelList({code:this.businessCode});
+            this.itelList = intelList;
+        },
         closeTip(){
             this.showTip = false;
+        },
+        selRange(){//选择经营范围
+            this.$router.push({name:'businessScope'})
         },
         chooseType() {
             document.getElementById('upload_file').click();
@@ -220,6 +273,24 @@ export default {
                     letter-spacing:1px;
                     margin-right: 55px;
                 }
+                .properties{
+                    width: 453px;
+                    height: 100%;
+                    border: none;
+                    outline: none;
+                    font-size:26px;
+                    color:#666;
+                    line-height: 120px;
+                    letter-spacing:1px;
+                    text-align: right;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    span{
+                        flex: 1;
+                        margin-right: 10px;
+                    }
+                }
                 .input{
                     width: 253px;
                     height: 100%;
@@ -358,6 +429,52 @@ export default {
                 margin-top: 54px;
                 margin-right: 49px;
             }
+        }
+    }
+    .mint-popup-bottom{
+        width: 100%;
+    }
+    .picker-toolbar{
+        width: 100%;
+        height: 96px;
+        border-bottom: 2px solid #ebebeb;
+    }
+    .barContent{
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 38px;
+        color:#666;
+        .cancel,.sure{
+            height: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding:0 30px;
+            font-size:26px;
+            color:rgba(102,102,102,1);
+            letter-spacing:2px;
+        }
+        .sure{
+            color:#FF0000;
+        }
+        .tip{
+            font-size:30px;
+            color:rgba(51,51,51,1);
+            letter-spacing:3px;
+        }
+    }
+    .slot1{
+        width: 100vw;
+        .picker-item{
+            font-size:30px;
+            color:rgba(51,51,51,1);
+            height: 78px;
+            line-height:78px;
+            letter-spacing:3px;
         }
     }
 }

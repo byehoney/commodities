@@ -19,7 +19,7 @@
             v-model="popupVisible"
             position="bottom"
         >
-            <mt-picker :slots="slots" @change="onValuesChange" showToolbar>
+            <mt-picker value-key="userName" :slots="slots" @change="onValuesChange" showToolbar>
                 <div class="barContent">
                     <div @click="handleCancel" class="cancel">取消</div>
                     <div class="tip">请选择</div>
@@ -32,6 +32,8 @@
 <script>
 import { Toast } from "mint-ui";
 import TopNav from '@/components/TopNav'
+import {getActorList} from '@/api/index'
+import {mapMutations} from 'vuex'
 export default {
     data(){
         return{
@@ -39,11 +41,13 @@ export default {
             pasTwo:'',
             popupVisible:false,
             set_value:'',//滑动变化值
-            sel_value:'角色1',//选择的值
+            sel_value:'请选择',//选择的值
+            userRole:'',
+            setRole:'',
             slots: [
                 {
                     flex: 1,
-                    values: ['角色1', '角色2', '角色3', '角色4'],
+                    values: [],
                     className: 'slot1',
                     textAlign: 'center'
                 }   
@@ -53,9 +57,18 @@ export default {
     components:{
         TopNav
     },
+    async mounted(){
+        let res = await getActorList();
+        this.$set(this.slots[0],'values',res.data.list)
+    },
     methods:{
+        ...mapMutations('register',['saveRole','savePsw']),
         onValuesChange(picker, values){
-            this.set_value = values[0];
+            if(!values.length||!values[0]){
+                return
+            }
+            this.set_value = values[0].userName;
+            this.setRole = values[0].userRole;
         },
         selActor(){
             this.popupVisible = !this.popupVisible;
@@ -66,9 +79,17 @@ export default {
         handleConfirm() {
             this.popupVisible = false;
             this.sel_value = this.set_value;
+            this.userRole = this.setRole;
         },
         goNext(){
-            if(!this.pasOne.trim()){
+            let reg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$/;
+            if(this.sel_value == '请选择'){
+                Toast({
+                    message: "请选择用户角色",
+                    position: "middle",
+                    duration: 2000
+                });
+            }else if(!this.pasOne.trim()){
                 Toast({
                     message: "请输入密码",
                     position: "middle",
@@ -82,7 +103,13 @@ export default {
                 });
             }else if(this.pasOne.trim().length<6){
                 Toast({
-                    message: "密码长度需为6-16位",
+                    message: "密码长度须为6-16位",
+                    position: "middle",
+                    duration: 2000
+                });
+            }else if(!reg.test(this.pasOne.trim())||!reg.test(this.pasTwo.trim())){
+                Toast({
+                    message: "密码须为6-16位字母数字的组合",
                     position: "middle",
                     duration: 2000
                 });
@@ -93,7 +120,9 @@ export default {
                     duration: 2000
                 });
             }else{
-
+                this.saveRole(this.userRole);
+                this.savePsw(this.pasOne);
+                console.log(this.$store)
             }
         }
     }
