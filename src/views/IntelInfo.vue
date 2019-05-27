@@ -73,7 +73,7 @@
 import Vue from 'vue'
 import { Toast } from "mint-ui";
 import TopNav from '@/components/TopNav'
-import {getPropertyList,getIntelList} from '@/api/index'
+import {getPropertyList,getIntelList,uploadImage} from '@/api/index'
 export default {
     data(){
         return{
@@ -92,7 +92,12 @@ export default {
                     className: 'slot1',
                     textAlign: 'center'
                 }   
-            ]
+            ],
+            file:'',
+            token:'',
+            file_key:'',
+            key:'',
+            domain:'http://yanhuawang.rydltech.com/'
         }
     },
     components:{
@@ -101,8 +106,15 @@ export default {
     async mounted(){
         let res = await getPropertyList();
         this.$set(this.slots[0],'values',res.data.list);
+        this.getToken();
     },
     methods: {
+        async getToken(){
+            let res = await getUploadToken({suffix:'1'});
+            this.token = res.data.token;
+            this.key = res.data.imgUrl;
+            console.log(res);
+        },
         onValuesChange(picker, values){
             if(!values.length||!values[0]){
                 return
@@ -137,9 +149,21 @@ export default {
         chooseType() {
             document.getElementById('upload_file').click();
         },
+        upload(){
+            var data = new FormData();//重点在这里 如果使用 var data = {}; data.inputfile=... 这样的方式不能正常上传
+            data.append('token', this.token);
+            data.append('file',this.file)
+            data.append('key',this.key+this.file_key)
+            uploadImage(data,(res)=>{
+                console.log(this.domain+res.key)
+            })
+        },
         fileChange(el,card) {
             if (!el.target.files[0].size) return;
+            this.file= e.target.files[0]
+            this.file_key = e.target.files[0].name
             this.fileList(el.target,card);
+            // this.upload();
             el.target.value = ''
         },
         fileList(fileList,card) {

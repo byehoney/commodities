@@ -1,15 +1,14 @@
 import { get, post,upload } from '@/axios/http.js';
-function getIndex (params) {
-    return get('/mock/5cb48c7ed491cd741c54456f/base/index', params);
-}
 function login(params) {
     return post('/mock/5cb48c7ed491cd741c54456f/base/login', params);
 }
 function uploadImage(params,handle) {
-    return upload('https://testservice.chetuobang.com/api/opencar/map/uploadTraffic', params,handle)
+    return upload('https://up-z0.qiniup.com', params,handle)
 }
 
-
+function getUploadToken(params) {//获取图片上传token
+    return post('/qiniu/get/token.do', params)
+}
 function getActorList(params){//获取注册角色列表
     return get('/userrole/get/list.do',params)
 }
@@ -24,8 +23,8 @@ function getRangeList(params){//获取注册经营范围
 }
 
 export {
-    getIndex,
     login,
+    getUploadToken,
     uploadImage,
     getActorList,
     getPropertyList,
