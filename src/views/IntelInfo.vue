@@ -32,14 +32,14 @@
                 </div>
             </div>
         </div>
-        <div class="itel_info">
+        <div class="itel_info" v-if="itelList.length>0">
             <p class="title">
                 <span class="main_title">资质信息</span>
-                <span class="tip">上传身份证正反面进行身份验证</span>
+                <!-- <span class="tip">上传身份证正反面进行身份验证</span> -->
             </p>
             <div class="itel_list">
                 <div class="itel_item" v-for="(item,index) in itelList" :key="index">
-                    <p class="itel_title">《xx经营许可证》</p>
+                    <p class="itel_title">{{item.aptitudeName}}</p>
                     <div class="itel_upload">
                         <img :src="item.imgStr" alt="">
                         <input @change="fileChange($event,index)" type="file" id="upload_file" class="upload_file"  accept="image/*"/>
@@ -125,7 +125,8 @@ export default {
         },
         async reqList(){
             let intelList = await getIntelList({code:this.businessCode});
-            this.itelList = intelList;
+            this.itelList = intelList.data.list;
+            console.log(this.intelList)
         },
         closeTip(){
             this.showTip = false;

@@ -48,7 +48,7 @@ export default {
                 }
             })
             this.saveRange(this.selList);
-            console.log(this.$store)
+            this.$router.history.go(-1)
         }
     }
 }

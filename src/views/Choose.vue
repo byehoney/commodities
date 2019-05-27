@@ -23,7 +23,7 @@
         v-infinite-scroll="loadMore"
         infinite-scroll-disabled="loading"
         infinite-scroll-distance="10">
-            <div class="ms_area">
+            <div class="ms_area" v-if="curType==3">
                 <div class="ms_content">
                     <div class="ms_item active">
                         <div class="time">12:00</div>
@@ -48,12 +48,13 @@
                     <div class="right">
                         <div class="name">烟花商品名称 500g</div>
                         <div class="factory">路尼克（广州）烟花制造厂</div>
+                        <div class="size">规格：35g*1支</div>
                         <div class="item_bot">
                             <div class="bot_left">
                                 <div class="discount" v-if="curType==0||curType==1">8.8折</div>
                                 <div class="star_dis" v-if="curType==2">
-                                    <div class="starIcon">星选</div>
                                     <div class="discount">8.8折</div>
+                                    <div class="starIcon">星选</div>
                                 </div>
                                 <div class="price">
                                     <span class="nPrice">￥6.50</span>
@@ -75,22 +76,30 @@
                         </div>
                         <div class="right">
                             <div class="name">烟花商品名称 500g</div>
+                            <div class="factory">路尼克（广州）烟花制造厂</div>
+                            <div class="size">规格：35g*1支</div>
                             <div class="progress">
                                 <div class="pro_bar">
                                     <div class="barInner"></div>
                                 </div>
                                 <div class="status">30%</div>
-                                <div class="saled">已销：70件</div>
+                            </div>
+                            <div class="star_dis">
+                                <div class="discount">8.8折</div>
+                                <div class="starIcon">星选</div>
                             </div>
                             <div class="Info">
                                 <div class="infoLeft">
-                                    <div class="size">规格：35g*1支</div>
                                     <div class="price">
                                         <span class="nPrice">￥6.50</span>
                                         <span class="oPrice">8.80</span>
                                     </div>
+
                                 </div>
-                                <div class="infoRight">马上抢</div>
+                                <div class="infoRight">
+                                    <p class="right_top">马上抢</p>
+                                    <div class="saled">已销：70件</div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -220,8 +229,20 @@ export default {
             display: flex;
             // justify-content: space-between;
             align-items: center;
-            padding: 16px 24px 16px 46px;
+            padding: 27px 24px 26px 46px;
             border-bottom: 2px solid #eee;
+            &.ms_item .Info{
+                margin-top: 21px;
+                position: relative;
+                .infoRight{
+                    position: absolute;
+                    right: 0;
+                    top: -85px;
+                }
+                .oPrice{
+                    line-height: 39px;
+                }
+            }
             .left{
                 width: 204px;
                 height: 192px;
@@ -230,6 +251,7 @@ export default {
                 img{
                     width: 100%;
                     height: 100%;
+                    object-fit: scale-down;
                 }
             }
             .right{
@@ -262,10 +284,44 @@ export default {
                     word-break: break-all;
                     text-overflow: ellipsis;
                 }
+                .size{
+                    font-size:18px;
+                    color:rgba(102,102,102,1);
+                    line-height:24px;
+                    letter-spacing:1px;
+                    margin-bottom: 10px;
+                }
+                .star_dis{
+                    display: flex;
+                    margin-top: 7px;
+                    .starIcon{
+                        width: 60px;
+                        height: 30px;
+                        background-color: #F8E71C;
+                        font-size: 18px;
+                        line-height: 30px;
+                        text-align: center;
+                        color: #C32918;
+                        border-radius: .05rem;
+                        border: 2px solid #F8E71C;
+                    }
+                }
+                .discount{
+                    width: 60px;
+                    height: 30px;
+                    line-height: 30px;
+                    color: #C32918;
+                    font-size: 18px;
+                    border: 2px solid #C32918;
+                    text-align: center;
+                    border-radius: .05rem;
+                    margin-right: 10px;
+                }
                 .item_bot{
                     display: flex;
                     justify-content: space-between;
-                    height: 100px;
+                    position: relative;
+                    // height: 100px;
                     .bot_left{
                         display: flex;
                         flex-direction: column;
@@ -275,14 +331,14 @@ export default {
                             .starIcon{
                                 width: 60px;
                                 height: 30px;
-                                background-color: #ffbe50;
+                                background-color: #F8E71C;
                                 font-size: 18px;
                                 line-height: 30px;
                                 text-align: center;
                                 color: #C32918;
                                 border-radius: .05rem;
                                 margin-right: 10px;
-                                border: 2px solid #ffbe50;
+                                border: 2px solid #F8E71C;
                             }
                         }
                         .discount{
@@ -294,6 +350,8 @@ export default {
                             border: 2px solid #C32918;
                             text-align: center;
                             border-radius: .05rem;
+                            // padding: 5px;
+                            margin-bottom: 40px;
                         }
                         .price{
                             display: flex;
@@ -310,7 +368,7 @@ export default {
                                 font-size:18px;
                                 font-family:'MicrosoftYaHeiLight';
                                 color:rgba(153,153,153,1);
-                                line-height:24px;
+                                line-height:33px;
                                 letter-spacing:1px;
                                 text-decoration: line-through;
                             }
@@ -321,6 +379,9 @@ export default {
                         flex-direction: column;
                         justify-content: space-between;
                         align-items: center;
+                        position: absolute;
+                        top: 8px;
+                        right: 0;
                         .car{
                             width: 62px;
                             height: 62px;
@@ -354,21 +415,26 @@ export default {
                 letter-spacing:2px;
                 align-self: flex-start;
                 padding-left: 43px;
+                margin-top: 21px;
+                margin-bottom: 22px;
             }
             .ms_content{
                 width: 664px;
-                height: 149px;
-                background-color: #fce9eb;
-                border: 2px dashed #ccc;
+                height: 138px;
+                // background-color: #fce9eb;
+                // border: 2px dashed #ccc;
                 display: flex;
                 justify-content: space-around;
                 align-items: center;
                 margin-top: 36px;
                 .ms_item{
                     height: 100%;
+                    width: 215px;
                     display: flex;
                     flex-direction: column;
                     justify-content: center;
+                    background-color: #e4e4e4;
+                    margin:0 7px; 
                     .time{
                         font-size:32px;
                         font-family:'MicrosoftYaHei-Bold';
@@ -389,6 +455,8 @@ export default {
                     }
                     &.active{
                         position: relative;
+                        background: url('../images/ms_bd.png') no-repeat 0 0;
+                        background-size: cover;
                         .time{
                             color:#C32918;
                             font-family:'MicrosoftYaHei-Bold';
@@ -439,11 +507,11 @@ export default {
                 position: absolute;
                 bottom: 8px;
                 left: -46px;
-                width: 125px;
+                width: 126px;
                 height: 43px;
-                background: url('../images/ms_limt.png') no-repeat 0 0;
+                background: url('../images/ms_limit_bg.png') no-repeat 0 0;
                 background-size: contain;
-                padding-left: 19px;
+                text-align: center;
 
             }
             .progress{
@@ -455,11 +523,12 @@ export default {
                 line-height:27px;
                 letter-spacing:2px;
                 .pro_bar{
-                    width: 210px;
+                    width: 201px;
                     height: 11px;
-                    border: 2px dashed #ccc;
+                    background-color: #e7e7e7;
                     position: relative;
                     margin-right: 24px;
+                    border-radius: 10px;
                     .barInner{
                         width: 120px;
                         height: 11px;
@@ -467,6 +536,7 @@ export default {
                         top: 0;
                         left: 0;
                         background-color: #c32918;
+                        border-radius: 10px;
                     }
                 }
                 .status{
@@ -508,21 +578,30 @@ export default {
                             font-size:18px;
                             font-family:'MicrosoftYaHeiLight';
                             color:rgba(153,153,153,1);
-                            line-height:24px;
+                            line-height:33px;
                             letter-spacing:1px;
                             text-decoration: line-through;
                         }
                     }
                 }
                 .infoRight{
-                    width: 125px;
-                    height: 60px;
-                    line-height: 60px;
-                    text-align: center;
-                    font-size: 30px;
-                    color: #fff;
-                    background-color: #c32918;
-                    border-radius: 5px;
+                    .right_top{
+                        width: 125px;
+                        height: 60px;
+                        line-height: 60px;
+                        text-align: center;
+                        font-size: 30px;
+                        color: #fff;
+                        background:linear-gradient(85deg,rgba(255,98,56,1) 0%,rgba(255,18,64,1) 100%);
+                        border-radius: 10px;
+                    }
+                    .saled{
+                        margin-top: 32px;
+                        font-size:18px;
+                        color:rgba(51,51,51,1);
+                        line-height:24px;
+                        letter-spacing:1px;
+                    }
                 }
             }
         }
