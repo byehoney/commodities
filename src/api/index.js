@@ -21,7 +21,9 @@ function getIntelList(params){//获取注册资质信息
 function getRangeList(params){//获取注册经营范围
     return get('/scope/get/list.do',params)
 }
-
+function getCityList(params) {
+    return post('/city/all/list.do', params)
+}
 export {
     login,
     getUploadToken,
@@ -29,5 +31,6 @@ export {
     getActorList,
     getPropertyList,
     getIntelList,
-    getRangeList
+    getRangeList,
+    getCityList
 }

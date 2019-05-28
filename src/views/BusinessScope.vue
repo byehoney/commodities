@@ -10,7 +10,7 @@
                 </div>
             </div>
         </div>
-        <div class="nextBtn" @click="confirm">完成</div>
+        <div class="nextBtn" @click="confirm">确定</div>
     </div>
 </template>
 <script>

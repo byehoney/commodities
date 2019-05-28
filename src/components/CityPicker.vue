@@ -31,27 +31,38 @@
 </template>
 
 <script>
-// 导入数据
-import data from "@/utils/pca_code.json";
-let index = 0;
-let index2 = 0;
-// 初始化省
-let province = data.map(res => {
-  return res.name;
-});
-// 初始化市
-let city = data[index].children.map(res => {
-  return res.name;
-});
-// 初始化区
-let area = data[index].children[index2].children.map(res => {
-  return res.name;
-});
+// // 导入数据
+// import data from "@/utils/pca_code.json";
+// let index = 0;
+// let index2 = 0;
+// // 初始化省
+// let province = data.map(res => {
+//   return res.name;
+// });
+// // 初始化市
+// let city = data[index].children.map(res => {
+//   return res.name;
+// });
+// // 初始化区
+// let area = data[index].children[index2].children.map(res => {
+//   return res.name;
+// });
+import {getCityList} from '@/api/index';
+let pCode = '';
+let cCode = '';
+let aCode = '';
 export default {
   name: "index",
   data() {
     return {
       // areaVisible: false,
+      data:[],
+      index:0,
+      index2:0,
+      index3:0,
+      province:[],
+      city:[],
+      area:[],
       areaString: "请选择",
       slots: [
         {
@@ -87,6 +98,22 @@ export default {
     }
   },
   props:['areaVisible','setArea','cancel'],
+  async mounted() {
+    let res = await getCityList();
+    this.data = res.data.list;
+    this.province = this.data.map(res => {
+        return res.regionName;
+    });
+    this.city = this.data[this.index].children.map(res => {
+            return  res.regionName;
+    });
+    this.area = this.data[this.index].children[this.index2].children.map(res => {
+        return res.regionName;
+    });
+    this.$set(this.slots[0],'values',this.province);
+    this.$set(this.slots[2],'values',this.city);
+    this.$set(this.slots[4],'values',this.area)
+  },
   methods: {
     handleConfirm() {
       this.areaString =
@@ -101,26 +128,41 @@ export default {
       this.cancel();
     },
     onValuesChange(picker, values) {
-      let one = values[0];
-      let two = values[1];
-      let three = values[2];
-      index = province.indexOf(one);
-      if (index >= 0 && province.length > 0) {
-        city = data[index].children.map(res => {
-          return res.name;
-        });
-        picker.setSlotValues(1, city);
-        two = values[1];
+      if(values[0]==undefined||values[1]==undefined||!values[2]==undefined){
+          return
       }
-      index2 = city.indexOf(two);
-      if (index2 >= 0 && city.length > 0) {
-        area = data[index].children[index2].children.map(res => {
-          return res.name;
-        });
-        picker.setSlotValues(2, area);
-        three = values[2];
-      }
-      //   this.areaString = values.join(',')
+      this.$nextTick(()=>{
+        let one = values[0];
+        let two = values[1];
+        let three = values[2];
+        this.index = this.province.indexOf(one);
+        pCode = this.data[this.index].regionCode;
+        if (this.index >= 0 && this.province.length > 0) {
+            this.city = this.data[this.index].children.map(res => {
+                return res.regionName;
+            });
+            picker.setSlotValues(1, this.city);
+            two = values[1];
+        }
+        this.index2 = this.city.indexOf(two);
+        this.index3 = this.area .indexOf(three);
+        if(this.data[this.index].children[this.index2]){
+            cCode = this.data[this.index].children[this.index2].regionCode;
+            if(this.data[this.index].children[this.index2].children[this.index3]){
+                aCode = this.data[this.index].children[this.index2].children[this.index3].regionCode;
+            }
+        }
+        if (this.index2 >= 0 && this.city.length > 0) {
+            this.area = this.data[this.index].children[this.index2].children.map(res => {
+            return res.regionName;
+            });
+            picker.setSlotValues(2, this.area);
+            three = values[2];
+        }
+        // this.areaString = values.join(',')
+        console.log(this.areaString)
+        console.log(pCode,cCode,aCode)
+      })
     }
   }
 };

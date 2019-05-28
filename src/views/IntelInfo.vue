@@ -42,12 +42,12 @@
                     <p class="itel_title">{{item.aptitudeName}}</p>
                     <div class="itel_upload">
                         <img :src="item.imgStr" alt="">
-                        <input @change="fileChange($event,index)" type="file" id="upload_file" class="upload_file"  accept="image/*"/>
+                        <input @change="fileChange($event,index,item.aptitudeCode)" type="file" id="upload_file" class="upload_file"  accept="image/*"/>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="nextBtn">完成</div>
+        <div class="nextBtn" @click="goEnd">完成</div>
         <div class="mask" v-if="showTip">
             <div class="tipContent">
                 <div class="title">温馨提示</div>
@@ -59,7 +59,7 @@
             v-model="popupVisible"
             position="bottom"
         >
-            <mt-picker value-key="businessName" :slots="slots" @change="onValuesChange" showToolbar>
+            <mt-picker value-key="businessName" ref="picker" :defaultIndex="dIndex" :slots="slots" @change="onValuesChange" showToolbar>
                 <div class="barContent">
                     <div @click="handleCancel" class="cancel">取消</div>
                     <div class="tip">请选择</div>
@@ -73,11 +73,13 @@
 import Vue from 'vue'
 import { Toast } from "mint-ui";
 import TopNav from '@/components/TopNav'
-import {getPropertyList,getIntelList,uploadImage} from '@/api/index'
+import {mapState,mapMutations} from 'vuex';
+import {getPropertyList,getIntelList,uploadImage,getUploadToken} from '@/api/index'
+import { setTimeout } from 'timers';
 export default {
     data(){
         return{
-            itel:'',
+            dIndex:0,//默认选中的经营性质
             itelList:[],//资质列表
             showTip:false,
             popupVisible:false,
@@ -97,8 +99,12 @@ export default {
             token:'',
             file_key:'',
             key:'',
-            domain:'http://yanhuawang.rydltech.com/'
+            domain:'http://yanhuawang.rydltech.com/',
+            aptitudeList:[],//存储资质信息 以及对应的图片  供最后提交
         }
+    },
+    computed:{
+        ...mapState('register',['intel'])
     },
     components:{
         TopNav,
@@ -106,9 +112,11 @@ export default {
     async mounted(){
         let res = await getPropertyList();
         this.$set(this.slots[0],'values',res.data.list);
+        this.sel_value = this.intel.intelName;
         this.getToken();
     },
     methods: {
+        ...mapMutations('register',['saveIntel']),
         async getToken(){
             let res = await getUploadToken({suffix:'1'});
             this.token = res.data.token;
@@ -133,12 +141,19 @@ export default {
             this.sel_value = this.set_value;
             this.businessCode = this.setCode;
             console.log(this.businessCode)
+            let dIndex = 0;
+            this.slots[0].values.map((item,index)=>{
+                if(item.businessCode==this.businessCode){
+                    dIndex = index;
+                }
+            })
+            this.saveIntel({name:this.sel_value,code:this.businessCode,dIndex:dIndex});
+            console.log(this.$store)
             this.reqList();
         },
         async reqList(){
-            let intelList = await getIntelList({code:this.businessCode});
-            this.itelList = intelList.data.list;
-            console.log(this.intelList)
+            let res = await getIntelList({code:this.businessCode});
+            this.itelList = res.data.list;
         },
         closeTip(){
             this.showTip = false;
@@ -149,86 +164,34 @@ export default {
         chooseType() {
             document.getElementById('upload_file').click();
         },
-        upload(){
+        upload(e,index,code){
             var data = new FormData();//重点在这里 如果使用 var data = {}; data.inputfile=... 这样的方式不能正常上传
             data.append('token', this.token);
             data.append('file',this.file)
             data.append('key',this.key+this.file_key)
             uploadImage(data,(res)=>{
                 console.log(this.domain+res.key)
+                this.$set(this.itelList[index],'imgStr',this.domain+res.key)
+                let index = this.aptitudeList.findIndex((item)=>{
+                    return item.aptitude_Code == code;
+                })
+                if(index>-1){
+                    this.aptitudeList.fill({aptitude_Code:code,aptitude_Url:this.domain+res.key},index,1);
+                }else{
+                    this.aptitudeList.push({aptitude_Code:code,aptitude_Url:this.domain+res.key});
+                }
             })
         },
-        fileChange(el,card) {
-            if (!el.target.files[0].size) return;
+        fileChange(e,index,code) {
+            if (!e.target.files[0].size) return;
             this.file= e.target.files[0]
             this.file_key = e.target.files[0].name
-            this.fileList(el.target,card);
-            // this.upload();
-            el.target.value = ''
+            e.target.value = ''
+            this.upload(e,index,code);
         },
-        fileList(fileList,card) {
-            let files = fileList.files;
-            for (let i = 0; i < files.length; i++) {
-                //判断是否为文件夹
-                if (files[i].type != '') {
-                    this.fileAdd(files[i],card);
-                } else {
-                    //文件夹处理
-                    this.folders(fileList.items[i],card);
-                }
-            }
-        },
-        //文件夹处理
-        folders(files,card) {
-            let _this = this;
-            //判断是否为原生file
-            if (files.kind) {
-                files = files.webkitGetAsEntry();
-            }
-            files.createReader().readEntries(function (file) {
-                for (let i = 0; i < file.length; i++) {
-                    if (file[i].isFile) {
-                        _this.foldersAdd(file[i],card);
-                    } else {
-                        _this.folders(file[i],card);
-                    }
-                }
-            });
-
-        },
-        foldersAdd(entry,card) {
-            let _this = this;
-            entry.file(function (file) {
-                _this.fileAdd(file,card)
-            })
-        },
-        fileAdd(file,card) {
-            if (this.limit !== undefined) this.limit--;
-            if (this.limit !== undefined && this.limit < 0) return;
-            //总大小
-            this.size = this.size + file.size;
-            //判断是否为图片文件
-            if (file.type.indexOf('image') == -1) {
-                
-            } else {
-                let reader = new FileReader();
-                let image = new Image();
-                let _this = this;
-                reader.readAsDataURL(file);
-                reader.onload = function () {
-                    file.src = this.result;
-                    image.onload = function(){
-                        let width = image.width;
-                        let height = image.height;
-                        file.width = width;
-                        file.height = height;
-                        Vue.set(_this.itelList,card,{imgStr:file.src});
-                        console.log(_this.itelList)
-                    };
-                    image.src= file.src;
-                }
-            }
-        },
+        goEnd(){
+            console.log(this.$store.state.register.intel)
+        }
     },
 }
 </script>
@@ -382,6 +345,7 @@ export default {
                     left:0;
                     width: 100%;
                     height: 100%; 
+                    object-fit: scale-down;
                 }
                 .upload_file{
                     position: absolute;
