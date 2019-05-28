@@ -4,7 +4,10 @@
       <img src="../images/home/logo.png">
     </div>
     <div class="header_input">
-      <input type="text" v-model="searchStr" placeholder="请输入烟花名称">
+      <span>
+        <img src="../images/smallsousuo.png"/>
+      </span>
+      <input type="text" v-model="searchStr" @click="search" placeholder="请输入烟花名称">
     </div>
     <div class="header_search" v-if="showlogo" @click="showcode">
       <img src="../images/home/home_list.png">
@@ -56,6 +59,9 @@ export default {
       if (this.searchStr.trim()) {
         this.$emit("receve", this.searchStr.trim());
       }
+    },
+    search(){
+      this.$router.push("/search")
     },
     cancelSearch() {
       this.$router.history.push("/");
@@ -115,15 +121,25 @@ export default {
   border-radius: 29px;
   float: left;
   margin: 0 21px;
+  background: #fff;
 }
 .header_input input {
-  width: 100%;
+  width: 80%;
   height: 58px;
   outline: none;
   border: none;
-  padding-left: 27px;
+  background: none;
+  padding-left: 15px;
   border-radius: 29px;
-  background: #fff;
+}
+.header_input span{
+  display: inline-block;
+  width:26px;
+  height: 26px;
+  margin-left:21px;
+}
+.header_input span img{
+  width:100%
 }
 .header_search {
   width: 17px;

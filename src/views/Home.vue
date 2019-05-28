@@ -28,28 +28,10 @@
         </div>
         <div class="classify_content">
           <ul>
-            <li>
+            <li v-for="(item,index) in heatList" :key="index">
               <a href="javascript:void(0)">
-                <img src="../images/home/home_menu.png">
-                <span>组合烟花</span>
-              </a>
-            </li>
-            <li>
-              <a href="javascript:void(0)">
-                <img src="../images/home/home_menu1.png">
-                <span>喜庆鞭炮</span>
-              </a>
-            </li>
-            <li>
-              <a href="javascript:void(0)">
-                <img src="../images/home/home_menu2.png">
-                <span>日景烟花</span>
-              </a>
-            </li>
-            <li>
-              <a href="javascript:void(0)">
-                <img src="../images/home/home_menu3.png">
-                <span>冷烟花</span>
+                <img :src="item.kindImage">
+                <span>{{item.kindName}}</span>
               </a>
             </li>
           </ul>
@@ -92,7 +74,7 @@
       </div>
     </div>
     <!-- <DrawerLeft/> -->
-    <TabBarBottom curTab="home" />
+    <TabBarBottom curTab="home"/>
   </div>
 </template>
 <script>
@@ -100,10 +82,13 @@
 import DrawerLeft from "@/components/DrawerLeft";
 import TabBarBottom from "@/components/TabBarBottom";
 import LocalHeader from "@/components/Header";
+import { getHeatList ,getSpecialList} from "@/api/index";
 export default {
   name: "home",
   data() {
-    return {};
+    return {
+      heatList: []
+    };
   },
   components: {
     DrawerLeft,
@@ -116,7 +101,12 @@ export default {
     // } catch (err) {
     // }
   },
-  mounted() {},
+  async mounted() {
+    let data = await getHeatList();
+    this.heatList = data.data.list;
+    let specialdata=await getSpecialList()
+    console.log(specialdata)
+  },
   methods: {}
 };
 </script>
@@ -204,6 +194,14 @@ export default {
 .classify_content ul li img {
   width: 100%;
   margin-bottom: 33px;
+}
+.classify_content ul li span {
+  display: inline-block;
+  width: 117px;
+  height: 35px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .recommond {
   width: 750px;
