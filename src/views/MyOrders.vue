@@ -39,6 +39,52 @@
                         <router-link class="goDetail" to="/">查看详情</router-link>
                     </div>
                 </div>
+                <div class="list_inner_other" v-if="actIndex==1||actIndex==2">
+                    <div class="top">
+                        <div class="topInner">
+                            <div class="head">
+                                <div class="left">
+                                    <img src="../images/dianpu.png" alt="">
+                                    <p class="fName">万家灯火烟花有限公司</p>
+                                </div>
+                                <div class="right" v-if="actIndex==1">
+                                    买家已付款
+                                </div>
+                                <div class="wRight" v-if="actIndex==2">
+                                    等待收货
+                                </div>
+                            </div>
+                            <div class="head_mid">
+                                <div class="mid_left">
+                                    <img src="../images/shopcar.png" alt="">
+                                </div>
+                                <div class="mid_right">
+                                    <p class="name_price">
+                                        <span class="name">烟花商品名称</span>
+                                        <span class="price">￥6.50</span>
+                                    </p>
+                                    <p class="mid_fName">河北保定星星烟花制造厂</p>
+                                    <p class="size">规格：35g*1支</p>
+                                    <p class="num">X1</p>
+                                </div>
+                            </div>
+                            <div class="head_bottom">
+                                <p class="total">共1件商品</p>
+                                <p class="money">实付款：￥6.50</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bottom" v-if="actIndex==1">
+                        <div class="btn warn">提醒发货</div>
+                        <div class="btn">修改地址</div>
+                        <div class="btn">申请退款</div>
+                    </div>
+                    <div class="bottom" v-if="actIndex==2">
+                        <div class="btn">申请退货</div>
+                        <div class="btn">查看物流</div>
+                        <div class="btn sure">确认收货</div>
+                    </div>
+                </div>
                 <div class="listInner" v-if="actIndex==3">
                     <div class="top">
                         <div class="topInfo">
@@ -137,6 +183,147 @@ export default {
             .listItem{
                 margin-bottom: 10px;
                 background-color: #fff;
+                .list_inner_other{
+                    display: flex;
+                    flex-direction: column;
+                    // padding: 28px 43px 31px 47px;
+                    .top{
+                        display: flex;
+                        flex-direction: column;
+                        padding-top: 28px;
+                        border-bottom: 2px solid #e5e5e5;
+                        .topInner{
+                            padding-left: 47px;
+                            padding-right: 43px;
+                        }
+                        .head{
+                            display: flex;
+                            justify-content: space-between;
+                            margin-bottom: 29px;
+                            .left{
+                                display: flex;
+                                align-items: center;
+                                img{
+                                    width: 26px;
+                                    height: 23px;
+                                }
+                                .fName{
+                                    font-size:28px;
+                                    color:rgba(102,102,102,1);
+                                    line-height:37px;
+                                    letter-spacing:3px;
+                                    margin-left: 10px;
+                                }
+                            }
+                            .right{
+                                font-size:28px;
+                                color:rgba(245,166,35,1);
+                                line-height:37px;
+                                letter-spacing:1px;
+                            }
+                            .wRight{
+                                font-size:28px;
+                                color:rgba(0,122,255,1);
+                                line-height:37px;
+                                letter-spacing:1px;
+                            }
+                        }
+                        .head_mid{
+                            display: flex;
+                            align-items: center;
+                            height:247px;
+                            background:rgba(245,244,244,1);
+                            .mid_left{
+                                width: 200px;
+                                height: 210px;
+                                margin-left: 30px;
+                                img{
+                                    width: 100%;
+                                    height: 100%;
+                                    object-fit: scale-down;
+                                    flex: 1;
+                                }
+                            }
+                            .mid_right{
+                                display: flex;
+                                flex-direction: column;
+                                justify-content: center;
+                                margin-left: 19px;
+                                flex: 1;
+                                .name_price{
+                                    display: flex;
+                                    justify-content: space-between;
+                                    .name{
+                                        font-size:28px;
+                                        color:rgba(51,51,51,1);
+                                        line-height:37px;
+                                        letter-spacing:2px;
+                                    }
+                                    .price{
+                                        font-size:28px;
+                                        color:rgba(102,102,102,1);
+                                        line-height:37px;
+                                        margin-right: 35px;
+                                    }
+                                }
+                                .mid_fName{
+                                    font-size:20px;
+                                    color:rgba(153,153,153,1);
+                                    line-height:26px;
+                                    letter-spacing:2px;
+                                    margin-top: 8px;
+                                }
+                                .size{
+                                    font-size:20px;
+                                    color:rgba(153,153,153,1);
+                                    line-height:26px;
+                                    letter-spacing:2px;
+                                    margin-top: 5px;
+                                }
+                                .num{
+                                    font-size:24px;
+                                    color:rgba(102,102,102,1);
+                                    line-height:31px;
+                                    margin-top: 30px;
+                                }
+                            }
+                        }
+                        .head_bottom{
+                            display: flex;
+                            justify-content: flex-end;
+                            font-size:28px;
+                            color:rgba(102,102,102,1);
+                            line-height:37px;
+                            letter-spacing:3px;
+                            padding: 24px 35px 29px 0; 
+                        }
+                    }
+                    .bottom{
+                        padding: 33px 43px 31px 47px;
+                        display: flex;
+                        justify-content: flex-end;
+                        .btn{
+                            width: 164px;
+                            height: 64px;
+                            line-height: 64px;
+                            border: 2px solid #999;
+                            border-radius: 8px;
+                            text-align: center;
+                            font-size:26px;
+                            color:rgba(153,153,153,1);
+                            letter-spacing:1px;
+                            margin-left: 32px;
+                            &.warn{
+                                border: 2px solid #F5A623;
+                                color: #F5A623;
+                            }
+                            &.sure{
+                                border: 2px solid #007AFF;
+                                color: #007AFF;
+                            }
+                        }
+                    }
+                }
                 .listInner{
                     display: flex;
                     flex-direction: column;
@@ -170,6 +357,7 @@ export default {
                             img{
                                 width: 150px;
                                 height: 120px;
+                                object-fit: scale-down;
                                 // margin-right: 20px;
                             }
                         }

@@ -297,7 +297,7 @@ const router = new Router({
             component: () =>
                 import(/* webpackChunkName: "myOrders" */ './views/MyOrders.vue'),
             meta: {
-                auth: true,
+                auth: false,
                 keepAlive: false,
                 title:'我的订单'
             }
@@ -341,9 +341,31 @@ const router = new Router({
             component: () =>
                 import(/* webpackChunkName: "waiteGet" */ './views/WaiteGet.vue'),
             meta: {
-                auth: true,
+                auth: false,
                 keepAlive: false,
                 title:'待收货'
+            }
+        },
+        {
+            path: '/waiteSend',
+            name: 'waiteSend',
+            component: () =>
+                import(/* webpackChunkName: "waiteSend" */ './views/WaiteSend.vue'),
+            meta: {
+                auth: false,
+                keepAlive: false,
+                title:'待发货'
+            }
+        },
+        {
+            path: '/returnGoods',
+            name: 'returnGoods',
+            component: () =>
+                import(/* webpackChunkName: "returnGoods" */ './views/ReturnGoods.vue'),
+            meta: {
+                auth: false,
+                keepAlive: false,
+                title:'退货'
             }
         },
         {
