@@ -82,12 +82,16 @@
 import DrawerLeft from "@/components/DrawerLeft";
 import TabBarBottom from "@/components/TabBarBottom";
 import LocalHeader from "@/components/Header";
-import { getHeatList ,getSpecialList} from "@/api/index";
+import { getHeatList, getSpecialList } from "@/api/index";
 export default {
   name: "home",
   data() {
     return {
-      heatList: []
+      heatList: [],
+      params: {
+        corpCode: "100",
+        companyId: "000019"
+      }
     };
   },
   components: {
@@ -104,8 +108,8 @@ export default {
   async mounted() {
     let data = await getHeatList();
     this.heatList = data.data.list;
-    let specialdata=await getSpecialList()
-    console.log(specialdata)
+    let specialdata = await getSpecialList(this.params);
+    console.log(specialdata);
   },
   methods: {}
 };
