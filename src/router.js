@@ -369,6 +369,17 @@ const router = new Router({
             }
         },
         {
+            path: '/applyReturn',
+            name: 'applyReturn',
+            component: () =>
+                import(/* webpackChunkName: "applyReturn" */ './views/ApplyReturn.vue'),
+            meta: {
+                auth: false,
+                keepAlive: false,
+                title:'申请退货'
+            }
+        },
+        {
             path: '/orderDetail',
             name: 'orderDetail',
             component: () =>

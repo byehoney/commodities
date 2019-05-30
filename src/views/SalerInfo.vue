@@ -11,11 +11,11 @@
                 <img src="../images/user_icon_act.png" class="stateIcon" alt="">
                 <p class="stateText">人员信息</p>
             </div>
-            <div class="divide"></div>
+            <!-- <div class="divide"></div>
             <div class="state">
                 <img src="../images/intel_icon_grey.png" class="stateIcon" alt="">
                 <p class="stateText grey">资质信息</p>
-            </div>
+            </div> -->
         </div>
         <div class="info_area">
             <div class="info_list">
@@ -33,37 +33,59 @@
             <div class="card_item">
                 <div class="top z">
                     <img :src="imgStrZ" alt="" class="cardImg">
-                    <input @change="fileChange($event,'Z')" type="file" id="upload_file" class="upload_file"  accept="image/*"/>
+                    <input @change="fileChange($event,'imgStrZ')" type="file" id="upload_file" class="upload_file"  accept="image/*"/>
                 </div>
                 <div class="bottom">身份证头像面</div>
             </div>
             <div class="card_item">
                 <div class="top f">
                     <img :src="imgStrF" alt="" class="cardImg">
-                    <input @change="fileChange($event,'F')" type="file" id="upload_file" class="upload_file"  accept="image/*"/>
+                    <input @change="fileChange($event,'imgStrF')" type="file" id="upload_file" class="upload_file"  accept="image/*"/>
                 </div>
                 <div class="bottom">身份证国徽面</div>
             </div>
         </div>
         <div class="nextBtn" @click="goNext">下一步</div>
+        <div class="mask" v-if="showTip">
+            <div class="tipContent">
+                <div class="title">温馨提示</div>
+                <div class="text">内容已提交，等待审核中</div>
+                <div class="sure" @click="closeTip">确认</div>
+            </div>
+        </div>
     </div>
 </template>
 <script>
 import { Toast } from "mint-ui";
 import TopNav from '@/components/TopNav'
+import {uploadImage,getUploadToken} from '@/api/index'
 export default {
     data(){
         return{
+            showTip:false,
             name:'',
             imgStrZ: '',
             imgStrF:'',
-            size: 0,
+            file:'',
+            token:'',
+            file_key:'',
+            key:'',
+            domain:'http://yanhuawang.rydltech.com/',
         }
     },
     components:{
         TopNav,
     },
+    mounted(){
+        this.getToken();
+    },
     methods:{
+        async getToken(){
+            let res = await getUploadToken({suffix:'1'});
+            this.token = res.data.token;
+            this.key = res.data.imgUrl;
+            console.log(res);
+        },
         goNext(){
             if(!this.name.trim()){
                 Toast({
@@ -84,83 +106,28 @@ export default {
                     duration: 2000
                 });
             }else{
-                
+                this.showTip = true;
             }
         },
         chooseType() {
             document.getElementById('upload_file').click();
         },
-        fileChange(el,card) {
-            if (!el.target.files[0].size) return;
-            this.fileList(el.target,card);
-            el.target.value = ''
-        },
-        fileList(fileList,card) {
-            let files = fileList.files;
-            for (let i = 0; i < files.length; i++) {
-                //判断是否为文件夹
-                if (files[i].type != '') {
-                    this.fileAdd(files[i],card);
-                } else {
-                    //文件夹处理
-                    this.folders(fileList.items[i],card);
-                }
-            }
-        },
-        //文件夹处理
-        folders(files,card) {
-            let _this = this;
-            //判断是否为原生file
-            if (files.kind) {
-                files = files.webkitGetAsEntry();
-            }
-            files.createReader().readEntries(function (file) {
-                for (let i = 0; i < file.length; i++) {
-                    if (file[i].isFile) {
-                        _this.foldersAdd(file[i],card);
-                    } else {
-                        _this.folders(file[i],card);
-                    }
-                }
-            });
-
-        },
-        foldersAdd(entry,card) {
-            let _this = this;
-            entry.file(function (file) {
-                _this.fileAdd(file,card)
+        upload(e,card){
+            var data = new FormData();//重点在这里 如果使用 var data = {}; data.inputfile=... 这样的方式不能正常上传
+            data.append('token', this.token);
+            data.append('file',this.file)
+            data.append('key',this.key+this.file_key)
+            uploadImage(data,(res)=>{
+                this[card] = this.domain+res.key
             })
         },
-        fileAdd(file,card) {
-            if (this.limit !== undefined) this.limit--;
-            if (this.limit !== undefined && this.limit < 0) return;
-            //总大小
-            this.size = this.size + file.size;
-            //判断是否为图片文件
-            if (file.type.indexOf('image') == -1) {
-                
-            } else {
-                let reader = new FileReader();
-                let image = new Image();
-                let _this = this;
-                reader.readAsDataURL(file);
-                reader.onload = function () {
-                    file.src = this.result;
-                    image.onload = function(){
-                        let width = image.width;
-                        let height = image.height;
-                        file.width = width;
-                        file.height = height;
-                        if(card == 'Z'){
-                            _this.imgStrZ = file.src;
-                        }else if(card == 'F'){
-                            _this.imgStrF = file.src;
-                        }
-                    };
-                    image.src= file.src;
-                }
-            }
-        },
+        fileChange(e,card) {
+           if (!e.target.files[0].size) return;
+            this.file= e.target.files[0]
+            this.file_key = e.target.files[0].name
+            e.target.value = ''
+            this.upload(e,card);
+        }
     }
 }
 </script>
@@ -236,9 +203,9 @@ export default {
                         height: 100%;
                         border: none;
                         outline: none;
-                        font-size:20px;
+                        font-size:26px;
                         color:#333;
-                        line-height: 120px;
+                        line-height: 110px;
                         letter-spacing:1px;
                     }
                     .right{
@@ -281,6 +248,7 @@ export default {
                         left: 0;
                         width: 100%;
                         height: 100%;
+                        object-fit: cover;
                     }
                     .upload_file{
                         width: 100%;
@@ -319,6 +287,52 @@ export default {
             letter-spacing:3px;
             background-color: #666;
             margin: 0 auto;
+        }
+        .mask{
+            position: fixed;
+            top: 0;
+            left:0;
+            width: 100%;
+            height: 100%;
+            background:rgba(0,0,0,.5);
+            .tipContent{
+                width:552px;
+                height:334px;
+                background:rgba(28,28,28,1);
+                border-radius:8px;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                margin-top: -167px;
+                margin-left: -276px;
+                display: flex;
+                flex-direction: column;
+                .title{
+                    font-size:36px;
+                    color:rgba(255,255,255,1);
+                    line-height:47px;
+                    letter-spacing:1px;
+                    padding-top: 75px;
+                    padding-left: 57px;
+                }
+                .text{
+                    font-size:30px;
+                    color:rgba(255,255,255,1);
+                    line-height:40px;
+                    letter-spacing:1px;
+                    padding-left: 57px;
+                    margin-top: 32px;
+                }
+                .sure{
+                    font-size:30px;
+                    color:rgba(74,144,226,1);
+                    line-height:40px;
+                    letter-spacing:1px;
+                    align-self: flex-end;
+                    margin-top: 54px;
+                    margin-right: 49px;
+                }
+            }
         }
     }
 </style>

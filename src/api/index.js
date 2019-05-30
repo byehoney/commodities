@@ -12,6 +12,9 @@ function getUploadToken(params) {//获取图片上传token
 function getActorList(params) {//获取注册角色列表
     return get('/userrole/get/list.do', params)
 }
+function getRegShopList(params) {//获取注册门店列表
+    return post('/client/list/regioncode.do', params)
+}
 function getPropertyList(params) {//获取注册经营性质
     return get('/properties/get/list.do', params)
 }
@@ -21,7 +24,7 @@ function getIntelList(params) {//获取注册资质信息
 function getRangeList(params) {//获取注册经营范围
     return get('/scope/get/list.do', params)
 }
-function getCityList(params) {
+function getCityList(params) {//地区选择获取数据
     return post('/city/all/list.do', params)
 }
 function getHeatList(params) {//获取首页热门分类
@@ -36,6 +39,7 @@ export {
     getUploadToken,
     uploadImage,
     getActorList,
+    getRegShopList,
     getPropertyList,
     getIntelList,
     getRangeList,

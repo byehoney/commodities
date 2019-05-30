@@ -67,7 +67,7 @@ export default {
       slots: [
         {
           flex: 1,
-          values: province,
+          values: [],
           className: "slot1",
           textAlign: "center"
         },
@@ -78,7 +78,7 @@ export default {
         },
         {
           flex: 1,
-          values: city,
+          values: [],
           className: "slot3",
           textAlign: "center"
         },
@@ -89,7 +89,7 @@ export default {
         },
         {
           flex: 1,
-          values: area,
+          values: [],
           className: "slot5",
           textAlign: "center"
         }
@@ -122,7 +122,7 @@ export default {
         this.$refs.picker.getValues()[1] +
         "," +
         this.$refs.picker.getValues()[2];
-      this.setArea(this.areaString)
+      this.setArea(this.areaString,pCode,cCode,aCode)
     },
     handleCancel() {
       this.cancel();

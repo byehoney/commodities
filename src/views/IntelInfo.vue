@@ -110,13 +110,18 @@ export default {
         TopNav,
     },
     async mounted(){
+        console.log(this.$store.state)
         let res = await getPropertyList();
         this.$set(this.slots[0],'values',res.data.list);
         this.sel_value = this.intel.intelName;
         this.getToken();
+        if(this.intel.intelCode){
+            this.businessCode = this.intel.intelCode;
+            this.reqList();
+        }
     },
     methods: {
-        ...mapMutations('register',['saveIntel']),
+        ...mapMutations('register',['saveIntel','restIntel']),
         async getToken(){
             let res = await getUploadToken({suffix:'1'});
             this.token = res.data.token;
@@ -137,6 +142,7 @@ export default {
             this.popupVisible = false
         },
         handleConfirm() {
+            this.restIntel();
             this.popupVisible = false;
             this.sel_value = this.set_value;
             this.businessCode = this.setCode;
@@ -147,13 +153,22 @@ export default {
                     dIndex = index;
                 }
             })
-            this.saveIntel({name:this.sel_value,code:this.businessCode,dIndex:dIndex});
-            console.log(this.$store)
+            this.saveIntel({name:this.sel_value,code:this.businessCode,dIndex:dIndex,aptitudeList:[]});
+            console.log(this.$store.state)
             this.reqList();
         },
         async reqList(){
+            console.log(33)
             let res = await getIntelList({code:this.businessCode});
-            this.itelList = res.data.list;
+            res.data.list.map((item,index)=>{
+                item.imgStr = '';
+            })
+            if(this.intel.aptitudeList.length&&this.intel.intelCode){
+                console.log(this.intel.aptitudeList)
+                this.itelList = this.intel.aptitudeList;
+            }else{
+                this.itelList = res.data.list;
+            }
         },
         closeTip(){
             this.showTip = false;
@@ -171,15 +186,17 @@ export default {
             data.append('key',this.key+this.file_key)
             uploadImage(data,(res)=>{
                 console.log(this.domain+res.key)
-                this.$set(this.itelList[index],'imgStr',this.domain+res.key)
-                let index = this.aptitudeList.findIndex((item)=>{
-                    return item.aptitude_Code == code;
-                })
-                if(index>-1){
-                    this.aptitudeList.fill({aptitude_Code:code,aptitude_Url:this.domain+res.key},index,1);
-                }else{
-                    this.aptitudeList.push({aptitude_Code:code,aptitude_Url:this.domain+res.key});
-                }
+                this.$set(this.itelList[index],'imgStr',this.domain+res.key);
+                this.saveIntel({name:this.sel_value,code:this.businessCode,dIndex:index,aptitudeList:this.itelList});
+                console.log(this.$store.state)
+                // let cIndex = this.aptitudeList.findIndex((item)=>{
+                //     return item.aptitude_Code == code;
+                // })
+                // if(cIndex>-1){
+                //     this.aptitudeList.fill({aptitude_Code:code,aptitude_Url:this.domain+res.key},index,1);
+                // }else{
+                //     this.aptitudeList.push({aptitude_Code:code,aptitude_Url:this.domain+res.key});
+                // }
             })
         },
         fileChange(e,index,code) {
@@ -190,7 +207,7 @@ export default {
             this.upload(e,index,code);
         },
         goEnd(){
-            console.log(this.$store.state.register.intel)
+            console.log(this.aptitudeList)
         }
     },
 }
@@ -255,7 +272,7 @@ export default {
                     border:none;
                 }
                 .left{
-                    width: 110px;
+                    width: 120px;
                     font-size:26px;
                     color:rgba(102,102,102,1);
                     letter-spacing:1px;

@@ -1,8 +1,8 @@
 <template>
-  <div class="joinContainer">
+  <div class="joinContainer" style="opacity:1">
     <TopNav></TopNav>
     <div class="join_area">
-      <div class="title">选择XX店地址</div>
+      <div class="title">选择门店地址</div>
       <div class="sel_area">
         <div class="sel_item">
             <div class="info_item" @click="handlerArea">
@@ -24,10 +24,10 @@
         </div>
       </div>
     </div>
-    <div class="creat_new" @click="creatNew">+创建新店</div>
-    <div class="nextBtn">下一步</div>
+    <div class="creat_new" @click="creatNew()">+创建新店</div>
+    <div class="nextBtn" @click="joinShop()">下一步</div>
     <mt-popup v-model="popupVisible" position="bottom">
-      <mt-picker :slots="slots" @change="onValuesChange" showToolbar>
+      <mt-picker :slots="slots" @change="onValuesChange" showToolbar valueKey="clientName">
         <div class="barContent">
           <div @click="shopCancel" class="cancel">取消</div>
           <div class="tip">请选择</div>
@@ -42,44 +42,95 @@
 import { Toast } from "mint-ui";
 import TopNav from "@/components/TopNav";
 import CityPicker from "@/components/CityPicker";
+import {mapState,mapMutations} from 'vuex';
+import {getRegShopList} from '@/api/index';
 export default {
   data() {
     return {
-      popupVisible: false,
-      areaVisible:false,
+      popupVisible: false,//门店选择开关
+      areaVisible:false,//地区选择开关
       set_value: "", //滑动变化值
       sel_value: "请选择", //选择的值
+      pCode:'',
+      cCode:'',
+      aCode:'',
       set_shop:'',//选择门店滑动变化值
+      set_shopCode:'',//选择门店滑动变化是选中的门店编码
       sel_shop:'请选择门店',//选中门店
+      sel_shopCode:'',//选择门店对应的编码
       slots: [
         {
           flex: 1,
-          values: ["门店1", "门店2", "门店3", "门店4"],
+          values: [],
           className: "slot1",
           textAlign: "center"
         }
       ]
     };
   },
+  computed:{
+    ...mapState('register',['joinInfo'])
+  },
   components: {
     TopNav,
     CityPicker
   },
+  mounted(){
+    this.pCode = this.joinInfo.pCode;
+    this.cCode = this.joinInfo.cCode;
+    this.aCode = this.joinInfo.aCode;
+    this.sel_value = this.joinInfo.addr||'请选择地区';
+    this.sel_shop = this.joinInfo.shopName||'请选择门店';
+    this.sel_shopCode = this.joinInfo.shopCode;
+    console.log(this.$store.state)
+    if(this.sel_shopCode&&this.aCode){
+      this.getShopList();
+    }
+  },
   methods: {
+    ...mapMutations('register',['saveJoinInfo']),
     handlerArea(){
         this.areaVisible = !this.areaVisible;
     },
-    handleSetArea(value){
+    handleSetArea(value,pCode,cCode,aCode){
+        console.log(pCode,cCode,aCode)
         this.sel_value = value;
+        this.pCode = pCode;
+        this.cCode = cCode;
+        this.aCode = aCode;
         this.areaVisible = false;
+        this.sel_shop = '请选择门店';
+        this.sel_shopCode = '';
+        this.getShopList();
     },
     handleCancel(){
         this.areaVisible = false;
     },
     onValuesChange(picker, values) {
-      this.set_shop = values[0];
+      console.log(values)
+      if(values[0]){
+        this.set_shop = values[0].clientName;
+        this.set_shopCode = values[0].clientCode;
+      }
+      console.log(this.set_shopCode)
+      console.log(this.set_shop)
     },
     selShop() {
+      if(!this.pCode||!this.cCode||!this.aCode){
+        Toast({
+            message: "请选择所在区域",
+            position: "middle",
+            duration: 2000
+        });
+        return;
+      }else if(!this.slots[0].values.length){
+        Toast({
+            message: "你选则的区域暂无门店",
+            position: "middle",
+            duration: 2000
+        });
+        return;
+      }
       this.popupVisible = !this.popupVisible;
     },
     shopCancel() {
@@ -88,9 +139,29 @@ export default {
     handleConfirm() {
       this.popupVisible = false;
       this.sel_shop = this.set_shop;
+      this.sel_shopCode = this.set_shopCode;
+    },
+    async getShopList(){//获取门店列表
+      let res = await getRegShopList({regionCode:this.aCode});
+      this.$set(this.slots[0],'values',res.data.list);
     },
     creatNew() {
-      this.$router.push("./creatNewShop");
+      this.$router.push({name:'creatNewShop'});
+    },
+    joinShop(){
+      if(!this.sel_shop||!this.sel_shopCode||!this.sel_value||this.sel_value=='请选择地区'||this.sel_shop=='请选择门店'){
+        return;
+      }
+      let data = {
+        pCode:this.pCode,
+        cCode:this.cCode,//市编码
+        aCode:this.aCode,//区域编码
+        shopCode:this.sel_shopCode,//门店编码
+        addr:this.sel_value,//注册选择的加入门店地址（省市区）
+        shopName:this.sel_shop//注册选择加入的门店名称
+      }
+      this.saveJoinInfo(data);
+      this.$router.push({name:'salerInfo'})
     }
   }
 };
@@ -118,8 +189,8 @@ export default {
         align-items: center;
         margin-left: 39px;
         border-bottom: 2px solid #ebebeb;
+        height: 120px;
         justify-content: space-between;
-        height: 100%;
         padding-right: 47px;
         .left{
             font-size:26px;
