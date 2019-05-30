@@ -17,6 +17,15 @@ export default {
             shopCode:'',//门店编码
             addr:'',//注册选择的加入门店地址（省市区）
             shopName:''//注册选择加入的门店名称
+        },
+        createAddInfo:{
+            addStr:'',//省市区
+            pCode:'',//省编码
+            cCode:'',//市编码
+            aCode:'',//区域编码
+            regAddr:'',//注册地址
+            shopName:'',//店铺名称
+            tCode:''//推荐码
         }
     },
     mutations: {
@@ -41,13 +50,22 @@ export default {
         saveRange(state,range){//保存经营范围
             state.rangeList = range;
         },
-        saveJoinInfo(state,data){
+        saveJoinInfo(state,data){//保存加入门店信息
             state.joinInfo.pCode = data.pCode;
             state.joinInfo.cCode = data.cCode;
             state.joinInfo.aCode = data.aCode;
             state.joinInfo.shopCode = data.shopCode;
             state.joinInfo.addr = data.addr;
             state.joinInfo.shopName = data.shopName;
+        },
+        saveCreateShop(state,data){//保存新建门店省市区信息
+            state.createAddInfo.addStr = data.addStr;
+            state.createAddInfo.pCode = data.pCode;
+            state.createAddInfo.cCode = data.cCode;
+            state.createAddInfo.aCode = data.aCode;
+            state.createAddInfo.regAddr = data.regAddr;
+            state.createAddInfo.shopName = data.shopName;
+            state.createAddInfo.tCode = data.tCode;
         }
     },
     actions: {

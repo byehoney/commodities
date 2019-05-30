@@ -49,6 +49,7 @@
 import { Toast } from "mint-ui";
 import TopNav from '@/components/TopNav'
 import CityPicker from '@/components/CityPicker'
+import {mapState,mapMutations} from 'vuex';
 export default {
     data(){
         return{
@@ -57,19 +58,36 @@ export default {
             sel_value:'请选择地区',//选择的值
             shop:'',
             addr:'',
-            code:''
+            code:'',
+            pCode:'',
+            cCode:'',
+            aCode:'',
         }
     },
     components:{
         TopNav,
         CityPicker
     },
+    computed:{
+        ...mapState('register',['createAddInfo'])
+    },
+    mounted(){
+        this.pCode = this.createAddInfo.pCode;
+        this.cCode = this.createAddInfo.cCode;
+        this.aCode = this.createAddInfo.aCode;
+        this.sel_value = this.createAddInfo.addStr||'请选择地区';
+        this.addr = this.createAddInfo.regAddr;
+        this.shop = this.createAddInfo.shopName;
+    },
     methods:{
         handlerArea(){
             this.popupVisible = !this.popupVisible;
         },
-        handleSetArea(value){
+        handleSetArea(value,pCode,cCode,aCode){
             this.sel_value = value;
+            this.pCode = pCode;
+            this.cCode = cCode;
+            this.aCode = aCode;
             this.popupVisible = false;
         },
         handleCancel(){
