@@ -1,8 +1,16 @@
 export default {
     namespaced: true,
     state: {
-        userRole:"",//用户注册角色编码
-        psw:'',//用户注册用户密码
+        mobile:'',
+        roleInfo:{
+            userRoleCode:"",//用户注册角色编码
+            userRoleName:'',//用户注册 角色名称
+            psw:'',//用户注册用户密码
+            companyCode:'',//用户注册  公司角色  厂家角色时 code
+            companyName:'',//用户注册  公司名称
+            partCode:'',//用户注册 厂家角色时 部门code
+            partName:'',//用户注册 部门名称
+        },
         rangeList:[],//用户注册选择经营范围
         intel:{
             intelName:'请选择',//经营性质文案
@@ -29,11 +37,17 @@ export default {
         }
     },
     mutations: {
-        saveRole(state,userRole){//保存校色编码
-            state.userRole = userRole
+        saveMobile(state,mobile){
+            state.mobile = mobile;
         },
-        savePsw(state,psw){//保存密码
-            state.psw = psw
+        saveRole(state,data){//保存校色编码
+            state.roleInfo.userRoleCode = data.userRoleCode;
+            state.roleInfo.userRoleName = data.userRoleName;
+            state.roleInfo.psw = data.psw;
+            state.roleInfo.companyCode = data.companyCode;
+            state.roleInfo.companyName = data.companyName;
+            state.roleInfo.partCode = data.partCode;
+            state.roleInfo.partName = data.partName;
         },
         saveIntel(state,data){//保存经营性质
             state.intel.intelName = data.name;

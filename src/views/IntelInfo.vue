@@ -8,13 +8,13 @@
             </div>
             <div class="divide"></div>
             <div class="state">
-                <img src="../images/user_icon_act.png" class="stateIcon" alt="">
-                <p class="stateText">人员信息</p>
+                <img src="../images/intel_icon_act.png" class="stateIcon" alt="">
+                <p class="stateText">资质信息</p>
             </div>
             <div class="divide"></div>
             <div class="state">
-                <img src="../images/intel_icon_act.png" class="stateIcon" alt="">
-                <p class="stateText">资质信息</p>
+                <img src="../images/user_icon_grey.png" class="stateIcon" alt="">
+                <p class="stateText grey">人员信息</p>
             </div>
         </div>
         <div class="info_area">
@@ -47,7 +47,7 @@
                 </div>
             </div>
         </div>
-        <div class="nextBtn" @click="goEnd">完成</div>
+        <div class="nextBtn" @click="goEnd">下一步</div>
         <div class="mask" v-if="showTip">
             <div class="tipContent">
                 <div class="title">温馨提示</div>
@@ -104,7 +104,7 @@ export default {
         }
     },
     computed:{
-        ...mapState('register',['intel'])
+        ...mapState('register',['intel','rangeList'])
     },
     components:{
         TopNav,
@@ -188,7 +188,7 @@ export default {
                 console.log(this.domain+res.key)
                 this.$set(this.itelList[index],'imgStr',this.domain+res.key);
                 this.saveIntel({name:this.sel_value,code:this.businessCode,dIndex:index,aptitudeList:this.itelList});
-                console.log(this.$store.state)
+                // console.log(this.$store.state)
                 // let cIndex = this.aptitudeList.findIndex((item)=>{
                 //     return item.aptitude_Code == code;
                 // })
@@ -206,8 +206,40 @@ export default {
             e.target.value = ''
             this.upload(e,index,code);
         },
+        checkFull(){//检测资质信息是否完善
+            var full = true;
+            for(var i=0;i<this.itelList.length;i++){
+                if(!this.itelList[i].imgStr||this.itelList[i].imgStr==''){
+                    full = false;
+                    break;
+                }else{
+                    full = true;
+                }
+            }
+            return full
+        },
         goEnd(){
-            console.log(this.aptitudeList)
+            if(this.sel_value=='请选择'||this.set_value==''){
+                Toast({
+                    message: "请选择经营性质",
+                    position: "middle",
+                    duration: 2000
+                });
+            }else if(!this.rangeList.length){
+                Toast({
+                    message: "请选择经营范围",
+                    position: "middle",
+                    duration: 2000
+                });
+            }else if(!this.checkFull()){
+                Toast({
+                    message: "请完善资质信息",
+                    position: "middle",
+                    duration: 2000
+                });
+            }else{
+                this.$router.push({name:'salerInfo',query:{creatNew:true}})
+            }
         }
     },
 }
@@ -241,6 +273,9 @@ export default {
                 font-size:22px;
                 color:rgba(255,0,0,1);
                 line-height:29px;
+                &.grey{
+                    color: #999;
+                }
             }
         }
         .divide{

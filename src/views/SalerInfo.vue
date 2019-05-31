@@ -1,23 +1,23 @@
 <template>
     <div class="salerContainer">
         <TopNav></TopNav>
-        <div class="progress">
+        <div class="progress" v-if="!unique">
             <div class="state">
                 <img src="../images/md_icon_act.png" class="stateIcon" alt="">
                 <p class="stateText">门店信息</p>
+            </div>
+            <div class="divide" v-if="more"></div>
+            <div class="state" v-if="more">
+                <img src="../images/intel_icon_act.png" class="stateIcon" alt="">
+                <p class="stateText">资质信息</p>
             </div>
             <div class="divide"></div>
             <div class="state">
                 <img src="../images/user_icon_act.png" class="stateIcon" alt="">
                 <p class="stateText">人员信息</p>
             </div>
-            <!-- <div class="divide"></div>
-            <div class="state">
-                <img src="../images/intel_icon_grey.png" class="stateIcon" alt="">
-                <p class="stateText grey">资质信息</p>
-            </div> -->
         </div>
-        <div class="info_area">
+        <div :class="['info_area',unique?'top':'']">
             <div class="info_list">
                 <div class="info_item">
                     <div class="left">姓名</div>
@@ -45,7 +45,7 @@
                 <div class="bottom">身份证国徽面</div>
             </div>
         </div>
-        <div class="nextBtn" @click="goNext">下一步</div>
+        <div class="nextBtn" @click="goNext">完成</div>
         <div class="mask" v-if="showTip">
             <div class="tipContent">
                 <div class="title">温馨提示</div>
@@ -59,9 +59,12 @@
 import { Toast } from "mint-ui";
 import TopNav from '@/components/TopNav'
 import {uploadImage,getUploadToken} from '@/api/index'
+import {mapState,mapMutations} from 'vuex'
 export default {
     data(){
         return{
+            more:false,//是否显示引导项
+            unique:false,
             showTip:false,
             name:'',
             imgStrZ: '',
@@ -76,7 +79,12 @@ export default {
     components:{
         TopNav,
     },
+    computed:{
+        ...mapState('register',[''])
+    },
     mounted(){
+        this.more = this.$router.history.current.query.creatNew;
+        this.unique = this.$router.history.current.query.unique;
         this.getToken();
     },
     methods:{
@@ -179,6 +187,9 @@ export default {
             width: 100%;
             background-color: #fff;
             margin-top: 10px;
+            &.top{
+                padding-top: .92rem;
+            }
             .info_list{
                 margin-left: 39px;
                 display: flex;
@@ -192,7 +203,7 @@ export default {
                         border:none;
                     }
                     .left{
-                        width: 110px;
+                        width: 120px;
                         font-size:26px;
                         color:rgba(102,102,102,1);
                         letter-spacing:1px;

@@ -9,13 +9,13 @@
             </div>
             <div class="divide"></div>
             <div class="state">
-                <img src="../images/user_icon_grey.png" class="stateIcon" alt="">
-                <p class="stateText grey">人员信息</p>
+                <img src="../images/intel_icon_grey.png" class="stateIcon" alt="">
+                <p class="stateText grey">资质信息</p>
             </div>
             <div class="divide"></div>
             <div class="state">
-                <img src="../images/intel_icon_grey.png" class="stateIcon" alt="">
-                <p class="stateText grey">资质信息</p>
+                <img src="../images/user_icon_grey.png" class="stateIcon" alt="">
+                <p class="stateText grey">人员信息</p>
             </div>
         </div>
         <div class="info_area">
@@ -37,7 +37,7 @@
                 </div>
                 <div class="info_item">
                     <div class="left">推荐码</div>
-                    <input type="text" v-model="code" placeholder="输入推荐码" class="input">
+                    <input type="text" v-model="code" maxlength="11" placeholder="输入推荐码" class="input">
                 </div>
             </div>
         </div>
@@ -78,8 +78,10 @@ export default {
         this.sel_value = this.createAddInfo.addStr||'请选择地区';
         this.addr = this.createAddInfo.regAddr;
         this.shop = this.createAddInfo.shopName;
+        this.code = this.createAddInfo.tCode;
     },
     methods:{
+        ...mapMutations('register',['saveCreateShop']),
         handlerArea(){
             this.popupVisible = !this.popupVisible;
         },
@@ -120,7 +122,17 @@ export default {
                     duration: 2000
                 });
             }else{
-                
+                let data = {
+                    addStr:this.sel_value,
+                    pCode:this.pCode,
+                    cCode:this.cCode,
+                    aCode:this.aCode,
+                    regAddr:this.addr,
+                    shopName:this.shop,
+                    tCode:this.code,
+                }
+                this.saveCreateShop(data);
+                this.$router.push({name:'intelInfo',query:{creatNew:true}})
             }
         }
     }

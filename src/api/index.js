@@ -12,6 +12,15 @@ function getUploadToken(params) {//获取图片上传token
 function getActorList(params) {//获取注册角色列表
     return get('/userrole/get/list.do', params)
 }
+function getCompanyList(params) {//获取注册角色列表
+    return get('/register/sycompany/list.do', params)
+}
+function getFactoryList(params) {//获取注册角色列表
+    return get('/register/cjcompany/list.do', params)
+}
+function getPartList(params) {//获取注册角色列表
+    return get('/register/cjcompany/bument.do', params)
+}
 function getRegShopList(params) {//获取注册门店列表
     return post('/client/list/regioncode.do', params)
 }
@@ -39,6 +48,9 @@ export {
     getUploadToken,
     uploadImage,
     getActorList,
+    getCompanyList,
+    getFactoryList,
+    getPartList,
     getRegShopList,
     getPropertyList,
     getIntelList,

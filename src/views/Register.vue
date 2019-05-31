@@ -23,6 +23,7 @@
 import TopNav from '@/components/TopNav'
 import { Toast } from "mint-ui";
 import { setInterval, clearInterval } from 'timers';
+import {mapState,mapMutations} from 'vuex';
 export default {
     data(){
         return{
@@ -36,7 +37,14 @@ export default {
     components:{
         TopNav
     },
+    computed:{
+        ...mapState('register',['mobile'])
+    },
+    mounted(){
+        this.tel = this.mobile;
+    },
     methods: {
+        ...mapMutations('register',['saveMobile']),
         sendMsg(){
             if(!this.canSend()){
                 return;
