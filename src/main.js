@@ -7,10 +7,12 @@ import wechat from '@/common/wechat/index'
 import VeLine from 'v-charts/lib/line.common'
 import DrawerLayout from 'vue-drawer-layout'
 import AwesomePicker from 'vue-awesome-picker';
+import VueVideoPlayer from 'vue-video-player'
 import "normalize.css"
 import "@/style/reset.scss"
 Vue.use(AwesomePicker);
 Vue.use(DrawerLayout)
+Vue.use(VueVideoPlayer)
 import {Header, Tabbar,Toast,Field, TabItem ,Picker,Cell,Popup,Button,InfiniteScroll,Swipe, SwipeItem} from 'mint-ui';
 Vue.use(InfiniteScroll);
 Vue.component(Field.name, Field);
