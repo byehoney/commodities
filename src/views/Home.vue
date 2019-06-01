@@ -81,10 +81,13 @@
           </span>
         </div>
         <div class="special_content">
-          <div :class="cx==index?'actives':''" class="special_content_left fix" v-for="(item,index) in secKillList" :key="index">
-            <div class="cx_title">
-              {{item.cxj}}
-            </div>
+          <div
+            :class="cx==index?'actives':''"
+            class="special_content_left fix"
+            v-for="(item,index) in secKillList"
+            :key="index"
+          >
+            <div class="cx_title">{{item.cxj}}</div>
             <img :src="item.url">
           </div>
         </div>
@@ -97,7 +100,14 @@
           <h3>标题</h3>
         </div>
         <div class="home_video_list_content">
-          <video-player class="vjs-custom-skin" :options="playerOptions"></video-player>
+          <video-player
+            class="video-player vjs-custom-skin"
+            ref="videoPlayer"
+            :playsinline="true"
+            :options="playerOptions"
+            @play="onPlayerPlay($event)"
+            @pause="onPlayerPause($event)"
+          ></video-player>
         </div>
       </div>
     </div>
@@ -110,12 +120,13 @@
 import DrawerLeft from "@/components/DrawerLeft";
 import TabBarBottom from "@/components/TabBarBottom";
 import LocalHeader from "@/components/Header";
+import { videoPlayer } from "vue-video-player";
 
 //引入video样式
 import "video.js/dist/video-js.css";
 import "vue-video-player/src/custom-theme.css";
-//引入hls.js
-// import 'videojs-contrib-hls.js/src/videojs.hlsjs'
+// //引入hls.js
+// import "videojs-contrib-hls.js/src/videojs.hlsjs";
 
 import { getHeatList, getSpecialList, secKill } from "@/api/index";
 export default {
@@ -125,32 +136,36 @@ export default {
       heatList: [],
       boutique: [],
       secKillList: [],
-      cx:0,   //限时特价促销的判断条件
+      cx: 0, //限时特价促销的判断条件
       params: {
         corpCode: "100",
         companyId: "000019",
         pageSize: 3
       },
       playerOptions: {
-        playbackRates: [0.7, 1.0, 1.5, 2.0], //播放速度
+        //        playbackRates: [0.7, 1.0, 1.5, 2.0], //播放速度
         autoplay: false, //如果true,浏览器准备好时开始回放。
-        controls: true, //控制条
-        preload: "auto", //视频预加载
-        muted: false, //默认情况下将会消除任何音频。
-        loop: false, //导致视频一结束就重新开始。
+        muted: false, // 默认情况下将会消除任何音频。
+        loop: false, // 导致视频一结束就重新开始。
+        preload: "auto", // 建议浏览器在<video>加载元素后是否应该开始下载视频数据。auto浏览器选择最佳行为,立即开始加载视频（如果浏览器支持）
         language: "zh-CN",
         aspectRatio: "16:9", // 将播放器置于流畅模式，并在计算播放器的动态大小时使用该值。值应该代表一个比例 - 用冒号分隔的两个数字（例如"16:9"或"4:3"）
         fluid: true, // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
         sources: [
           {
-            type: "application/x-mpegURL",
-            src: "https://video-dev.github.io/streams/x36xhzz/x36xhzz.m3u8"
+            type: "video/mp4",
+            src: "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4" //你的视频地址（必填）
           }
         ],
-        poster:
-          "http://static.smartisanos.cn/pr/img/video/video_03_cc87ce5bdb.jpg", //你的封面地址
+        poster: "poster.jpg", //你的封面地址
         width: document.documentElement.clientWidth,
-        notSupportedMessage: "此视频暂无法播放，请稍后再试" //允许覆盖Video.js无法播放媒体源时显示的默认信息。
+        notSupportedMessage: "此视频暂无法播放，请稍后再试", //允许覆盖Video.js无法播放媒体源时显示的默认信息。
+        controlBar: {
+          timeDivider: true,
+          durationDisplay: true,
+          remainingTimeDisplay: false,
+          fullscreenToggle: true //全屏按钮
+        }
       }
     };
   },
@@ -158,7 +173,8 @@ export default {
   components: {
     DrawerLeft,
     TabBarBottom,
-    LocalHeader
+    LocalHeader,
+    videoPlayer
   },
   async created() {
     // try {
@@ -178,7 +194,20 @@ export default {
     let killdata = await secKill(this.params);
     this.secKillList = killdata.data.list;
   },
-  methods: {}
+  methods: {
+    onPlayerPlay(player) {
+      alert("play");
+    },
+    onPlayerPause(player) {
+      alert("pause");
+    }
+  },
+
+  computed: {
+    player() {
+      return this.$refs.videoPlayer.player;
+    }
+  }
 };
 </script>
 <style scoped>
@@ -377,17 +406,17 @@ export default {
   float: left;
   background: #eee;
   margin-right: 12px;
-  border:11px solid #eee;
+  border: 11px solid #eee;
   border-radius: 10px;
   font-size: 18px;
 }
-.cx_title{
+.cx_title {
   min-height: 46px;
   line-height: 46px;
 }
-.special_content_left.actives{
-    background: #fadfc5;
-    border: 11px solid #fadfc5
+.special_content_left.actives {
+  background: #fadfc5;
+  border: 11px solid #fadfc5;
 }
 .special_content_left img {
   width: 100%;
@@ -412,5 +441,6 @@ export default {
 .home_video_list_content video {
   width: 100%;
   height: 200px;
+  margin-bottom: 100px;
 }
 </style>
