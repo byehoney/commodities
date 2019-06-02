@@ -31,6 +31,12 @@
         </ul>
       </div>
     </div>
+    <!-- 下拉菜单 -->
+    <div class="search_list">
+      <ul>
+        <li>泡泡冷烟花</li>
+      </ul>
+    </div>
   </div>
 </template>
 <script>
@@ -193,5 +199,17 @@ a {
   text-align: center;
   margin-right: 28px;
   margin-top: 28px;
+}
+.search_list{
+  width: 750px;
+  background: #fff
+}
+.search_list ul li{
+  min-height: 85px;
+  line-height: 85px;
+  border-bottom: 1px solid #eee;
+  font-size: 26px;
+  color:#666;
+  margin-left:39px;
 }
 </style>
