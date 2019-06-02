@@ -415,13 +415,13 @@ const router = new Router({
             }
         }
     ],
-    scrollBehavior (to, from, savedPosition) {
-        if (savedPosition) {
-          return savedPosition
-        } else {
-          return { x: 0, y: 0 }
-        }
-    }
+    // scrollBehavior (to, from, savedPosition) {
+    //     if (savedPosition) {
+    //       return savedPosition
+    //     } else {
+    //       return { x: 0, y: 0 }
+    //     }
+    // }
 })
 
 // 全局路由钩子函数 对全局有效

@@ -121,7 +121,8 @@ export default {
             typeList:['销量','价格','主推','秒杀'],
             curType:0,
             list:[],
-            loading:false,
+            loading:false,//是否开启下拉加载
+            moreLoading:false,
             sort:0,//按价格排序是  0  正序  1  倒序
             pageSize:10,
             pageNum:1,
@@ -140,18 +141,27 @@ export default {
         SimpleCropper,
         TabBarBottom
     },
+    activated(){
+        this.loading = false;
+    },
+    deactivated(){
+        this.loading = true;
+    },
     mounted(){
         this.getData();
     },
     methods:{
         changeType(index){
+            if(this.moreLoading){
+                return;
+            }
             this.curType = index;
             this.pageNum = 1;
             this.list = [];
             this.getData();
         },
         async getData(){
-            this.loading = true;
+            this.moreLoading = true;
             let data ={
                 pageSize:this.pageSize,
                 pageNum:this.pageNum,
@@ -166,7 +176,7 @@ export default {
             let res = await getChooseList(data);
             if(!res.data.list.length){
                 this.hasMore = false;
-                this.loading = false;
+                this.moreLoading = false;
                 if(this.pageNum!=1){
                     Toast({
                         message: "已经到底了~",
@@ -183,10 +193,10 @@ export default {
                 return;
             }
             this.list = [...this.list,...res.data.list];
-            this.loading = false;
+            this.moreLoading = false;
         },
         loadMore() {
-            if(this.loading||!this.hasMore){
+            if(this.moreLoading||!this.hasMore){
                 return;
             }
             this.pageNum = this.pageNum+1;
