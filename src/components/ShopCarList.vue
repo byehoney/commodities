@@ -4,12 +4,16 @@
       <div>
         <div class="list_shopcar_title">
           <div class="list_shopcar_name">
-            <span></span>
+            <div
+              class="list_shopcar_circle"
+              :class="item.check?'checked':''"
+              @click="shopchoose(item)"
+            ></div>
             <span>{{item.shop_name}}</span>
           </div>
           <div class="list_shopcar_desc">{{item.pro_brand}}</div>
         </div>
-        <div class="list_shopcar_content" v-for="(list,index) in item.products">
+        <div class="list_shopcar_content" v-for="(list,index) in item.products" :key="index">
           <div
             class="list_shopcar_circle"
             :class="list.checked?'checked':''"
@@ -25,11 +29,11 @@
                 <p>{{list.pro_place}}</p>
                 <p>{{list.pro_depot}}</p>
               </div>
-              <div class="list_shopcar_com_top_gift">{{list.pro_purity}}</div>
+              <!-- <div class="list_shopcar_com_top_gift">{{list.pro_purity}}</div> -->
               <div style="clear:both"></div>
             </div>
-            <div class="list_shopcar_com_bottom">
-              <div class="list_shopcar_com_price">{{list.pro_price}}</div>
+            <div class="list_shopcar_com_bottom fix">
+              <div class="list_shopcar_com_price">¥{{list.pro_price}}</div>
               <div class="list_shopcar_com_num">
                 <ul>
                   <li @click="reduce(list)">-</li>
@@ -40,7 +44,7 @@
             </div>
           </div>
           <div style="clear:both"></div>
-          <div class="shop_gift">3434</div>
+          <!-- <div class="shop_gift">3434</div> -->
         </div>
       </div>
       <!-- 脚部 -->
@@ -70,6 +74,21 @@ export default {
     }
   },
   methods: {
+    shoptrue(item) {
+      item.products.forEach(pro => {
+        pro.checked === false ? this.choosetrue(item, pro) : "";
+      });
+    }, //循环店铺中的商品，先筛选出目前没选中的商品，给它执行choosetrue函数
+    shopfalse(item) {
+
+      item.products.forEach(pro => {
+        pro.checked === true ? this.choosefalse(item, pro) : "";
+      });
+    }, //循环店铺中的商品，先筛选出目前被选中的商品，给它执行choosefalse函数
+    shopchoose(item) {
+      !item.check ? this.shoptrue(item) : this.shopfalse(item);
+    },
+    //商铺选择结束
     choosetrue(item, list) {
       list.checked = true; //将商品选中状态改为true
       ++this.fetchData.allnum;
@@ -94,6 +113,7 @@ export default {
       this.fetchData.allsum -= list.sum;
     },
     choose(item, list) {
+      console.log(item)
       !list.checked
         ? this.choosetrue(item, list)
         : this.choosefalse(item, list);
@@ -137,13 +157,14 @@ export default {
   padding-top: 20px;
   font-size: 26px;
   color: #666;
+  line-height: 40px;
   font-weight: 900;
   border-bottom: 1px solid #d8d8d8;
 }
 .list_shopcar_name {
   float: left;
 }
-.list_shopcar_name span:nth-of-type(1) {
+.list_shopcar_name span:nth-of-type(2) {
   display: inline-block;
   width: 26px;
   height: 23px;
@@ -154,7 +175,7 @@ export default {
 .list_shopcar_desc {
   float: right;
   font-size: 18px;
-  color: #f5a623;
+  color: #666666;
   margin-right: 23px;
   font-weight: 400;
 }
@@ -175,6 +196,10 @@ export default {
   background-size: 100%;
   margin-right: 8px;
   float: left;
+}
+.list_shopcar_com_bottom{
+  width:380px;
+
 }
 .checked {
   background: url("../images/car_checkcircle.png") no-repeat center;
