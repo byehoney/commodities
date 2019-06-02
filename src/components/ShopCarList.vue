@@ -4,12 +4,16 @@
       <div>
         <div class="list_shopcar_title">
           <div class="list_shopcar_name">
-            <span></span>
+            <div
+              class="list_shopcar_circle"
+              :class="item.checked?'checked':''"
+              @click="choose(item,list)"
+            ></div>
             <span>{{item.shop_name}}</span>
           </div>
           <div class="list_shopcar_desc">{{item.pro_brand}}</div>
         </div>
-        <div class="list_shopcar_content" v-for="(list,index) in item.products">
+        <div class="list_shopcar_content" v-for="(list,index) in item.products" :key="index">
           <div
             class="list_shopcar_circle"
             :class="list.checked?'checked':''"
@@ -143,7 +147,7 @@ export default {
 .list_shopcar_name {
   float: left;
 }
-.list_shopcar_name span:nth-of-type(1) {
+.list_shopcar_name span:nth-of-type(2) {
   display: inline-block;
   width: 26px;
   height: 23px;

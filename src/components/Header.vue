@@ -1,13 +1,22 @@
 <template>
   <div class="header">
+    <!-- 头部logo -->
     <div class="header_logo" v-if="showlogo"></div>
-    <div class="header_input">
+    <!-- 头部input输入框 -->
+    <div class="header_input" v-if="showlogo">
       <span>
         <img src="../images/smallsousuo.png">
       </span>
       <input type="text" v-model="searchStr" @click="search" placeholder="请输入烟花名称">
     </div>
-    <div class="selIcon_box">
+    <!-- 头部切换的输入框 -->
+    <div class="header_input newheader" v-else>
+      <span>
+        <img src="../images/smallsousuo.png">
+      </span>
+      <input type="text" v-model="searchStr" @click="search" placeholder="请输入烟花名称">
+    </div>
+    <div class="selIcon_box" v-if="showlogo">
       <img class="selIcon" src="../images/sel_ld_icon.png" alt>
     </div>
     <div class="header_search" v-if="showlogo" @click="showcode">
@@ -99,6 +108,8 @@ export default {
 .header {
   width: 708px;
   height: 58px;
+  background: #ff1240;
+  background: -webkit-linear-gradient(to right, #ff6238ed, #ff1240);
   background: linear-gradient(to right, #ff6238ed, #ff1240);
   font-size: 25px;
   padding: 15px 21px;
@@ -106,6 +117,9 @@ export default {
   top: 0;
   left: 0;
   z-index: 1000;
+}
+.newheader {
+  width: 505px !important;
 }
 .header_logo {
   width: 91px;
@@ -137,14 +151,14 @@ export default {
   width: 26px;
   height: 26px;
   margin-left: 21px;
-  vertical-align: sub
+  vertical-align: sub;
 }
 .header_input span img {
   width: 100%;
 }
 .selIcon_box {
   float: left;
-  margin-top:10px;
+  margin-top: 10px;
 }
 .selIcon {
   width: 46px;
@@ -156,7 +170,7 @@ export default {
   height: 58px;
   float: left;
   margin-top: 3px;
-  margin-left:30px;
+  margin-left: 30px;
 }
 .header_search img {
   width: 100%;
