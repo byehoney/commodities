@@ -1,12 +1,13 @@
 <template>
     <div class="container">
         <div class="topFix">
-            <div class="header">
+            <!-- <div class="header">
                 <div class="header_logo"></div>
                 <input class="header_input" type="text" placeholder="请输入烟花名称" value="" disabled>
                 <img class="selIcon" src="../images/sel_ld_icon.png" alt="">
                 <div class="header_search"></div>
-            </div>
+            </div> -->
+            <LocalHeader/>
             <div class="selBar">
                 <div :class="['selBar_item',{'active':curType==index}]" 
                      @click="changeType(index)"
@@ -19,27 +20,34 @@
         </div>
         <div
         class="scrollBox"
+        style="max-height: 100vh; overflow-y: auto;"
         v-infinite-scroll="loadMore"
         infinite-scroll-disabled="loading"
         infinite-scroll-distance="10">
             <div class="ms_area" v-if="curType==3">
                 <div class="ms_content">
-                    <div class="ms_item active">
+                    <div :class="['ms_item',(now>=12&&now<14)?'active':'']">
                         <div class="time">12:00</div>
-                        <div class="state">抢购中</div>
+                        <div class="state" v-if="now>=12&&now<14">抢购中</div>
+                        <div class="state" v-else-if="now<12">即将开始</div>
+                        <div class="state" v-else>已结束</div>
                     </div>
-                    <div class="ms_item">
+                    <div :class="['ms_item',(now>=14&&now<16)?'active':'']">
                         <div class="time">14:00</div>
-                        <div class="state">即将开始</div>
+                        <div class="state" v-if="now>=14&&now<16">抢购中</div>
+                        <div class="state" v-else-if="now<14">即将开始</div>
+                        <div class="state" v-else>已结束</div>
                     </div>
-                    <div class="ms_item">
+                    <div :class="['ms_item',(now>=16&&now<18)?'active':'']">
                         <div class="time">16:00</div>
-                        <div class="state">即将开始</div>
+                        <div class="state" v-if="now>=16&&now<18">抢购中</div>
+                        <div class="state" v-else-if="now<16">即将开始</div>
+                        <div class="state" v-else>已结束</div>
                     </div>
                 </div>
                 <p class="tip">抢购中 数量有限哦</p>
             </div>
-            <div v-for="(item,index) in list" :key="index" @click="geDetail(item.spbm)">
+            <div v-for="(item,index) in list" :key="index" @click="goDetail(item.spbm)">
                 <div class="scrollItem" v-if="curType==0||curType==1||curType==2">
                     <div class="left">
                         <img :src="item.url" alt="">
@@ -52,8 +60,8 @@
                             <div class="bot_left">
                                 <div class="discount" v-if="curType==0||curType==1">{{item.cxj|formatDis(item.ptsj)}}折</div>
                                 <div class="star_dis" v-if="curType==2">
-                                    <div class="discount">8.8折</div>
-                                    <div class="starIcon">星选</div>
+                                    <div class="discount" v-if="item.hdlx=='打折'">{{item.cxj|formatDis(item.ptsj)}}折</div>
+                                    <div class="starIcon" v-if="item.hdlx=='星选'">星选</div>
                                 </div>
                                 <div class="price">
                                     <span class="nPrice">￥{{item.cxj}}</span>
@@ -70,18 +78,18 @@
                 <div v-if="curType==3">
                     <div class="scrollItem ms_item">
                         <div class="left">
-                            <div class="limt">限2000件</div>
-                            <img src="../images/bomb_01.png" alt="">
+                            <div class="limt">限{{item.ddxgl}}件</div>
+                            <img :src="item.url" alt="">
                         </div>
                         <div class="right">
-                            <div class="name">烟花商品名称 500g</div>
-                            <div class="factory">路尼克（广州）烟花制造厂</div>
-                            <div class="size">规格：35g*1支</div>
+                            <div class="name">{{item.spmc}}</div>
+                            <div class="factory">{{item.cj}}</div>
+                            <div class="size">规格：{{item.hlgg}}</div>
                             <div class="progress">
                                 <div class="pro_bar">
-                                    <div class="barInner"></div>
+                                    <div class="barInner" :style="{'width':formatPro(item.yszb)+'rem'}"></div>
                                 </div>
-                                <div class="status">30%</div>
+                                <div class="status">{{item.yszb}}</div>
                             </div>
                             <div class="star_dis">
                                 <div class="discount">8.8折</div>
@@ -90,14 +98,14 @@
                             <div class="Info">
                                 <div class="infoLeft">
                                     <div class="price">
-                                        <span class="nPrice">￥6.50</span>
-                                        <span class="oPrice">8.80</span>
+                                        <span class="nPrice">￥{{item.cxj}}</span>
+                                        <span class="oPrice">{{item.ptsj}}</span>
                                     </div>
 
                                 </div>
                                 <div class="infoRight">
                                     <p class="right_top">马上抢</p>
-                                    <div class="saled">已销：70件</div>
+                                    <div class="saled">已销：{{item.ys}}件</div>
                                 </div>
                             </div>
                         </div>
@@ -113,11 +121,13 @@
 import { Toast } from "mint-ui";
 import SimpleCropper from "../components/SimpleCropper"
 import TabBarBottom from '@/components/TabBarBottom'
+import LocalHeader from "@/components/Header";
 import {getChooseList} from '@/api/index'
 import {mapState} from 'vuex'
 export default {
     data(){
         return{
+            now:new Date().getHours(),
             typeList:['销量','价格','主推','秒杀'],
             curType:0,
             list:[],
@@ -130,15 +140,18 @@ export default {
         }
     },
     computed:{
-        ...mapState('login',['user'])
+        ...mapState('login',['user']),
     },
     filters:{
         formatDis(nPrice,oPrice){
-            return (parseFloat(nPrice)/parseFloat(oPrice)).toFixed(1)
+            return Math.floor((parseFloat(nPrice)/parseFloat(oPrice))*100)/10
+        },
+        formatPro(data){
+            return data.split('%')[0]*200/100
         }
     },
     components:{
-        SimpleCropper,
+        LocalHeader,
         TabBarBottom
     },
     activated(){
@@ -151,11 +164,16 @@ export default {
         this.getData();
     },
     methods:{
+        formatPro(data){
+            return data.split('%')[0]*2/100
+        },
         changeType(index){
             if(this.moreLoading){
                 return;
             }
+            this.loading = false;
             this.curType = index;
+            this.hasMore = true;
             this.pageNum = 1;
             this.list = [];
             this.getData();
@@ -178,7 +196,7 @@ export default {
                 this.hasMore = false;
                 this.moreLoading = false;
                 if(this.pageNum!=1){
-                    Toast({
+                   Toast({
                         message: "已经到底了~",
                         position: "middle",
                         duration: 2000
@@ -194,6 +212,7 @@ export default {
             }
             this.list = [...this.list,...res.data.list];
             this.moreLoading = false;
+            console.log(this.loading)
         },
         loadMore() {
             if(this.moreLoading||!this.hasMore){
@@ -203,7 +222,7 @@ export default {
             this.getData();
         },
         goDetail(id){
-
+            this.$router.push({name:'detail',query:{id:id}});
         }
     }
 }
@@ -223,50 +242,50 @@ export default {
         left: 0;
         z-index: 10000;
     }
-    .header{
-        width: 100vw;
-        height: 88px;
-        // padding: 15px 0;
-        background:linear-gradient(182deg,rgba(245,81,81,0.89) 0%,rgba(195,41,24,1) 100%);
-        display: flex;
-        justify-content: space-around;
-        align-items: center;
-        // flex: 1;
-        .header_logo{
-            width: 91px;
-            height: 58px;
-            background: url('../images/gg_icon.png') no-repeat 0 0;
-            background-size: 100% 100%;
-            margin-left: 27px;
-            margin-right: 21px;
-        }
-        .header_input{
-            width: 429px;
-            height: 58px;
-            background-color: #fff;
-            border-radius:29px;
-            border:none;
-            font-size:22px;
-            font-family:MicrosoftYaHeiLight;
-            color:rgba(153,153,153,1);
-            line-height:30px;
-            letter-spacing:2px;
-            padding-left: 27px;
-        }
-        .selIcon{
-            width: 46px;
-            height: 40px;
-            margin-left: 30px;
-        }
-        .header_search{
-            width: 18px;
-            height: 58px;
-            background: url('../images/home/home_list.png') no-repeat 0 0;
-            background-size: contain;
-            flex: 1;
-            margin-left: 30px;
-        }
-    }
+    // .header{
+    //     width: 100vw;
+    //     height: 88px;
+    //     // padding: 15px 0;
+    //     background:linear-gradient(182deg,rgba(245,81,81,0.89) 0%,rgba(195,41,24,1) 100%);
+    //     display: flex;
+    //     justify-content: space-around;
+    //     align-items: center;
+    //     // flex: 1;
+    //     .header_logo{
+    //         width: 91px;
+    //         height: 58px;
+    //         background: url('../images/gg_icon.png') no-repeat 0 0;
+    //         background-size: 100% 100%;
+    //         margin-left: 27px;
+    //         margin-right: 21px;
+    //     }
+    //     .header_input{
+    //         width: 429px;
+    //         height: 58px;
+    //         background-color: #fff;
+    //         border-radius:29px;
+    //         border:none;
+    //         font-size:22px;
+    //         font-family:MicrosoftYaHeiLight;
+    //         color:rgba(153,153,153,1);
+    //         line-height:30px;
+    //         letter-spacing:2px;
+    //         padding-left: 27px;
+    //     }
+    //     .selIcon{
+    //         width: 46px;
+    //         height: 40px;
+    //         margin-left: 30px;
+    //     }
+    //     .header_search{
+    //         width: 18px;
+    //         height: 58px;
+    //         background: url('../images/home/home_list.png') no-repeat 0 0;
+    //         background-size: contain;
+    //         flex: 1;
+    //         margin-left: 30px;
+    //     }
+    // }
     .selBar{
         width:100vw;
         height:93px;
@@ -275,6 +294,7 @@ export default {
         justify-content: space-between;
         align-items: center;
         margin-bottom: 6px;
+        margin-top: 88px;
         // flex: 1;
         .selBar_item{
             width: 25%;
@@ -363,6 +383,8 @@ export default {
                 .star_dis{
                     display: flex;
                     margin-top: 7px;
+                    height: 30px;
+                    margin-bottom: 40px;
                     .starIcon{
                         width: 60px;
                         height: 30px;
@@ -592,7 +614,7 @@ export default {
                 line-height:27px;
                 letter-spacing:2px;
                 .pro_bar{
-                    width: 201px;
+                    width: 200px;
                     height: 11px;
                     background-color: #e7e7e7;
                     position: relative;

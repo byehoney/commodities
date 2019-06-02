@@ -21,13 +21,11 @@
                 <span>{{item.title}}</span>
               </div>
             </div>
-
-            <div class="class_content_right " :class="isActive==index?active_bg:''">
-              <div :class='isActive==index?is_active:""'></div>
-              <span v-for="(data,index) in item.data" :key="index">{{data.name}}</span>
-            </div>
           </li>
         </ul>
+        <div class="class_content_right " :class="isActive==index?active_bg:''">
+          
+        </div>
       </div>
     </div>
   </div>
