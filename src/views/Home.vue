@@ -45,13 +45,27 @@
         <span></span>
         <span>精品推荐</span>
       </div>
-      <div class="recommond_content">
-        <div class="recommond_left"></div>
+      <div class="recommond_content fix">
+        <div class="recommond_left">
+          <div class="recommond_left_com">
+            <img :src="boutique[0].url">
+          </div>
+          <div class="recommond_left_tip">
+            <p>星选好物</p>
+          </div>
+        </div>
         <div class="recommond_center">
           <div class="recommond_center_top"></div>
           <div class="recommond_center_bottom"></div>
         </div>
-        <div class="recommond_right"></div>
+        <div class="recommond_right">
+          <div class="recommond_left_com">
+            <img :src="boutique[1].url">
+          </div>
+          <div class="recommond_left_tip">
+            <p>星选好物</p>
+          </div>
+        </div>
       </div>
     </div>
     <!-- 限时秒杀 -->
@@ -67,9 +81,33 @@
           </span>
         </div>
         <div class="special_content">
-          <div class="special_content_left"></div>
-          <div class="special_content_center"></div>
-          <div class="special_content_right"></div>
+          <div
+            :class="cx==index?'actives':''"
+            class="special_content_left fix"
+            v-for="(item,index) in secKillList"
+            :key="index"
+          >
+            <div class="cx_title">{{item.cxj}}</div>
+            <img :src="item.url">
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- special 结束 -->
+    <div class="home_video">
+      <div class="home_video_list">
+        <div class="home_video_list_header">
+          <h3>标题</h3>
+        </div>
+        <div class="home_video_list_content">
+          <video-player
+            class="video-player vjs-custom-skin"
+            ref="videoPlayer"
+            :playsinline="true"
+            :options="playerOptions"
+            @play="onPlayerPlay($event)"
+            @pause="onPlayerPause($event)"
+          ></video-player>
         </div>
       </div>
     </div>
@@ -82,22 +120,61 @@
 import DrawerLeft from "@/components/DrawerLeft";
 import TabBarBottom from "@/components/TabBarBottom";
 import LocalHeader from "@/components/Header";
-import { getHeatList, getSpecialList } from "@/api/index";
+import { videoPlayer } from "vue-video-player";
+
+//引入video样式
+import "video.js/dist/video-js.css";
+import "vue-video-player/src/custom-theme.css";
+// //引入hls.js
+// import "videojs-contrib-hls.js/src/videojs.hlsjs";
+
+import { getHeatList, getSpecialList, secKill } from "@/api/index";
 export default {
   name: "home",
   data() {
     return {
       heatList: [],
+      boutique: [],
+      secKillList: [],
+      cx: 0, //限时特价促销的判断条件
       params: {
         corpCode: "100",
-        companyId: "000019"
+        companyId: "000019",
+        pageSize: 3
+      },
+      playerOptions: {
+        //        playbackRates: [0.7, 1.0, 1.5, 2.0], //播放速度
+        autoplay: false, //如果true,浏览器准备好时开始回放。
+        muted: false, // 默认情况下将会消除任何音频。
+        loop: false, // 导致视频一结束就重新开始。
+        preload: "auto", // 建议浏览器在<video>加载元素后是否应该开始下载视频数据。auto浏览器选择最佳行为,立即开始加载视频（如果浏览器支持）
+        language: "zh-CN",
+        aspectRatio: "16:9", // 将播放器置于流畅模式，并在计算播放器的动态大小时使用该值。值应该代表一个比例 - 用冒号分隔的两个数字（例如"16:9"或"4:3"）
+        fluid: true, // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
+        sources: [
+          {
+            type: "video/mp4",
+            src: "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4" //你的视频地址（必填）
+          }
+        ],
+        poster: "poster.jpg", //你的封面地址
+        width: document.documentElement.clientWidth,
+        notSupportedMessage: "此视频暂无法播放，请稍后再试", //允许覆盖Video.js无法播放媒体源时显示的默认信息。
+        controlBar: {
+          timeDivider: true,
+          durationDisplay: true,
+          remainingTimeDisplay: false,
+          fullscreenToggle: true //全屏按钮
+        }
       }
     };
   },
+
   components: {
     DrawerLeft,
     TabBarBottom,
-    LocalHeader
+    LocalHeader,
+    videoPlayer
   },
   async created() {
     // try {
@@ -106,12 +183,31 @@ export default {
     // }
   },
   async mounted() {
-    let data = await getHeatList();
-    this.heatList = data.data.list;
-    let specialdata = await getSpecialList(this.params);
-    console.log(specialdata);
+    //热门分类
+    let { data } = await getHeatList();
+    this.heatList = data.list;
+    //精品推荐
+    let specialData = await getSpecialList(this.params);
+    this.boutique = specialData.data.list;
+    console.log(this.boutique);
+    //限时秒杀
+    let killdata = await secKill(this.params);
+    this.secKillList = killdata.data.list;
   },
-  methods: {}
+  methods: {
+    onPlayerPlay(player) {
+      alert("play");
+    },
+    onPlayerPause(player) {
+      alert("pause");
+    }
+  },
+
+  computed: {
+    player() {
+      return this.$refs.videoPlayer.player;
+    }
+  }
 };
 </script>
 <style scoped>
@@ -157,7 +253,7 @@ export default {
   line-height: 98px;
   font-size: 28px;
   color: #333;
-  margin-bottom: 45px;
+  margin-bottom: 32px;
   padding-left: 40px;
   border-bottom: 1px solid #ebebeb;
 }
@@ -215,19 +311,41 @@ export default {
 }
 .recommond_header {
   padding-left: 85px;
-  margin-bottom: 22px;
+  margin-bottom: 33px;
 }
 .recommond_content {
-  padding: 36px 82px 42px 86px;
+  padding: 0px 82px 42px 82px;
 }
 .recommond_left {
   width: 194px;
-  min-height: 194px;
+  height: 194px;
   border: 8px solid #ebebeb;
   border-radius: 10px;
   background: #fff;
   margin-right: 13px;
   float: left;
+  text-align: center;
+  position: relative;
+}
+.recommond_left_com {
+  width: 194px;
+  height: 194px;
+  margin: 0 auto;
+}
+.recommond_left_tip {
+  width: 100%;
+  height: 49px;
+  line-height: 49px;
+  color: #fff;
+  opacity: 0.8;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  background: #ccc;
+  font-size: 12px;
+}
+.recommond_left_com img {
+  width: 100%;
 }
 .recommond_center {
   float: left;
@@ -238,26 +356,27 @@ export default {
 }
 .recommond_center_top,
 .recommond_center_bottom {
-  width: 137px;
+  width: 131px;
   height: 98px;
   background: #ebebeb;
   border-radius: 10px;
 }
 .recommond_right {
-  width: 208px;
-  min-height: 208px;
+  width: 194px;
+  height: 194px;
   float: left;
-  background: #ebebeb;
+  border: 8px solid #ebebeb;
+  /* background: #ebebeb; */
   border-radius: 10px;
+  text-align: center;
+  position: relative;
 }
-
+/* 限时特价 */
 .special {
   width: 750px;
   min-height: 357px;
   background: #fff;
-  margin-bottom: 98px;
 }
-
 .special_header {
   padding-left: 85px;
   margin-bottom: 22px;
@@ -277,20 +396,51 @@ export default {
   font-size: 18px;
   margin-right: 8px;
 }
-
 .special_content {
   background: #fff;
-  padding: 36px 82px 42px 86px;
+  padding: 0px 82px 42px 86px;
 }
-.special_content div {
-  width: 186px;
-  height: 186px;
+.special_content_left {
+  width: 163px;
+  min-height: 163px;
   float: left;
   background: #eee;
   margin-right: 12px;
+  border: 11px solid #eee;
   border-radius: 10px;
+  font-size: 18px;
 }
-.special_content div:nth-of-type(3) {
+.cx_title {
+  min-height: 46px;
+  line-height: 46px;
+}
+.special_content_left.actives {
+  background: #fadfc5;
+  border: 11px solid #fadfc5;
+}
+.special_content_left img {
+  width: 100%;
+}
+.special_content_left:nth-of-type(3) {
   margin-right: 0;
+}
+.home_video_list {
+  width: 750px;
+  height: 420px;
+  font-size: 24px;
+}
+.home_video_list_header h3 {
+  color: #666;
+  margin-left: 35px;
+  font-size: 24px;
+}
+.home_video_list_header {
+  height: 92px;
+  line-height: 92px;
+}
+.home_video_list_content video {
+  width: 100%;
+  height: 200px;
+  margin-bottom: 100px;
 }
 </style>

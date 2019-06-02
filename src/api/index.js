@@ -63,6 +63,9 @@ function getHeatList(params) {//获取首页热门分类
 function getSpecialList(params) {//获取首页精品推荐
     return post('/index/boutique/list.do',params)
 }
+function secKill(params) {//获取首页限时秒杀
+    return post('/index/spike/list.do',params)
+}
 
 export {
     login,
@@ -85,6 +88,7 @@ export {
     getMyInfo,
     getChooseList,
     getHeatList,
-    getSpecialList
+    getSpecialList,
+    secKill
 
 }
