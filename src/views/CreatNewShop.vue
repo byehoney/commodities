@@ -50,6 +50,7 @@ import { Toast } from "mint-ui";
 import TopNav from '@/components/TopNav'
 import CityPicker from '@/components/CityPicker'
 import {mapState,mapMutations} from 'vuex';
+import {checkTcode} from '@/api/index'
 export default {
     data(){
         return{
@@ -95,7 +96,16 @@ export default {
         handleCancel(){
             this.popupVisible = false;
         },
+        async checkCode(){
+            let res = await checkTcode({code:this.code.trim()});
+            if(res.code==0){
+                return true;
+            }else{
+                return false;
+            }
+        },
         goNext(){
+            this.checkCode();
             let reg = /^1[345678]\d{9}$/; 
             if(!this.shop){
                 Toast({
@@ -115,7 +125,13 @@ export default {
                     position: "middle",
                     duration: 2000
                 });
-            }else if(!reg.test(this.code.trim())){
+            }else if(!this.code.trim()){
+                Toast({
+                    message: "请输入正确的推荐码",
+                    position: "middle",
+                    duration: 2000
+                });
+            }else if(!this.checkCode()){
                 Toast({
                     message: "请输入正确的推荐码",
                     position: "middle",

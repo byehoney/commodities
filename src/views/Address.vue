@@ -6,30 +6,53 @@
             <span class="btn" @click="addNew">添加新地址</span>
         </div>
         <div class="addList">
-            <div class="addItem">
-                <img src="../images/add_check.png" class="check_icon" alt="">
-                <div class="addContent">
-                    <div class="top">张建 139****0381</div>
-                    <div class="bottom">辽宁 沈阳市 铁西区 肇工北街4甲1号15门</div>
+            <div class="addItem" v-for="(item,index) in list" :key="index">
+                <div class="check_icon">
+                    <img src="../images/add_check.png"  alt="">
                 </div>
-                <div class="edit">编辑</div>
+                <div class="addContent">
+                    <div class="top">{{item.person}} {{item.tel}}</div>
+                    <div class="bottom">{{item.city}} {{item.cvPosition}} {{item.warehouseAddr}}</div>
+                </div>
+                <div class="edit" @click="edit(item.warehouseCode,item.person,item.tel,item.city,item.cvPosition,item.warehouseAddr)">编辑</div>
             </div>
         </div>
     </div>
 </template>
 <script>
+import {getAddrList} from '@/api/index'
 export default {
     data(){
         return{
-            
+            list:[]
         }
     },
+    mounted(){
+        this.getList();
+    },
     methods:{
+        async getList(){
+            let res = await getAddrList({corpCode:'100',companyId:'000019'});
+            this.list = res.data.list;
+            console.log(res)
+        },
         goBack(){
             this.$router.go(-1);
         },
+        edit(id,person,tel,city,cvPosition,warehouseAddr){
+            let data = {
+                edit:true,
+                warehouseCode:id,
+                person:person,
+                tel:tel,
+                city:city,
+                cvPosition:cvPosition,
+                warehouseAddr:warehouseAddr
+            }
+            this.$router.push({name:'addNewAdr',query:data});
+        },
         addNew(){
-
+            this.$router.push({name:'addNewAdr'});
         }
     }
 }
@@ -88,6 +111,15 @@ export default {
                     height: 40px;
                     margin-left: 39px;
                     margin-right: 29px;
+                    position: relative;
+                    img{
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        object-fit: scale-down;
+                    }
                 }
                 .addContent{
                     display: flex;

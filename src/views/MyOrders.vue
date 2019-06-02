@@ -80,7 +80,7 @@
                         <div class="btn">申请退款</div>
                     </div>
                     <div class="bottom" v-if="actIndex==2">
-                        <div class="btn">申请退货</div>
+                        <div class="btn">整单退</div>
                         <div class="btn">查看物流</div>
                         <div class="btn sure">确认收货</div>
                     </div>

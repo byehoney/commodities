@@ -7,6 +7,7 @@ import wechat from '@/common/wechat/index'
 import VeLine from 'v-charts/lib/line.common'
 import DrawerLayout from 'vue-drawer-layout'
 import AwesomePicker from 'vue-awesome-picker';
+import md5 from 'js-md5';
 import "normalize.css"
 import "@/style/reset.scss"
 Vue.use(AwesomePicker);
@@ -26,6 +27,8 @@ Vue.component(SwipeItem.name, SwipeItem);
 Vue.component(Popup.name, Popup);
 Vue.component(Header.name, Header);
 Vue.use(wechat);
+
+Vue.prototype.$md5 = md5;
 // 注入全局过滤器
 Object.keys(filters).forEach(item => {
     Vue.filter(item, filters[item])

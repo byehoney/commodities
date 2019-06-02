@@ -31,8 +31,13 @@
                 </div>
             </li>
         </ul>
-        <div class="nextBtn">
-            到货
+        <div class="fixBottom">
+            <div class="nextBtn left">
+                退货
+            </div>
+            <div class="nextBtn right">
+                收货
+            </div>
         </div>
     </div>
 </template>
@@ -174,7 +179,7 @@ export default {
                 }
             }
         }
-        .nextBtn{
+        .fixBottom{
             position: fixed;
             width: 100%;
             bottom: 0;
@@ -185,7 +190,21 @@ export default {
             font-size:30px;
             color:rgba(255,255,255,1);
             letter-spacing:3px;
-            background-color: #666;
+            background:rgba(235,235,235,1);
+            display: flex;
+            justify-content: space-between;
+        }
+        .nextBtn{
+          width: 370px;
+          height: 98px;
+          line-height: 98px;
+          text-align: center;
+          &.left{
+              background-color: #666;
+          }
+          &.right{
+              background-color: #FF513A
+          }
         }
     }
 </style>

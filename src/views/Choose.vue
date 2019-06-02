@@ -1,11 +1,10 @@
 <template>
     <div class="container">
-       <!-- choose 图片上传
-        <SimpleCropper></SimpleCropper> -->
         <div class="topFix">
             <div class="header">
                 <div class="header_logo"></div>
-                <input class="header_input" type="text" placeholder="请输入烟花名称" value="3434">
+                <input class="header_input" type="text" placeholder="请输入烟花名称" value="" disabled>
+                <img class="selIcon" src="../images/sel_ld_icon.png" alt="">
                 <div class="header_search"></div>
             </div>
             <div class="selBar">
@@ -40,30 +39,30 @@
                 </div>
                 <p class="tip">抢购中 数量有限哦</p>
             </div>
-            <div v-for="(item,index) in list" :key="index">
+            <div v-for="(item,index) in list" :key="index" @click="geDetail(item.spbm)">
                 <div class="scrollItem" v-if="curType==0||curType==1||curType==2">
                     <div class="left">
-                        <img src="../images/bomb_01.png" alt="">
+                        <img :src="item.url" alt="">
                     </div>
                     <div class="right">
-                        <div class="name">烟花商品名称 500g</div>
-                        <div class="factory">路尼克（广州）烟花制造厂</div>
-                        <div class="size">规格：35g*1支</div>
+                        <div class="name">{{item.spmc}}</div>
+                        <div class="factory">{{item.cj}}</div>
+                        <div class="size">规格：{{item.hlgg}}</div>
                         <div class="item_bot">
                             <div class="bot_left">
-                                <div class="discount" v-if="curType==0||curType==1">8.8折</div>
+                                <div class="discount" v-if="curType==0||curType==1">{{item.cxj|formatDis(item.ptsj)}}折</div>
                                 <div class="star_dis" v-if="curType==2">
                                     <div class="discount">8.8折</div>
                                     <div class="starIcon">星选</div>
                                 </div>
                                 <div class="price">
-                                    <span class="nPrice">￥6.50</span>
-                                    <span class="oPrice">8.80</span>
+                                    <span class="nPrice">￥{{item.cxj}}</span>
+                                    <span class="oPrice">{{item.ptsj}}</span>
                                 </div>
                             </div>
                             <div class="bot_right">
                                 <img class="car" src="../images/choose_car.png" alt="">
-                                <div class="saled">已销：70件</div>
+                                <div class="saled">已销：{{item.ys}}件</div>
                             </div>
                         </div>
                     </div>
@@ -111,34 +110,90 @@
 </template>
 
 <script>
+import { Toast } from "mint-ui";
 import SimpleCropper from "../components/SimpleCropper"
 import TabBarBottom from '@/components/TabBarBottom'
+import {getChooseList} from '@/api/index'
+import {mapState} from 'vuex'
 export default {
     data(){
         return{
             typeList:['销量','价格','主推','秒杀'],
             curType:0,
-            list:[1,2,3],
-            loading:false
+            list:[],
+            loading:false,
+            sort:0,//按价格排序是  0  正序  1  倒序
+            pageSize:10,
+            pageNum:1,
+            hasMore:true,
+        }
+    },
+    computed:{
+        ...mapState('login',['user'])
+    },
+    filters:{
+        formatDis(nPrice,oPrice){
+            return (parseFloat(nPrice)/parseFloat(oPrice)).toFixed(1)
         }
     },
     components:{
         SimpleCropper,
         TabBarBottom
     },
+    mounted(){
+        this.getData();
+    },
     methods:{
         changeType(index){
             this.curType = index;
+            this.pageNum = 1;
+            this.list = [];
+            this.getData();
+        },
+        async getData(){
+            this.loading = true;
+            let data ={
+                pageSize:this.pageSize,
+                pageNum:this.pageNum,
+                corpCode:this.user.corpCode ,
+                companyId:this.user.companyId,
+                type:this.curType+1,
+                flTerm:'',
+                pzTerm:'',
+                cjTerm:'',
+                sort:this.sort,
+            }
+            let res = await getChooseList(data);
+            if(!res.data.list.length){
+                this.hasMore = false;
+                this.loading = false;
+                if(this.pageNum!=1){
+                    Toast({
+                        message: "已经到底了~",
+                        position: "middle",
+                        duration: 2000
+                    });
+                }else{
+                    Toast({
+                        message: "暂无数据",
+                        position: "middle",
+                        duration: 2000
+                    });
+                }
+                return;
+            }
+            this.list = [...this.list,...res.data.list];
+            this.loading = false;
         },
         loadMore() {
-            this.loading = true;
-            setTimeout(() => {
-                let last = this.list[this.list.length - 1];
-                for (let i = 1; i <= 10; i++) {
-                    this.list.push(last + i);
-                }
-                this.loading = false;
-            }, 100);
+            if(this.loading||!this.hasMore){
+                return;
+            }
+            this.pageNum = this.pageNum+1;
+            this.getData();
+        },
+        goDetail(id){
+
         }
     }
 }
@@ -168,16 +223,15 @@ export default {
         align-items: center;
         // flex: 1;
         .header_logo{
-            width: 105px;
+            width: 91px;
             height: 58px;
-            background: url('../images/logo.png') no-repeat 0 4px;
-            background-size: contain;
+            background: url('../images/gg_icon.png') no-repeat 0 0;
+            background-size: 100% 100%;
             margin-left: 27px;
             margin-right: 21px;
-            flex: 1;
         }
         .header_input{
-            width: 506px;
+            width: 429px;
             height: 58px;
             background-color: #fff;
             border-radius:29px;
@@ -189,13 +243,18 @@ export default {
             letter-spacing:2px;
             padding-left: 27px;
         }
+        .selIcon{
+            width: 46px;
+            height: 40px;
+            margin-left: 30px;
+        }
         .header_search{
-            width: 34px;
-            height: 34px;
-            background: url('../images/sousuo.png') no-repeat 0 0;
+            width: 18px;
+            height: 58px;
+            background: url('../images/home/home_list.png') no-repeat 0 0;
             background-size: contain;
             flex: 1;
-            margin-left: 21px;
+            margin-left: 30px;
         }
     }
     .selBar{

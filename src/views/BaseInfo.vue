@@ -158,9 +158,13 @@ export default {
     }
     .baseContainer {
         background-color: #fff;
+        .nav{
+            border-bottom: 2px solid #ebebeb;
+        }
         .baseBox{
             display: flex;
             flex-direction: column;
+            padding-top: 92px;
             .baseItem{
                 display: flex;
                 justify-content: space-between;

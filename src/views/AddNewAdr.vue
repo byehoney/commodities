@@ -20,15 +20,16 @@
                     手机号：
                 </div>
                 <div class="right">
-                    <input type="text" class="input" autocomplete="false" placeholder="请输入" v-model="tel">
+                    <input type="text" maxlength="11" class="input" autocomplete="false" placeholder="请输入" v-model="tel">
                 </div>
             </div>
              <div class="addItem" @click="handlerArea"> 
                 <div class="left">
                     所在地区：
                 </div>
-                <div class="right">
-                    <input type="text" disabled class="input" v-model="sel_value" autocomplete="false" placeholder="省市区县">
+                <div class="right addr">
+                    <input type="text" disabled class="input" v-model="sel_value" autocomplete="false" placeholder="请选择省市区">
+                    <img src="../images/arrow_right.png" alt>
                 </div>
             </div>
              <div class="addItem">
@@ -48,6 +49,7 @@
 import { Toast } from "mint-ui";
 import TopNav from '@/components/TopNav'
 import CityPicker from "@/components/CityPicker";
+import {addNewAddr} from '@/api/index'
 export default {
     data(){
         return{
@@ -57,23 +59,51 @@ export default {
             sel_value: "", //选择的值
             name:'',
             tel:'',
-            details:''
+            details:'',
+            pCode:'',
+            cCode:'',
+            aCode:'',
         }
     },
     components:{
         TopNav,
         CityPicker
     },
+    mounted(){
+        let query = this.$router.history.current.query;
+        if(query.edit){
+            this.showDel = true;
+            this.sel_value = query.city+','+query.cvPosition;
+            this.name = query.person;
+            this.tel = query.tel;
+            this.details = query.warehouseAddr;
+        }
+    },
     methods:{
+        goBack(){
+            this.$router.go(-1);
+        },
         handlerArea(){
             this.areaVisible = !this.areaVisible;
         },
-        handleSetArea(value){
+        handleSetArea(value,pCode,cCode,aCode){
             this.sel_value = value;
+            this.pCode = pCode;
+            this.cCode = cCode;
+            this.aCode = aCode;
             this.areaVisible = false;
         },
         handleCancel(){
             this.areaVisible = false;
+        },
+        async reqAdd(data){
+            let res = await addNewAddr(data);
+            if(res.code==0){
+
+            }
+        },
+        delAdd(){
+
         },
         saveAddr(){
             let reg = /^1[345678]\d{9}$/;
@@ -102,7 +132,16 @@ export default {
                     duration: 2000
                 });
             }else{
-                
+                let data = {
+                    corpCode:'100',//平台编码
+                    guestId:'000019',
+                    userId:'13998120381',
+                    address:this.details,
+                    userName:this.name,
+                    mobile:this.tel,
+                    positionCode:this.aCode
+                }
+                this.reqAdd(data);
             }
         }
     }
@@ -171,6 +210,16 @@ export default {
                 align-items: center;
                 flex: 1;
                 padding-right: 41px;
+                &.addr{
+                    display: flex;
+                    .input{
+                        padding-right: 20px;
+                    }
+                    img{
+                        width: 17px;
+                        height: 30px;
+                    }
+                }
                 .input{
                     border: none;
                     outline: none;
@@ -181,6 +230,7 @@ export default {
                     letter-spacing:3px;
                     text-align: right;
                     width: 100%;
+                    background-color: #fff;
                 }
             }
         }

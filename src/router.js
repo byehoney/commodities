@@ -72,7 +72,7 @@ const router = new Router({
             component: () =>
                 import(/* webpackChunkName: "my" */ './views/My.vue'),
             meta: {
-                auth: true,
+                auth: false,
                 keepAlive: true
             }
         },
@@ -111,7 +111,7 @@ const router = new Router({
             component: () =>
                 import(/* webpackChunkName: "baseInfo" */ './views/BaseInfo.vue'),
             meta: {
-                auth: true,
+                auth: false,
                 keepAlive: false,
                 title: '个人中心',
             }
@@ -275,7 +275,7 @@ const router = new Router({
             component: () =>
                 import(/* webpackChunkName: "addNewAdr" */ './views/AddNewAdr.vue'),
             meta: {
-                auth: true,
+                auth: false,
                 keepAlive: false,
                 title:'新增收货地址'
             }

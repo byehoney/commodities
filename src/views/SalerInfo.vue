@@ -58,7 +58,7 @@
 <script>
 import { Toast } from "mint-ui";
 import TopNav from '@/components/TopNav'
-import {uploadImage,getUploadToken} from '@/api/index'
+import {uploadImage,getUploadToken,joinRegister,creatRegister,} from '@/api/index'
 import {mapState,mapMutations} from 'vuex'
 export default {
     data(){
@@ -80,7 +80,7 @@ export default {
         TopNav,
     },
     computed:{
-        ...mapState('register',[''])
+        ...mapState('register',['mobile','roleInfo','rangeList','intel','joinInfo','createAddInfo'])
     },
     mounted(){
         this.more = this.$router.history.current.query.creatNew;
@@ -93,6 +93,12 @@ export default {
             this.token = res.data.token;
             this.key = res.data.imgUrl;
             console.log(res);
+        },
+        async registerJoin(data){
+            let res = await joinRegister(data)
+        },
+        async registerCreat(data){
+            let res = await creatRegister(data)
         },
         goNext(){
             if(!this.name.trim()){
@@ -115,6 +121,24 @@ export default {
                 });
             }else{
                 this.showTip = true;
+                if((this.roleInfo.userRoleCode=='06'||this.roleInfo.userRoleCode=='07')&&this.more){
+                    let data = {
+                        mobile:this.mobile,
+                        name:this.name,
+                        userRole:this.roleInfo.userRoleCode,
+                        qIdCard:this.imgStrZ,
+                        hIdCard:this.imgStrF,
+                        passWord:this.roleInfo.psw,
+                        companyName:this.createAddInfo.shopName,
+                        regionCode:this.createAddInfo.aCode,
+                        address:this.createAddInfo.regAddr,
+                        code:this.createAddInfo.tCode,
+                        businessCode:this.intel.intelCode,
+                        aptitudeStr:{'aptitude':this.intel.aptitudeList},
+                        scopeStr:{'scope':this.rangeList}
+                    }
+                    this.registerCreat(data)
+                }
             }
         },
         chooseType() {

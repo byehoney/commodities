@@ -1,25 +1,23 @@
 <template>
     <div class="myContainer">
         <div class="info_area">
-            <!-- <div class="topArea">
-                <div class="scroe">
-
-                </div> -->
+            <div class="topArea">
+                <img src="../images/score.png" class="scroe" alt="">
                 <img src="../images/my_kf.png" class="kf_icon" alt="">
-            <!-- </div> -->
+            </div>
             <div class="user_info">
                 <div class="atv_box">
-                    <img src="../images/shopcar.png" class="atv" alt="" style="display:none">
-                    <div class="default">
+                    <img src="../images/shopcar.png" class="atv" alt="" v-if="user.user_hp">
+                    <div class="default" v-else>
                         <img src="../images/defaultAtv.png" class="atv" alt="">
                     </div>
                 </div>
-                <div class="user_msg" style="display:none">
-                    <div class="user_name">张建</div>
-                    <div class="user_tel">133****1568</div>
+                <div class="user_msg" v-if="user.userId">
+                    <div class="user_name">{{user.userName}}</div>
+                    <div class="user_tel">{{user.userId|formatTel}}</div>
                     <div class="user_add">沈阳市 铁西区肇工北街4甲1号15门</div>
                 </div>
-                <div class="loginBtn"><router-link to="/login">点击登录</router-link></div>
+                <div v-else class="loginBtn"><router-link :to="{name:'login',query:{redirect:'/my'}}">点击登录</router-link></div>
             </div>
         </div>
         <div class="op_area">
@@ -78,7 +76,7 @@
                 </div>
             </router-link>
         </div>
-        <div class="login_btn" v-if="user&&token" @click="logOut">退出登陆</div>
+        <div class="login_btn" v-if="user.userId" @click="logOut">退出登陆</div>
         <div class="login_btn" v-else>登陆</div>
         <!-- <ve-line :data="chartData"></ve-line>
         <CityPicker /> -->
@@ -88,6 +86,7 @@
 <script>
 import { mapState ,mapMutations} from 'vuex';
 import TabBarBottom from '@/components/TabBarBottom';
+import {getMyInfo} from '@/api/index';
 // import CityPicker from '@/components/CityPicker'
 export default {
     name:'my',
@@ -106,8 +105,17 @@ export default {
             // }
         }
     },
+    filters:{
+        formatTel(data){
+            return data.substr(0,3)+'****' + data.substr(7,11);
+        }
+    },
     computed:{
         ...mapState('login', ['user', 'token'])
+    },
+    async mounted(){
+        console.log(this.$router)
+        let res = await getMyInfo({userId:this.user.userId})
     },
     methods:{
         ...mapMutations('login',['LOGOUT']),
@@ -135,6 +143,16 @@ export default {
         background-color: #ff2c3e;
         font-family:'MicrosoftYaHei';
         height: 340px;
+        .topArea{
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            .scroe{
+                width: 98px;
+                height: 45px;
+                margin-right: 31px;
+            }
+        }
         .kf_icon{
             width: 32px;
             height: 35px;
