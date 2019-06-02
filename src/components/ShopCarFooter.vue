@@ -80,16 +80,18 @@ export default {
     del(data) {
       var data = data.list;
       console.log(data);
-      for (var i = 0; i < data.length; i++) {
+      for (var i = 0; i <data.length; i++) {
         if (data[i].check) {
+          console.log(33)
           data.splice(i, 1);
         } else {
           for (var j = 0; j < data[i].products.length; j++) {
             var check = data[i].products[j].checked;
-            console.log(data[i].products[j].checked);
             if (check) {
+
               console.log(data[i].products[j]);
               data[i].products.splice(j, 1);
+              --data[i].choose
               if (data[i].products.length == 0) {
                 data.splice(i, 1);
               }
