@@ -6,33 +6,32 @@
         <mt-button icon="back" class="text"></mt-button>
       </router-link>
       <mt-button title="管理" slot="right" class="text">
-        <span v-if="is_success"  @click="manage">管理</span>
-        <span v-else>完成</span>
+        <span  @click="complete">{{result?'管理':'完成'}}</span>
       </mt-button>
     </mt-header>
   </div>
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapMutations, mapGetters } from "vuex";
 export default {
-  computed: {
-    is_success: {
-      get: function() {
-        return this.$store.state.shopCar.fetchData.is_success;
-      },
-      set: function() {}
+  data(){
+    return{
+        result:false
     }
   },
-  methods:{
-      manage(){
-          console.log(this.shopResult)
-        // this.shop_result=!this.shop_result
-        
-      }
+  computed:{
+     ...mapState("shopCar",["fetchData"])
+  },
+  methods: {
+    ...mapMutations("shopCar", ["manage"]),
+    complete(){
+      this.result=!this.result
+      this.manage(this.result)
+    }
   },
   mounted() {
-      console.log(this.shopResult)
+    this.result=this.fetchData.is_success
   }
 };
 </script>

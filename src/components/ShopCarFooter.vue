@@ -17,7 +17,7 @@
         </div>
       </div>
       <div class="shop_footer_right" v-else>
-          <div class="remove">删除</div>
+        <div class="remove" @click="del(fetchData)">删除</div>
       </div>
     </mt-tabbar>
   </div>
@@ -29,7 +29,7 @@ export default {
   computed: {
     ...mapState({
       fetchData: state => state.shopCar.fetchData,
-      shopResult:state => state.shopCar,
+      shopResult: state => state.shopCar.fetchData.is_success
     })
   },
   methods: {
@@ -44,7 +44,6 @@ export default {
         : ""; //如果店铺选中状态改为true，选中店铺数量先+1，再与店铺数量比较，如果相等就更改全选选中状态为true
       this.fetchData.allsum += list.sum;
       this.fetchData.is_success = false;
-      console.log(this.fetchData.allnum);
     },
     choosefalse(item, list) {
       list.checked = false; //将商品选中状态改为false
@@ -77,6 +76,27 @@ export default {
       this.fetchData.status
         ? this.fetchData.list.forEach(item => this.shoptrue(item))
         : this.fetchData.list.forEach(item => this.shopfalse(item));
+    },
+    del(data) {
+      var data = data.list;
+      console.log(data);
+      for (var i = 0; i < data.length; i++) {
+        if (data[i].check) {
+          data.splice(i, 1);
+        } else {
+          for (var j = 0; j < data[i].products.length; j++) {
+            var check = data[i].products[j].checked;
+            console.log(data[i].products[j].checked);
+            if (check) {
+              console.log(data[i].products[j]);
+              data[i].products.splice(j, 1);
+              if (data[i].products.length == 0) {
+                data.splice(i, 1);
+              }
+            }
+          }
+        }
+      }
     }
   }
 };
@@ -120,18 +140,18 @@ export default {
   width: 506px;
   float: left;
 }
-.remove{
-    width:134px;
-    height: 68px;
-    line-height: 70px;
-    text-align: center;
-    color:#ff0000;
-    font-size: 28px;
-    border:2px solid #ff0000;
-    border-radius: 50px;
-    float:right;
-    margin-top:15px;
-    margin-right:39px;
+.remove {
+  width: 134px;
+  height: 68px;
+  line-height: 70px;
+  text-align: center;
+  color: #ff0000;
+  font-size: 28px;
+  border: 2px solid #ff0000;
+  border-radius: 50px;
+  float: right;
+  margin-top: 15px;
+  margin-right: 39px;
 }
 .shop_footer_price {
   float: left;
