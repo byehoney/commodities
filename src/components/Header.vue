@@ -1,13 +1,14 @@
 <template>
   <div class="header">
-    <div class="header_logo" v-if="showlogo">
-      <img src="../images/home/logo.png">
-    </div>
+    <div class="header_logo" v-if="showlogo"></div>
     <div class="header_input">
       <span>
-        <img src="../images/smallsousuo.png"/>
+        <img src="../images/smallsousuo.png">
       </span>
       <input type="text" v-model="searchStr" @click="search" placeholder="请输入烟花名称">
+    </div>
+    <div class="selIcon_box">
+      <img class="selIcon" src="../images/sel_ld_icon.png" alt>
     </div>
     <div class="header_search" v-if="showlogo" @click="showcode">
       <img src="../images/home/home_list.png">
@@ -60,8 +61,8 @@ export default {
         this.$emit("receve", this.searchStr.trim());
       }
     },
-    search(){
-      this.$router.push("/search")
+    search() {
+      this.$router.push("/search");
     },
     cancelSearch() {
       this.$router.history.push("/");
@@ -107,20 +108,19 @@ export default {
   z-index: 1000;
 }
 .header_logo {
-  width: 105px;
+  width: 91px;
   height: 58px;
+  background: url("../images/gg_icon.png") no-repeat 0 0;
+  background-size: 100% 100%;
   float: left;
 }
-.header_logo img {
-  width: 100%;
-}
 .header_input {
-  width: 506px;
+  width: 456px;
   height: 58px;
   border: 1px solid #fff;
   border-radius: 29px;
   float: left;
-  margin: 0 21px;
+  margin: 0 0 0 21px;
   background: #fff;
 }
 .header_input input {
@@ -132,20 +132,31 @@ export default {
   padding-left: 15px;
   border-radius: 29px;
 }
-.header_input span{
+.header_input span {
   display: inline-block;
-  width:26px;
+  width: 26px;
   height: 26px;
-  margin-left:21px;
+  margin-left: 21px;
+  vertical-align: sub
 }
-.header_input span img{
-  width:100%
+.header_input span img {
+  width: 100%;
+}
+.selIcon_box {
+  float: left;
+  margin-top:10px;
+}
+.selIcon {
+  width: 46px;
+  height: 40px;
+  margin-left: 30px;
 }
 .header_search {
   width: 17px;
   height: 58px;
-  float: right;
-  margin-top: 5px;
+  float: left;
+  margin-top: 3px;
+  margin-left:30px;
 }
 .header_search img {
   width: 100%;

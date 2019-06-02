@@ -48,7 +48,7 @@
       <div class="recommond_content fix">
         <div class="recommond_left">
           <div class="recommond_left_com">
-            <img :src="boutique[0].url">
+            <!-- <img :src="boutique[0].url"> -->
           </div>
           <div class="recommond_left_tip">
             <p>星选好物</p>
@@ -60,7 +60,7 @@
         </div>
         <div class="recommond_right">
           <div class="recommond_left_com">
-            <img :src="boutique[1].url">
+            <!-- <img :src="boutique[1].url"> -->
           </div>
           <div class="recommond_left_tip">
             <p>星选好物</p>
