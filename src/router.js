@@ -4,7 +4,13 @@ import Home from './views/Home.vue'
 import store from 'store/index'
 Vue.use(Router)
 const router = new Router({
-    // mode:"history",
+    // mode:"hash",
+    scrollBehavior (to, from, savedPosition) {
+        if(savedPosition){
+            return { x: 0, y: savedPosition }
+        }
+        return { x: 0, y: 0 }
+    },
     routes: [
         {
             path: '/',
@@ -13,7 +19,7 @@ const router = new Router({
             meta: {
                 title: '首页',
                 auth: false, // 是否需要登录
-                keepAlive: true // 是否缓存组件
+                keepAlive: false // 是否缓存组件
             }
         }, {
 
@@ -47,7 +53,8 @@ const router = new Router({
                 import(/* webpackChunkName: "choose" */ './views/Choose.vue'),
             meta: {
                 auth: false,
-                keepAlive: true
+                keepAlive: true,
+                canKeep:false
             }
         },
         {
@@ -60,7 +67,7 @@ const router = new Router({
                 import(/* webpackChunkName: "shopcar" */ './views/ShopCar.vue'),
             meta: {
                 auth: false,
-                keepAlive: true
+                keepAlive: false
             }
         },
         {
@@ -73,7 +80,7 @@ const router = new Router({
                 import(/* webpackChunkName: "my" */ './views/My.vue'),
             meta: {
                 auth: false,
-                keepAlive: true
+                keepAlive: false
             }
         },
         {
@@ -86,7 +93,7 @@ const router = new Router({
                 import(/* webpackChunkName: "search" */ './views/Search.vue'),
             meta: {
                 auth: false,
-                keepAlive: true
+                keepAlive: false
             }
         },
         {
@@ -99,7 +106,7 @@ const router = new Router({
                 import(/* webpackChunkName: "about" */ './views/About.vue'),
             meta: {
                 auth: true,
-                keepAlive: true
+                keepAlive: false
             }
         },
         {
@@ -414,14 +421,7 @@ const router = new Router({
                 // keepAlive: true
             }
         }
-    ],
-    // scrollBehavior (to, from, savedPosition) {
-    //     if (savedPosition) {
-    //       return savedPosition
-    //     } else {
-    //       return { x: 0, y: 0 }
-    //     }
-    // }
+    ]
 })
 
 // 全局路由钩子函数 对全局有效

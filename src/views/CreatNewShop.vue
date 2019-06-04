@@ -12,8 +12,8 @@
                 <img src="../images/intel_icon_grey.png" class="stateIcon" alt="">
                 <p class="stateText grey">资质信息</p>
             </div>
-            <div class="divide"></div>
-            <div class="state">
+            <div class="divide" v-if="!is_add_relative"></div>
+            <div class="state" v-if="!is_add_relative">
                 <img src="../images/user_icon_grey.png" class="stateIcon" alt="">
                 <p class="stateText grey">人员信息</p>
             </div>
@@ -54,6 +54,7 @@ import {checkTcode} from '@/api/index'
 export default {
     data(){
         return{
+            is_add_relative:false,//是否  我的 -   添加关联门店
             popupVisible:false,
             set_value:'',//滑动变化值
             sel_value:'请选择地区',//选择的值
@@ -73,6 +74,9 @@ export default {
         ...mapState('register',['createAddInfo'])
     },
     mounted(){
+        if(this.$router.history.current.query.is_add_relative){
+            this.is_add_relative = true;
+        }
         this.pCode = this.createAddInfo.pCode;
         this.cCode = this.createAddInfo.cCode;
         this.aCode = this.createAddInfo.aCode;
@@ -98,14 +102,15 @@ export default {
         },
         async checkCode(){
             let res = await checkTcode({code:this.code.trim()});
+            let pass = false;
             if(res.code==0){
-                return true;
+                pass = true;
             }else{
-                return false;
+                pass = false;
             }
+            return pass;
         },
         goNext(){
-            this.checkCode();
             let reg = /^1[345678]\d{9}$/; 
             if(!this.shop){
                 Toast({
@@ -148,7 +153,11 @@ export default {
                     tCode:this.code,
                 }
                 this.saveCreateShop(data);
-                this.$router.push({name:'intelInfo',query:{creatNew:true}})
+                if(this.is_add_relative){
+                    this.$router.push({name:'intelInfo',query:{is_add_relative:true}})
+                }else{
+                    this.$router.push({name:'intelInfo',query:{creatNew:true}})
+                }
             }
         }
     }

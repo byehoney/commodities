@@ -124,6 +124,12 @@ export default {
             list:[1,2,3]
         }
     },
+    mounted(){
+        let setTab = this.$router.history.current.query.showTab;
+        if(setTab){
+            this.selType(setTab)
+        }
+    },
     methods:{
         selType(index){
             this.actIndex = index;

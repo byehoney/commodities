@@ -31,6 +31,7 @@ export default {
     async mounted(){
         let res = await getRangeList();
         this.dataList = res.data.list;
+        console.log(res)
     },
     methods:{
         ...mapMutations('register',['saveRange']),
@@ -44,7 +45,7 @@ export default {
         confirm(){
             this.dataList.map((item,index)=>{
                 if(item.gxStatus=='勾选'){
-                    this.selList.push(item.scopeCode);
+                    this.selList.push({scope_code:item.scopeCode});
                 }
             })
             this.saveRange(this.selList);

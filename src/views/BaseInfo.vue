@@ -19,7 +19,7 @@
                     <div class="left">姓名</div>
                     <div class="right">
                         <div class="right_text">
-                            张建
+                            {{name}}
                         </div>
                     <img src="../images/arrow_right.png" class="right_icon" alt="">
                     </div>
@@ -30,7 +30,7 @@
                     <div class="left">手机</div>
                     <div class="right">
                         <div class="right_text">
-                            13333333333
+                            {{tel}}
                         </div>
                     <img src="../images/arrow_right.png" class="right_icon" alt="">
                     </div>
@@ -40,13 +40,13 @@
                 <div class="left">所属门店</div>
                 <div class="right">
                     <div class="right_text">
-                        北极北纬39
+                        {{shop}}
                     </div>
                    <img src="../images/arrow_right.png" class="right_icon" alt="">
                 </div>
             </div>
             <div class="line"></div>
-            <div class="baseItem noBorder">
+            <div class="baseItem noBorder" @click="addRelateCompany">
                 <div class="left">添加关联门店</div>
                 <div class="right">
                    <img src="../images/arrow_right.png" class="right_icon" alt="">
@@ -56,14 +56,21 @@
     </div>
 </template>
 <script>
+import {uploadImage,getUploadToken,getCompanyInfo} from '@/api/index'
 import { mapState ,mapActions } from 'vuex';
 import TopNav from '@/components/TopNav.vue';
 export default {
     data(){
         return{
             imgStr: '',
-            size: 0,
-            limit:6, //限制图片上传的数量
+            name:'',
+            tel:'',
+            shop:'',
+            file:'',
+            tokenUp:'',
+            file_key:'',
+            key:'',
+            domain:'http://yanhuawang.rydltech.com/',
         }
     },
     components:{
@@ -72,83 +79,44 @@ export default {
     computed:{
         ...mapState('login',['user','token'])
     },
-    mounted(){
-        this.imgStr = this.user.portrait;
-        console.log(this.user)
+    async mounted(){
+        this.imgStr = this.user.user_hp;
+        this.name = this.user.userName;
+        this.tel = this.user.userId;
+        this.getToken();
+        let res =  await getCompanyInfo({corpCode:this.user.corpCode,companyId:this.user.companyId});
+        this.shop = res.data.cvName;
     },
     methods:{
         ...mapActions('login',['setAtv']),
+        async getToken(){
+            let res = await getUploadToken({suffix:'1'});
+            this.tokenUp = res.data.token;
+            this.key = res.data.imgUrl;
+        },
         chooseType() {
             document.getElementById('upload_file').click();
         },
-        fileChange(el) {
-            if (!el.target.files[0].size) return;
-            this.fileList(el.target);
-            el.target.value = ''
-        },
-        fileList(fileList) {
-            let files = fileList.files;
-            for (let i = 0; i < files.length; i++) {
-                //判断是否为文件夹
-                if (files[i].type != '') {
-                    this.fileAdd(files[i]);
-                } else {
-                    //文件夹处理
-                    this.folders(fileList.items[i]);
-                }
-            }
-        },
-        //文件夹处理
-        folders(files) {
-            let _this = this;
-            //判断是否为原生file
-            if (files.kind) {
-                files = files.webkitGetAsEntry();
-            }
-            files.createReader().readEntries(function (file) {
-                for (let i = 0; i < file.length; i++) {
-                    if (file[i].isFile) {
-                        _this.foldersAdd(file[i]);
-                    } else {
-                        _this.folders(file[i]);
-                    }
-                }
-            });
-
-        },
-        foldersAdd(entry) {
-            let _this = this;
-            entry.file(function (file) {
-                _this.fileAdd(file)
+        upload(e){
+            var data = new FormData();//重点在这里 如果使用 var data = {}; data.inputfile=... 这样的方式不能正常上传
+            data.append('token', this.tokenUp);
+            data.append('file',this.file)
+            data.append('key',this.key+this.file_key)
+            uploadImage(data,(res)=>{
+                this.imgStr = this.domain+res.key;
+                this.setAtv(this.imgStr)
             })
         },
-        fileAdd(file) {
-            if (this.limit !== undefined) this.limit--;
-            if (this.limit !== undefined && this.limit < 0) return;
-            //总大小
-            this.size = this.size + file.size;
-            //判断是否为图片文件
-            if (file.type.indexOf('image') == -1) {
-                
-            } else {
-                let reader = new FileReader();
-                let image = new Image();
-                let _this = this;
-                reader.readAsDataURL(file);
-                reader.onload = function () {
-                    file.src = this.result;
-                    image.onload = function(){
-                        let width = image.width;
-                        let height = image.height;
-                        file.width = width;
-                        file.height = height;
-                        _this.imgStr = file.src;
-                        _this.setAtv(file.src);
-                    };
-                    image.src= file.src;
-                }
-            }
+        fileChange(e) {
+            if (!e.target.files[0].size) return;
+            this.file= e.target.files[0]
+            this.file_key = e.target.files[0].name
+            e.target.value = ''
+            this.upload();
         },
+        addRelateCompany(){
+            this.$router.push({name:'joinShop',query:{addRelate:true}})
+        }   
     }
 }
 </script>
@@ -201,7 +169,7 @@ export default {
                     .atv_box{
                         width:126px;
                         height:126px;
-                        background:#fff;
+                        background:linear-gradient(85deg,rgba(255,98,56,1) 0%,rgba(255,18,64,1) 100%);
                         border-radius: 50%;
                         display: flex;
                         justify-content: center;
@@ -229,6 +197,7 @@ export default {
                         }
                         .atv{
                             width:126px;
+                            object-fit: scale-down;
                         }
                     }
                 }

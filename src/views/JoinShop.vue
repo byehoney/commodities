@@ -25,7 +25,8 @@
       </div>
     </div>
     <div class="creat_new" @click="creatNew()">+创建新店</div>
-    <div class="nextBtn" @click="joinShop()">下一步</div>
+    <div class="nextBtn" @click="joinShop()" v-if="!is_add_relative">下一步</div>
+    <div class="nextBtn" @click="addEffectShop()" v-if="is_add_relative">完成</div>
     <mt-popup v-model="popupVisible" position="bottom">
       <mt-picker :slots="slots" @change="onValuesChange" showToolbar valueKey="clientName">
         <div class="barContent">
@@ -47,6 +48,7 @@ import {getRegShopList} from '@/api/index';
 export default {
   data() {
     return {
+      is_add_relative:false,//页面来源是否是  我的 --  添加关联门店
       popupVisible: false,//门店选择开关
       areaVisible:false,//地区选择开关
       set_value: "", //滑动变化值
@@ -76,6 +78,9 @@ export default {
     CityPicker
   },
   mounted(){
+    if(this.$router.history.current.query.addRelate){
+      this.is_add_relative = true;
+    }
     this.pCode = this.joinInfo.pCode;
     this.cCode = this.joinInfo.cCode;
     this.aCode = this.joinInfo.aCode;
@@ -146,7 +151,11 @@ export default {
       this.$set(this.slots[0],'values',res.data.list);
     },
     creatNew() {
-      this.$router.push({name:'creatNewShop'});
+      if(this.is_add_relative){
+        this.$router.push({name:'creatNewShop',query:{is_add_relative:true}});
+      }else{
+        this.$router.push({name:'creatNewShop'});
+      }
     },
     joinShop(){
       if(!this.sel_shop||!this.sel_shopCode||!this.sel_value||this.sel_value=='请选择地区'||this.sel_shop=='请选择门店'){
@@ -162,6 +171,9 @@ export default {
       }
       this.saveJoinInfo(data);
       this.$router.push({name:'salerInfo'})
+    },
+    addEffectShop(){
+
     }
   }
 };

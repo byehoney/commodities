@@ -98,7 +98,10 @@ export default {
             let res = await joinRegister(data)
         },
         async registerCreat(data){
-            let res = await creatRegister(data)
+            let res = await creatRegister(data);
+            if(res.code==0){
+                this.showTip = true;
+            }
         },
         goNext(){
             if(!this.name.trim()){
@@ -120,7 +123,6 @@ export default {
                     duration: 2000
                 });
             }else{
-                this.showTip = true;
                 if((this.roleInfo.userRoleCode=='06'||this.roleInfo.userRoleCode=='07')&&this.more){
                     let data = {
                         mobile:this.mobile,
@@ -128,16 +130,34 @@ export default {
                         userRole:this.roleInfo.userRoleCode,
                         qIdCard:this.imgStrZ,
                         hIdCard:this.imgStrF,
-                        passWord:this.roleInfo.psw,
+                        passWord:this.$md5(this.roleInfo.psw),
                         companyName:this.createAddInfo.shopName,
                         regionCode:this.createAddInfo.aCode,
                         address:this.createAddInfo.regAddr,
                         code:this.createAddInfo.tCode,
                         businessCode:this.intel.intelCode,
-                        aptitudeStr:{'aptitude':this.intel.aptitudeList},
-                        scopeStr:{'scope':this.rangeList}
+                        aptitudeStr:JSON.stringify({'aptitude':this.intel.aptitudeList}),
+                        scopeStr:JSON.stringify({'scope':this.rangeList})
                     }
+                    console.log(data)
                     this.registerCreat(data)
+                }else{
+                    let data = {
+                        mobile:this.mobile,
+                        name:this.name,
+                        userRole:this.roleInfo.userRoleCode,
+                        qIdCard:this.imgStrZ,
+                        hIdCard:this.imgStrF,
+                        passWord:this.$md5(this.roleInfo.psw),
+                        companyName:this.createAddInfo.shopName,
+                        regionCode:this.createAddInfo.aCode,
+                        address:this.createAddInfo.regAddr,
+                        code:this.createAddInfo.tCode,
+                        businessCode:this.intel.intelCode,
+                        aptitudeStr:JSON.stringify({'aptitude':this.intel.aptitudeList}),
+                        scopeStr:JSON.stringify({'scope':this.rangeList})
+                    }
+                    this.joinRegister(data)
                 }
             }
         },
@@ -159,6 +179,10 @@ export default {
             this.file_key = e.target.files[0].name
             e.target.value = ''
             this.upload(e,card);
+        },
+        closeTip(){
+            this.showTip = false;
+            this.$router.go(0)
         }
     }
 }

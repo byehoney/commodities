@@ -11,8 +11,8 @@
                 <img src="../images/intel_icon_act.png" class="stateIcon" alt="">
                 <p class="stateText">资质信息</p>
             </div>
-            <div class="divide"></div>
-            <div class="state">
+            <div class="divide" v-if="!is_add_relative"></div>
+            <div class="state" v-if="!is_add_relative">
                 <img src="../images/user_icon_grey.png" class="stateIcon" alt="">
                 <p class="stateText grey">人员信息</p>
             </div>
@@ -47,7 +47,9 @@
                 </div>
             </div>
         </div>
-        <div class="nextBtn" @click="goEnd">下一步</div>
+
+        <div class="nextBtn" @click="goEnd" v-if="!is_add_relative">下一步</div>
+        <div class="nextBtn" @click="goEnd" v-if="is_add_relative">完成</div>
         <div class="mask" v-if="showTip">
             <div class="tipContent">
                 <div class="title">温馨提示</div>
@@ -79,6 +81,7 @@ import { setTimeout } from 'timers';
 export default {
     data(){
         return{
+            is_add_relative:false, //是否来源   我的  ---添加关联门店
             dIndex:0,//默认选中的经营性质
             itelList:[],//资质列表
             showTip:false,
@@ -110,6 +113,9 @@ export default {
         TopNav,
     },
     async mounted(){
+        if(this.$router.history.current.query.is_add_relative){
+            this.is_add_relative = true;
+        }
         console.log(this.$store.state)
         let res = await getPropertyList();
         this.$set(this.slots[0],'values',res.data.list);
@@ -238,7 +244,11 @@ export default {
                     duration: 2000
                 });
             }else{
-                this.$router.push({name:'salerInfo',query:{creatNew:true}})
+                if(!this.is_add_relative){
+                    this.$router.push({name:'salerInfo',query:{creatNew:true}})
+                }else{//添加关联门店
+
+                }
             }
         }
     },

@@ -92,8 +92,8 @@ export default {
                     height:96px;
                     .yzm{
                         width:199px;
-                        height:96px;
-                        line-height: 96px;
+                        height:94px;
+                        line-height: 94px;
                         font-size:30px;
                         font-family:MicrosoftYaHei;
                         color:rgba(235,235,235,1);
@@ -102,7 +102,7 @@ export default {
                         outline: none;
                     }
                     .input{
-                        width: 100%;
+                        width: 98%;
                         height:94px;
                         line-height: 94px;
                         background:rgba(255,255,255,1);

@@ -92,8 +92,8 @@
                                 <div class="status">{{item.yszb}}</div>
                             </div>
                             <div class="star_dis">
-                                <div class="discount">8.8折</div>
-                                <div class="starIcon">星选</div>
+                                <div class="discount" v-if="item.hdlx=='打折'">{{item.cxj|formatDis(item.ptsj)}}折</div>
+                                <div class="starIcon" v-if="item.hdlx=='星选'">星选</div>
                             </div>
                             <div class="Info">
                                 <div class="infoLeft">
@@ -127,6 +127,7 @@ import {mapState} from 'vuex'
 export default {
     data(){
         return{
+            scrollTop:0,
             now:new Date().getHours(),
             typeList:['销量','价格','主推','秒杀'],
             curType:0,
@@ -156,12 +157,42 @@ export default {
     },
     activated(){
         this.loading = false;
+        if (!this.$route.meta.canKeep) {
+            window.scrollTo(0, 1);
+            this.loading = false;
+            this.curType = 0;
+            this.hasMore = true;
+            this.pageNum = 1;
+            this.list = [];
+            this.getData();
+        } 
     },
     deactivated(){
         this.loading = true;
     },
     mounted(){
         this.getData();
+    },
+    beforeRouteLeave(to, from, next){
+        let position = document.getElementsByClassName('scrollBox')[0].scrollTop
+        sessionStorage.setItem('top',position);
+        next()
+    },
+    beforeRouteEnter (to, from, next) {
+        if(from.name == 'detail'){
+            to.meta.canKeep = true;
+            next(vm => {
+                // 通过 `vm` 访问组件实例
+                vm.$nextTick(function(){
+                    let position = sessionStorage.getItem('top') //返回页面取出来
+                    console.log("beforeRouteEnter moments update: ", position);
+                    document.getElementsByClassName('scrollBox')[0].scroll(0, position)
+                })
+            })   
+        }else{
+            to.meta.canKeep = false;
+            next();
+        }
     },
     methods:{
         formatPro(data){

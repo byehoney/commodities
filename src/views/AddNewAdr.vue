@@ -50,6 +50,7 @@ import { Toast } from "mint-ui";
 import TopNav from '@/components/TopNav'
 import CityPicker from "@/components/CityPicker";
 import {addNewAddr} from '@/api/index'
+import {mapState}  from 'vuex'
 export default {
     data(){
         return{
@@ -64,6 +65,9 @@ export default {
             cCode:'',
             aCode:'',
         }
+    },
+    computed:{
+        ...mapState('login',['user'])
     },
     components:{
         TopNav,
@@ -99,7 +103,7 @@ export default {
         async reqAdd(data){
             let res = await addNewAddr(data);
             if(res.code==0){
-
+                this.$router.push({name:'address'})
             }
         },
         delAdd(){
@@ -133,9 +137,9 @@ export default {
                 });
             }else{
                 let data = {
-                    corpCode:'100',//平台编码
-                    guestId:'000019',
-                    userId:'13998120381',
+                    corpCode:this.user.corpCode,//平台编码
+                    companyId:'000033'||this.user.companyId,
+                    userId:'15940985450'||this.user.userId,
                     address:this.details,
                     userName:this.name,
                     mobile:this.tel,

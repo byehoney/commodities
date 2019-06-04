@@ -7,7 +7,7 @@
             </div>
             <div class="user_info">
                 <div class="atv_box">
-                    <img src="../images/shopcar.png" class="atv" alt="" v-if="user.user_hp">
+                    <img :src="user.user_hp" class="atv" alt="" v-if="user.user_hp">
                     <div class="default" v-else>
                         <img src="../images/defaultAtv.png" class="atv" alt="">
                     </div>
@@ -21,27 +21,27 @@
             </div>
         </div>
         <div class="op_area">
-            <div class="op_item">
+            <div class="op_item" @click="goOrders(1)">
                 <img src="../images/waite_send.png" class="op_icon" alt="">
                 <p class="op_text">待发货</p>
                 <span class="op_num">3</span>
             </div>
-            <div class="op_item">
+            <div class="op_item" @click="goOrders(2)">
                 <img src="../images/waite_get.png" class="op_icon" alt="">
                 <p class="op_text">待收货</p>
                 <span class="op_num">3</span>
             </div>
-            <div class="op_item">
+            <div class="op_item" @click="goOrders(3)">
                 <img src="../images/waite_eva.png" class="op_icon" alt="">
                 <p class="op_text">待评价</p>
                 <span class="op_num">3</span>
             </div>
-            <div class="op_item">
+            <div class="op_item" @click="goOrders(4)">
                 <img src="../images/waite_send.png" class="op_icon" alt="">
                 <p class="op_text">退货</p>
                 <!-- <span class="op_num">3</span> -->
             </div>
-            <div class="op_item">
+            <div class="op_item" @click="goOrders(0)">
                 <img src="../images/all_order.png" class="op_icon" alt="">
                 <p class="op_text">全部订单</p>
                 <!-- <span class="op_num">3</span> -->
@@ -66,7 +66,7 @@
                     <img src="../images/arrow_right.png" class="list_icon" alt="">
                 </div>
             </router-link>
-            <router-link class="list_nav" tag="div" to="/modiPass">
+            <router-link class="list_nav" tag="div" to="/forgetPas">
                 <div class="list_item">
                     <div class="left">
                         <div class="line"></div>
@@ -123,8 +123,10 @@ export default {
             this.LOGOUT({
                $router:this.$router,
            })
+        },
+        goOrders(index){
+            this.$router.push({name:'myOrders',query:{showTab:index}})
         }
-
     },
     components:{
         TabBarBottom,

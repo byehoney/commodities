@@ -32,7 +32,7 @@ export default {
     },
     methods:{
         async getList(){
-            let res = await getAddrList({corpCode:'100',companyId:'000019'});
+            let res = await getAddrList({corpCode:'100',companyId:'0000033'});
             this.list = res.data.list;
             console.log(res)
         },

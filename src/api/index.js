@@ -54,6 +54,9 @@ function addNewAddr(params){//用户信息  新增收货地址
 function getMyInfo(params){//我的页面  获取用户信息
     return post('/user/get/info.do', params)
 }
+function getCompanyInfo(params){//我的页面  获取门店详细信息
+    return post('/client/get/info.do', params)
+}
 function getChooseList(params){//选品列表
     return post('/product/get/list.do', params)
 }
@@ -86,6 +89,7 @@ export {
     getAddrList,
     addNewAddr,
     getMyInfo,
+    getCompanyInfo,
     getChooseList,
     getHeatList,
     getSpecialList,

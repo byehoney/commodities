@@ -90,7 +90,15 @@ export default {
                     duration: 2000
                 });
                 return;
+            }else if(!this.checked){
+                Toast({
+                    message: "请勾选用户使用协议",
+                    position: "middle",
+                    duration: 2000
+                });
+                return;
             }else{
+                this.saveMobile(this.tel)
                 // 下一步
                 this.$router.push('/registerActor')
             }

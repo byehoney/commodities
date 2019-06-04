@@ -5,7 +5,7 @@ export default {
     namespaced: true,
     state: {
         token: localStorage.getItem('token') || '',
-        user: JSON.parse(localStorage.getItem('userData')) || {userId:"13998120381",companyId:"000019",corpCode:"100",password:"02f7bc6992a52c06fce2c75ed5e711a9",userRole:"06",userName:"曹辉"}
+        user: JSON.parse(localStorage.getItem('userData')) || {userId:"13998120381",companyId:"000019",corpCode:"100",password:"02f7bc6992a52c06fce2c75ed5e711a9",userRole:"06",userName:"曹辉",user_hp:''}
     },
     mutations: {
         [type.LOGIN](state, data) {
@@ -23,7 +23,7 @@ export default {
             payload.$router.replace({path:'/'})
         },
         [type.SETATV](state,payload){
-            state.user.portrait=payload;
+            state.user.user_hp=payload;
             let userDate = state.user;
             localStorage.setItem('userData', JSON.stringify(userDate))
         }

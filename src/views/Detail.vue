@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="detail_header">
-      <div class="detail_back">返回</div>
+      <div class="detail_back" @click="$router.go(-1)">返回</div>
       <div class="detail_title">商品详情</div>
     </div>
     <div class="detail_loop">
