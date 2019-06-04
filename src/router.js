@@ -414,7 +414,19 @@ const router = new Router({
                 import(/* webpackChunkName: "login" */ './views/login.vue'),
             meta: {
                 auth: false,
-                keepAlive: true
+                keepAlive: false,
+                title:'登录'
+            }
+        },
+        {
+            path: '/hotSuit',
+            name: 'hotSuit',
+            component: () =>
+                import(/* webpackChunkName: "hotSuit" */ './views/HotSuit.vue'),
+            meta: {
+                auth: false,
+                keepAlive: true,
+                title:'人气套餐'
             }
         },
         {
