@@ -95,7 +95,11 @@ export default {
             console.log(res);
         },
         async registerJoin(data){
-            let res = await joinRegister(data)
+            let res = await joinRegister(data);
+            alert(JSON.stringify(res))
+            if(res.code==0){
+                this.showTip = true;
+            }
         },
         async registerCreat(data){
             let res = await creatRegister(data);
@@ -142,6 +146,14 @@ export default {
                     console.log(data)
                     this.registerCreat(data)
                 }else{
+                    let companyId = '';
+                    if(this.roleInfo.userRoleCode=='06'||this.roleInfo.userRoleCode=='07'){
+                        companyId = this.joinInfo.shopCode;
+                    }else if(this.userRole=='03'||this.userRole=='08'){
+                        companyId = this.roleInfo.partCode;
+                    }else {
+                        companyId = this.roleInfo.companyCode;
+                    }
                     let data = {
                         mobile:this.mobile,
                         name:this.name,
@@ -149,15 +161,9 @@ export default {
                         qIdCard:this.imgStrZ,
                         hIdCard:this.imgStrF,
                         passWord:this.$md5(this.roleInfo.psw),
-                        companyName:this.createAddInfo.shopName,
-                        regionCode:this.createAddInfo.aCode,
-                        address:this.createAddInfo.regAddr,
-                        code:this.createAddInfo.tCode,
-                        businessCode:this.intel.intelCode,
-                        aptitudeStr:JSON.stringify({'aptitude':this.intel.aptitudeList}),
-                        scopeStr:JSON.stringify({'scope':this.rangeList})
+                        companyId:companyId
                     }
-                    this.joinRegister(data)
+                    this.registerJoin(data)
                 }
             }
         },
@@ -182,7 +188,6 @@ export default {
         },
         closeTip(){
             this.showTip = false;
-            this.$router.go(0)
         }
     }
 }

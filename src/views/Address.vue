@@ -32,7 +32,7 @@ export default {
     },
     methods:{
         async getList(){
-            let res = await getAddrList({corpCode:'100',companyId:'0000033'});
+            let res = await getAddrList({corpCode:'100',companyId:'000033'});
             this.list = res.data.list;
             console.log(res)
         },
@@ -106,6 +106,7 @@ export default {
                 align-items: center;
                 background-color: #fff;
                 padding:38px 40px 54px 0;
+                border-bottom: 2px solid #ebebeb;
                 .check_icon{
                     width: 40px;
                     height: 40px;

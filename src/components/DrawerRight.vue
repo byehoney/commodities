@@ -5,16 +5,13 @@
         <div class="draw_close" @click="close">
           <img src="../images/guanbi.png">
         </div>
-        <div class="draw_title">厂家</div>
+        <div class="draw_title">选择门店</div>
         <div class="draw_list">
-          <ul>
-            <li>沈阳合庆烟花有限公司</li>
-            <li>大连市甘井子区北路鸿运烟花有限公司</li>
-            <li>沈阳合庆烟花有限公司</li>
-            <li>大连市甘井子区北路鸿运烟花有限公司</li>
+          <ul :style="win">
+            <li v-for="(item,index) in list" :key="index" @click="selCompany(item.companyId)">{{item.companyName}}</li>
           </ul>
         </div>
-        <div class="draw_title">分类</div>
+        <!-- <div class="draw_title">分类</div>
         <div class="draw_classify">
           <ul>
             <li>造型烟花</li>
@@ -22,33 +19,53 @@
             <li>造型烟花</li>
             <li>大地红财神炮</li>
           </ul>
-        </div>
+        </div> -->
       </div>
-      <div class="draw_footer">
+      <!-- <div class="draw_footer">
         <ul>
           <li>重置</li>
           <li>确定</li>
         </ul>
-      </div>
+      </div> -->
     </div>
   </transition>
 </template>
 
 <script>
+import {switchCompanyList} from '@/api/index'
+import {mapState,mapMutations} from 'vuex'
 export default {
   props: ["rightHide"],
   data() {
     return {
+      list:[],
       win: {
         height: document.documentElement.clientHeight + "px"
       },
       rightWin: true
     };
   },
+  computed:{
+    ...mapState('login',['user'])
+  },
+  mounted(){
+    this.getList();
+  },
   methods: {
+    ...mapMutations('login',['saveCompany']),
     close() {
       this.rightWin = this.rightHide;
       this.$emit("getRight", this.rightWin);
+    },
+    selCompany(id){
+      this.saveCompany(id);
+      this.$router.push({name:'blank'});
+    },
+    async getList(){
+      let res = await switchCompanyList({userId:'15940985450'||this.user.userId});
+      if(res.code==0){
+        this.list = res.data.list;
+      }
     }
   }
 };
@@ -62,7 +79,7 @@ export default {
 
 .right-slide-leave-active,
 .right-slide-enter-active {
-  transition: all 1s;
+  transition: all 0.5s;
 }
 .slide-right-enter,
 .slide-right-leave-active {
@@ -71,7 +88,7 @@ export default {
 
 .slide-right-leave-active,
 .slide-right-enter-active {
-  transition: all 1s 1s cubic-bezier(0.33, 0.25, 0.33, 1);
+  transition: all 0.5s 0.5s cubic-bezier(0.33, 0.25, 0.33, 1);
 }
 .draw_wrap {
   width: 597px;
@@ -106,8 +123,14 @@ export default {
   font-size: 28px;
   margin-left: 39px;
 }
+.draw_list ul{
+  overflow-y: scroll;
+} 
 .draw_list {
   margin-bottom: 50px;
+}
+.draw_list ul li:last-child{
+  margin-bottom: 350px;
 }
 .draw_classify {
   min-height: 300px;
@@ -150,6 +173,8 @@ export default {
 .draw_footer ul li:nth-of-type(2) {
   border-top-right-radius: 50px;
   border-bottom-right-radius: 50px;
-  background: linear-gradient(to right, #ff6238ed, #ff1240);
+  background-color:#ff1240;
+  background: linear-gradient(to right, rgba(245,81,81,0.9), rgba(195,41,24,1)); 
+  /* background:linear-gradient(51deg,rgba(58,229,188,1) 0%,rgba(27,199,135,1) 100%); */
 }
 </style>

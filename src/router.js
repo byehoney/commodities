@@ -397,6 +397,16 @@ const router = new Router({
                 title:'订单详情'
             }
         },
+        {//空白页 做路由跳转
+            path: '/blank',
+            name: 'blank',
+            component: () =>
+                import(/* webpackChunkName: "blank" */ './views/Blank.vue'),
+            meta: {
+                auth: false,
+                keepAlive: false,
+            }
+        },
         {
             path: '/login',
             name: 'login',

@@ -9,11 +9,13 @@ import DrawerLayout from 'vue-drawer-layout'
 import AwesomePicker from 'vue-awesome-picker';
 import md5 from 'js-md5';
 import VueVideoPlayer from 'vue-video-player'
+import 'video.js/dist/video-js.css'
+import 'vue-video-player/src/custom-theme.css'
 import "normalize.css"
 import "@/style/reset.scss"
 Vue.use(AwesomePicker);
 Vue.use(DrawerLayout)
-Vue.use(VueVideoPlayer)
+// Vue.use(VueVideoPlayer)
 import {Header, Tabbar,Toast,Field, TabItem ,Picker,Cell,Popup,Button,InfiniteScroll,Swipe, SwipeItem} from 'mint-ui';
 Vue.use(InfiniteScroll);
 Vue.component(Field.name, Field);

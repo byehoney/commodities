@@ -26,6 +26,9 @@ export default {
             state.user.user_hp=payload;
             let userDate = state.user;
             localStorage.setItem('userData', JSON.stringify(userDate))
+        },
+        saveCompany(state,id){
+            state.user.companyId = id;
         }
     },
     actions: {

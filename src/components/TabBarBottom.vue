@@ -68,10 +68,12 @@ export default {
 <style scoped lang="scss">
     .mint-tabbar>.mint-tab-item{
         color: #fff;
-        background:linear-gradient(182deg,rgba(245,81,81,0.9) 0%,rgba(195,41,24,1) 100%);
+        background: #ff1240;
+        background:linear-gradient(180deg,rgba(245,81,81,1) 0%,rgba(195,41,24,1) 100%);
     }
    .mint-tabbar>.mint-tab-item.is-selected {
-        background:linear-gradient(182deg,rgba(245,81,81,0.9) 0%,rgba(195,41,24,1) 100%);
+        background: #ff1240;
+        background:linear-gradient(180deg,rgba(245,81,81,1) 0%,rgba(195,41,24,1) 100%);
         color:#fff;
     }
     .bar{
@@ -81,7 +83,8 @@ export default {
         font-family:'MicrosoftYaHei';
         line-height:29px;
         letter-spacing:2px;
-        background:linear-gradient(182deg,rgba(245,81,81,0.9) 0%,rgba(195,41,24,1) 100%);
+        background: #ff1240;
+        background:linear-gradient(180deg,rgba(245,81,81,1) 0%,rgba(195,41,24,1) 100%);
     }
     .mint-tab-item{
         padding: 21px 0 16px;
@@ -96,5 +99,8 @@ export default {
     .mint-tab-item-icon>*{
         width: 29px!important;
         height: 28px!important;
+    }
+    .mint-tabbar.is-fixed{
+        z-index: 1000;
     }
 </style>

@@ -60,6 +60,9 @@ function getCompanyInfo(params){//我的页面  获取门店详细信息
 function getChooseList(params){//选品列表
     return post('/product/get/list.do', params)
 }
+function switchCompanyList(params){//首页切换门店 门店数据
+    return post('/client/list/usercode.do', params)
+}
 function getHeatList(params) {//获取首页热门分类
     return post('/index/heat/list.do', params)
 }
@@ -91,6 +94,7 @@ export {
     getMyInfo,
     getCompanyInfo,
     getChooseList,
+    switchCompanyList,
     getHeatList,
     getSpecialList,
     secKill
