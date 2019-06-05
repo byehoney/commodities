@@ -39,7 +39,6 @@ export default {
                 duration: 2000
             });
         }else if(!reg.test(this.username.trim())){
-            console.log()
             Toast({
                 message: "请输入正确的手机号",
                 position: "middle",
@@ -47,10 +46,10 @@ export default {
             });
         }else {
             this.login({
-            username: this.username,
-            password: this.password,
-            $router: this.$router,
-            $route: this.$route
+                mobile: this.username,
+                password: this.password,
+                $router: this.$router,
+                $route: this.$route
             });
         }
     }
@@ -59,6 +58,7 @@ export default {
 </script>
 <style scoped lang="scss">
     .login_area{
+        opacity: 1;
         width: 100vw;
         min-height: 100vh;
         background-color:#e4393c; 

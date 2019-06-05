@@ -45,31 +45,43 @@
         <span></span>
         <span>精品推荐</span>
       </div>
-      <div class="recommond_content fix">
-        <div class="recommond_left">
+      <div class="recommond_content">
+        <div class="recommond_item">
+          <img :src="boutique[0].url?boutique[0].url:''" alt="">
+          <p class="tip_bg"></p>
+        </div>
+        <div class="recommond_item">
+          <img :src="boutique[1].url?boutique[1].url:''" alt="">
+          <p class="tip_bg"></p>
+        </div>
+        <div class="recommond_item">
+          <img :src="boutique[2].url?boutique[2].url:''" alt="">
+          <p class="tip_bg"></p>
+        </div>
+        <!-- <div class="recommond_left">
           <div class="recommond_left_com">
             <img :src="boutique[0].url?boutique[0].url:''">
           </div>
           <div class="recommond_left_tip">
-            <p>星选好物</p>
+            <p class="tip_bg"></p>
           </div>
         </div>
-        <div class="recommond_center">
-          <div class="recommond_center_top">
-            <img :src="boutique[1].url?boutique[1].url:''" alt>
+        <div class="recommond_left">
+          <div class="recommond_left_com">
+            <img :src="boutique[1].url?boutique[1].url:''">
           </div>
-          <div class="recommond_center_bottom">
-            <img :src="boutique[2].url?boutique[2].url:''" alt>
+          <div class="recommond_left_tip">
+            <p class="tip_bg"></p>
           </div>
         </div>
         <div class="recommond_right">
           <div class="recommond_left_com">
-            <img :src="boutique[3].url?boutique[3].url:''">
+            <img :src="boutique[2].url?boutique[2].url:''">
           </div>
           <div class="recommond_left_tip">
-            <p>星选好物</p>
+            <p class="tip_bg"></p>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
     <!-- 限时秒杀 -->
@@ -255,7 +267,7 @@ export default {
   }
 };
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .homeContainer {
   padding-bottom: 120px;
   opacity: 1;
@@ -266,6 +278,36 @@ export default {
   margin-bottom: 15px;
   /* background: #ccc; */
   position: relative;
+}
+.recommond{
+  background-color: #fff;
+  margin-bottom: 30px;
+}
+.recommond_content{
+  padding: 16px;
+  height: 254px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .recommond_item{
+    width: 228px;
+    height: 259px;
+    position: relative;
+    .tip_bg{
+      width: 226px;
+      height: 61px;
+      background: url('../images/star_goods.png') no-repeat 0 0;
+      background-size: 100% 100%;
+      position: absolute;
+      left: 0;
+      bottom: 10px;
+    }
+    img{
+      width: 100%;
+      height: 100%;
+      object-fit: scale-down;
+    }
+  }
 }
 .item {
   width: 100%;
@@ -352,74 +394,7 @@ export default {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.recommond {
-  width: 750px;
-  min-height: 382px;
-  background: #fff;
-  margin-bottom: 15px;
-}
-.recommond_header {
-  padding-left: 85px;
-  margin-bottom: 33px;
-}
-.recommond_content {
-  padding: 0px 82px 42px 82px;
-}
-.recommond_left {
-  width: 194px;
-  height: 194px;
-  border: 8px solid #ebebeb;
-  border-radius: 10px;
-  background: #fff;
-  margin-right: 13px;
-  float: left;
-  text-align: center;
-  position: relative;
-}
-.recommond_left_com {
-  width: 194px;
-  height: 194px;
-  margin: 0 auto;
-}
-.recommond_left_tip {
-  width: 100%;
-  height: 49px;
-  line-height: 49px;
-  color: #fff;
-  opacity: 0.8;
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  background: #ccc;
-  font-size: 12px;
-}
-.recommond_left_com img {
-  width: 100%;
-}
-.recommond_center {
-  float: left;
-  margin-right: 14px;
-}
-.recommond_center_top {
-  margin-bottom: 12px;
-}
-.recommond_center_top,
-.recommond_center_bottom {
-  width: 131px;
-  height: 98px;
-  background: #ebebeb;
-  border-radius: 10px;
-}
-.recommond_right {
-  width: 194px;
-  height: 194px;
-  float: left;
-  border: 8px solid #ebebeb;
-  /* background: #ebebeb; */
-  border-radius: 10px;
-  text-align: center;
-  position: relative;
-}
+
 /* 限时特价 */
 .special {
   width: 750px;

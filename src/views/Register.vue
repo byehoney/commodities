@@ -13,7 +13,7 @@
                     <img v-if="checked" src="../images/agree_02.png" class="check" alt="">
                     <span>确认阅读并同意</span>
                 </div>
-                <router-link to="/agreement">XXXX用户使用协议</router-link>
+                <router-link to="/agreement">用户使用协议</router-link>
             </div>
             <div class="next_btn" @click="goNext">下一步</div>
         </div>
@@ -24,6 +24,7 @@ import TopNav from '@/components/TopNav'
 import { Toast } from "mint-ui";
 import { setInterval, clearInterval } from 'timers';
 import {mapState,mapMutations} from 'vuex';
+import {checkYzCode,getYzCode,checkExist} from '@/api/index';
 export default {
     data(){
         return{
@@ -31,7 +32,8 @@ export default {
             yzm:'',
             msgStr:"获取验证码",
             checked:true,
-            sending:false
+            sending:false,
+            canPass:false
         }
     },
     components:{
@@ -45,13 +47,68 @@ export default {
     },
     methods: {
         ...mapMutations('register',['saveMobile']),
-        sendMsg(){
+        async reqYzcode(){
+            let res = await getYzCode({mobile:this.tel});
+        },
+        async checkCode(){
+            if(!this.canSend()){
+                return;
+            }else if(!this.yzm.trim()){
+                Toast({
+                    message: "请输入验证码",
+                    position: "middle",
+                    duration: 2000
+                });
+                return;
+            }
+            let res = await checkYzCode({mobile:this.tel,code:this.yzm});
+            this.canPass = res.data.ckeckResult;
+            if(!this.canSend()){
+                return;
+            }else if(!this.yzm.trim()){
+                Toast({
+                    message: "请输入验证码",
+                    position: "middle",
+                    duration: 2000
+                });
+                return;
+            }else if(!this.canPass){
+                Toast({
+                    message: "验证码不正确",
+                    position: "middle",
+                    duration: 2000
+                });
+                return;
+            }else if(!this.checked){
+                Toast({
+                    message: "请勾选用户使用协议",
+                    position: "middle",
+                    duration: 2000
+                });
+                return;
+            }else{
+                this.saveMobile(this.tel)
+                // 下一步
+                this.$router.push('/registerActor')
+            }
+        },
+        async sendMsg(){
+            let res = await checkExist({mobile:this.tel});
+            if(res.code!=0){
+                Toast({
+                    message: "该手机号已被注册",
+                    position: "middle",
+                    duration: 2000
+                });
+                return;
+            }
             if(!this.canSend()){
                 return;
             }else if(!this.sending){
                 let timer = null;
                 let step = 60;
                 this.sending = true;
+                this.reqYzcode();
                 timer = setInterval(()=>{
                     step--;
                     if(step==0){
@@ -81,27 +138,7 @@ export default {
             this.checked = !this.checked;
         },
         goNext(){
-            if(!this.canSend()){
-                return;
-            }else if(!this.yzm.trim()){
-                Toast({
-                    message: "请输入验证码",
-                    position: "middle",
-                    duration: 2000
-                });
-                return;
-            }else if(!this.checked){
-                Toast({
-                    message: "请勾选用户使用协议",
-                    position: "middle",
-                    duration: 2000
-                });
-                return;
-            }else{
-                this.saveMobile(this.tel)
-                // 下一步
-                this.$router.push('/registerActor')
-            }
+            this.checkCode(); 
         }
     },
 }
@@ -111,6 +148,7 @@ export default {
         width: 100vw;
         height: 100vh;
         background:rgba(235,235,235,1);
+        opacity: 1;
         .reg_area{
             display: flex;
             flex-direction: column;

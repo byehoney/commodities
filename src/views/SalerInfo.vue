@@ -134,7 +134,7 @@ export default {
                         userRole:this.roleInfo.userRoleCode,
                         qIdCard:this.imgStrZ,
                         hIdCard:this.imgStrF,
-                        passWord:this.$md5(this.roleInfo.psw),
+                        passWord:this.roleInfo.psw,
                         companyName:this.createAddInfo.shopName,
                         regionCode:this.createAddInfo.aCode,
                         address:this.createAddInfo.regAddr,
@@ -160,7 +160,7 @@ export default {
                         userRole:this.roleInfo.userRoleCode,
                         qIdCard:this.imgStrZ,
                         hIdCard:this.imgStrF,
-                        passWord:this.$md5(this.roleInfo.psw),
+                        passWord:this.roleInfo.psw,
                         companyId:companyId
                     }
                     this.registerJoin(data)

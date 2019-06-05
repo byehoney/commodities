@@ -59,7 +59,8 @@ export default {
     },
     selCompany(id){
       this.saveCompany(id);
-      this.$router.push({name:'blank'});
+      window.location.reload();
+      // this.$router.push({name:'blank'});
     },
     async getList(){
       let res = await switchCompanyList({userId:'15940985450'||this.user.userId});

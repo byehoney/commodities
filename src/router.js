@@ -79,7 +79,7 @@ const router = new Router({
             component: () =>
                 import(/* webpackChunkName: "my" */ './views/My.vue'),
             meta: {
-                auth: false,
+                auth: true,
                 keepAlive: false
             }
         },
@@ -427,6 +427,28 @@ const router = new Router({
                 auth: false,
                 keepAlive: true,
                 title:'人气套餐'
+            }
+        },
+        {
+            path: '/suitDetail',
+            name: 'suitDetail',
+            component: () =>
+                import(/* webpackChunkName: "suitDetail" */ './views/SuitDetail.vue'),
+            meta: {
+                auth: false,
+                keepAlive: true,
+                title:'套餐详情'
+            }
+        },
+        {
+            path: '/agreement',
+            name: 'agreement',
+            component: () =>
+                import(/* webpackChunkName: "agreement" */ './views/Agreement.vue'),
+            meta: {
+                auth: false,
+                keepAlive: true,
+                title:'人云科技软件服务及隐私协议'
             }
         },
         {

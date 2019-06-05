@@ -5,7 +5,7 @@ export default {
     namespaced: true,
     state: {
         token: localStorage.getItem('token') || '',
-        user: JSON.parse(localStorage.getItem('userData')) || {userId:"13998120381",companyId:"000019",corpCode:"100",password:"02f7bc6992a52c06fce2c75ed5e711a9",userRole:"06",userName:"曹辉",user_hp:''}
+        user: JSON.parse(localStorage.getItem('userData')) || {}
     },
     mutations: {
         [type.LOGIN](state, data) {
@@ -23,20 +23,22 @@ export default {
             payload.$router.replace({path:'/'})
         },
         [type.SETATV](state,payload){
-            state.user.user_hp=payload;
+            state.user.userHp=payload;
             let userDate = state.user;
             localStorage.setItem('userData', JSON.stringify(userDate))
         },
         saveCompany(state,id){
             state.user.companyId = id;
+            let userDate = state.user;
+            localStorage.setItem('userData', JSON.stringify(userDate))
         }
     },
     actions: {
         async login(state, data) {
             try {
                 let res = await login({
-                    username: data.username,
-                    password: data.password
+                    mobile: data.mobile,
+                    passWord: data.password
                 })
                 state.commit(type.LOGIN, res);
                 Toast({
@@ -65,6 +67,18 @@ export default {
     getters: {
         token(state) {
             return state.token
+        },
+        userId(state){
+            return state.user.userId
+        },
+        corpCode(state){
+            return state.user.corpCode
+        },
+        companyId(state){
+            return state.user.companyId
+        },
+        userRole(state){
+            return state.user.userRole
         },
         user(state) {
             console.log('state', state);

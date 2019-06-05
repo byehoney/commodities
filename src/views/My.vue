@@ -1,5 +1,5 @@
 <template>
-    <div class="myContainer">
+    <div class="myContainer" style="opacity:1">
         <div class="info_area">
             <div class="topArea">
                 <img src="../images/score.png" class="scroe" alt="">
@@ -7,7 +7,7 @@
             </div>
             <div class="user_info">
                 <div class="atv_box">
-                    <img :src="user.user_hp" class="atv" alt="" v-if="user.user_hp">
+                    <img :src="user.userHp" class="atv" alt="" v-if="user.userHp">
                     <div class="default" v-else>
                         <img src="../images/defaultAtv.png" class="atv" alt="">
                     </div>
@@ -15,7 +15,7 @@
                 <div class="user_msg" v-if="user.userId">
                     <div class="user_name">{{user.userName}}</div>
                     <div class="user_tel">{{user.userId|formatTel}}</div>
-                    <div class="user_add">沈阳市 铁西区肇工北街4甲1号15门</div>
+                    <div class="user_add">{{addr}}</div>
                 </div>
                 <div v-else class="loginBtn"><router-link :to="{name:'login',query:{redirect:'/my'}}">点击登录</router-link></div>
             </div>
@@ -77,7 +77,7 @@
             </router-link>
         </div>
         <div class="login_btn" v-if="user.userId" @click="logOut">退出登陆</div>
-        <div class="login_btn" v-else>登陆</div>
+        <div class="login_btn" v-else @click="goLogin">登陆</div>
         <!-- <ve-line :data="chartData"></ve-line>
         <CityPicker /> -->
         <TabBarBottom curTab="my"/>
@@ -92,17 +92,7 @@ export default {
     name:'my',
     data(){
         return{
-            // chartData: {
-            //     columns: ['日期', '访问用户', '下单用户', '下单率'],
-            //     rows: [
-            //         { '日期': '1/1', '访问用户': 1393, '下单用户': 1093, '下单率': 0.32 },
-            //         { '日期': '1/2', '访问用户': 3530, '下单用户': 3230, '下单率': 0.26 },
-            //         { '日期': '1/3', '访问用户': 2923, '下单用户': 2623, '下单率': 0.76 },
-            //         { '日期': '1/4', '访问用户': 1723, '下单用户': 1423, '下单率': 0.49 },
-            //         { '日期': '1/5', '访问用户': 3792, '下单用户': 3492, '下单率': 0.323 },
-            //         { '日期': '1/6', '访问用户': 4593, '下单用户': 4293, '下单率': 0.78 }
-            //     ]
-            // }
+            addr:''
         }
     },
     filters:{
@@ -114,8 +104,9 @@ export default {
         ...mapState('login', ['user', 'token'])
     },
     async mounted(){
-        console.log(this.$router)
-        let res = await getMyInfo({userId:this.user.userId})
+        let res = await getMyInfo()
+        this.addr = res.data.clientMap.cvName;
+        console.log(this.user)
     },
     methods:{
         ...mapMutations('login',['LOGOUT']),
@@ -123,6 +114,9 @@ export default {
             this.LOGOUT({
                $router:this.$router,
            })
+        },
+        goLogin(){
+            this.$router.push({name:'login',query:{redirect:'/my'}});
         },
         goOrders(index){
             this.$router.push({name:'myOrders',query:{showTab:index}})
@@ -194,6 +188,7 @@ export default {
                 align-items: center;
                 margin-left: 80px;
                 margin-right: 43px;
+                overflow: hidden;
                 .default{
                     width:118px;
                     height:118px;
@@ -205,12 +200,14 @@ export default {
                     .atv{
                         width: 76px;
                         height: 76px;
+                        object-fit: scale-down;
                     }
                 }
                 .atv{
                     width:118px;
-                    height:118px;
+                    // height:118px;
                     border-radius: 50%;
+                    object-fit: scale-down;
                 }
             }
             .user_msg{

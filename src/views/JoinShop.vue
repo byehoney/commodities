@@ -37,6 +37,13 @@
       </mt-picker>
     </mt-popup>
     <CityPicker :areaVisible="areaVisible" :setArea="handleSetArea" :cancel="handleCancel"></CityPicker>
+    <div class="mask" v-if="showTip">
+        <div class="tipContent">
+            <div class="title">温馨提示</div>
+            <div class="text">内容已提交，等待审核中</div>
+            <div class="sure" @click="closeTip">确认</div>
+        </div>
+    </div>
   </div>
 </template>
 <script>
@@ -44,10 +51,11 @@ import { Toast } from "mint-ui";
 import TopNav from "@/components/TopNav";
 import CityPicker from "@/components/CityPicker";
 import {mapState,mapMutations} from 'vuex';
-import {getRegShopList} from '@/api/index';
+import {getRegShopList,addRelativeCompany} from '@/api/index';
 export default {
   data() {
     return {
+      showTip:false,
       is_add_relative:false,//页面来源是否是  我的 --  添加关联门店
       popupVisible: false,//门店选择开关
       areaVisible:false,//地区选择开关
@@ -172,8 +180,17 @@ export default {
       this.saveJoinInfo(data);
       this.$router.push({name:'salerInfo'})
     },
-    addEffectShop(){
-
+    async addEffectShop(){
+      if(!this.sel_shop||!this.sel_shopCode||!this.sel_value||this.sel_value=='请选择地区'||this.sel_shop=='请选择门店'){
+        return;
+      }
+      let res = await addRelativeCompany({companyCode:this.sel_shopCode})
+      if(res.code==0){
+        this.showTip = true;
+      }
+    },
+    closeTip(){
+      this.$router.push({name:'my'})
     }
   }
 };
@@ -317,6 +334,53 @@ export default {
     letter-spacing: 3px;
     background-color: #666;
     margin: 0 auto;
+  }
+  .mask{
+      position: fixed;
+      top: 0;
+      left:0;
+      width: 100%;
+      height: 100%;
+      z-index: 10000;
+      background:rgba(0,0,0,.5);
+      .tipContent{
+          width:552px;
+          height:334px;
+          background:rgba(28,28,28,1);
+          border-radius:8px;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          margin-top: -167px;
+          margin-left: -276px;
+          display: flex;
+          flex-direction: column;
+          .title{
+              font-size:36px;
+              color:rgba(255,255,255,1);
+              line-height:47px;
+              letter-spacing:1px;
+              padding-top: 75px;
+              // padding-left: 57px;
+          }
+          .text{
+              font-size:30px;
+              color:rgba(255,255,255,1);
+              line-height:40px;
+              letter-spacing:1px;
+              padding-left: 57px;
+              margin-top: 20px;
+          }
+          .sure{
+              font-size:30px;
+              color:rgba(74,144,226,1);
+              line-height:40px;
+              letter-spacing:1px;
+              align-self: flex-end;
+              margin-top: 54px;
+              margin-right: 49px;
+          }
+      }
   }
 }
 </style>

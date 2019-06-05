@@ -261,6 +261,7 @@ export default {
             position: fixed;
             bottom: 0;
             left: 0;
+            z-index: 10000;
             width: 100vw;
             height: 98px;
             line-height: 98px;
@@ -270,6 +271,8 @@ export default {
             letter-spacing:3px;
             background-color: #666;
             margin: 0 auto;
+            transform: translateZ(0);
+            -webkit-transform: translateZ(0);
         }
     }
 </style>

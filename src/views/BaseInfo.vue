@@ -1,5 +1,5 @@
 <template>
-    <div class="baseContainer">
+    <div class="baseContainer" style="opacity:1">
         <TopNav/>
         <div class="baseBox">
             <div class="baseItem atv">
@@ -21,7 +21,7 @@
                         <div class="right_text">
                             {{name}}
                         </div>
-                    <img src="../images/arrow_right.png" class="right_icon" alt="">
+                        <img src="../images/arrow_right.png" class="right_icon" alt="">
                     </div>
                 </div>
             </router-link>
@@ -58,6 +58,7 @@
 <script>
 import {uploadImage,getUploadToken,getCompanyInfo} from '@/api/index'
 import { mapState ,mapActions } from 'vuex';
+import {updateUserInfo} from '@/api/index';
 import TopNav from '@/components/TopNav.vue';
 export default {
     data(){
@@ -80,11 +81,11 @@ export default {
         ...mapState('login',['user','token'])
     },
     async mounted(){
-        this.imgStr = this.user.user_hp;
+        this.imgStr = this.user.userHp;
         this.name = this.user.userName;
         this.tel = this.user.userId;
         this.getToken();
-        let res =  await getCompanyInfo({corpCode:this.user.corpCode,companyId:this.user.companyId});
+        let res =  await getCompanyInfo();
         this.shop = res.data.cvName;
     },
     methods:{
@@ -97,14 +98,20 @@ export default {
         chooseType() {
             document.getElementById('upload_file').click();
         },
+        async uploadAtv(imgStr){
+            let res = await updateUserInfo({data:imgStr,type:1});
+            if(res.code == 0){
+                this.imgStr = imgStr;
+                this.setAtv(this.imgStr);
+            }
+        },
         upload(e){
             var data = new FormData();//重点在这里 如果使用 var data = {}; data.inputfile=... 这样的方式不能正常上传
             data.append('token', this.tokenUp);
             data.append('file',this.file)
             data.append('key',this.key+this.file_key)
             uploadImage(data,(res)=>{
-                this.imgStr = this.domain+res.key;
-                this.setAtv(this.imgStr)
+                this.uploadAtv(this.domain+res.key)
             })
         },
         fileChange(e) {

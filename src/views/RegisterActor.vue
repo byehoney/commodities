@@ -26,7 +26,7 @@
             </div>
             <input v-model="pasOne" class="input" type="password" placeholder="请输入密码" maxlength="16">
             <input v-model="pasTwo" class="input" type="password" placeholder="请再次输入密码" maxlength="16">
-            <p class="tip">设置您的密码（密码长度需为6-16位字母数字组合）</p>
+            <!-- <p class="tip">设置您的密码（密码长度需为6-16位字母数字组合）</p> -->
         </div>
         <div class="nextBtn" @click="goNext">下一步</div>
         <mt-popup
@@ -299,42 +299,49 @@ export default {
                     position: "middle",
                     duration: 2000
                 });
+                return;
             }else if(!this.pasOne.trim()){
                 Toast({
                     message: "请输入密码",
                     position: "middle",
                     duration: 2000
                 });
+                return;
             }else if(!this.pasTwo.trim()){
                 Toast({
                     message: "请再次输入密码",
                     position: "middle",
                     duration: 2000
                 });
-            }else if(this.pasOne.trim().length<6){
-                Toast({
-                    message: "密码长度须为6-16位",
-                    position: "middle",
-                    duration: 2000
-                });
-            }else if(!reg.test(this.pasOne.trim())||!reg.test(this.pasTwo.trim())){
-                Toast({
-                    message: "密码须为6-16位字母数字的组合",
-                    position: "middle",
-                    duration: 2000
-                });
-            }else if(this.pasOne.trim()!=this.pasTwo.trim()){
+                return;
+            }
+            // else if(this.pasOne.trim().length<6){
+            //     Toast({
+            //         message: "密码长度须为6-16位",
+            //         position: "middle",
+            //         duration: 2000
+            //     });
+            // }else if(!reg.test(this.pasOne.trim())||!reg.test(this.pasTwo.trim())){
+            //     Toast({
+            //         message: "密码须为6-16位字母数字的组合",
+            //         position: "middle",
+            //         duration: 2000
+            //     });
+            // }
+            else if(this.pasOne.trim()!=this.pasTwo.trim()){
                 Toast({
                     message: "两次输入密码不同",
                     position: "middle",
                     duration: 2000
                 });
+                return;
             }else if(!this.checkFull()){
-                 Toast({
+                Toast({
                     message: "请完善信息",
                     position: "middle",
                     duration: 2000
                 });
+                return;
             }else{
                 let data = {
                     userRoleCode:this.userRole,//用户注册角色编码
