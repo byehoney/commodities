@@ -441,6 +441,17 @@ const router = new Router({
             }
         },
         {
+            path: '/bestGoods',
+            name: 'bestGoods',
+            component: () =>
+                import(/* webpackChunkName: "bestGoods" */ './views/BestGoods.vue'),
+            meta: {
+                auth: true,
+                keepAlive: true,
+                title:'精品买赠'
+            }
+        },
+        {
             path: '/agreement',
             name: 'agreement',
             component: () =>
