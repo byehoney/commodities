@@ -2,7 +2,7 @@
     <div class="telContainer">
         <TopNav></TopNav>
         <div class="telContent">
-            <div class="tip">您正在更换手机号：139****8888</div>
+            <div class="tip">您正在更换手机号：{{user.mobile|formatTel}}</div>
             <div class="text">请验证</div>
             <div class="sendArea">
                 <input v-model="yzm" type="text" autocomplete="false" placeholder="请输入验证码" class="left">
@@ -14,6 +14,8 @@
 <script>
 import { Toast } from "mint-ui";
 import TopNav from '@/components/TopNav'
+import {updateUserInfo,getYzCode,checkYzCode} from '@/api/index'
+import {mapState,mapMutations} from 'vuex'
 export default {
     data(){
         return{
@@ -22,10 +24,21 @@ export default {
             msgStr:"获取验证码",
         }
     },
+    filters:{
+        formatTel(data){
+            return data.substr(0,3)+'****' + data.substr(7,11);
+        }
+    },
+    computed:{
+        ...mapState('login',['user'])
+    },
     components:{
         TopNav,
     },
     methods:{
+        async reqYzcode(){
+            let res = await getYzCode({mobile:this.user.mobile});
+        },
         sendMsg(){
             if(!this.sending){
                 let timer = null;

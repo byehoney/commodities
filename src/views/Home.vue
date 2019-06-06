@@ -7,9 +7,15 @@
     <div class="loop_pic">
       <!-- <div> -->
       <mt-swipe :auto="4000" :show-indicators="false">
-        <mt-swipe-item class="item">1</mt-swipe-item>
-        <mt-swipe-item class="item">2</mt-swipe-item>
-        <mt-swipe-item class="item">3</mt-swipe-item>
+        <mt-swipe-item class="item">
+          <img src="../images/banner_01.jpg" alt="">
+        </mt-swipe-item>
+        <mt-swipe-item class="item">
+          <img src="../images/banner_01.jpg" alt="">
+        </mt-swipe-item>
+        <mt-swipe-item class="item">
+          <img src="../images/banner_01.jpg" alt="">
+        </mt-swipe-item>
       </mt-swipe>
       <!-- </div> -->
       <!-- 轮播图 -->
@@ -45,7 +51,7 @@
         <span></span>
         <span>精品推荐</span>
       </div>
-      <div class="recommond_content">
+      <div class="recommond_content" @click="goChoose(2)">
         <div class="recommond_item">
           <img :src="boutique[0].url?boutique[0].url:''" alt="">
           <p class="tip_bg"></p>
@@ -58,34 +64,18 @@
           <img :src="boutique[2].url?boutique[2].url:''" alt="">
           <p class="tip_bg"></p>
         </div>
-        <!-- <div class="recommond_left">
-          <div class="recommond_left_com">
-            <img :src="boutique[0].url?boutique[0].url:''">
-          </div>
-          <div class="recommond_left_tip">
-            <p class="tip_bg"></p>
-          </div>
-        </div>
-        <div class="recommond_left">
-          <div class="recommond_left_com">
-            <img :src="boutique[1].url?boutique[1].url:''">
-          </div>
-          <div class="recommond_left_tip">
-            <p class="tip_bg"></p>
-          </div>
-        </div>
-        <div class="recommond_right">
-          <div class="recommond_left_com">
-            <img :src="boutique[2].url?boutique[2].url:''">
-          </div>
-          <div class="recommond_left_tip">
-            <p class="tip_bg"></p>
-          </div>
-        </div> -->
       </div>
     </div>
+    <div class="act_area">
+      <router-link to="/">
+        <img src="../images/suit_banner.png" alt="">
+      </router-link>
+      <router-link to="/">
+        <img src="../images/specil_banner.png" alt="">
+      </router-link>
+    </div>
     <!-- 限时秒杀 -->
-    <div class="special" v-if="secKillList.length>0">
+    <div class="special" v-if="secKillList.length>0" @click="goChoose(3)">
       <div class="special_wrap">
         <div class="special_header">
           <span></span>
@@ -103,14 +93,14 @@
             v-for="(item,index) in secKillList"
             :key="index"
           >
-            <div class="cx_title">{{item.cxj}}</div>
+            <img class="ms_icon" src="../images/ms_icon.png" alt="">
             <img :src="item.url">
           </div>
         </div>
       </div>
     </div>
     <!-- special 结束 -->
-    <div class="home_video">
+    <div class="home_video" style="display:none">
       <div class="home_video_list">
         <div class="home_video_list_header">
           <h3>标题</h3>
@@ -216,6 +206,9 @@ export default {
     this.count();
   },
   methods: {
+    goChoose(index){
+      this.$router.push({name:'choose',query:{showTab:index}})
+    },
     count() {
       this.timer = setInterval(() => {
         let nowH = new Date().getHours();
@@ -281,7 +274,7 @@ export default {
 }
 .recommond{
   background-color: #fff;
-  margin-bottom: 30px;
+  // margin-bottom: 30px;
 }
 .recommond_content{
   padding: 16px;
@@ -293,6 +286,7 @@ export default {
     width: 228px;
     height: 259px;
     position: relative;
+    border: 2px solid #ebebeb;
     .tip_bg{
       width: 226px;
       height: 61px;
@@ -306,6 +300,24 @@ export default {
       width: 100%;
       height: 100%;
       object-fit: scale-down;
+    }
+  }
+}
+.act_area{
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #eee;
+  a{
+    display: block;
+    width: 347px;
+    height: 229px;
+    border-radius: 8px;
+    img{
+      width: 100%;
+      height: 100%;
+      object-fit: fill;
     }
   }
 }
@@ -336,6 +348,7 @@ export default {
   position: absolute;
   left: 45px;
   bottom: 14px;
+  border-radius: 10px;
 }
 .classify_header,
 .recommond_header,
@@ -344,9 +357,12 @@ export default {
   line-height: 98px;
   font-size: 28px;
   color: #333;
-  margin-bottom: 32px;
+  // margin-bottom: 32px;
   padding-left: 40px;
   border-bottom: 1px solid #ebebeb;
+}
+.classify_header{
+  margin-bottom: 32px;
 }
 .classify_header span:nth-of-type(1),
 .recommond_header span:nth-of-type(1),
@@ -397,14 +413,16 @@ export default {
 
 /* 限时特价 */
 .special {
-  width: 750px;
+  // width: 750px;
   min-height: 357px;
-  background: #fff;
-  padding-bottom: 33px;
+  // background: #fff;
+  padding:0 16px 33px;
 }
 .special_header {
-  padding-left: 85px;
-  margin-bottom: 22px;
+  padding-left: 24px;
+  margin-bottom: 0!important;
+  border-bottom: 2px solid rgba(255,37,62,0.1);
+  background: #fff;
 }
 .special_header span:nth-of-type(3) {
   color: #ed5f45;
@@ -425,28 +443,40 @@ export default {
 }
 .special_content {
   background: #fff;
-  padding: 0px 82px 42px 86px;
+  padding: 12px 16px 9px;
+  overflow: hidden;
+  display: flex;
+  justify-content: space-between;
 }
 .special_content_left {
-  width: 163px;
-  min-height: 163px;
-  float: left;
-  background: #eee;
+  width: 224px;
+  height: 229px;
+  background: #ebebeb;
   margin-right: 12px;
   border: 11px solid #eee;
   border-radius: 10px;
   font-size: 18px;
+  position: relative;
 }
 .cx_title {
   min-height: 46px;
   line-height: 46px;
 }
 .special_content_left.actives {
-  background: #fadfc5;
-  border: 11px solid #fadfc5;
+  // background: #fadfc5;
+  // border: 11px solid #fadfc5;
 }
 .special_content_left img {
   width: 100%;
+  height: 100%;
+  object-fit: scale-down;
+}
+.special_content_left .ms_icon{
+  width: 28px;
+  height: 30px;
+  position: absolute;
+  top: -11px;
+  left: 0;
 }
 .special_content_left:nth-of-type(3) {
   margin-right: 0;

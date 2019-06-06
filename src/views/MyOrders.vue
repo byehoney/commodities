@@ -115,6 +115,7 @@
 <script>
 import { Toast } from "mint-ui";
 import TopNav from '@/components/TopNav'
+import {getOrdersList} from '@/api/index'
 export default {
     data(){
         return{
@@ -128,6 +129,8 @@ export default {
         let setTab = this.$router.history.current.query.showTab;
         if(setTab){
             this.selType(setTab)
+        }else{
+            this.getData();
         }
     },
     methods:{
@@ -144,6 +147,9 @@ export default {
         loadMore(){
             let data = ['load','load','load'];
             this.list = [...this.list,...data];
+        },
+        async getData(){
+            let res = await getOrdersList({type:this.actIndex});
         }
     },
     components:{

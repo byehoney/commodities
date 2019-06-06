@@ -68,6 +68,7 @@ export default {
     SearchVal() {
       if (this.searchStr.trim()) {
         this.$emit("receve", this.searchStr.trim());
+        this.searchStr = '';
       }
     },
     search() {

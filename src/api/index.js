@@ -74,10 +74,20 @@ function creatRegister(params){//注册  创建门店类型
     return post('/register/create/client.do', params)
 }
 function getAddrList(params){//用户信息  获取收货地址列表
-    return post('/user/address/list.do', params)
+    let data = {...defaulParams,...params}
+    return post('/user/address/list.do', data)
 }
 function addNewAddr(params){//用户信息  新增收货地址
-    return post('/user/add/address.do', params)
+    let data = {...defaulParams,...params}
+    return post('/user/add/address.do', data)
+}
+function upDateAddr(params){//收货地址  更新收货地址  type:0 修改   1 删除
+    let data = {...defaulParams,...params}
+    return post('/user/update/address.do', data)
+}
+function setDefaultAddr(params){//收货地址  设置默认
+    let data = {...defaulParams,...params}
+    return post('/user/moren/address.do', data)
 }
 function getMyInfo(params){//我的页面  获取用户信息
     let data = {...defaulParams,...params}
@@ -87,14 +97,24 @@ function getCompanyInfo(params){//我的页面  获取门店详细信息
     let data = {...defaulParams,...params}
     return post('/client/get/info.do', data)
 }
-function addRelativeCompany(params){//我的页面  添加关联门店
+function addRelativeCompany(params){//我的页面  添加关联门店  
     let data = {...defaulParams,...params}
     return post('/user/add/client.do', data)
+}
+function addRelativeCreate(params){//我的页面  添加关联门店  创建新门店
+    let data = {...defaulParams,...params}
+    return post('/user/create/client.do', data)
 }
 function getChooseList(params){//选品列表
     let data = {...defaulParams,...params}
     return post('/product/get/list.do', data)
 }
+
+function getOrdersList(params){//获取订单列表   type  0 全部 1 待发货 2 待收货 3 待评价 4 退货
+    let data = {...defaulParams,...params}
+    return post('/order/get/type.do', data)
+}
+
 function switchCompanyList(params){//首页切换门店 门店数据
     let data = {...defaulParams,...params}
     return post('/client/list/usercode.do', data)
@@ -118,6 +138,7 @@ export {
     checkYzCode,
     login,
     addRelativeCompany,
+    addRelativeCreate,
     updateUserInfo,
     getUploadToken,
     uploadImage,
@@ -135,9 +156,12 @@ export {
     creatRegister,
     getAddrList,
     addNewAddr,
+    upDateAddr,
+    setDefaultAddr,
     getMyInfo,
     getCompanyInfo,
     getChooseList,
+    getOrdersList,
     switchCompanyList,
     getHeatList,
     getSpecialList,

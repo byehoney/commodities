@@ -190,6 +190,7 @@ export default {
       }
     },
     closeTip(){
+      this.showTip = false;
       this.$router.push({name:'my'})
     }
   }
@@ -361,7 +362,8 @@ export default {
               line-height:47px;
               letter-spacing:1px;
               padding-top: 75px;
-              // padding-left: 57px;
+              margin-left: 57px;
+              text-align: left;
           }
           .text{
               font-size:30px;

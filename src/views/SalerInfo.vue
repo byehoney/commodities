@@ -378,6 +378,7 @@ export default {
                     letter-spacing:1px;
                     padding-top: 75px;
                     padding-left: 57px;
+                    text-align: left;
                 }
                 .text{
                     font-size:30px;

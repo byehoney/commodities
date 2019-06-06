@@ -12,7 +12,7 @@
                         <img src="../images/defaultAtv.png" class="atv" alt="">
                     </div>
                 </div>
-                <div class="user_msg" v-if="user.userId">
+                <div class="user_msg" v-if="user.mobile">
                     <div class="user_name">{{user.userName}}</div>
                     <div class="user_tel">{{user.userId|formatTel}}</div>
                     <div class="user_add">{{addr}}</div>
@@ -106,7 +106,6 @@ export default {
     async mounted(){
         let res = await getMyInfo()
         this.addr = res.data.clientMap.cvName;
-        console.log(this.user)
     },
     methods:{
         ...mapMutations('login',['LOGOUT']),

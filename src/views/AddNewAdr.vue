@@ -49,7 +49,7 @@
 import { Toast } from "mint-ui";
 import TopNav from '@/components/TopNav'
 import CityPicker from "@/components/CityPicker";
-import {addNewAddr} from '@/api/index'
+import {addNewAddr,upDateAddr} from '@/api/index'
 import {mapState}  from 'vuex'
 export default {
     data(){
@@ -64,6 +64,7 @@ export default {
             pCode:'',
             cCode:'',
             aCode:'',
+            warehouseCode:''
         }
     },
     computed:{
@@ -81,6 +82,8 @@ export default {
             this.name = query.person;
             this.tel = query.tel;
             this.details = query.warehouseAddr;
+            this.aCode = query.positionCode;
+            this.warehouseCode = query.warehouseCode;
         }
     },
     methods:{
@@ -106,7 +109,22 @@ export default {
                 this.$router.push({name:'address'})
             }
         },
-        delAdd(){
+        async modifyArr(data){
+            let res = await upDateAddr(data);
+            if(res.code == 0){
+                this.$router.push({name:'address'})
+            }
+        },
+        async delAdd(){
+            let data ={
+                address:this.details,
+                userName:this.name,
+                warehouseCode:this.warehouseCode,
+                mobile:this.tel,
+                type:1,
+                positionCode:this.aCode
+            }
+            let res = await upDateAddr(data);
 
         },
         saveAddr(){
@@ -138,14 +156,18 @@ export default {
             }else{
                 let data = {
                     corpCode:this.user.corpCode,//平台编码
-                    companyId:'000033'||this.user.companyId,
-                    userId:'15940985450'||this.user.userId,
+                    companyId:this.user.companyId,
+                    userId:this.user.userId,
                     address:this.details,
                     userName:this.name,
                     mobile:this.tel,
                     positionCode:this.aCode
                 }
-                this.reqAdd(data);
+                if(this.showDel){//修改  删除
+                    this.modifyArr({...data,type:0,warehouseCode:this.warehouseCode})
+                }else{
+                    this.reqAdd(data);
+                }
             }
         }
     }

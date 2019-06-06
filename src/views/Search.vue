@@ -1,7 +1,7 @@
 <template>
   <div>
     <LocalHeader :data="search" @receve="getval"/>
-    <div class="history_wrap">
+    <div class="history_wrap" v-if="showHistory">
         <!-- 历史搜索 -->
       <div class="history_list" v-if="HistoryList.length">
         <h3>
@@ -44,6 +44,7 @@ import LocalHeader from "../components/Header";
 export default {
   data() {
     return {
+      showHistory:true,
       HistoryList: [],
       hotList:[],
       timer: null,
@@ -160,7 +161,7 @@ a {
 .history_wrap {
   width: 671px;
   min-height: 700px;
-  padding: 37px 34px 0px 45px;
+  padding: 98px 34px 0px 45px;
   background: #fff;
   margin-top: 13px;
   font-size: 28px;
@@ -188,11 +189,12 @@ a {
 
 .history_list ul li,
 .history_new ul li {
-  min-height: 55px;
+  height: 55px;
   background: #ededed;
   border-radius: 80px;
   border: 2px solid #979797;
-  min-width: 113px;
+  // min-width: 113px;
+  padding: 0 10px;
   color: #666;
   float: left;
   line-height: 55px;

@@ -31,6 +31,11 @@ export default {
             state.user.companyId = id;
             let userDate = state.user;
             localStorage.setItem('userData', JSON.stringify(userDate))
+        },
+        saveUserName(state,name){
+            state.user.userName = name;
+            let userDate = state.user;
+            localStorage.setItem('userData', JSON.stringify(userDate))
         }
     },
     actions: {

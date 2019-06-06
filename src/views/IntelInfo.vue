@@ -76,7 +76,7 @@ import Vue from 'vue'
 import { Toast } from "mint-ui";
 import TopNav from '@/components/TopNav'
 import {mapState,mapMutations} from 'vuex';
-import {getPropertyList,getIntelList,uploadImage,getUploadToken} from '@/api/index'
+import {getPropertyList,getIntelList,uploadImage,getUploadToken,addRelativeCreate} from '@/api/index'
 import { setTimeout } from 'timers';
 export default {
     data(){
@@ -107,7 +107,13 @@ export default {
         }
     },
     computed:{
-        ...mapState('register',['intel','rangeList'])
+        ...mapState({
+            user: state => state.login.user,
+            intel: state => state.register.intel,
+            rangeList:state =>state.register.rangeList,
+            createAddInfo:state =>state.register.createAddInfo,
+        })
+        // ...mapState('register',['intel','rangeList','createAddInfo'])
     },
     components:{
         TopNav,
@@ -164,7 +170,6 @@ export default {
             this.reqList();
         },
         async reqList(){
-            console.log(33)
             let res = await getIntelList({code:this.businessCode});
             res.data.list.map((item,index)=>{
                 item.imgStr = '';
@@ -178,6 +183,7 @@ export default {
         },
         closeTip(){
             this.showTip = false;
+            this.$router.push({name:'my'})
         },
         selRange(){//选择经营范围
             this.$router.push({name:'businessScope'})
@@ -224,6 +230,12 @@ export default {
             }
             return full
         },
+        async addRelative(data){
+            let res = await addRelativeCreate(data);
+            if(res.code==0){
+                this.showTip = true;
+            }
+        },
         goEnd(){
             if(this.sel_value=='请选择'||this.set_value==''){
                 Toast({
@@ -247,7 +259,18 @@ export default {
                 if(!this.is_add_relative){
                     this.$router.push({name:'salerInfo',query:{creatNew:true}})
                 }else{//添加关联门店
-
+                    let data = {
+                        mobile:this.user.userId,
+                        companyName:this.createAddInfo.shopName,
+                        regionCode:this.createAddInfo.aCode,
+                        address:this.createAddInfo.regAddr,
+                        code:this.createAddInfo.tCode,
+                        businessCode:this.intel.intelCode,
+                        aptitudeStr:JSON.stringify({'aptitude':this.intel.aptitudeList}),
+                        scopeStr:JSON.stringify({'scope':this.rangeList})
+                    }
+                    alert(JSON.stringify(data))
+                    this.addRelative(data)
                 }
             }
         }
@@ -463,6 +486,7 @@ export default {
                 letter-spacing:1px;
                 padding-top: 75px;
                 padding-left: 57px;
+                text-align: left;
             }
             .text{
                 font-size:30px;

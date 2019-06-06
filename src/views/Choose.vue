@@ -80,6 +80,7 @@
                         <div class="left">
                             <div class="limt">限{{item.ddxgl}}件</div>
                             <img :src="item.url" alt="">
+                            <img v-if="item.hdlx=='秒杀'" class="ms_icon" src="../images/ms_icon.png" alt="">
                         </div>
                         <div class="right">
                             <div class="name">{{item.spmc}}</div>
@@ -158,9 +159,15 @@ export default {
     activated(){
         this.loading = false;
         if (!this.$route.meta.canKeep) {
+            let showTab = this.$router.history.current.query.showTab;
+            if(showTab!=''&&showTab!=undefined){
+                this.curType = showTab;
+            }else{
+                this.curType = 0;
+            }
             window.scrollTo(0, 1);
             this.loading = false;
-            this.curType = 0;
+            // this.curType = 0;
             this.hasMore = true;
             this.pageNum = 1;
             this.list = [];
@@ -171,6 +178,10 @@ export default {
         this.loading = true;
     },
     mounted(){
+        let showTab = this.$router.history.current.query.showTab;
+        if(showTab!=''&&showTab!=undefined){
+            this.curType = showTab;
+        }
         this.getData();
     },
     beforeRouteLeave(to, from, next){
@@ -216,7 +227,7 @@ export default {
                 pageNum:this.pageNum,
                 corpCode:this.user.corpCode ,
                 companyId:this.user.companyId,
-                type:this.curType+1,
+                type:parseInt(this.curType)+1,
                 flTerm:'',
                 pzTerm:'',
                 cjTerm:'',
@@ -364,8 +375,8 @@ export default {
                 }
             }
             .left{
-                width: 204px;
-                height: 192px;
+                width: 200px;
+                height: 210px;
                 // overflow: hidden;
                 margin-right: 48px;
                 img{
@@ -557,6 +568,7 @@ export default {
                     justify-content: center;
                     background-color: #e4e4e4;
                     margin:0 7px; 
+                    position: relative;
                     .time{
                         font-size:32px;
                         font-family:'MicrosoftYaHei-Bold';
@@ -620,6 +632,13 @@ export default {
             position: relative;
             .left{
                 position: relative;
+                .ms_icon{
+                    position: absolute;
+                    width: 28px;
+                    height: 30px;
+                    top: 0;
+                    right: 5px;
+                }
             }
             .limt{
                 font-size:20px;

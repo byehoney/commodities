@@ -9,18 +9,27 @@
     </div>
 </template>
 <script>
+import {updateUserInfo} from '@/api/index'
+import {mapState,mapActions, mapMutations} from 'vuex' 
 export default {
     data(){
         return{
-            
+            name:''
         }
     },
+    computed:{
+        ...mapState('login',['user'])
+    },
     methods:{
+        ...mapMutations('login',['saveUserName']),
         goBack(){
             this.$router.go(-1);
         },
-        saveName(){
-
+        async saveName(){
+            let res = await updateUserInfo({type:3,data:this.name});
+            if(res.code == 0){
+                this.saveUserName(this.name)
+            }
         }
     }
 }
