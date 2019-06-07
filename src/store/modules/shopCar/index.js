@@ -1,8 +1,9 @@
 import * as type from './mutations_types'
+import { stat } from 'fs';
 export default {
     namespaced: true,
     state: {
-        shopResult:true,
+        shopResult: false,
         fetchData: {
             list: [
                 {
@@ -16,7 +17,7 @@ export default {
                             pro_price: 480,
                             pro_num: 1,
                             pro_img: './images/1.png',
-                            sum: 480,
+                            pro_sum: 480,
                             pro_place: "河北保定星星烟花制造厂",
                             pro_depot: "规格：35g*1支",
                             pro_purity: "选择赠品>",
@@ -28,7 +29,7 @@ export default {
                             pro_price: 480,
                             pro_num: 1,
                             pro_img: './images/1.png',
-                            sum: 480,
+                            pro_sum: 480,
                             pro_place: "河北保定星星烟花制造厂",
                             pro_depot: "规格：35g*1支",
                             pro_purity: "选择赠品>",
@@ -40,7 +41,7 @@ export default {
                             pro_price: 480,
                             pro_num: 1,
                             pro_img: './images/1.png',
-                            sum: 480,
+                            pro_sum: 480,
                             pro_place: "河北保定星星烟花制造厂",
                             pro_depot: "规格：35g*1支",
                             pro_purity: "选择赠品>",
@@ -61,7 +62,7 @@ export default {
                             pro_price: 480,
                             pro_num: 1,
                             pro_img: './images/1.png',
-                            sum: 480,
+                            pro_sum: 480,
                             pro_place: "河北保定星星烟花制造厂",
                             pro_depot: "规格：35g*1支",
                             pro_purity: "选择赠品>",
@@ -73,7 +74,7 @@ export default {
                             pro_price: 480,
                             pro_num: 1,
                             pro_img: './images/1.png',
-                            sum: 480,
+                            pro_sum: 480,
                             pro_place: "河北保定星星烟花制造厂",
                             pro_depot: "规格：35g*1支",
                             pro_purity: "选择赠品>",
@@ -94,7 +95,7 @@ export default {
                             pro_price: 480,
                             pro_num: 1,
                             pro_img: './images/1.png',
-                            sum: 480,
+                            pro_sum: 480,
                             pro_place: "河北保定星星烟花制造厂",
                             pro_depot: "规格：35g*1支",
                             pro_purity: "选择赠品>",
@@ -106,7 +107,7 @@ export default {
                             pro_price: 480,
                             pro_num: 1,
                             pro_img: './images/1.png',
-                            sum: 480,
+                            pro_sum: 480,
                             pro_place: "河北保定星星烟花制造厂",
                             pro_depot: "规格：35g*1支",
                             pro_purity: "选择赠品>",
@@ -121,20 +122,21 @@ export default {
             allchoose: 0,//店铺选中个数
             allsum: 0,//总计价格
             allnum: 0,//总计数量
-            is_success:false   //控制管理和完成的显示
+            is_success: true   //控制管理和完成的显示
         },
-        
+
     },
     mutations: {
-        manage(state,data){
-            state.fetchData.is_success=data
-            console.log(state.fetchData)
-
+        manage(state) {
+            state.fetchData.is_success = !state.fetchData.is_success
         }
     },
-    actions:{
-        chooseOnly({commit}){
-           commit("type.CHOOSYALL")
+    actions: {
+        chooseOnly({ commit }) {
+            commit("type.CHOOSYALL")
+        },
+        chooseAll({commit}){
+            commit("shopchoose")
         }
     }
 }

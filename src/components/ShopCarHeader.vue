@@ -6,7 +6,7 @@
         <mt-button icon="back" class="text"></mt-button>
       </router-link>
       <mt-button title="管理" slot="right" class="text">
-        <span  @click="complete">{{result?'管理':'完成'}}</span>
+        <span @click="complete">{{result?'管理':'完成'}}</span>
       </mt-button>
     </mt-header>
   </div>
@@ -14,24 +14,25 @@
 
 <script>
 import { mapState, mapMutations, mapGetters } from "vuex";
+import { setTimeout } from "timers";
 export default {
-  data(){
-    return{
-        result:false
-    }
+  data() {
+    return {
+      result: true
+    };
   },
-  computed:{
-     ...mapState("shopCar",["fetchData"])
+  computed: {
+    ...mapState("shopCar", ["fetchData"])
   },
   methods: {
     ...mapMutations("shopCar", ["manage"]),
-    complete(){
-      this.result=!this.result
-      this.manage(this.result)
+    complete() {
+        this.result = !this.result;
+        this.manage(this.result);
     }
   },
   mounted() {
-    this.result=this.fetchData.is_success
+    this.result = this.fetchData.is_success;
   }
 };
 </script>

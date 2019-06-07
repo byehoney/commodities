@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="list_shopcar" v-for="(item,index) in fetchData.list" :key="index">
+    <div class="list_shopcar fix" v-for="(item,index) in fetchData.list" :key="index">
       <div>
         <div class="list_shopcar_title">
           <div class="list_shopcar_name">
@@ -13,48 +13,80 @@
           </div>
           <div class="list_shopcar_desc">{{item.pro_brand}}</div>
         </div>
-        <div class="list_shopcar_content" v-for="(list,index) in item.products" :key="index">
+        <div class="list_shopcar_content fix" v-for="(list,index) in item.products" :key="index">
           <div
             class="list_shopcar_circle"
             :class="list.checked?'checked':''"
             @click="choose(item,list)"
           ></div>
-          <div class="list_shopcar_pic">
-            <img :src="item.pro_img">
-          </div>
-          <div class="list_shopcar_com">
-            <div class="list_shopcar_com_top">
-              <div class="list_shopcar_com_top_title">
-                <p>{{list.pro_text}}</p>
-                <p>{{list.pro_place}}</p>
-                <p>{{list.pro_depot}}</p>
-              </div>
-              <!-- <div class="list_shopcar_com_top_gift">{{list.pro_purity}}</div> -->
-              <div style="clear:both"></div>
+          <div class="com_add">
+            <div class="list_shopcar_pic">
+              <img :src="item.pro_img">
             </div>
-            <div class="list_shopcar_com_bottom fix">
-              <div class="list_shopcar_com_price">¥{{list.pro_price}}</div>
-              <div class="list_shopcar_com_num">
-                <ul>
-                  <li @click="reduce(list)">-</li>
-                  <li>{{list.pro_num}}</li>
-                  <li @click="add(list)">+</li>
-                </ul>
+            <div class="list_shopcar_com fix">
+              <div class="list_shopcar_com_top fix">
+                <div class="list_shopcar_com_top_title">
+                  <p>{{list.pro_text}}</p>
+                  <p>{{list.pro_place}}</p>
+                  <p>{{list.pro_depot}}</p>
+                </div>
+              </div>
+              <div class="list_shopcar_com_bottom fix">
+                <div class="list_shopcar_com_price">¥{{list.pro_price}}</div>
+                <div class="list_shopcar_com_num">
+                  <ul>
+                    <li @click="reduce(list)">-</li>
+                    <li>{{list.pro_num}}</li>
+                    <li @click="add(list)">+</li>
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
-          <div style="clear:both"></div>
-          <!-- <div class="shop_gift">3434</div> -->
+          <div class="shop_gift">
+            <div class="shop_gift_top">
+              <div class="shop_gift_left">
+                <h3>商品活动</h3>
+              </div>
+              <div class="shop_gift_right">累积购买可或赠品，点击查看更多活动规则</div>
+            </div>
+            <div class="shop_gift_bottom">
+              <router-link to="/choosegift">选择赠品</router-link>
+              
+            </div>
+          </div>
         </div>
       </div>
       <!-- 脚部 -->
     </div>
     <!-- 一个商品结束 -->
+    <div>
+      <mt-tabbar fixed class="shop_footer">
+        <div class="shop_footer_left" @click="cartchoose()">
+          <span :class="this.fetchData.status?'checked':'first'"></span>
+          <span>全选</span>
+        </div>
+        <div class="shop_footer_right" v-if="shopResult">
+          <div class="shop_footer_price">
+            <span>合计：</span>
+            <span>¥</span>
+            <span>{{this.fetchData.allsum}}</span>
+          </div>
+          <div class="shop_footer_result">
+            <span>结算</span>
+            <span>({{this.fetchData.allnum}})</span>
+          </div>
+        </div>
+        <div class="shop_footer_right" v-else>
+          <div class="remove" @click="del(fetchData)">删除</div>
+        </div>
+      </mt-tabbar>
+    </div>
   </div>
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions, mapMutations } from "vuex";
 export default {
   data() {
     return {
@@ -64,14 +96,11 @@ export default {
   },
   computed: {
     ...mapState({
-      fetchData: state => state.shopCar.fetchData
-    }),
-    is_success: {
-      get: function() {
-        return this.$store.state.shopCar.fetchData.is_success;
-      },
-      set: function() {}
-    }
+      // 获取所有数据
+      fetchData: state => state.shopCar.fetchData,
+      // 获取管理和完成的状态
+      shopResult: state => state.shopCar.fetchData.is_success
+    })
   },
   methods: {
     shoptrue(item) {
@@ -80,7 +109,6 @@ export default {
       });
     }, //循环店铺中的商品，先筛选出目前没选中的商品，给它执行choosetrue函数
     shopfalse(item) {
-
       item.products.forEach(pro => {
         pro.checked === true ? this.choosefalse(item, pro) : "";
       });
@@ -98,7 +126,7 @@ export default {
           ? (this.fetchData.status = true)
           : (this.fetchData.status = false)
         : ""; //如果店铺选中状态改为true，选中店铺数量先+1，再与店铺数量比较，如果相等就更改全选选中状态为true
-      this.fetchData.allsum += list.sum;
+      this.fetchData.allsum += list.pro_sum;
     },
     choosefalse(item, list) {
       list.checked = false; //将商品选中状态改为false
@@ -110,10 +138,9 @@ export default {
         --this.fetchData.allchoose; //并且选中店铺数量-1
       }
       this.fetchData.status = false; //无论之前全选的状态，将其改为false就行
-      this.fetchData.allsum -= list.sum;
+      this.fetchData.allsum -= list.pro_sum;
     },
     choose(item, list) {
-      console.log(item)
       !list.checked
         ? this.choosetrue(item, list)
         : this.choosefalse(item, list);
@@ -135,6 +162,35 @@ export default {
           ? (this.fetchData.allsum -= list.pro_price)
           : this.fetchData.allsum; //同上
       }
+    },
+    cartchoose(item) {
+      // this.fetchData.is_success=false
+      // var item = this.fetchData.list;
+      this.fetchData.status = !this.fetchData.status; //取反改变状态
+      this.fetchData.status
+        ? this.fetchData.list.forEach(item => this.shoptrue(item))
+        : this.fetchData.list.forEach(item => this.shopfalse(item));
+    },
+    del(data) {
+      var data = data.list;
+      for (var i = 0; i < data.length; i++) {
+        if (data[i].check) {
+          data.splice(i, 1);
+          i--;
+        } else {
+          for (var j = 0; j < data[i].products.length; j++) {
+            var check = data[i].products[j].checked;
+            if (check) {
+              data[i].products.splice(j, 1);
+              --data[i].choose;
+              if (data[i].products.length == 0) {
+                this.fetchData.allsum = 0;
+                data.splice(i, 1);
+              }
+            }
+          }
+        }
+      }
     }
   },
 
@@ -148,7 +204,6 @@ export default {
 <style scoped>
 .list_shopcar {
   padding-left: 38px;
-  border-bottom: 1px solid #d8d8d8;
   background: #fff;
   min-height: 547px;
 }
@@ -185,6 +240,7 @@ export default {
   color: #666;
   min-height: 200px;
   border-bottom: 1px solid #d8d8d8;
+  background: #fff;
 }
 .list_shopcar_content:last-child {
   border-bottom: none;
@@ -197,13 +253,16 @@ export default {
   margin-right: 8px;
   float: left;
 }
-.list_shopcar_com_bottom{
-  width:380px;
-
+.list_shopcar_com_bottom {
+  width: 380px;
 }
 .checked {
   background: url("../images/car_checkcircle.png") no-repeat center;
   background-size: 100%;
+}
+.com_add {
+  min-height: 206px;
+  border-bottom: 1px solid #d8d8d8;
 }
 .list_shopcar_pic {
   width: 220px;
@@ -218,7 +277,7 @@ export default {
 .list_shopcar_com {
   float: left;
   line-height: 35px;
-  min-height: 70px;
+  /* min-height: 70px; */
 }
 .list_shopcar_com_top {
   margin-bottom: 25px;
@@ -241,10 +300,30 @@ export default {
   margin-left: 47px;
   width: 618px;
   min-height: 40px;
-  background: #f1efef;
   margin-top: 12px;
   margin-bottom: 15px;
   line-height: 40px;
+  font-size: 20px;
+}
+.shop_gift_top {
+  display: flex;
+  color: #999;
+  margin-bottom: 18px;
+}
+.shop_gift_left h3 {
+  color: #ff1900;
+  font-weight: 400;
+  margin-right: 26px;
+}
+.shop_gift_bottom {
+  width: 104px;
+  height: 43px;
+  border: 1px solid #4a90e2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #4a90e2;
+  border-radius: 4px;
 }
 .list_shopcar_com_price {
   float: left;
@@ -266,5 +345,77 @@ export default {
 .list_shopcar_com_num ul li:nth-of-type(2),
 .list_shopcar_com_num ul li:nth-of-type(3) {
   border-left: none;
+}
+.shop_footer {
+  background: #fff !important;
+  min-height: 98px;
+  font-size: 26px;
+  line-height: 98px;
+  color: #666;
+}
+.shop_footer_left {
+  width: 244px;
+  height: 98px;
+  float: left;
+}
+.shop_footer_left span {
+  display: inline-block;
+}
+.shop_footer_left span.first {
+  width: 40px;
+  height: 40px;
+  margin-right: 11px;
+  position: relative;
+  top: 10px;
+  background: url("../images/car_circle.png") no-repeat left 50%;
+  background-size: 100%;
+}
+.checked {
+  width: 40px;
+  height: 40px;
+  margin-right: 11px;
+  position: relative;
+  /* top: 10px; */
+  background: url("../images/car_checkcircle.png") no-repeat left 50%;
+  background-size: 100%;
+}
+/*  */
+.shop_footer_right {
+  width: 506px;
+  float: left;
+}
+.remove {
+  width: 134px;
+  height: 68px;
+  line-height: 70px;
+  text-align: center;
+  color: #ff0000;
+  font-size: 28px;
+  border: 2px solid #ff0000;
+  border-radius: 50px;
+  float: right;
+  margin-top: 15px;
+  margin-right: 39px;
+}
+.shop_footer_price {
+  float: left;
+  margin-left: 90px;
+}
+.shop_footer_price span {
+  color: #ff0000;
+}
+.shop_footer_price span:first-child {
+  color: #333;
+}
+.shop_footer_result {
+  width: 244px;
+  height: 98px;
+  background: url("../images/result.png") no-repeat top;
+  background-size: 100%;
+  color: #fff;
+  float: right;
+}
+.shop_footer_result img {
+  width: 100%;
 }
 </style>
