@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState,mapMutations } from "vuex";
 export default {
   computed: {
     ...mapState({
@@ -33,6 +33,7 @@ export default {
     })
   },
   methods: {
+    ...mapMutations("shopCar", ["manage"]),
     choosetrue(item, list) {
       list.checked = true; //将商品选中状态改为true
       ++this.fetchData.allnum;
@@ -43,7 +44,7 @@ export default {
           : (this.fetchData.status = false)
         : ""; //如果店铺选中状态改为true，选中店铺数量先+1，再与店铺数量比较，如果相等就更改全选选中状态为true
       this.fetchData.allsum += list.sum;
-      this.fetchData.is_success = false;
+      // this.fetchData.is_success = false;
     },
     choosefalse(item, list) {
       list.checked = false; //将商品选中状态改为false
@@ -55,9 +56,8 @@ export default {
         --this.fetchData.allchoose; //并且选中店铺数量-1
       }
       this.fetchData.status = false; //无论之前全选的状态，将其改为false就行
-      this.fetchData.is_success = true;
+      // this.fetchData.is_success = true;
       this.fetchData.allsum -= list.sum;
-      console.log(this.fetchData.allnum);
     },
     shoptrue(item) {
       item.products.forEach(pro => {
@@ -70,6 +70,7 @@ export default {
       });
     },
     cartchoose() {
+      // this.fetchData.is_success=false
       var item = this.fetchData.list;
       console.log(this.fetchData.status);
       this.fetchData.status = !this.fetchData.status; //取反改变状态
@@ -79,17 +80,14 @@ export default {
     },
     del(data) {
       var data = data.list;
-      console.log(data);
       for (var i = 0; i <data.length; i++) {
         if (data[i].check) {
-          console.log(33)
           data.splice(i, 1);
+          i--
         } else {
           for (var j = 0; j < data[i].products.length; j++) {
             var check = data[i].products[j].checked;
             if (check) {
-
-              console.log(data[i].products[j]);
               data[i].products.splice(j, 1);
               --data[i].choose
               if (data[i].products.length == 0) {
@@ -100,6 +98,9 @@ export default {
         }
       }
     }
+  },
+  mounted(){
+
   }
 };
 </script>

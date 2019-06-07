@@ -5,8 +5,8 @@ import store from 'store/index'
 Vue.use(Router)
 const router = new Router({
     // mode:"hash",
-    scrollBehavior (to, from, savedPosition) {
-        if(savedPosition){
+    scrollBehavior(to, from, savedPosition) {
+        if (savedPosition) {
             return { x: 0, y: savedPosition }
         }
         return { x: 0, y: 0 }
@@ -32,16 +32,16 @@ const router = new Router({
             name: "detail",
             component: () =>
                 import(/* webpackChunkName: "choose" */ './views/Detail.vue')
-        },{
+        }, {
             path: "/flashdetail",
             name: "flashdetail",
             component: () =>
-                import(/* webpackChunkName: "choose" */ './views/FlashDetail.vue') 
-        },{
+                import(/* webpackChunkName: "choose" */ './views/FlashDetail.vue')
+        }, {
             path: "/watch",
             name: "watch",
             component: () =>
-                import(/* webpackChunkName: "choose" */ './views/watch.vue') 
+                import(/* webpackChunkName: "choose" */ './views/watch.vue')
         },
         {
             path: '/choose',
@@ -54,7 +54,7 @@ const router = new Router({
             meta: {
                 auth: false,
                 keepAlive: true,
-                canKeep:false
+                canKeep: false
             }
         },
         {
@@ -69,6 +69,12 @@ const router = new Router({
                 auth: false,
                 keepAlive: false
             }
+        },
+        {
+            path: "/choosegift",
+            name: "choosegift",
+            component: () =>
+                import("./views/ChooseGift.vue")
         },
         {
             path: '/my',
@@ -160,7 +166,7 @@ const router = new Router({
             meta: {
                 auth: true,
                 keepAlive: false,
-                title:'更换手机号'
+                title: '更换手机号'
             }
         },
         {
@@ -174,7 +180,7 @@ const router = new Router({
             meta: {
                 auth: true,
                 keepAlive: false,
-                title:'修改姓名'
+                title: '修改姓名'
             }
         },
         {
@@ -185,7 +191,7 @@ const router = new Router({
             meta: {
                 auth: false,
                 keepAlive: false,
-                title:'用户注册'
+                title: '用户注册'
             }
         },
         {
@@ -196,7 +202,7 @@ const router = new Router({
             meta: {
                 auth: false,
                 keepAlive: false,
-                title:'用户注册'
+                title: '用户注册'
             }
         },
         {
@@ -207,7 +213,7 @@ const router = new Router({
             meta: {
                 auth: false,
                 keepAlive: false,
-                title:'加入门店'
+                title: '加入门店'
             }
         },
         {
@@ -218,7 +224,7 @@ const router = new Router({
             meta: {
                 auth: false,
                 keepAlive: false,
-                title:'创建新门店'
+                title: '创建新门店'
             }
         },
         {
@@ -229,7 +235,7 @@ const router = new Router({
             meta: {
                 auth: false,
                 keepAlive: false,
-                title:'人员信息'
+                title: '人员信息'
             }
         },
         {
@@ -240,7 +246,7 @@ const router = new Router({
             meta: {
                 auth: false,
                 keepAlive: false,
-                title:'资质信息'
+                title: '资质信息'
             }
         },
         {
@@ -251,7 +257,7 @@ const router = new Router({
             meta: {
                 auth: false,
                 keepAlive: false,
-                title:'经营范围'
+                title: '经营范围'
             }
         },
         {
@@ -262,7 +268,7 @@ const router = new Router({
             meta: {
                 auth: false,
                 keepAlive: false,
-                title:'PC登录'
+                title: 'PC登录'
             }
         },
         {
@@ -273,7 +279,7 @@ const router = new Router({
             meta: {
                 auth: false,
                 keepAlive: false,
-                title:'忘记密码'
+                title: '忘记密码'
             }
         },
         {
@@ -284,7 +290,7 @@ const router = new Router({
             meta: {
                 auth: false,
                 keepAlive: false,
-                title:'新增收货地址'
+                title: '新增收货地址'
             }
         },
         {
@@ -295,7 +301,7 @@ const router = new Router({
             meta: {
                 auth: true,
                 keepAlive: false,
-                title:'厂家拒开列表'
+                title: '厂家拒开列表'
             }
         },
         {
@@ -306,7 +312,7 @@ const router = new Router({
             meta: {
                 auth: false,
                 keepAlive: false,
-                title:'我的订单'
+                title: '我的订单'
             }
         },
         {
@@ -317,7 +323,7 @@ const router = new Router({
             meta: {
                 auth: true,
                 keepAlive: false,
-                title:'已评价'
+                title: '已评价'
             }
         },
         {
@@ -328,7 +334,7 @@ const router = new Router({
             meta: {
                 auth: true,
                 keepAlive: false,
-                title:'评价晒单'
+                title: '评价晒单'
             }
         },
         {
@@ -339,7 +345,7 @@ const router = new Router({
             meta: {
                 auth: true,
                 keepAlive: false,
-                title:'订单物流'
+                title: '订单物流'
             }
         },
         {
@@ -350,7 +356,7 @@ const router = new Router({
             meta: {
                 auth: false,
                 keepAlive: false,
-                title:'待收货'
+                title: '待收货'
             }
         },
         {
@@ -361,7 +367,7 @@ const router = new Router({
             meta: {
                 auth: false,
                 keepAlive: false,
-                title:'待发货'
+                title: '待发货'
             }
         },
         {
@@ -372,7 +378,7 @@ const router = new Router({
             meta: {
                 auth: false,
                 keepAlive: false,
-                title:'退货'
+                title: '退货'
             }
         },
         {
@@ -383,7 +389,7 @@ const router = new Router({
             meta: {
                 auth: false,
                 keepAlive: false,
-                title:'申请退货'
+                title: '申请退货'
             }
         },
         {
@@ -394,7 +400,7 @@ const router = new Router({
             meta: {
                 auth: true,
                 keepAlive: false,
-                title:'订单详情'
+                title: '订单详情'
             }
         },
         {//空白页 做路由跳转
@@ -415,7 +421,7 @@ const router = new Router({
             meta: {
                 auth: false,
                 keepAlive: false,
-                title:'登录'
+                title: '登录'
             }
         },
         {
@@ -426,7 +432,7 @@ const router = new Router({
             meta: {
                 auth: false,
                 keepAlive: true,
-                title:'人气套餐'
+                title: '人气套餐'
             }
         },
         {
@@ -437,7 +443,7 @@ const router = new Router({
             meta: {
                 auth: false,
                 keepAlive: true,
-                title:'套餐详情'
+                title: '套餐详情'
             }
         },
         {
@@ -448,7 +454,7 @@ const router = new Router({
             meta: {
                 auth: true,
                 keepAlive: true,
-                title:'精品买赠'
+                title: '精品买赠'
             }
         },
         {
@@ -459,14 +465,14 @@ const router = new Router({
             meta: {
                 auth: false,
                 keepAlive: true,
-                title:'人云科技软件服务及隐私协议'
+                title: '人云科技软件服务及隐私协议'
             }
         },
         {
-             path:"/classify",
-             name:"classify",
-             component:()=>
-             import("./views/Classify.vue")
+            path: "/classify",
+            name: "classify",
+            component: () =>
+                import("./views/Classify.vue")
         },
         {
             path: '*', // 未匹配到路由时重定向
