@@ -118,30 +118,35 @@ export default {
                     position: "middle",
                     duration: 2000
                 });
+                return;
             }else if(this.sel_value=='请选择地区'){
                 Toast({
                     message: "请选择所在地区",
                     position: "middle",
                     duration: 2000
                 });
+                return;
             }else if(!this.addr){
                 Toast({
                     message: "请输入注册地址",
                     position: "middle",
                     duration: 2000
                 });
+                return;
             }else if(!this.code.trim()){
                 Toast({
                     message: "请输入正确的推荐码",
                     position: "middle",
                     duration: 2000
                 });
+                return;
             }else if(!this.checkCode()){
                 Toast({
                     message: "请输入正确的推荐码",
                     position: "middle",
                     duration: 2000
                 });
+                return;
             }else{
                 let data = {
                     addStr:this.sel_value,

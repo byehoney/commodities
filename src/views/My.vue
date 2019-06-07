@@ -84,7 +84,7 @@
     </div>
 </template>
 <script>
-import { mapState ,mapMutations} from 'vuex';
+import { mapState ,mapMutations,mapGetters} from 'vuex';
 import TabBarBottom from '@/components/TabBarBottom';
 import {getMyInfo} from '@/api/index';
 // import CityPicker from '@/components/CityPicker'
@@ -101,10 +101,18 @@ export default {
         }
     },
     computed:{
-        ...mapState('login', ['user', 'token'])
+        ...mapState('login', ['user', 'token']),
+        ...mapGetters('login',['token','userId','corpCode','companyId','userRole'])
     },
     async mounted(){
-        let res = await getMyInfo()
+        let defaulParams = {
+            token:this.token,
+            userId:this.userId,
+            corpCode:this.corpCode,
+            companyId:this.companyId,
+            userRole:this.userRole,
+        } 
+        let res = await getMyInfo(defaulParams)
         this.addr = res.data.clientMap.cvName;
     },
     methods:{
@@ -127,7 +135,7 @@ export default {
     }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
     html{
         background-color: #ebebeb;
     }

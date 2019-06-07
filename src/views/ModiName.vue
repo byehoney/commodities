@@ -10,7 +10,7 @@
 </template>
 <script>
 import {updateUserInfo} from '@/api/index'
-import {mapState,mapActions, mapMutations} from 'vuex' 
+import {mapState,mapActions, mapMutations,mapGetters} from 'vuex' 
 export default {
     data(){
         return{
@@ -18,7 +18,8 @@ export default {
         }
     },
     computed:{
-        ...mapState('login',['user'])
+        ...mapState('login',['user']),
+        ...mapGetters('login',['token','userId','corpCode','companyId','userRole'])
     },
     methods:{
         ...mapMutations('login',['saveUserName']),
@@ -26,9 +27,17 @@ export default {
             this.$router.go(-1);
         },
         async saveName(){
-            let res = await updateUserInfo({type:3,data:this.name});
+            let defaulParams = {
+                token:this.token,
+                userId:this.userId,
+                corpCode:this.corpCode,
+                companyId:this.companyId,
+                userRole:this.userRole,
+            }; 
+            let res = await updateUserInfo({...defaulParams,type:3,data:this.name});
             if(res.code == 0){
-                this.saveUserName(this.name)
+                this.saveUserName(this.name);
+                this.$router.go(-1);
             }
         }
     }

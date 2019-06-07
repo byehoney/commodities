@@ -50,7 +50,7 @@ import { Toast } from "mint-ui";
 import TopNav from '@/components/TopNav'
 import CityPicker from "@/components/CityPicker";
 import {addNewAddr,upDateAddr} from '@/api/index'
-import {mapState}  from 'vuex'
+import {mapState,mapGetters}  from 'vuex'
 export default {
     data(){
         return{
@@ -68,7 +68,8 @@ export default {
         }
     },
     computed:{
-        ...mapState('login',['user'])
+        ...mapState('login',['user']),
+        ...mapGetters('login',['token','userId','corpCode','companyId','userRole'])
     },
     components:{
         TopNav,
@@ -116,7 +117,15 @@ export default {
             }
         },
         async delAdd(){
+            let defaulParams = {
+                token:this.token,
+                userId:this.userId,
+                corpCode:this.corpCode,
+                companyId:this.companyId,
+                userRole:this.userRole,
+            };
             let data ={
+                ...defaulParams,
                 address:this.details,
                 userName:this.name,
                 warehouseCode:this.warehouseCode,
@@ -125,7 +134,9 @@ export default {
                 positionCode:this.aCode
             }
             let res = await upDateAddr(data);
-
+            if(res.code==0){
+                this.$router.push({name:'address'})
+            }
         },
         saveAddr(){
             let reg = /^1[345678]\d{9}$/;
@@ -154,7 +165,15 @@ export default {
                     duration: 2000
                 });
             }else{
+                let defaulParams = {
+                    token:this.token,
+                    userId:this.userId,
+                    corpCode:this.corpCode,
+                    companyId:this.companyId,
+                    userRole:this.userRole,
+                };
                 let data = {
+                    ...defaulParams,
                     corpCode:this.user.corpCode,//平台编码
                     companyId:this.user.companyId,
                     userId:this.user.userId,

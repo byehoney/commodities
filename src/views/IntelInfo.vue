@@ -75,7 +75,7 @@
 import Vue from 'vue'
 import { Toast } from "mint-ui";
 import TopNav from '@/components/TopNav'
-import {mapState,mapMutations} from 'vuex';
+import {mapState,mapMutations,mapGetters} from 'vuex';
 import {getPropertyList,getIntelList,uploadImage,getUploadToken,addRelativeCreate} from '@/api/index'
 import { setTimeout } from 'timers';
 export default {
@@ -112,7 +112,8 @@ export default {
             intel: state => state.register.intel,
             rangeList:state =>state.register.rangeList,
             createAddInfo:state =>state.register.createAddInfo,
-        })
+        }),
+        ...mapGetters('login',['token','userId','corpCode','companyId','userRole'])
         // ...mapState('register',['intel','rangeList','createAddInfo'])
     },
     components:{
@@ -259,7 +260,15 @@ export default {
                 if(!this.is_add_relative){
                     this.$router.push({name:'salerInfo',query:{creatNew:true}})
                 }else{//添加关联门店
+                    let defaulParams = {
+                        token:this.token,
+                        userId:this.userId,
+                        corpCode:this.corpCode,
+                        companyId:this.companyId,
+                        userRole:this.userRole,
+                    };
                     let data = {
+                        ...defaulParams,
                         mobile:this.user.userId,
                         companyName:this.createAddInfo.shopName,
                         regionCode:this.createAddInfo.aCode,
@@ -269,7 +278,6 @@ export default {
                         aptitudeStr:JSON.stringify({'aptitude':this.intel.aptitudeList}),
                         scopeStr:JSON.stringify({'scope':this.rangeList})
                     }
-                    alert(JSON.stringify(data))
                     this.addRelative(data)
                 }
             }

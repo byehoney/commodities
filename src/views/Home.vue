@@ -135,7 +135,7 @@ import { videoPlayer } from "vue-video-player";
 // import "videojs-contrib-hls.js/src/videojs.hlsjs";
 
 import { getHeatList, getSpecialList, secKill } from "@/api/index";
-import { mapState } from "vuex";
+import { mapState,mapGetters } from "vuex";
 import { setInterval } from "timers";
 export default {
   name: "home",
@@ -185,23 +185,22 @@ export default {
     videoPlayer
   },
   async mounted() {
+    let defaulParams = {
+        token:this.token,
+        userId:this.userId,
+        corpCode:this.corpCode,
+        companyId:this.companyId,
+        userRole:this.userRole,
+    } 
     //热门分类
-    let { data } = await getHeatList();
+    let { data } = await getHeatList(defaulParams);
     this.heatList = data.list;
     //精品推荐
-    let specialData = await getSpecialList({
-      corpCode: this.user.corpCode,
-      companyId: this.user.companyId,
-      pageSize: 4
-    });
+    let specialData = await getSpecialList({...defaulParams,pageSize:4});
     this.boutique = specialData.data.list;
     console.log(this.boutique);
     //限时秒杀
-    let killdata = await secKill({
-      corpCode: this.user.corpCode,
-      companyId: this.user.companyId,
-      pageSize: 3
-    });
+    let killdata = await secKill({...defaulParams,pageSize: 3});
     this.secKillList = killdata.data.list;
     this.count();
   },
@@ -254,6 +253,7 @@ export default {
 
   computed: {
     ...mapState("login", ["user"]),
+    ...mapGetters('login',['token','userId','corpCode','companyId','userRole']),
     player() {
       return this.$refs.videoPlayer.player;
     }

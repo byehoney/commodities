@@ -22,18 +22,29 @@
 </template>
 <script>
 import {getAddrList,setDefaultAddr} from '@/api/index'
+import {mapGetters} from 'vuex';
 export default {
     data(){
         return{
             list:[]
         }
     },
+    computed:{
+        ...mapGetters('login',['token','userId','corpCode','companyId','userRole'])
+    },
     mounted(){
         this.getList();
     },
     methods:{
         async getList(){
-            let res = await getAddrList();
+            let defaulParams = {
+                token:this.token,
+                userId:this.userId,
+                corpCode:this.corpCode,
+                companyId:this.companyId,
+                userRole:this.userRole,
+            } 
+            let res = await getAddrList(defaulParams);
             this.list = res.data.list;
             console.log(res)
         },
@@ -41,7 +52,14 @@ export default {
             this.$router.go(-1);
         },
         async selDefault(index,warehouseCode){
-            let res = await setDefaultAddr({warehouseCode:warehouseCode})
+            let defaulParams = {
+                token:this.token,
+                userId:this.userId,
+                corpCode:this.corpCode,
+                companyId:this.companyId,
+                userRole:this.userRole,
+            } 
+            let res = await setDefaultAddr({...defaulParams,warehouseCode:warehouseCode})
             if(res.code == 0){
                 this.list.forEach((item,i)=>{
                     this.$set(this.list[i],'status','');

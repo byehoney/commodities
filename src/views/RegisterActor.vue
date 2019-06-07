@@ -365,7 +365,7 @@ export default {
     }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
     .reg_container{
         width: 100vw;
         height: 100vh;

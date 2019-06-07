@@ -50,7 +50,7 @@
 import { Toast } from "mint-ui";
 import TopNav from "@/components/TopNav";
 import CityPicker from "@/components/CityPicker";
-import {mapState,mapMutations} from 'vuex';
+import {mapState,mapMutations,mapGetters} from 'vuex';
 import {getRegShopList,addRelativeCompany} from '@/api/index';
 export default {
   data() {
@@ -79,7 +79,8 @@ export default {
     };
   },
   computed:{
-    ...mapState('register',['joinInfo'])
+    ...mapState('register',['joinInfo']),
+    ...mapGetters('login',['token','userId','corpCode','companyId','userRole'])
   },
   components: {
     TopNav,
@@ -184,7 +185,14 @@ export default {
       if(!this.sel_shop||!this.sel_shopCode||!this.sel_value||this.sel_value=='请选择地区'||this.sel_shop=='请选择门店'){
         return;
       }
-      let res = await addRelativeCompany({companyCode:this.sel_shopCode})
+      let defaulParams = {
+          token:this.token,
+          userId:this.userId,
+          corpCode:this.corpCode,
+          companyId:this.companyId,
+          userRole:this.userRole,
+      }; 
+      let res = await addRelativeCompany({...defaulParams,companyCode:this.sel_shopCode})
       if(res.code==0){
         this.showTip = true;
       }

@@ -123,6 +123,11 @@ export default {
   color: #999999;
   font-size: 28px;
   margin-left: 39px;
+  width: 550px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-break: break-all;
+  overflow: hidden;
 }
 .draw_list ul{
   overflow-y: scroll;

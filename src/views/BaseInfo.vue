@@ -57,7 +57,7 @@
 </template>
 <script>
 import {uploadImage,getUploadToken,getCompanyInfo} from '@/api/index'
-import { mapState ,mapActions } from 'vuex';
+import { mapState ,mapActions,mapGetters} from 'vuex';
 import {updateUserInfo} from '@/api/index';
 import TopNav from '@/components/TopNav.vue';
 export default {
@@ -78,14 +78,22 @@ export default {
         TopNav
     },
     computed:{
-        ...mapState('login',['user','token'])
+        ...mapState('login',['user','token']),
+        ...mapGetters('login',['token','userId','corpCode','companyId','userRole'])
     },
     async mounted(){
+        let defaulParams = {
+            token:this.token,
+            userId:this.userId,
+            corpCode:this.corpCode,
+            companyId:this.companyId,
+            userRole:this.userRole,
+        };
         this.imgStr = this.user.userHp;
         this.name = this.user.userName;
         this.tel = this.user.userId;
         this.getToken();
-        let res =  await getCompanyInfo();
+        let res =  await getCompanyInfo(defaulParams);
         this.shop = res.data.cvName;
     },
     methods:{
@@ -99,7 +107,14 @@ export default {
             document.getElementById('upload_file').click();
         },
         async uploadAtv(imgStr){
-            let res = await updateUserInfo({data:imgStr,type:1});
+            let defaulParams = {
+                token:this.token,
+                userId:this.userId,
+                corpCode:this.corpCode,
+                companyId:this.companyId,
+                userRole:this.userRole,
+            };
+            let res = await updateUserInfo({...defaulParams,data:imgStr,type:1});
             if(res.code == 0){
                 this.imgStr = imgStr;
                 this.setAtv(this.imgStr);
