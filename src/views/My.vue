@@ -14,7 +14,7 @@
                 </div>
                 <div class="user_msg" v-if="user.mobile">
                     <div class="user_name">{{user.userName}}</div>
-                    <div class="user_tel">{{user.userId|formatTel}}</div>
+                    <div class="user_tel">{{user.mobile|formatTel}}</div>
                     <div class="user_add">{{addr}}</div>
                 </div>
                 <div v-else class="loginBtn"><router-link :to="{name:'login',query:{redirect:'/my'}}">点击登录</router-link></div>

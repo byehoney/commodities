@@ -16,7 +16,7 @@
                 </div>
                 <div class="right">
                     <input type="text" placeholder="请输入验证码" class="yzm" autocomplete="false" v-model="yzm">
-                    <div class="sendBtn">获取验证码</div>
+                    <div class="sendBtn" @click="sendMsg()">{{msgStr}}</div>
                 </div>
             </div>
             <div class="pasItem">
@@ -24,7 +24,7 @@
                     设置密码
                 </div>
                 <div class="right">
-                    <input type="text" maxlength="20" minlength="6" placeholder="6-20位字母或数字组合" class="input" autocomplete="false" v-model="yzm">
+                    <input type="text" maxlength="20" minlength="6" placeholder="请输入密码" class="input" autocomplete="false" v-model="pasOne">
                 </div>
             </div>
             <div class="pasItem">
@@ -32,7 +32,7 @@
                     再次输入
                 </div>
                 <div class="right">
-                    <input type="text" maxlength="20" minlength="6" placeholder="请再次确认密码" class="input" autocomplete="false" v-model="yzm">
+                    <input type="text" maxlength="20" minlength="6" placeholder="请再次确认密码" class="input" autocomplete="false" v-model="pasTwo">
                 </div>
             </div>
         </div>
@@ -40,16 +40,110 @@
     </div>
 </template>
 <script>
+import { Toast } from "mint-ui";
 import TopNav from '@/components/TopNav'
+import {mapGetters} from 'vuex'
+import {getYzCode,checkYzCode} from '@/api/index'
 export default {
     data(){
         return{
-            
+            tel:'',
+            yzm:'',
+            pasOne:'',
+            pasTwo:'',
+            msgStr:'获取验证码'
         }
     },
     components:{
         TopNav,
     },
+    computed:{
+        ...mapGetters('login',['token','userId','corpCode','companyId','userRole'])
+    },
+    methods:{
+        canSend(){
+            let reg = /^1[345678]\d{9}$/;
+            if(!this.tel.trim()||!reg.test(this.tel.trim())){
+                Toast({
+                    message: "请输入正确的手机号",
+                    position: "middle",
+                    duration: 2000
+                });
+                return false;
+            }else{
+                return true
+            }
+        },
+        async reqYzcode(){
+            let res = await getYzCode({mobile:this.user.mobile});
+        },
+        sendMsg(){
+            if(!this.canSend()){
+                return;
+            }
+            if(!this.sending){
+                let timer = null;
+                let step = 60;
+                this.sending = true;
+                this.reqYzcode();
+                timer = setInterval(()=>{
+                    step--;
+                    if(step==0){
+                        this.msgStr = '重新发送' ;
+                        clearInterval(timer);
+                        this.sending = false;
+                    }else{
+                        this.msgStr = step+'s后重新发送' ;
+                    }
+                },1000) 
+            }
+        },
+        async checkCode(){
+            if(!this.canSend()){
+                return;
+            }else if(!this.yzm.trim()){
+                Toast({
+                    message: "请输入验证码",
+                    position: "middle",
+                    duration: 2000
+                });
+                return;
+            }
+            let res = await checkYzCode({mobile:this.tel,code:this.yzm});
+            this.canPass = res.data.ckeckResult;
+            if(!this.canSend()){
+                return;
+            }else if(!this.yzm.trim()){
+                Toast({
+                    message: "请输入验证码",
+                    position: "middle",
+                    duration: 2000
+                });
+                return;
+            }else if(!this.canPass){
+                Toast({
+                    message: "验证码不正确",
+                    position: "middle",
+                    duration: 2000
+                });
+                return;
+            }else if(!this.pasOne.trim()||!this.pasTwo.trim()){
+
+            }else{
+                let defaulParams = {
+                    token:this.token,
+                    userId:this.userId,
+                    corpCode:this.corpCode,
+                    companyId:this.companyId,
+                    userRole:this.userRole,
+                }; 
+               let res = await updateUserInfo({...defaulParams,data:this.tel,type:2});
+               if(res.code==0){
+                   this.$router.go(-1);
+               }
+            }
+        },
+    }
 }
 </script>
 <style lang="scss" scoped>
@@ -92,8 +186,8 @@ export default {
                     height:96px;
                     .yzm{
                         width:199px;
-                        height:94px;
-                        line-height: 94px;
+                        height:92px;
+                        line-height: 92px;
                         font-size:30px;
                         font-family:MicrosoftYaHei;
                         color:rgba(235,235,235,1);
@@ -103,8 +197,8 @@ export default {
                     }
                     .input{
                         width: 98%;
-                        height:94px;
-                        line-height: 94px;
+                        height:92px;
+                        line-height: 92px;
                         background:rgba(255,255,255,1);
                         border-radius:4px;
                         font-size:30px;

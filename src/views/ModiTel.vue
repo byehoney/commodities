@@ -7,10 +7,10 @@
             <div class="pasArea">
                 <div class="pasItem">
                     <div class="left">
-                        手机号
+                        新手机号
                     </div>
                     <div class="right">
-                        <input type="text" placeholder="请输入您的手机号" class="input" autocomplete="false" v-model="tel">
+                        <input type="text" maxlength="11" placeholder="请输入您的手机号" class="input" autocomplete="false" v-model="tel">
                     </div>
                 </div>
                 <div class="pasItem">
@@ -19,11 +19,12 @@
                     </div>
                     <div class="right">
                         <input type="text" placeholder="请输入验证码" class="yzm" autocomplete="false" v-model="yzm">
-                        <div class="sendBtn" @click="sendMsg()">获取验证码</div>
+                        <div class="sendBtn" @click="sendMsg()">{{msgStr}}</div>
                     </div>
                 </div>
             </div>
         </div>
+        <div class="confirm_btn" @click="confirm()">确认</div>
     </div>
 </template>
 <script>
@@ -53,6 +54,7 @@ export default {
         TopNav,
     },
     methods:{
+        ...mapMutations('login',['saveMobile']),
         async reqYzcode(){
             let res = await getYzCode({mobile:this.user.mobile});
         },
@@ -70,10 +72,14 @@ export default {
             }
         },
         sendMsg(){
+            if(!this.canSend()){
+                return;
+            }
             if(!this.sending){
                 let timer = null;
                 let step = 60;
                 this.sending = true;
+                this.reqYzcode();
                 timer = setInterval(()=>{
                     step--;
                     if(step==0){
@@ -85,6 +91,53 @@ export default {
                     }
                 },1000) 
             }
+        },
+        async checkCode(){
+            if(!this.canSend()){
+                return;
+            }else if(!this.yzm.trim()){
+                Toast({
+                    message: "请输入验证码",
+                    position: "middle",
+                    duration: 2000
+                });
+                return;
+            }
+            let res = await checkYzCode({mobile:this.tel,code:this.yzm});
+            this.canPass = res.data.ckeckResult;
+            if(!this.canSend()){
+                return;
+            }else if(!this.yzm.trim()){
+                Toast({
+                    message: "请输入验证码",
+                    position: "middle",
+                    duration: 2000
+                });
+                return;
+            }else if(!this.canPass){
+                Toast({
+                    message: "验证码不正确",
+                    position: "middle",
+                    duration: 2000
+                });
+                return;
+            }else{
+                this.saveMobile(this.tel);
+                let defaulParams = {
+                    token:this.token,
+                    userId:this.userId,
+                    corpCode:this.corpCode,
+                    companyId:this.companyId,
+                    userRole:this.userRole,
+                }; 
+               let res = await updateUserInfo({...defaulParams,data:this.tel,type:2});
+               if(res.code==0){
+                   this.$router.go(-1);
+               }
+            }
+        },
+        confirm(){
+            this.checkCode();
         }
     }
 }
@@ -94,6 +147,17 @@ export default {
     width: 100vw;
     height: 100vh;
     background:rgba(235,235,235,1);
+    .confirm_btn{
+        width: 671px;
+        height: 98px;
+        line-height: 98px;
+        text-align: center;
+        background-color: #666;
+        font-size:30px;
+        color:rgba(255,255,255,1);
+        letter-spacing:3px;
+        margin: 83px auto 0;
+    }
     .telContent{
         padding-top: 120px;
         display: flex;
@@ -181,7 +245,7 @@ export default {
                         line-height: 94px;
                         font-size:30px;
                         font-family:MicrosoftYaHei;
-                        color:rgba(235,235,235,1);
+                        color:#333;
                         letter-spacing:3px;
                         border: none;
                         outline: none;

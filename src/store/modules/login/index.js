@@ -36,6 +36,11 @@ export default {
             state.user.userName = name;
             let userDate = state.user;
             localStorage.setItem('userData', JSON.stringify(userDate))
+        },
+        saveMobile(state,mobile){
+            state.user.mobile = mobile;
+            let userDate = state.user;
+            localStorage.setItem('userData', JSON.stringify(userDate))
         }
     },
     actions: {

@@ -91,7 +91,7 @@ export default {
         };
         this.imgStr = this.user.userHp;
         this.name = this.user.userName;
-        this.tel = this.user.userId;
+        this.tel = this.user.mobile;
         this.getToken();
         let res =  await getCompanyInfo(defaulParams);
         this.shop = res.data.cvName;
