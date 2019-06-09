@@ -109,6 +109,9 @@ function getChooseList(params){//选品列表
     // let data = {...defaulParams,...params}
     return post('/product/get/list.do', params)
 }
+function getChooseDetail(params){  //选品商品详情
+    return post('/product/get/info.do',params)
+}
 
 function getOrdersList(params){//获取订单列表   type  0 全部 1 待发货 2 待收货 3 待评价 4 退货
     // let data = {...defaulParams,...params}
@@ -161,6 +164,7 @@ export {
     getMyInfo,
     getCompanyInfo,
     getChooseList,
+    getChooseDetail,
     getOrdersList,
     switchCompanyList,
     getHeatList,

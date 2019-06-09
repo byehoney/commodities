@@ -16,7 +16,7 @@
         <div
           class="list_shopcar_circle"
           :class="item.checked?'checked':''"
-          @click="checkgift()"
+          @click="checkgift(item)"
         ></div>
         <div class="shopgift_list_pic"></div>
         <div class="shopgift_list_text">
@@ -34,11 +34,30 @@
         </div>
       </div>
     </div>
+    <!-- 底部 -->
+    <div class="footer_guide fix">
+      <div class="footer_guide_left fix">
+        <p class="badge">
+          已选择
+          <span>434</span>件
+        </p>
+      </div>
+      <div class="footer_guide_right fix">
+        <ul>
+          <li>
+            <span @click="addshop">清空</span>
+          </li>
+          <li>
+            <span @click="handlerClick">确定</span>
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import { constants } from 'crypto';
+import { constants } from "crypto";
 export default {
   data() {
     return {
@@ -50,7 +69,7 @@ export default {
             sum: "规格：35g*1支",
             price: "￥0.00",
             num: "2",
-            checked: true,
+            checked: false
           },
           {
             name: "赠品冷焰火",
@@ -58,20 +77,15 @@ export default {
             sum: "规格：35g*1支",
             price: "￥0.00",
             num: "3",
-            checked: true,
+            checked: false
           }
         ]
       }
     };
   },
   methods: {
-    checkgift() {
-        let data=this.list.product
-       data.forEach((item,index)=>{
-           console.log(item)
-           item.checked=!item.checked
-          
-       })
+    checkgift(item) {
+      item.checked ? (item.checked = false) : (item.checked = true);
     }
   }
 };
@@ -154,5 +168,79 @@ export default {
 .shopgift_text_bottom ul li:nth-of-type(2) {
   float: right;
   text-align: center;
+}
+/* 底部样式 */
+.footer_guide {
+  border-top: 5px solid #e4e4e4;
+  position: fixed;
+  z-index: 100;
+  left: 0;
+  right: 0;
+  bottom: 1px;
+  background-color: #fff;
+  width: 100%;
+  height: 95px;
+  line-height: 95px;
+}
+.footer_guide_left {
+  width: 262px;
+  float: left;
+  min-height: 100px;
+}
+.footer_guide_left ul li {
+  width: 62px;
+  height: 62px;
+  float: left;
+  margin-left: 49px;
+}
+.footer_guide_left ul li:nth-of-type(1) {
+  position: relative;
+}
+.footer_guide_left ul li:nth-of-type(2) {
+  width: 49px;
+  height: 62px;
+  float: left;
+}
+.footer_guide_left ul li img,
+.footer_guide_right ul li img {
+  width: 100%;
+}
+.footer_guide_right {
+  width: 488px;
+  float: left;
+  text-align: center;
+  color: #fff;
+}
+.footer_guide_right ul li {
+  width: 244px;
+  height: 100px;
+  line-height: 50px;
+  float: left;
+  background: url("../images/resultgray.png") no-repeat top;
+  background-size: 100%;
+}
+.footer_guide_right ul li:nth-of-type(2) {
+  background: url("../images/result.png") no-repeat top;
+  background-size: 100%;
+}
+.on {
+  color: #02a774;
+}
+span {
+  display: inline-block;
+  font-size: 12px;
+}
+.badge {
+  font-size: 26px;
+  text-align: center;
+  color: #666;
+  line-height: 95px;
+  span {
+    color: #ff0000;
+    font-size: 26px;
+  }
+}
+.iconfont {
+  font-size: 22px;
 }
 </style>
