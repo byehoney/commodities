@@ -113,6 +113,9 @@ function getChooseList(params){//选品列表
     // let data = {...defaulParams,...params}
     return post('/product/get/list.do', params)
 }
+function getChooseDetail(params){  //选品商品详情
+    return post('/product/get/info.do',params)
+}
 
 function getMoreKindsMain(params){//获取更多分类里 大类
     return post('/search/product/select.do', params)
@@ -181,6 +184,7 @@ export {
     getMyInfo,
     getCompanyInfo,
     getChooseList,
+    getChooseDetail,
     getOrdersList,
     switchCompanyList,
     getMoreKindsMain,

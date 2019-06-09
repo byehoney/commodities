@@ -52,7 +52,6 @@
             </div>
             <div class="shop_gift_bottom">
               <router-link to="/choosegift">选择赠品</router-link>
-              
             </div>
           </div>
         </div>

@@ -5,13 +5,15 @@
       <div class="detail_title">商品详情</div>
     </div>
     <div class="detail_loop">
-      <div class="detsil_loop_center"></div>
+      <div class="detsil_loop_center">
+         <img :src='shopDetail.slt'/>
+        </div>
     </div>
 
     <div class="detail_content">
       <!-- 价格栏位 -->
       <div class="detail_content_one">
-        <div class="detail_content_title">星星闪耀</div>
+        <div class="detail_content_title">{{shopDetail.cj}}</div>
         <div class="detail_content_content">
           <div class="detail_content_tag">
             <span>
@@ -27,7 +29,7 @@
             </div>
           </div>
         </div>
-        <div class="newprice">¥3200</div>
+        <div class="newprice">¥{{shopDetail.cxj}}</div>
         <div style="clear:both"></div>
       </div>
       <!-- 所在地区 -->
@@ -40,7 +42,7 @@
             </li>
             <li>
               <span>销量：</span>
-              <span>22</span>
+              <span>{{shopDetail.ljsl}}</span>
             </li>
           </ul>
         </div>
@@ -71,16 +73,16 @@
         <div class="detail_content_three_desc">
           <ul>
             <li>
-              <p>商品名称：星星闪耀飞天散花五彩造型烟花</p>
+              <p>商品名称：{{shopDetail.spmc}}</p>
               <p></p>
               <p></p>
               <p></p>
               <p></p>
             </li>
             <li>
-              <p>最小包装：xxxg</p>
-              <p></p>
-              <p></p>
+              <p>最小包装：{{shopDetail.xbz}}g</p>
+              <p>采集量:{{shopDetail.cjl}}</p>
+              <p>中包装:{{shopDetail.zbz}}</p>
               <p></p>
               <p></p>
             </li>
@@ -153,12 +155,25 @@
 
 <script>
 import { Toast } from "mint-ui";
+import { getChooseDetail } from "@/api/index";
+import { mapState, mapGetters } from "vuex";
 export default {
   data() {
     return {
       shopnum: 1,
-      popupVisible: false
+      popupVisible: false,
+      shopDetail:[]
     };
+  },
+  computed: {
+    ...mapState("login", ["user"]),
+    ...mapGetters("login", [
+      "token",
+      "userId",
+      "corpCode",
+      "companyId",
+      "userRole"
+    ])
   },
   methods: {
     addshop() {
@@ -177,12 +192,31 @@ export default {
     },
     reduce() {
       this.shopnum == 0 ? (this.shopnum = 0) : this.shopnum--;
+    },
+    async getShopDetail() {
+      let defaulParams = {
+        token: this.token,
+        userId: this.userId,
+        corpCode: this.corpCode,
+        companyId: this.companyId,
+        userRole: this.userRole,
+        productId:this.$route.query.id
+      };
+      let result = await getChooseDetail(defaulParams);
+      this.shopDetail=result.data
     }
+  },
+  deactivated(){
+      this.loading = true;
+  },
+  mounted() {
+    console.log(this.$route.query.id);
+    this.getShopDetail();
   }
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 * {
   margin: 0;
   padding: 0;
@@ -222,6 +256,10 @@ a {
   height: 460px;
   margin: 0 auto;
   background: #f6f6f6;
+  img{
+    width:100%;
+    height: 100%;
+  }
 }
 .detail_content {
   width: 750px;
@@ -322,6 +360,7 @@ a {
 }
 .detail_content_three_desc ul li {
   margin-bottom: 30px;
+  line-height: 35px;
 }
 /* 底部样式 */
 .footer_guide {
@@ -336,45 +375,46 @@ a {
   height: 95px;
   line-height: 95px;
 }
-.footer_guide_left{
-    width:262px;
-    float: left;
-    min-height: 100px;
+.footer_guide_left {
+  width: 262px;
+  float: left;
+  min-height: 100px;
 }
-.footer_guide_left ul li{
+.footer_guide_left ul li {
   width: 62px;
   height: 62px;
   float: left;
-  margin-left:49px;
+  margin-left: 49px;
 }
-.footer_guide_left ul li:nth-of-type(1){
+.footer_guide_left ul li:nth-of-type(1) {
   position: relative;
 }
-.footer_guide_left ul li:nth-of-type(2){
+.footer_guide_left ul li:nth-of-type(2) {
   width: 49px;
   height: 62px;
   float: left;
 }
-.footer_guide_left ul li img,.footer_guide_right ul li img{
-  width:100%;
+.footer_guide_left ul li img,
+.footer_guide_right ul li img {
+  width: 100%;
 }
-.footer_guide_right{
-    width:488px;
-    float: left;
-    text-align:center;
-    color:#fff;
+.footer_guide_right {
+  width: 488px;
+  float: left;
+  text-align: center;
+  color: #fff;
 }
-.footer_guide_right ul li{
-  width:244px;
-  height:100px;
+.footer_guide_right ul li {
+  width: 244px;
+  height: 100px;
   line-height: 50px;
   float: left;
   background: url("../images/resultgray.png") no-repeat top;
   background-size: 100%;
 }
-.footer_guide_right ul li:nth-of-type(2){
+.footer_guide_right ul li:nth-of-type(2) {
   background: url("../images/result.png") no-repeat top;
-  background-size: 100%
+  background-size: 100%;
 }
 .on {
   color: #02a774;
@@ -390,12 +430,12 @@ span {
   border-radius: 50%;
   background: #f00;
   position: absolute;
-  z-index:100;
+  z-index: 100;
   top: 10px;
   right: -8px;
   font-size: 12px;
   text-align: center;
-  color:#fff;
+  color: #fff;
   line-height: 29px;
 }
 .iconfont {
