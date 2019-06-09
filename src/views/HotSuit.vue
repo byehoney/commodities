@@ -73,6 +73,8 @@
     </div>
 </template>
 <script>
+import { mapGetters } from 'vuex'
+import { getSuitList } from '@/api/index'
 import TopNav from '@/components/TopNav'
 export default {
     data(){
@@ -80,10 +82,26 @@ export default {
             
         }
     },
+    computed:{
+        ...mapGetters('login',['token','userId','corpCode','companyId','userRole']),
+    },
     components:{
         TopNav,
     },
+    mounted(){
+        this.getData();
+    },
     methods: {
+        async getData(){
+            let defaulParams = {
+                token:this.token,
+                userId:this.userId,
+                corpCode:this.corpCode,
+                companyId:this.companyId,
+                userRole:this.userRole,
+            };
+            let res = await getSuitList(defaulParams);
+        },
         loadMore(){
 
         }

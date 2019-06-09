@@ -36,14 +36,14 @@
                 </div>
             </div>
         </div>
-        <div class="nextBtn">完成</div>
+        <div class="nextBtn" @click="goNext()">完成</div>
     </div>
 </template>
 <script>
 import { Toast } from "mint-ui";
 import TopNav from '@/components/TopNav'
 import {mapGetters} from 'vuex'
-import {getYzCode,checkYzCode} from '@/api/index'
+import {getYzCode,checkYzCode,forgetPass} from '@/api/index'
 export default {
     data(){
         return{
@@ -75,7 +75,7 @@ export default {
             }
         },
         async reqYzcode(){
-            let res = await getYzCode({mobile:this.user.mobile});
+            let res = await getYzCode({mobile:this.tel});
         },
         sendMsg(){
             if(!this.canSend()){
@@ -128,7 +128,19 @@ export default {
                 });
                 return;
             }else if(!this.pasOne.trim()||!this.pasTwo.trim()){
-
+                Toast({
+                    message: "请输入密码",
+                    position: "middle",
+                    duration: 2000
+                });
+                return;
+            }else if(this.pasOne.trim()!=this.pasTwo.trim()){
+                Toast({
+                    message: "两次密码输入不同",
+                    position: "middle",
+                    duration: 2000
+                });
+                return;
             }else{
                 let defaulParams = {
                     token:this.token,
@@ -137,12 +149,15 @@ export default {
                     companyId:this.companyId,
                     userRole:this.userRole,
                 }; 
-               let res = await updateUserInfo({...defaulParams,data:this.tel,type:2});
+               let res = await forgetPass({...defaulParams,mobile:this.tel,passWord:this.pasOne,code:this.yzm});
                if(res.code==0){
                    this.$router.go(-1);
                }
             }
         },
+        goNext(){
+            this.checkCode();
+        }
     }
 }
 </script>

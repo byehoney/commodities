@@ -16,7 +16,7 @@
       </span>
       <input type="text" v-model="searchStr" @click="search" placeholder="请输入烟花名称">
     </div>
-    <div class="selIcon_box" v-if="showlogo">
+    <div class="selIcon_box" v-if="showlogo" @click="goMore">
       <img class="selIcon" src="../images/sel_ld_icon.png" alt>
     </div>
     <div class="header_search" v-if="showlogo" @click="showcode">
@@ -89,6 +89,9 @@ export default {
     change() {
       this.rightWinShow = !this.rightWinShow;
       this.hide = false;
+    },
+    goMore(){
+      this.$router.push({name:'classify'})
     }
   },
   mounted() {

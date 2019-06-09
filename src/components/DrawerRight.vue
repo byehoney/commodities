@@ -8,7 +8,7 @@
         <div class="draw_title">选择门店</div>
         <div class="draw_list">
           <ul :style="win">
-            <li v-for="(item,index) in list" :key="index" @click="selCompany(item.companyId)">{{item.companyName}}</li>
+            <li :class="[item.companyId==user.companyId?'active':'']" v-for="(item,index) in list" :key="index" @click="selCompany(item.companyId)">{{item.companyName}}</li>
           </ul>
         </div>
         <!-- <div class="draw_title">分类</div>
@@ -33,7 +33,7 @@
 
 <script>
 import {switchCompanyList} from '@/api/index'
-import {mapState,mapMutations} from 'vuex'
+import {mapState,mapMutations,mapGetters} from 'vuex'
 export default {
   props: ["rightHide"],
   data() {
@@ -46,7 +46,8 @@ export default {
     };
   },
   computed:{
-    ...mapState('login',['user'])
+    ...mapState('login',['user']),
+    ...mapGetters('login',['token','userId','corpCode','companyId','userRole'])
   },
   mounted(){
     this.getList();
@@ -59,11 +60,18 @@ export default {
     },
     selCompany(id){
       this.saveCompany(id);
-      window.location.reload();
-      // this.$router.push({name:'blank'});
+      this.close();
+      this.$router.push({name:'blank',query:{goTo:this.$router.history.current.fullPath}});
     },
     async getList(){
-      let res = await switchCompanyList({userId:'15940985450'||this.user.userId});
+      let defaulParams = {
+          token:this.token,
+          userId:this.userId,
+          corpCode:this.corpCode,
+          companyId:this.companyId,
+          userRole:this.userRole,
+      };
+      let res = await switchCompanyList(defaulParams);
       if(res.code==0){
         this.list = res.data.list;
       }
@@ -128,6 +136,9 @@ export default {
   white-space: nowrap;
   word-break: break-all;
   overflow: hidden;
+}
+.draw_list ul li.active{
+  color: #C32918
 }
 .draw_list ul{
   overflow-y: scroll;

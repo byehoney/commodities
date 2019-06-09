@@ -34,7 +34,7 @@
         </div>
         <div class="classify_content">
           <ul>
-            <li v-for="(item,index) in heatList" :key="index">
+            <li v-for="(item,index) in heatList" :key="index" @click="goMoreClass(item.kindCode,index)">
               <a href="javascript:void(0)">
                 <img :src="item.kindImage">
                 <span>{{item.kindName}}</span>
@@ -66,11 +66,11 @@
         </div>
       </div>
     </div>
-    <div class="act_area">
-      <router-link to="/">
+    <div class="act_area" v-if="showTc||showMz">
+      <router-link to="/" v-if="showTc">
         <img src="../images/suit_banner.png" alt="">
       </router-link>
-      <router-link to="/">
+      <router-link to="/" v-if="showMz">>
         <img src="../images/specil_banner.png" alt="">
       </router-link>
     </div>
@@ -134,13 +134,15 @@ import { videoPlayer } from "vue-video-player";
 // //引入hls.js
 // import "videojs-contrib-hls.js/src/videojs.hlsjs";
 
-import { getHeatList, getSpecialList, secKill } from "@/api/index";
+import { getHeatList, getSpecialList, secKill ,getActivityInfo} from "@/api/index";
 import { mapState,mapGetters } from "vuex";
 import { setInterval } from "timers";
 export default {
   name: "home",
   data() {
     return {
+      showTc:false,//显示套餐活动入口
+      showMz:false,//显示买赠活动入口
       timer: null,
       H: 0, //倒计时
       M: 0, //倒计分
@@ -203,10 +205,17 @@ export default {
     let killdata = await secKill({...defaulParams,pageSize: 3});
     this.secKillList = killdata.data.list;
     this.count();
+    // 是否显示精品买赠 套餐活动
+    let actInfo = await getActivityInfo(defaulParams);
+    this.showTc = actInfo.data.tcCount>0?true:false;
+    this.showMz = actInfo.data.mzCount>0?true:false;
   },
   methods: {
     goChoose(index){
       this.$router.push({name:'choose',query:{showTab:index}})
+    },
+    goMoreClass(code,index){
+      this.$router.push({name:'classify',query:{code:code,index:index}})
     },
     count() {
       this.timer = setInterval(() => {
@@ -215,13 +224,13 @@ export default {
         let nowS = new Date().getSeconds();
         let nowTime = new Date().getHours();
         let leftsecond = "";
-        if (nowH >= this.msList[0][0] && nowH <= this.msList[0][1]) {
+        if (nowH >= this.msList[0][0] && nowH < this.msList[0][1]) {
           leftsecond =
             this.msList[0][1] * 60 * 60 - (nowH * 60 * 60 + nowM * 60 + nowS);
-        } else if (nowH >= this.msList[1][0] && nowH <= this.msList[1][1]) {
+        } else if (nowH >= this.msList[1][0] && nowH < this.msList[1][1]) {
           leftsecond =
             this.msList[1][1] * 60 * 60 - (nowH * 60 * 60 + nowM * 60 + nowS);
-        } else if (nowH >= this.msList[2][0] && nowH <= this.msList[2][1]) {
+        } else if (nowH >= this.msList[2][0] && nowH < this.msList[2][1]) {
           leftsecond =
             this.msList[2][1] * 60 * 60 - (nowH * 60 * 60 + nowM * 60 + nowS);
         }
@@ -417,6 +426,7 @@ export default {
   min-height: 357px;
   // background: #fff;
   padding:0 16px 33px;
+  margin-top: 16px;
 }
 .special_header {
   padding-left: 24px;

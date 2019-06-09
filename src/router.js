@@ -26,22 +26,22 @@ const router = new Router({
             path: "/list",
             name: "list",
             component: () =>
-                import(/* webpackChunkName: "choose" */ './views/List.vue')
+                import(/* webpackChunkName: "list" */ './views/List.vue')
         }, {
             path: "/detail",
             name: "detail",
             component: () =>
-                import(/* webpackChunkName: "choose" */ './views/Detail.vue')
+                import(/* webpackChunkName: "detail" */ './views/Detail.vue')
         }, {
             path: "/flashdetail",
             name: "flashdetail",
             component: () =>
-                import(/* webpackChunkName: "choose" */ './views/FlashDetail.vue')
+                import(/* webpackChunkName: "flashdetail" */ './views/FlashDetail.vue')
         }, {
             path: "/watch",
             name: "watch",
             component: () =>
-                import(/* webpackChunkName: "choose" */ './views/watch.vue')
+                import(/* webpackChunkName: "watch" */ './views/watch.vue')
         },
         {
             path: '/choose',
@@ -311,8 +311,9 @@ const router = new Router({
                 import(/* webpackChunkName: "myOrders" */ './views/MyOrders.vue'),
             meta: {
                 auth: false,
-                keepAlive: false,
-                title: '我的订单'
+                keepAlive: true,
+                title: '我的订单',
+                canKeep: false
             }
         },
         {
@@ -388,7 +389,7 @@ const router = new Router({
                 import(/* webpackChunkName: "applyReturn" */ './views/ApplyReturn.vue'),
             meta: {
                 auth: false,
-                keepAlive: false,
+                keepAlive: true,
                 title: '申请退货'
             }
         },
@@ -458,6 +459,28 @@ const router = new Router({
             }
         },
         {
+            path: '/manageHome',
+            name: 'manageHome',
+            component: () =>
+                import(/* webpackChunkName: "manageHome" */ './views/ManageHome.vue'),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title: 'xx店铺'
+            }
+        },
+        {
+            path: '/salesTrend',//销售走向图
+            name: 'salesTrend',
+            component: () =>
+                import(/* webpackChunkName: "salesTrend" */ './views/SalesTrend.vue'),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title: 'xx店铺'
+            }
+        },
+        {
             path: '/agreement',
             name: 'agreement',
             component: () =>
@@ -472,7 +495,12 @@ const router = new Router({
             path: "/classify",
             name: "classify",
             component: () =>
-                import("./views/Classify.vue")
+                import(/* webpackChunkName: "classify" */"./views/Classify.vue"),
+            meta: {
+                auth: true,
+                keepAlive: true,
+                title: '人云科技软件服务及隐私协议'
+            }
         },
         {
             path: '*', // 未匹配到路由时重定向

@@ -8,6 +8,7 @@
         </div>
         <ul
             class="content"
+            style="max-height: 100vh; overflow-y: auto;"
             v-infinite-scroll="loadMore"
             infinite-scroll-disabled="loading"
             infinite-scroll-distance="10"
@@ -116,26 +117,64 @@
 import { Toast } from "mint-ui";
 import TopNav from '@/components/TopNav'
 import {getOrdersList} from '@/api/index'
+import {mapGetters} from 'vuex'
 export default {
     data(){
         return{
             actIndex:0,
             tabList:['全部','待发货','待收货','待评价','退货'],
             loading:false,
-            list:[1,2,3]
+            list:[],
+            scrollTop:0,
+            moreLoading:false,
+            pageSize:10,
+            pageNum:1,
+            noData:false//是否有数据
         }
     },
-    mounted(){
+    computed:{
+        ...mapGetters('login',['token','userId','corpCode','companyId','userRole'])
+    },
+    activated(){
+        this.loading = false;
         let setTab = this.$router.history.current.query.showTab;
-        if(setTab){
-            this.selType(setTab)
+        this.actIndex = setTab;
+        this.pageNum = 1;
+        this.list = [];
+        this.hasMore = true;
+        this.getData();
+    },
+    deactivated(){
+        this.loading = true;
+    },
+    beforeRouteLeave(to, from, next){
+        let position = document.getElementsByClassName('content')[0].scrollTop
+        sessionStorage.setItem('oTop',position);
+        next()
+    },
+    beforeRouteEnter (to, from, next) {
+        if(from.name == 'orderDetail'){
+            to.meta.canKeep = true;
+            next(vm => {
+                // 通过 `vm` 访问组件实例
+                vm.$nextTick(function(){
+                    let position = sessionStorage.getItem('oTop') //返回页面取出来
+                    document.getElementsByClassName('content')[0].scroll(0, position)
+                })
+            })   
         }else{
-            this.getData();
+            to.meta.canKeep = false;
+            next();
         }
     },
     methods:{
         selType(index){
             this.actIndex = index;
+            this.pageNum = 1;
+            this.list = [];
+            this.loading = false;
+            this.hasMore = true;
+            this.getData();
         },
         scanOper(){
             Toast({
@@ -145,11 +184,49 @@ export default {
             });
         },
         loadMore(){
-            let data = ['load','load','load'];
-            this.list = [...this.list,...data];
+            if(this.moreLoading||!this.hasMore){
+                return;
+            }
+            console.log(this.moreLoading,this.hasMore)
+            this.pageNum = this.pageNum+1;
+            this.getData();
         },
         async getData(){
-            let res = await getOrdersList({type:this.actIndex});
+            let defaulParams = {
+                token:this.token,
+                userId:this.userId,
+                corpCode:this.corpCode,
+                companyId:this.companyId,
+                userRole:this.userRole,
+                pageSize:this.pageSize,
+                pageNum:this.pageNum
+            };
+            let res = await getOrdersList({...defaulParams,type:this.actIndex});
+            if(res.code == 0){
+                if(!res.data.list.length){
+                    this.hasMore = false;
+                    this.moreLoading = false;
+                    if(this.pageNum!=1){
+                        Toast({
+                            message: "已经到底了~",
+                            position: "middle",
+                            duration: 2000
+                        });
+                    }else{
+                        Toast({
+                            message: "暂无数据",
+                            position: "middle",
+                            duration: 2000
+                        });
+                    }
+                    return;
+                }else{
+                    this.hasMore = true;
+                    this.moreLoading = false;
+                }
+                
+                this.list = [...this.list,...res.data.list];
+            }
         }
     },
     components:{

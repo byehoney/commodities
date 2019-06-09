@@ -13,12 +13,12 @@
         </div> -->
       </div>
       <div class="class_content">
-        <ul class="left">
-          <li v-for="(item,index) in list" :key="index" @click="changeClass(index)" :class="[isActive==index?'active':'']">
+        <ul class="left" :style="styleObj">
+          <li v-for="(item,index) in list" :key="index" @click="changeClass(index,item.kindCode)" :class="[isActive==index?'active':'']">
             <div class="class_content_left">
               <div class="class_content_pic">
-                <img :src="item.img"/>
-                <span>{{item.title}}</span>
+                <img :src="item.kindImage"/>
+                <span>{{item.kindName}}</span>
               </div>
             </div>
             <!-- <div class="class_content_right " :class="isActive==index?active_bg:''">
@@ -28,7 +28,7 @@
           </li>
         </ul>
         <div class="right">
-          <div class="factoryList" v-if="isActive==0">
+          <!-- <div class="factoryList" v-if="isActive==0">
             <div class="listItem">
               造型烟花
             </div>
@@ -38,19 +38,10 @@
             <div class="listItem">
               造型烟花
             </div>
-          </div>
-          <div class="typeList" v-else>
-            <div class="typeItem">
-              造型烟花
-            </div>
-            <div class="typeItem">
-              造型烟花
-            </div>
-            <div class="typeItem">
-              造型烟花
-            </div>
-            <div class="typeItem">
-              造型烟花
+          </div> -->
+          <div class="typeList">
+            <div :class="['typeItem',isFact?'factItem':'']" @click="setClass(item.kindCode)" v-for="(item,index) in branchList" :key="index">
+              {{item.kindName}}
             </div>
           </div>
         </div>
@@ -61,43 +52,80 @@
 
 <script>
 import LocalHeader from "../components/Header";
+import {getMoreKindsMain,getMoreKindsBranch} from '@/api/index'
+import { mapGetters } from 'vuex'
 export default {
   components: {
     LocalHeader
   },
   data() {
     return {
+      isFact:false,
+      styleObj:{},
       isActive:0,
       is_active:"is_active",
       active_bg:"active_bg",
-      list: [
-        {
-          title: "厂家",
-          img:require("../images/home/home_menu.png")
-        },
-        {
-          title: "组合烟花",
-          img:require("../images/home/home_menu.png")
-        },
-        {
-          title: "喜琴鞭炮",
-          img:require("../images/home/home_menu1.png")
-        },
-        {
-          title: "日景烟花",
-          img:require("../images/home/home_menu2.png")
-        },
-        {
-          title: "冷烟花",
-          img:require("../images/home/home_menu3.png")
-        }
-      ]
+      list: [],
+      branchList:[],
     };
   },
+  computed:{
+    ...mapGetters('login',['token','userId','corpCode','companyId','userRole'])
+  },
+  created(){
+    this.styleObj = {
+      height:(window.screen.height-98)+'px',
+    }
+  },
+  mounted(){
+    this.getMainClass();
+    if(this.$route.query.code){
+      this.changeClass(this.$route.query.index,this.$route.query.code)
+    }
+    console.log(this.$route)
+  },
   methods:{
-      changeClass(index){
-        this.isActive=index
+    changeClass(index,code){
+      if(code == 'Factory'){
+        this.isFact = true;
+      }else{
+        this.isFact = false;
       }
+      this.isActive=index;
+      this.getBranch(code);
+    },
+    async getMainClass(){
+      let defaulParams = {
+        token:this.token,
+        userId:this.userId,
+        corpCode:this.corpCode,
+        companyId:this.companyId,
+        userRole:this.userRole,
+      }; 
+      let res = await getMoreKindsMain(defaulParams);
+      this.list = res.data.list;
+      if(!this.$route.query.code){
+        this.getBranch(this.list[0].kindCode);
+      }
+    },
+    async getBranch(code){
+      let defaulParams = {
+          token:this.token,
+          userId:this.userId,
+          corpCode:this.corpCode,
+          companyId:this.companyId,
+          userRole:this.userRole,
+      }; 
+      let res = await getMoreKindsBranch({...defaulParams,kindCode:code});
+      this.branchList = res.data.list
+    },
+    setClass(code){
+      if(this.isFact){
+        this.$router.push({name:'choose',query:{cjTerm:code}})
+      }else{
+        this.$router.push({name:'choose',query:{flTerm:code}})
+      }
+    }
   }
 };
 </script>
@@ -133,6 +161,9 @@ export default {
 }
 .class_content{
   display: flex;
+  .left{
+    overflow-y: scroll;
+  }
   .right{
     flex: 1;
     background-color: #fff;
@@ -160,6 +191,12 @@ export default {
         color: #666;
         text-align: center;
         padding-top: 60px;
+        &.factItem{
+          width: 100%;
+          border-bottom: 2px solid #ebebeb;
+          padding-top: 30px;
+          padding-bottom: 30px;
+        }
       }
     }
   }
@@ -208,16 +245,17 @@ export default {
   color: #b43726;
 }
 .class_content_pic {
-  width: 115px;
-  height: 115px;
   border-radius: 50%;
   font-size: 26px;
   text-align: center;
-  margin-left: 40px;
+  display: flex;
+  align-items:center;
+  flex-direction: column;
+  // margin-left: 40px;
 }
 .class_content_pic img {
+  width: 115px;
+  height: 115px;
   margin-bottom: 16px;
-  width: 100%;
-  height: 100%;
 }
 </style>

@@ -26,21 +26,21 @@
         infinite-scroll-distance="10">
             <div class="ms_area" v-if="curType==3">
                 <div class="ms_content">
-                    <div :class="['ms_item',(now>=12&&now<14)?'active':'']">
+                    <div :class="['ms_item',(now>=8&&now<12)?'active':'']">
+                        <div class="time">8:00</div>
+                        <div class="state" v-if="now>=8&&now<12">抢购中</div>
+                        <div class="state" v-else-if="now<8">即将开始</div>
+                        <div class="state" v-else>已结束</div>
+                    </div>
+                    <div :class="['ms_item',(now>=12&&now<16)?'active':'']">
                         <div class="time">12:00</div>
-                        <div class="state" v-if="now>=12&&now<14">抢购中</div>
+                        <div class="state" v-if="now>=12&&now<16">抢购中</div>
                         <div class="state" v-else-if="now<12">即将开始</div>
                         <div class="state" v-else>已结束</div>
                     </div>
-                    <div :class="['ms_item',(now>=14&&now<16)?'active':'']">
-                        <div class="time">14:00</div>
-                        <div class="state" v-if="now>=14&&now<16">抢购中</div>
-                        <div class="state" v-else-if="now<14">即将开始</div>
-                        <div class="state" v-else>已结束</div>
-                    </div>
-                    <div :class="['ms_item',(now>=16&&now<18)?'active':'']">
+                    <div :class="['ms_item',(now>=16&&now<20)?'active':'']">
                         <div class="time">16:00</div>
-                        <div class="state" v-if="now>=16&&now<18">抢购中</div>
+                        <div class="state" v-if="now>=16&&now<20">抢购中</div>
                         <div class="state" v-else-if="now<16">即将开始</div>
                         <div class="state" v-else>已结束</div>
                     </div>
@@ -51,6 +51,7 @@
                 <div class="scrollItem" v-if="curType==0||curType==1||curType==2">
                     <div class="left">
                         <img :src="item.url" alt="">
+                        <img v-if="item.hdlx=='秒杀'" class="ms_icon" src="../images/ms_icon.png" alt="">
                     </div>
                     <div class="right">
                         <div class="name">{{item.spmc}}</div>
@@ -58,8 +59,8 @@
                         <div class="size">规格：{{item.hlgg}}</div>
                         <div class="item_bot">
                             <div class="bot_left">
-                                <div class="discount" v-if="curType==0||curType==1">{{item.cxj|formatDis(item.ptsj)}}折</div>
-                                <div class="star_dis" v-if="curType==2">
+                                <!-- <div class="discount" v-if="curType==0||curType==1">{{item.cxj|formatDis(item.ptsj)}}折</div> -->
+                                <div class="star_dis">
                                     <div class="discount" v-if="item.hdlx=='打折'">{{item.cxj|formatDis(item.ptsj)}}折</div>
                                     <div class="starIcon" v-if="item.hdlx=='星选'">星选</div>
                                 </div>
@@ -124,10 +125,14 @@ import SimpleCropper from "../components/SimpleCropper"
 import TabBarBottom from '@/components/TabBarBottom'
 import LocalHeader from "@/components/Header";
 import {getChooseList} from '@/api/index'
-import {mapState} from 'vuex'
+import {mapState,mapGetters} from 'vuex'
 export default {
     data(){
         return{
+            flTerm:'',
+            pzTerm:'',
+            cjTerm:'',
+            sort:0,//按价格排序是  0  正序  1  倒序
             scrollTop:0,
             now:new Date().getHours(),
             typeList:['销量','价格','主推','秒杀'],
@@ -135,7 +140,6 @@ export default {
             list:[],
             loading:false,//是否开启下拉加载
             moreLoading:false,
-            sort:0,//按价格排序是  0  正序  1  倒序
             pageSize:10,
             pageNum:1,
             hasMore:true,
@@ -143,6 +147,7 @@ export default {
     },
     computed:{
         ...mapState('login',['user']),
+        ...mapGetters('login',['token','userId','corpCode','companyId','userRole'])
     },
     filters:{
         formatDis(nPrice,oPrice){
@@ -160,17 +165,28 @@ export default {
         this.loading = false;
         if (!this.$route.meta.canKeep) {
             let showTab = this.$router.history.current.query.showTab;
+            let flTerm = this.$router.history.current.query.flTerm;
+            let cjTerm = this.$router.history.current.query.cjTerm;
             if(showTab!=''&&showTab!=undefined){
                 this.curType = showTab;
             }else{
                 this.curType = 0;
             }
+            if(flTerm!=''&&flTerm!=undefined){
+                this.flTerm = flTerm;
+            }else{
+                 this.flTerm = '';
+            }
+            if(cjTerm!=''&&cjTerm!=undefined){
+                this.cjTerm = cjTerm;
+            }else{
+                 this.cjTerm = '';
+            }
             window.scrollTo(0, 1);
             this.loading = false;
-            // this.curType = 0;
+            this.list = [];
             this.hasMore = true;
             this.pageNum = 1;
-            this.list = [];
             this.getData();
         } 
     },
@@ -178,11 +194,16 @@ export default {
         this.loading = true;
     },
     mounted(){
-        let showTab = this.$router.history.current.query.showTab;
-        if(showTab!=''&&showTab!=undefined){
-            this.curType = showTab;
-        }
-        this.getData();
+        // let showTab = this.$router.history.current.query.showTab;
+        // let flTerm = this.$router.history.current.query.flTerm;
+        // if(showTab!=''&&showTab!=undefined){
+        //     this.curType = showTab;
+        // }
+        // if(flTerm!=''&&flTerm!=undefined){
+        //     this.flTerm = flTerm;
+        // }
+        // this.list = [];
+        // this.getData();
     },
     beforeRouteLeave(to, from, next){
         let position = document.getElementsByClassName('scrollBox')[0].scrollTop
@@ -213,6 +234,11 @@ export default {
             if(this.moreLoading){
                 return;
             }
+            if(index==1&&this.sort==0){
+                this.sort = 1;
+            }else if(index==1&&this.sort==1){
+                this.sort = 0;
+            }
             this.loading = false;
             this.curType = index;
             this.hasMore = true;
@@ -222,15 +248,23 @@ export default {
         },
         async getData(){
             this.moreLoading = true;
+            let defaulParams = {
+                token:this.token,
+                userId:this.userId,
+                corpCode:this.corpCode,
+                companyId:this.companyId,
+                userRole:this.userRole,
+            };
             let data ={
+                ...defaulParams,
                 pageSize:this.pageSize,
                 pageNum:this.pageNum,
                 corpCode:this.user.corpCode ,
                 companyId:this.user.companyId,
                 type:parseInt(this.curType)+1,
-                flTerm:'',
-                pzTerm:'',
-                cjTerm:'',
+                flTerm:this.flTerm,
+                pzTerm:this.pzTerm,
+                cjTerm:this.cjTerm,
                 sort:this.sort,
             }
             let res = await getChooseList(data);
@@ -379,6 +413,14 @@ export default {
                 height: 210px;
                 // overflow: hidden;
                 margin-right: 48px;
+                position: relative;
+                .ms_icon{
+                    position: absolute;
+                    width: 28px;
+                    height: 30px;
+                    top: 0;
+                    right: 5px;
+                }
                 img{
                     width: 100%;
                     height: 100%;

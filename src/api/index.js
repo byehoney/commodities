@@ -37,6 +37,10 @@ function updateUserInfo(params){//更新用户信息  type: 1 修改头像  2 �
     // let data = {...defaulParams,...params}
     return post('/user/update/info.do', params)
 }
+function forgetPass(params){//忘记密码  修改
+    // let data = {...defaulParams,...params}
+    return post('/user/update/password.do', params)
+}
 function getActorList(params) {//获取注册角色列表
     return get('/userrole/get/list.do', params)
 }
@@ -110,15 +114,30 @@ function getChooseList(params){//选品列表
     return post('/product/get/list.do', params)
 }
 
+function getMoreKindsMain(params){//获取更多分类里 大类
+    return post('/search/product/select.do', params)
+}
+function getMoreKindsBranch(params){//获取更多分类里 小类
+    return post('/search/select/detail.do', params)
+}
+
 function getOrdersList(params){//获取订单列表   type  0 全部 1 待发货 2 待收货 3 待评价 4 退货
     // let data = {...defaulParams,...params}
     return post('/order/get/type.do', params)
 }
 
+function getActivityInfo(params){//首页 是否显示套餐 买赠活动
+    return post('/index/mztc/status.do', params)
+}
+
 function switchCompanyList(params){//首页切换门店 门店数据
-    // let data = {...defaulParams,...params}
     return post('/client/list/usercode.do', params)
 }
+
+function getSuitList(params){//获取套餐列表
+    return post('/index/get/taocan.do', params)
+}
+
 function getHeatList(params) {//获取首页热门分类
     // let data = {...defaulParams,...params}
     return post('/index/heat/list.do', params)
@@ -154,6 +173,7 @@ export {
     getCityList,
     joinRegister,
     creatRegister,
+    forgetPass,
     getAddrList,
     addNewAddr,
     upDateAddr,
@@ -163,6 +183,10 @@ export {
     getChooseList,
     getOrdersList,
     switchCompanyList,
+    getMoreKindsMain,
+    getMoreKindsBranch,
+    getActivityInfo,
+    getSuitList,
     getHeatList,
     getSpecialList,
     secKill
