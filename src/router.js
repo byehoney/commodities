@@ -317,6 +317,18 @@ const router = new Router({
             }
         },
         {
+            path: '/confirmOrders',
+            name: 'confirmOrders',
+            component: () =>
+                import(/* webpackChunkName: "confirmOrders" */ './views/ConfirmOrders.vue'),
+            meta: {
+                auth: false,
+                keepAlive: true,
+                title: '确认订单',
+                canKeep: false
+            }
+        },
+        {
             path: '/hasEva',
             name: 'hasEva',
             component: () =>

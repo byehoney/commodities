@@ -109,6 +109,24 @@
                         <router-link class="hasEva" to="/">已评价</router-link>
                     </div>
                 </div>
+                <div class="listInner back" v-if="actIndex==4">
+                    <div class="backTop">
+                        <div class="backLeft">
+                            <img src="../images/shopcar.png" alt="">
+                        </div>
+                        <div class="backRight">
+                            <div class="backName">烟花商品名称烟花商品名称烟花商品名称</div>
+                            <div class="backNum">数量：1</div>
+                            <div class="backStatus">
+                                <img src="../images/shopcar.png" class="backIcon" alt="">
+                                <span class="backText">退货退款 退款成功</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="backBottom">
+                        <div class="backBtn">查看详情</div>
+                    </div>
+                </div>
             </li>
         </ul>
     </div>
@@ -140,7 +158,7 @@ export default {
         let setTab = this.$router.history.current.query.showTab;
         this.actIndex = setTab;
         this.pageNum = 1;
-        this.list = [];
+        this.list = [1,2,3];
         this.hasMore = true;
         this.getData();
     },
@@ -171,7 +189,7 @@ export default {
         selType(index){
             this.actIndex = index;
             this.pageNum = 1;
-            this.list = [];
+            this.list = [1,2,3];
             this.loading = false;
             this.hasMore = true;
             this.getData();
@@ -272,6 +290,76 @@ export default {
             .listItem{
                 margin-bottom: 10px;
                 background-color: #fff;
+                .listInner{
+                    &.back{
+                        display: flex;
+                        flex-direction: column;
+                        .backTop{
+                            margin-left: 49px;
+                            border-bottom: 2px solid #ebebeb;
+                            display: flex;
+                            padding: 22px 43px 22px 0;
+                            .backLeft{
+                                width:200px;
+                                height:173px;
+                                img{
+                                    width: 100%;
+                                    height: 100%;
+                                    object-fit: scale-down;
+                                }
+                            }
+                            .backRight{
+                                margin-left: 70px;
+                                .backName{
+                                    font-size:26px;
+                                    color:rgba(51,51,51,1);
+                                    line-height:35px;
+                                    letter-spacing:2px;
+                                    margin-bottom: 16px;
+                                }
+                                .backNum{
+                                    font-size:18px;
+                                    color:rgba(102,102,102,1);
+                                    line-height:24px;
+                                    letter-spacing:1px;
+                                    margin-bottom: 35px;
+                                }
+                                .backStatus{
+                                    display: flex;
+                                    align-items: center;
+                                    .backIcon{
+                                        width:34px;
+                                        height:34px;
+                                    }
+                                    .backText{
+                                        font-size:22px;
+                                        color:rgba(51,51,51,1);
+                                        line-height:29px;
+                                        letter-spacing:2px;
+                                        margin-left: 13px;
+                                    }
+                                }
+                            }
+                        }
+                        .backBottom{
+                            padding: 18px 51px 20px 0;
+                            display: flex;
+                            justify-content: flex-end;
+                            .backBtn{
+                                width:145px;
+                                height:50px;
+                                background:rgba(255,255,255,1);
+                                border-radius:4px;
+                                border:2px solid rgba(245,166,35,1);
+                                font-size:22px;
+                                color:rgba(245,166,35,1);
+                                line-height:50px;
+                                letter-spacing:2px;
+                                text-align: center;
+                            }
+                        }
+                    }
+                }
                 .list_inner_other{
                     display: flex;
                     flex-direction: column;
