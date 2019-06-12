@@ -493,6 +493,17 @@ const router = new Router({
             }
         },
         {
+            path: '/manageSaleRank',//销售走向图
+            name: 'manageSaleRank',
+            component: () =>
+                import(/* webpackChunkName: "manageSaleRank" */ './views/ManageSaleRank.vue'),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title: 'xx店铺'
+            }
+        },
+        {
             path: '/agreement',
             name: 'agreement',
             component: () =>

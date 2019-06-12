@@ -28,20 +28,75 @@
 </template>
 <script>
 import TopNav from '@/components/TopNav'
+import { getEvaList } from '@/api/index'
+import {mapGetters} from 'vuex'
 export default {
     data(){
         return{
             loading:false,
-            list:[1,2,3]
+            list:[],
+            moreLoading:false,
+            pageSize:10,
+            pageNum:1,
+            noData:false,//是否有数据
+            hasMore:true
         }
+    },
+    computed:{
+        ...mapGetters('login',['token','userId','corpCode','companyId','userRole'])
     },
     components:{
         TopNav,
     },
+    mounted() {
+        this.getData();
+    },
     methods:{
+        async getData(){
+            this.moreLoading = true;
+            let defaulParams = {
+                token:this.token,
+                userId:this.userId,
+                corpCode:this.corpCode,
+                companyId:this.companyId,
+                userRole:this.userRole,
+                pageSize:this.pageSize,
+                pageNum:this.pageNum,
+                orderId :this.$route.query.id,
+            }
+            let res  = await getEvaList(defaulParams);
+            this.moreLoading = false;
+            if(res.code == 0){
+                if(!res.data.list.length){
+                    this.hasMore = false;
+                    if(this.pageNum!=1){
+                        Toast({
+                            message: "已经到底了~",
+                            position: "middle",
+                            duration: 2000
+                        });
+                    }else{
+                        Toast({
+                            message: "暂无数据",
+                            position: "middle",
+                            duration: 2000
+                        });
+                    }
+                    return;
+                }else{
+                    this.hasMore = true;
+                }
+                
+                this.list = [...this.list,...res.data.list];
+            }
+        },
         loadMore(){
-            let data = ['load','load','load'];
-            this.list = [...this.list,...data];
+            if(this.moreLoading||!this.hasMore){
+                return;
+            }
+            console.log(this.moreLoading,this.hasMore)
+            this.pageNum = this.pageNum+1;
+            this.getData();
         }
     },
 }

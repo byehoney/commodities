@@ -8,11 +8,16 @@ import VeLine from 'v-charts/lib/line.common'
 import DrawerLayout from 'vue-drawer-layout'
 import AwesomePicker from 'vue-awesome-picker';
 import md5 from 'js-md5';
+// import BaiduMap from 'vue-baidu-map'
 import VueVideoPlayer from 'vue-video-player'
 import 'video.js/dist/video-js.css'
 import 'vue-video-player/src/custom-theme.css'
 import "normalize.css"
 import "@/style/reset.scss"
+// Vue.use(BaiduMap, {
+//     // ak 是在百度地图开发者平台申请的密钥 详见 http://lbsyun.baidu.com/apiconsole/key */
+//     ak: 'CbvGZwjbrnWurzE8xAKUoaeFjZIcSClx'
+// })
 Vue.use(AwesomePicker);
 Vue.use(DrawerLayout)
 // Vue.use(VueVideoPlayer)

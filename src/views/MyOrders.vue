@@ -17,19 +17,19 @@
                 <div class="listInner" v-if="actIndex==0">
                     <div class="top">
                         <div class="topInfo">
-                            <div class="orderNum">订单号：990789789889</div>
-                            <div class="orderState">待收货</div>
+                            <div class="orderNum">{{item.orderid}}</div>
+                            <div class="orderState">{{item.orderstatus}}</div>
                         </div>
                         <div class="topImgs">
+                            <img :src="item.url" alt="">
+                            <!-- <img src="../images/shopcar.png" alt="">
                             <img src="../images/shopcar.png" alt="">
-                            <img src="../images/shopcar.png" alt="">
-                            <img src="../images/shopcar.png" alt="">
-                            <img src="../images/shopcar.png" alt="">
+                            <img src="../images/shopcar.png" alt=""> -->
                         </div>
                         <div class="topDetail">
-                            <div class="total">共120件商品</div>
+                            <div class="total">共{{item.bdpgs}}件商品</div>
                             <div class="name">金额：</div>
-                            <div class="num">￥68.95</div>
+                            <div class="num">￥{{item.bdje}}</div>
                         </div>
                     </div>
                     <div class="bottom">
@@ -37,7 +37,7 @@
                             <img src="../images/saoma.png" alt="">
                             <span>付款码</span>
                         </div>
-                        <router-link class="goDetail" to="/">查看详情</router-link>
+                        <router-link class="goDetail" :to="{name:'orderDetail',query:{id:item.orderid}}">查看详情</router-link>
                     </div>
                 </div>
                 <div class="list_inner_other" v-if="actIndex==1||actIndex==2">
@@ -49,15 +49,15 @@
                                     <p class="fName">万家灯火烟花有限公司</p>
                                 </div>
                                 <div class="right" v-if="actIndex==1">
-                                    买家已付款
+                                    {{item.orderstatus}}
                                 </div>
                                 <div class="wRight" v-if="actIndex==2">
-                                    等待收货
+                                    {{item.orderstatus}}
                                 </div>
                             </div>
                             <div class="head_mid">
                                 <div class="mid_left">
-                                    <img src="../images/shopcar.png" alt="">
+                                    <img :src="item.url" alt="">
                                 </div>
                                 <div class="mid_right">
                                     <p class="name_price">
@@ -105,8 +105,8 @@
                         </div>
                     </div>
                     <div class="bottom">
-                        <router-link class="goEva" to="/">评价</router-link>
-                        <router-link class="hasEva" to="/">已评价</router-link>
+                        <router-link class="goEva" :to="{name:'evaForOrder',query:{id:item.orderid,url:item.url}}">评价</router-link>
+                        <router-link class="hasEva" :to="{name:'hasEva',query:{id:item.orderid,url:item.url}}">已评价</router-link>
                     </div>
                 </div>
                 <div class="listInner back" v-if="actIndex==4">
@@ -147,7 +147,8 @@ export default {
             moreLoading:false,
             pageSize:10,
             pageNum:1,
-            noData:false//是否有数据
+            noData:false,//是否有数据
+            hasMore:true
         }
     },
     computed:{
@@ -158,7 +159,7 @@ export default {
         let setTab = this.$router.history.current.query.showTab;
         this.actIndex = setTab;
         this.pageNum = 1;
-        this.list = [1,2,3];
+        this.list = [];
         this.hasMore = true;
         this.getData();
     },
@@ -189,7 +190,7 @@ export default {
         selType(index){
             this.actIndex = index;
             this.pageNum = 1;
-            this.list = [1,2,3];
+            this.list = [];
             this.loading = false;
             this.hasMore = true;
             this.getData();

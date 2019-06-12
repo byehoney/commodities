@@ -16,7 +16,6 @@
 	<link href="<%= htmlWebpackPlugin.options.cdn.css[i] %>" rel="preload" as="style" />
 	<link href="<%= htmlWebpackPlugin.options.cdn.css[i] %>" rel="stylesheet" />
 	<% } %>
-
 	<title>vuedemo</title>
 </head>
 
@@ -31,7 +30,6 @@
     htmlWebpackPlugin.options.cdn&&htmlWebpackPlugin.options.cdn.js) { %>
 	<script src="<%= htmlWebpackPlugin.options.cdn.js[i] %>"></script>
 	<% } %>
-
 	<!-- built files will be auto injected -->
 	<script>
 	if (window.plus) {
@@ -45,7 +43,7 @@
 		var ws = plus.webview.currentWebview(); //pw回车可输出plus.webview
 		// ... code
 		// alert('这是ready')
-		alert(window.plus)
+		// alert(window.plus)
 	}
 	</script>
 </body>

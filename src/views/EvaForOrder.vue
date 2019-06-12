@@ -5,7 +5,7 @@
       <div class="top">
         <div class="shopArea">
           <div class="shopImg">
-            <img src="../images/shopcar.png" alt>
+            <img :src="url" alt>
           </div>
           <div class="tip">分享你的使用体验吧</div>
         </div>
@@ -59,13 +59,18 @@
   </div>
 </template>
 <script>
+import { Toast } from "mint-ui";
 import TopNav from "@/components/TopNav";
 import UploadImages from "@/components/UploadImages";
 let starOffImg = require("@/images/star_grey.png");
 let starOnImg = require("@/images/eva_star.png");
+import {evaForOrder} from '@/api/index'
+import {mapGetters} from 'vuex'
 export default {
   data() {
     return {
+      id:'',
+      url:'',
       evaContent: "",
       imgList: [],
       packNum:5,
@@ -143,12 +148,44 @@ export default {
     TopNav,
     UploadImages
   },
+  computed:{
+    ...mapGetters('login',['token','userId','corpCode','companyId','userRole'])
+  },
+  mounted() {
+    this.id = this.$route.query.id;
+    this.url = this.$route.query.url;
+    console.log(this.id,this.url)
+  },
   methods: {
     setImgList(list){
-        console.log(list)
+      this.imgList = list;
     },
-    sendEva(){
-        console.log(this.imgList)
+    async sendEva(){
+      if(!this.evaContent.trim()){
+        Toast({
+            message: "请输入评价内容",
+            position: "middle",
+            duration: 2000
+        });
+        return;
+      }
+      let defaulParams = {
+        token:this.token,
+        userId:this.userId,
+        corpCode:this.corpCode,
+        companyId:this.companyId,
+        userRole:this.userRole,
+        comment:this.evaContent,
+        orderId:this.id,
+        url:this.imgList.join(','),
+        bzpj:this.packNum,
+        shsdpj:this.speedNum,
+        psypj:this.sendNum  
+      };
+      let res = await evaForOrder(defaulParams);
+      if(res.code==0){
+        this.$router.go(-1)
+      }
     },
     rating(index, type,starNum,score,arr) {
         var total = type.length; // 星星总数
@@ -220,7 +257,7 @@ export default {
     padding: 118px 41px 10px 39px;
     background-color: #fff;
     .mint-field.is-textarea {
-      height: 100%;
+      height: 99%;
     }
     .top {
       .shopArea {
@@ -232,7 +269,9 @@ export default {
           // background:rgba(235,235,235,1);
           img {
             // width: 100%;
-            object-fit: cover;
+            object-fit: scale-down;
+            width: 100%;
+            height: 100%;
           }
         }
         .tip {

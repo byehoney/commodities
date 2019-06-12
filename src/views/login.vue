@@ -6,7 +6,7 @@
         <div class="login_btn" @click="loginBtn">登录</div>
         <div class="more_fun">
             <router-link to="/register" replace>手机快速注册</router-link>
-            <router-link to="/modiPass" replace>忘记密码？</router-link>
+            <router-link to="/forgetPas" replace>忘记密码？</router-link>
         </div>
         <!-- <CheckUser></CheckUser> -->
     </div>

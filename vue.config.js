@@ -127,7 +127,7 @@ module.exports = {
     // 打包时不生成.map文件
     productionSourceMap: false,
     devServer: {
-        open: true, // 启动服务后是否打开浏览器
+        open: false, // 启动服务后是否打开浏览器
         host: '0.0.0.0',
         port: 8088, // 服务端口
         https: false,

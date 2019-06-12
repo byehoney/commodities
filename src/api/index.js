@@ -128,6 +128,16 @@ function getOrdersList(params){//获取订单列表   type  0 全部 1 待发货
     // let data = {...defaulParams,...params}
     return post('/order/get/type.do', params)
 }
+function evaForOrder(params){//订单评价
+    return post('/order/add/comment.do', params)
+}
+function getEvaList(params){//获取订单评价列表
+    return post('/order/get/comment.do', params)
+}
+
+function getViewLogist(params){//获取物流信息
+    return post('/order/get/express.do', params)
+}
 
 function getActivityInfo(params){//首页 是否显示套餐 买赠活动
     return post('/index/mztc/status.do', params)
@@ -186,6 +196,9 @@ export {
     getChooseList,
     getChooseDetail,
     getOrdersList,
+    evaForOrder,
+    getEvaList,
+    getViewLogist,
     switchCompanyList,
     getMoreKindsMain,
     getMoreKindsBranch,

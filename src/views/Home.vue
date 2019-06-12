@@ -70,7 +70,7 @@
       <router-link to="/" v-if="showTc">
         <img src="../images/suit_banner.png" alt="">
       </router-link>
-      <router-link to="/" v-if="showMz">>
+      <router-link to="/" v-if="showMz">
         <img src="../images/specil_banner.png" alt="">
       </router-link>
     </div>

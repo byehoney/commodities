@@ -17,6 +17,7 @@
 // import {MessageBox, Toast} from 'mint-ui'
 // import {Swipe, SwipeItem} from 'mint-ui'
 // import 'mint-ui/lib/style.css'
+import {uploadImage,getUploadToken} from '@/api/index'
 export default {
   name: 'upload',
   data () {
@@ -29,36 +30,58 @@ export default {
       num: 0,
       avatar: '',
       file: '',
+      token:'',
+      file_key:'',
+      key:'',
+      domain:'http://yanhuawang.rydltech.com/',
       showBg: false
     }
   },
   props: ['uploadType', 'imgUrl','setList'],
   created () {
     console.log(this)
-    this.avatar = this.imgUrl
+    this.avatar = this.imgUrl;
+    this.getToken();
   },
   methods: {
+    async getToken(){
+      let res = await getUploadToken({suffix:'1'});
+      this.token = res.data.token;
+      this.key = res.data.imgUrl;
+      console.log(res);
+    },
     changeImage: function (e) {
-      if (e.target.files.length <= (this.maxImages - this.imgUrls.length)) {
-        for (var i = 0; i < e.target.files.length; i++) {
-          let file = e.target.files[i]
-          this.file = file
-          console.log(this.file)
-          let reader = new FileReader()
-          let that = this
-          reader.readAsDataURL(file)
-          reader.onload = function (e) {
-            console.log(this.result)
-            that.imgUrls.push(this.result)
-            that.setList(that.imgUrls)
-          }
-        }
+      // if (e.target.files.length <= (this.maxImages - this.imgUrls.length)) {
+        // for (var i = 0; i < e.target.files.length; i++) {
+        //   let file = e.target.files[i]
+        //   this.file = file
+          if (!e.target.files[0].size) return;
+          this.file= e.target.files[0]
+          this.file_key = e.target.files[0].name
+          e.target.value = ''
+          var data = new FormData();//重点在这里 如果使用 var data = {}; data.inputfile=... 这样的方式不能正常上传
+          data.append('token', this.token);
+          data.append('file',this.file)
+          data.append('key',this.key+this.file_key)
+          uploadImage(data,(res)=>{
+             this.imgUrls.push(this.domain+res.key)
+          })
+          // let reader = new FileReader()
+          // let that = this
+          // reader.readAsDataURL(file)
+          // reader.onload = function (e) {
+          //   console.log(this.result)
+          //   that.imgUrls.push(this.result)
+          //   that.setList(that.imgUrls)
+          // }
+        // }
         // 剩余张数
         this.leftImages = this.maxImages - (this.imgUrls.length + e.target.files.length)
         this.pictureNums = String(this.maxImages - (this.imgUrls.length + e.target.files.length)) + '/' + String(this.maxImages)
-      } else {
-        Toast('只能选择' + (this.maxImages - this.imgUrls.length) + '张了')
-      }
+        this.setList(this.imgUrls)
+      // } else {
+      //   Toast('只能选择' + (this.maxImages - this.imgUrls.length) + '张了')
+      // }
     },
     delect (index) {
       this.imgUrls.splice(index, 1)
@@ -68,6 +91,7 @@ export default {
       } else {
         this.pictureNums = String(this.leftImages) + '/' + String(this.maxImages)
       }
+      this.setList(this.imgUrls)
     },
     handleChange (index) {
       this.num = index
