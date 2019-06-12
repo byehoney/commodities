@@ -120,59 +120,89 @@ export default {
         initMap() {
             loadBMap()
                 .then(() => {
-                    // 百度地图API功能
-                    // this.myMap = new BMap.Map("map") // 创建Map实例
-                    // this.myMap.centerAndZoom(new BMap.Point(116.404, 39.915), 11) // 初始化地图,设置中心点坐标和地图级别
-                    // this.myMap.setCurrentCity('北京') // 设置地图显示的城市 此项是必须设置的
-                    let that = this;
+
                     this.myMap = new BMap.Map("map");
-                    var myCity = new BMap.LocalCity();
-                    myCity.get(myFun); 
-                    function myFun(result){
-                        var cityName = result.name;
-                        that.myMap.setCenter(cityName);
-                        var mk = new BMap.Marker(result.center);
-                        // that.myMap.addOverlay(mk);
-                        that.myMap.panTo(result.center);
-                        that.myMap.centerAndZoom(result.center,12);
-                        var p1 = new BMap.Point(116.301934,39.977552);
-                        var p2 = new BMap.Point(116.508328,39.919141);
-                        var p3 = new BMap.Point(116.365942,39.996165);
-                        var startIcon = new BMap.Icon(require("../images/local_icon.png"),new BMap.Size(64,64))
-                        var endIcon = new BMap.Icon(require("../images/local_icon.png"),new BMap.Size(64,64))
-                        var icon = require('../images/local_icon.png');
-                        var wayPointIconHtml='<img style="width:16px;height:16px;position:absolute;top:20px" src="'+icon+'">'
-                        var driving = new BMap.DrivingRoute(that.myMap, {
-                            renderOptions:{map: that.myMap, autoViewport: true},
-                            onPolylinesSet:function(routes) {
-                                var searchRoute = routes[0].getPolyline();//导航路线
-                                that.myMap.addOverlay(searchRoute);
-                            },
-                        });
-                        driving.setSearchCompleteCallback(function(){
-                            var plan = driving.getResults().getPlan(0);
-                            for(var i=0;i<plan.getNumRoutes();i++){
-                                var pts =plan.getRoute(i).getPath();
-                    　　　　     //重点在这   这个地方是关于修改颜色的
-                                var polyline = new BMap.Polyline(pts,{ strokeColor: "#FF1240", strokeWeight: 5, strokeOpacity: 1});
-                                that.myMap.addOverlay(polyline);
-                            }
-                        })
-                        driving.search(p1, p2,{waypoints:[p3]});//waypoints表示途经点
-                        driving.setMarkersSetCallback(function(res){
-                            res[0].marker.setIcon(startIcon);
-                            res[1].Nm.Yc.innerHTML=wayPointIconHtml;
-                            res[2].marker.setIcon(endIcon);
-                        })
-                    }
-                    var myGeo = new BMap.Geocoder();      
-                    // 将地址解析结果显示在地图上，并调整地图视野    
-                    myGeo.getPoint("佛山路30号7门", function(point){      
-                        if (point) {      
-                            console.log(point)
-                        }      
-                    }, 
-                    "辽宁市");
+                    var p1 = new BMap.Point(116.301934,39.977552);//(后期改为 起点物流位置)
+                    var p2 = new BMap.Point(116.508328,39.919141);//(后期改为 当前物流位置)
+                    var p3 = new BMap.Point(116.365942,39.996165);//(后期改为 终点物流位置)
+                    const points = [p1,p2,p3]; //一组坐标点
+                    const view = this.myMap.getViewport(points); //获取最佳视角
+                    const zoom = view.zoom; //获取最佳视角的缩放层级
+                    const centerPoint = view.center; //获取最佳视角的中心点
+                    this.myMap.centerAndZoom(centerPoint, zoom);  // 编写自定义函数，创建标注 
+                    
+                    let myIcon1 = new BMap.Icon(require("../images/local_icon.png"), new BMap.Size(64, 64), {    
+                        anchor: new BMap.Size(64, 64),    
+                        imageOffset: new BMap.Size(0, 0)   // 设置图片偏移    
+                    });      
+                    let myIcon2 = new BMap.Icon(require("../images/local_icon.png"), new BMap.Size(64, 64), {    
+                        anchor: new BMap.Size(64, 64),    
+                        imageOffset: new BMap.Size(0, 0)   // 设置图片偏移    
+                    });      
+                    let myIcon3 = new BMap.Icon(require("../images/local_icon.png"), new BMap.Size(64, 64), {    
+                        anchor: new BMap.Size(64, 64),    
+                        imageOffset: new BMap.Size(0, 0)   // 设置图片偏移    
+                    });      
+                    let marker1 = new BMap.Marker(p1, {icon: myIcon1});
+                    let marker2 = new BMap.Marker(p2, {icon: myIcon2});        
+                    let marker3 = new BMap.Marker(p3, {icon: myIcon3});        
+                    this.myMap.addOverlay(marker1);   
+                    this.myMap.addOverlay(marker2);   
+                    this.myMap.addOverlay(marker3);    
+                    // 百度地图API功能
+                    // let that = this;
+                    // this.myMap = new BMap.Map("map");
+                    // var myCity = new BMap.LocalCity();
+                    // myCity.get(myFun); 
+                    // function myFun(result){
+                    //     var cityName = result.name;
+                    //     that.myMap.setCenter(cityName);
+                    //     var mk = new BMap.Marker(result.center);
+                    //     // that.myMap.addOverlay(mk);
+                    //     that.myMap.panTo(result.center);
+                    //     that.myMap.centerAndZoom(result.center,12);
+                    //     var p1 = new BMap.Point(116.301934,39.977552);
+                    //     var p2 = new BMap.Point(116.508328,39.919141);
+                    //     var p3 = new BMap.Point(116.365942,39.996165);
+                    //     var startIcon = new BMap.Icon(require("../images/local_icon.png"),new BMap.Size(64,64))
+                    //     var endIcon = new BMap.Icon(require("../images/local_icon.png"),new BMap.Size(64,64))
+                    //     var icon = require('../images/local_icon.png');
+                    //     var wayPointIconHtml='<img style="width:16px;height:16px;position:absolute;top:20px" src="'+icon+'">'
+                    //     var driving = new BMap.DrivingRoute(that.myMap, {
+                    //         renderOptions:{map: that.myMap, autoViewport: true},
+                    //         onPolylinesSet:function(routes) {
+                    //             var searchRoute = routes[0].getPolyline();//导航路线
+                    //             that.myMap.addOverlay(searchRoute);
+                    //         },
+                    //     });
+                    //     driving.setSearchCompleteCallback(function(){
+                    //         var plan = driving.getResults().getPlan(0);
+                    //         for(var i=0;i<plan.getNumRoutes();i++){
+                    //             var pts =plan.getRoute(i).getPath();
+                    // 　　　　     //重点在这   这个地方是关于修改颜色的
+                    //             var polyline = new BMap.Polyline(pts,{ strokeColor: "#FF1240", strokeWeight: 5, strokeOpacity: 1});
+                    //             that.myMap.addOverlay(polyline);
+                    //         }
+                    //     })
+                    //     driving.search(p1, p2,{waypoints:[p3]});//waypoints表示途经点
+                    //     driving.setMarkersSetCallback(function(res){
+                    //         res[0].marker.setIcon(startIcon);
+                    //         res[1].Nm.Yc.innerHTML=wayPointIconHtml;
+                    //         res[2].marker.setIcon(endIcon);
+                    //     })
+                    // }
+                    // var myGeo = new BMap.Geocoder();      
+                    // // 将地址解析结果显示在地图上，并调整地图视野    
+                    // myGeo.getPoint("佛山路30号7门", function(point){      
+                    //     if (point) {      
+                    //         console.log(point)
+                    //     }      
+                    // }, 
+                    // "辽宁市");
+
+
+
+
                     // var geolocation = new BMap.Geolocation();
                     // geolocation.getCurrentPosition(function(r){
                     //     console.log(r)
