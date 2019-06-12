@@ -6,11 +6,40 @@
     </div>
     <div class="detail_loop">
       <div class="detsil_loop_center">
-         <img :src='shopDetail.slt'/>
-        </div>
+        <img :src="shopDetail.slt">
+      </div>
     </div>
 
     <div class="detail_content">
+      <!-- 限时秒杀广告栏位 -->
+      <div class="detail_content_onece fix" v-if="!contentShow">
+        <div class="detail_content_onece_left">
+          <ul>
+            <li>¥{{shopDetail.cxj}}</li>
+            <li>
+              <p>$50</p>
+              <p>仅剩50件</p>
+            </li>
+            <li>限购{{shopDetail.xgl}}件</li>
+          </ul>
+        </div>
+        <div class="detail_content_onece_right">
+          <ul>
+            <li>
+              <span>
+                <img src="../images/clock.png">
+              </span>
+              <span>限时秒杀</span>
+            </li>
+            <li>
+              <span>10</span>:
+              <span>10</span>:
+              <span>10</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <!-- 限时秒杀广告栏位 -->
       <!-- 价格栏位 -->
       <div class="detail_content_one">
         <div class="detail_content_title">{{shopDetail.cj}}</div>
@@ -22,18 +51,62 @@
             <span>
               <img src="../images/detail_sale.png">
             </span>
-            <div class="detail_content_price">
+            <div class="detail_content_price" v-if="contentShow">
               <ul>
                 <li>原价：4590</li>
               </ul>
             </div>
+            <div v-if="!contentShow">
+            <div class="detail_content_price" >
+              <ul>
+                <li>销量：23</li>
+              </ul>
+            </div>
+            <div class="detail_content_price" >
+              <ul>
+                <li>
+                  所在地区：
+                  <a>广东省</a>
+                </li>
+              </ul>
+            </div>
+          </div>
           </div>
         </div>
         <div class="newprice">¥{{shopDetail.cxj}}</div>
         <div style="clear:both"></div>
       </div>
+      <!-- 库存 -->
+      <div v-if="!contentShow">
+      <div class="storesave fix">
+        <div class="storesave_left">
+          <ul>
+            <li></li>
+            <li>限时限量 疯狂抢购</li>
+          </ul>
+        </div>
+        <div class="storesave_right">
+          <ul>
+            <li>库存：</li>
+            <li>{{shopDetail.dqkc}}</li>
+          </ul>
+        </div>
+      </div>
+      <div class="storesave_list fix">
+        <ul>
+          <li>优惠</li>
+          <li>优惠文案相关展示内容</li>
+        </ul>
+      </div>
+      <div class="storesave_list bd fix">
+        <ul>
+          <li>活动</li>
+          <li>满88 减40</li>
+        </ul>
+      </div>
+      </div>
       <!-- 所在地区 -->
-      <div class="detail_content_two">
+      <div class="detail_content_two" v-if="contentShow">
         <div class="detail_content_two_left">
           <ul>
             <li>
@@ -47,7 +120,7 @@
           </ul>
         </div>
         <div style="clear:both"></div>
-        <div class="detail_content_add">
+        <div class="detail_content_add" v-if="commonShow">
           <ul>
             <li>
               <span>优惠</span>
@@ -65,7 +138,7 @@
         <div style="clear:both"></div>
       </div>
       <!-- 商品信息栏位 -->
-      <div class="detail_content_three">
+      <div class="detail_content_three" v-if="contentShow">
         <div class="detail_content_three_header">
           <span></span>
           <span>商品信息</span>
@@ -96,6 +169,43 @@
           </ul>
         </div>
       </div>
+      <!-- 秒杀 -->
+      <div class="detail_content_three" v-if="!contentShow">
+        <div class="detail_content_three_header">
+          <span></span>
+          <span>商品信息</span>
+        </div>
+        <div class="detail_content_three_desc">
+          <ul>
+            <li>
+              <p>商品名称：{{shopDetail.spmc}}</p>
+              <p>通用名：{{shopDetail.tymc}}</p>
+              <p>生产厂家：{{shopDetail.cj}}</p>
+              <p>规格：{{shopDetail.hlgg}}</p>
+              <p>销售单位：{{shopDetail.dw}}</p>
+            </li>
+            <li>
+              <p>[规格]{{shopDetail.bzgg}}</p>
+              <p></p>
+              <p></p>
+              <p></p>
+              <p></p>
+            </li>
+            <li>
+              <p>最小包装：{{shopDetail.xbz}}g</p>
+              <p>采集量:{{shopDetail.cjl}}</p>
+              <p>中包装:{{shopDetail.zbz}}</p>
+              <p></p>
+              <p></p>
+            </li>
+            
+          </ul>
+        </div>
+      </div>
+      
+
+
+
       <!-- 底部 -->
       <div class="footer_guide fix">
         <div class="footer_guide_left fix">
@@ -162,7 +272,9 @@ export default {
     return {
       shopnum: 1,
       popupVisible: false,
-      shopDetail:[]
+      shopDetail: [],
+      contentShow:true,
+      commonShow:true
     };
   },
   computed: {
@@ -200,17 +312,26 @@ export default {
         corpCode: this.corpCode,
         companyId: this.companyId,
         userRole: this.userRole,
-        productId:this.$route.query.id
+        productId: this.$route.query.id
       };
       let result = await getChooseDetail(defaulParams);
-      this.shopDetail=result.data
+      this.shopDetail = result.data;
+      console.log(this.shopDetail.hdlx);
+      if (this.shopDetail.hdlx == "秒杀") {
+          this.contentShow=false
+      }else{
+          this.commonShow=true
+          this.contentShow=true
+      }
     }
   },
-  deactivated(){
-      this.loading = true;
+  deactivated() {
+    this.loading = true;
   },
   mounted() {
-    console.log(this.$route.query.id);
+    if (this.shopDetail.sfzt == "true") {
+      this.$router.push({ name: "flashdetail", query: { id: id } });
+    }
     this.getShopDetail();
   }
 };
@@ -256,8 +377,8 @@ a {
   height: 460px;
   margin: 0 auto;
   background: #f6f6f6;
-  img{
-    width:100%;
+  img {
+    width: 100%;
     height: 100%;
   }
 }
@@ -265,6 +386,78 @@ a {
   width: 750px;
   min-height: 199px;
 }
+.detail_content_onece {
+  min-height: 117px;
+  background: linear-gradient(to right, #ff6238, #ff1240);
+  padding: 0;
+}
+.detail_content_onece_left {
+  width: 480px;
+  float: left;
+}
+.detail_content_onece_left ul li {
+  width: 110px;
+  float: left;
+  font-size: 22px;
+  margin-left: 46px;
+  color: #fff;
+}
+.detail_content_onece_left ul li:nth-of-type(1) {
+  font-size: 50px;
+  margin-top: 30px;
+}
+.detail_content_onece_left ul li:nth-of-type(2) {
+  margin-top: 15px;
+}
+.detail_content_onece_left ul li:nth-of-type(2) p {
+  line-height: 45px;
+}
+.detail_content_onece_left ul li:nth-of-type(3) {
+  margin-top: 45px;
+  width: 120px;
+}
+.detail_content_onece_right {
+  width: 260px;
+  min-height: 117px;
+  float: right;
+  background: url("../images/detail_flash.png") no-repeat top;
+  background-size: 100%;
+  line-height: 0;
+}
+.detail_content_onece_right ul li {
+  margin-left: 60px;
+  font-size: 30px;
+  color: #fff;
+  margin-top: 20px;
+}
+.detail_content_onece_right span {
+  display: inline-block;
+  font-size: 0.3rem;
+}
+.detail_content_onece_right ul li span:nth-of-type(1) {
+  width: 26px;
+  height: 26px;
+  margin-right: 10px;
+  font-size: 40px;
+}
+.detail_content_onece_right span img {
+  width: 100%;
+  vertical-align: middle;
+  /* margin-right:10px; */
+}
+.detail_content_onece_right ul li:nth-of-type(2) {
+  margin-left: 80px;
+}
+.detail_content_onece_right ul li:nth-of-type(2) span {
+  display: inline-block;
+  width: 33px;
+  height: 33px;
+  line-height: 33px;
+  text-align: center;
+  font-size: 22px;
+  background: #db9d53;
+}
+// 秒杀样式
 .detail_content_one,
 .detail_content_two,
 .detail_content_three {
@@ -295,18 +488,71 @@ a {
   min-height: 61px;
   line-height: 61px;
 }
+.detail_content_price:first-child ul li {
+  text-decoration: line-through;
+}
 .detail_content_price ul li {
   float: left;
 }
 .detail_content_price ul li:nth-of-type(1) {
   font-size: 22px;
   color: #999999;
-  text-decoration: line-through;
 }
 .detail_content_price ul li:nth-of-type(2) {
   font-size: 28px;
   color: #ff0000;
   float: right;
+}
+/* 库存 */
+.storesave {
+  width: 656px;
+  min-height: 70px;
+  background: #ffefef;
+  line-height: 70px;
+  color: #ff0000;
+  padding: 0 47px;
+  font-size: 24px;
+}
+.storesave_left,
+.storesave_right {
+  float: left;
+}
+.storesave_left ul li,
+.storesave_right ul li {
+  float: left;
+}
+.storesave_right ul li:nth-of-type(1) {
+  color: #999;
+}
+.storesave_left ul li:nth-of-type(1) {
+  width: 44px;
+  height: 44px;
+  background: url("../images/miao.png") no-repeat center center;
+  background-size: 100% 100%;
+  margin-right: 24px;
+  margin-top: 10px;
+}
+.storesave_right {
+  float: right;
+}
+.storesave_list {
+  min-height: 70px;
+  background: #fff;
+  line-height: 70px;
+  border-bottom: 1px solid #ededed;
+}
+.bd {
+  margin-bottom: 5px;
+  border-bottom: none;
+}
+.storesave_list ul li {
+  float: left;
+  font-size: 22px;
+  color: #666;
+  margin-left: 49px;
+}
+.storesave_list ul li:nth-of-type(1) {
+  color: #ff0000;
 }
 .detail_content_two_left {
   width: 610px;

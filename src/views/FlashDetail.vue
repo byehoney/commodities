@@ -247,43 +247,43 @@ a {
   width: 750px;
   min-height: 199px;
 }
-.detail_content_one,
+.detail_content_once,
 .detail_content_two,
 .detail_content_three {
   background: #fff;
   padding: 24px 46px;
 }
-.detail_content_one {
+.detail_content_onece {
   min-height: 117px;
   background: linear-gradient(to right,#ff6238,#ff1240);
   padding: 0;
 }
-.detail_content_one_left {
+.detail_content_onece_left {
   width: 480px;
   float: left;
 }
-.detail_content_one_left ul li {
+.detail_content_onece_left ul li {
   width: 110px;
   float: left;
   font-size: 22px;
   margin-left: 46px;
   color: #fff;
 }
-.detail_content_one_left ul li:nth-of-type(1) {
+.detail_content_onece_left ul li:nth-of-type(1) {
   font-size: 50px;
   margin-top: 30px;
 }
-.detail_content_one_left ul li:nth-of-type(2) {
+.detail_content_onece_left ul li:nth-of-type(2) {
   margin-top: 15px;
 }
-.detail_content_one_left ul li:nth-of-type(2) p {
+.detail_content_onece_left ul li:nth-of-type(2) p {
   line-height: 45px;
 }
-.detail_content_one_left ul li:nth-of-type(3) {
+.detail_content_onece_left ul li:nth-of-type(3) {
   margin-top: 45px;
   width: 120px;
 }
-.detail_content_one_right {
+.detail_content_onece_right {
   width: 260px;
   min-height: 117px;
   float: right;
@@ -291,31 +291,31 @@ a {
   background-size: 100%;
   line-height: 0;
 }
-.detail_content_one_right ul li {
+.detail_content_onece_right ul li {
   margin-left: 60px;
   font-size: 30px;
   color: #fff;
   margin-top: 20px;
 }
-.detail_content_one_right span {
+.detail_content_onece_right span {
   display: inline-block;
   font-size: 0.3rem;
 }
-.detail_content_one_right ul li span:nth-of-type(1) {
+.detail_content_onece_right ul li span:nth-of-type(1) {
   width: 26px;
   height: 26px;
   margin-right: 10px;
   font-size: 40px;
 }
-.detail_content_one_right span img {
+.detail_content_onece_right span img {
   width: 100%;
   vertical-align: middle;
   /* margin-right:10px; */
 }
-.detail_content_one_right ul li:nth-of-type(2) {
+.detail_content_onece_right ul li:nth-of-type(2) {
   margin-left: 80px;
 }
-.detail_content_one_right ul li:nth-of-type(2) span {
+.detail_content_onece_right ul li:nth-of-type(2) span {
   display: inline-block;
   width: 33px;
   height: 33px;

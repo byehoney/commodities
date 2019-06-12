@@ -36,7 +36,7 @@
                 <div class="list_shopcar_com_num">
                   <ul>
                     <li @click="reduce(list)">-</li>
-                    <li>{{list.pro_num}}</li>
+                    <li> <input type="number" v-model="list.pro_num" class="sum" v-on:input="calculate(pro)"></li>
                     <li @click="add(list)">+</li>
                   </ul>
                 </div>
@@ -102,34 +102,19 @@ export default {
     })
   },
   methods: {
-    shoptrue(item) {
-      item.products.forEach(pro => {
-        pro.checked === false ? this.choosetrue(item, pro) : "";
-      });
-    }, //循环店铺中的商品，先筛选出目前没选中的商品，给它执行choosetrue函数
-    shopfalse(item) {
-      item.products.forEach(pro => {
-        pro.checked === true ? this.choosefalse(item, pro) : "";
-      });
-    }, //循环店铺中的商品，先筛选出目前被选中的商品，给它执行choosefalse函数
-    shopchoose(item) {
-      !item.check ? this.shoptrue(item) : this.shopfalse(item);
-    },
-    //商铺选择结束
-    choosetrue(item, list) {
-      list.checked = true; //将商品选中状态改为true
-      ++this.fetchData.allnum;
+    choosetrue(item, pro) {
+      pro.checked = true; //将商品选中状态改为true
       ++item.choose === item.products.length ? (item.check = true) : ""; //这里执行了两部，选中商品数量先+1，再与该店铺商品数量比较，如果相等就更改店铺选中状态为true
       item.check
         ? ++this.fetchData.allchoose === this.fetchData.list.length
           ? (this.fetchData.status = true)
           : (this.fetchData.status = false)
         : ""; //如果店铺选中状态改为true，选中店铺数量先+1，再与店铺数量比较，如果相等就更改全选选中状态为true
-      this.fetchData.allsum += list.pro_sum;
+      this.fetchData.allsum += pro.pro_sum;
+      this.fetchData.allnum += pro.pro_num;
     },
-    choosefalse(item, list) {
-      list.checked = false; //将商品选中状态改为false
-      --this.fetchData.allnum;
+    choosefalse(item, pro) {
+      pro.checked = false; //将商品选中状态改为false
       --item.choose; //选中商品数量-1
       if (item.check) {
         //如果店铺是被选中的，更改店铺选中状态
@@ -137,44 +122,73 @@ export default {
         --this.fetchData.allchoose; //并且选中店铺数量-1
       }
       this.fetchData.status = false; //无论之前全选的状态，将其改为false就行
-      this.fetchData.allsum -= list.pro_sum;
+      this.fetchData.allsum -= pro.pro_sum; //商品总计价格变动
+      this.fetchData.allnum -= pro.pro_num;
     },
-    choose(item, list) {
-      !list.checked
-        ? this.choosetrue(item, list)
-        : this.choosefalse(item, list);
-    }, //这里是绑定到html上的方法，取反是由于你在触发方法的时候取的是之前的状态
-    add(list) {
-      list.pro_num++;
-      list.pro_sum += list.pro_price;
-      list.checked
-        ? (this.fetchData.allsum += list.pro_price)
-        : this.fetchData.allsum; //这里判断下商品的状态决定是不是要改变总计价格
+    choose(item, pro) {
+      !pro.checked ? this.choosetrue(item, pro) : this.choosefalse(item, pro);
     },
-    reduce(list) {
-      if (list.pro_num === 1) {
-        list.pro_num;
-      } else {
-        list.pro_num--;
-        list.pro_sum -= list.pro_price;
-        list.checked
-          ? (this.fetchData.allsum -= list.pro_price)
-          : this.fetchData.allsum; //同上
-      }
+    shoptrue(item) {
+      item.products.forEach(pro => {
+        pro.checked === false && this.choosetrue(item, pro); //循环店铺中的商品，先筛选出目前没选中的商品，给它执行choosetrue函数
+      });
     },
-    cartchoose(item) {
-      // this.fetchData.is_success=false
-      // var item = this.fetchData.list;
+    shopfalse(item) {
+      item.products.forEach(pro => {
+        pro.checked === true && this.choosefalse(item, pro); //循环店铺中的商品，先筛选出目前被选中的商品，给它执行choosefalse函数
+      });
+    },
+    shopchoose(item) {
+      !item.check ? this.shoptrue(item) : this.shopfalse(item);
+    },
+    cartchoose() {
       this.fetchData.status = !this.fetchData.status; //取反改变状态
       this.fetchData.status
         ? this.fetchData.list.forEach(item => this.shoptrue(item))
-        : this.fetchData.list.forEach(item => this.shopfalse(item));
+        : this.fetchData.list.forEach(item => this.shopfalse(item)); //根据取反后的状态进行相应的店铺按钮操作
     },
+    add(pro) {
+      console.log(pro)
+      pro.pro_num++;
+      pro.pro_sum += pro.pro_price;
+      if (pro.checked) {
+        this.fetchData.allnum++;
+        this.fetchData.allsum += pro.price;
+      }
+    },
+    reduce(pro) {
+      if (pro.pro_num === 1) return;
+      pro.pro_num--;
+      pro.pro_sum -= pro.pro_price;
+      if (pro.checked) {
+        this.fetchData.allnum--;
+        this.fetchData.allsum -= pro.pro_price;
+      }
+    },
+    calculate(pro) {
+      let oldsum = pro.pro_sum; //之前的总价
+      let oldnum = oldsum / pro.pro_price; //之前的数量
+      pro.pro_num = parseInt(pro.pro_num);
+      pro.pro_num > 0 ? (pro.pro_sum = pro.pro_num * pro.pro_price) : (pro.pro_num = oldnum); //如果输入数量大于0，计算价格，否则返回之前的数量
+      let diffsum = pro.pro_sum - oldsum; //差价
+      let diffnum = pro.pro_num - oldnum; //差量
+      if (pro.checked) {
+        //如果商品被选中
+        this.fetchData.allsum += diffsum; //计算总价
+        this.fetchData.allnum += diffnum; //计算总量
+      }
+    },
+
     del(data) {
       var data = data.list;
       for (var i = 0; i < data.length; i++) {
         if (data[i].check) {
           data.splice(i, 1);
+          console.log(this.fetchData.status)
+         this.fetchData.allchoose--
+         console.log(this.fetchData)
+         console.log(this.fetchData.allnum)
+          this.fetchData.status=false
           i--;
         } else {
           for (var j = 0; j < data[i].products.length; j++) {
@@ -339,6 +353,13 @@ export default {
   float: left;
   border: 1px solid #ccc;
   line-height: 48px;
+  text-align: center;
+}
+.list_shopcar_com_num ul li input{
+  width: 47px;
+  height: 47px;
+  border: 1px solid #ccc;
+  border-left: none;
   text-align: center;
 }
 .list_shopcar_com_num ul li:nth-of-type(2),
