@@ -297,7 +297,7 @@ export default {
             this.pageNum = this.pageNum+1;
             this.getData();
         },
-        goDetail(id){
+        goDetail(id){   
             this.$router.push({name:'detail',query:{id:id}});
         }
     }

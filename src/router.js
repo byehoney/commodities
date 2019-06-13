@@ -77,6 +77,12 @@ const router = new Router({
                 import("./views/ChooseGift.vue")
         },
         {
+            path: "/public",
+            name: "public",
+            component: () =>
+                import("./views/public.vue")
+        },
+        {
             path: '/my',
             name: 'my',
             // route level code-splitting
