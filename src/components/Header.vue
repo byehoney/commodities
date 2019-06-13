@@ -2,6 +2,10 @@
   <div class="header">
     <!-- 头部logo -->
     <div class="header_logo" v-if="showlogo"></div>
+    <!-- 公告的返回 -->
+    <!-- <div class="public_header_back" v-else>
+        <img src="../images/publicback.png"/>
+    </div> -->
     <!-- 头部input输入框 -->
     <div class="header_input" v-if="showlogo">
       <span>
@@ -10,7 +14,7 @@
       <input type="text" v-model="searchStr" @click="search" placeholder="请输入烟花名称">
     </div>
     <!-- 头部切换的输入框 -->
-    <div class="header_input newheader" v-else>
+    <div class="header_input newheader" v-else  ref="sel">
       <span>
         <img src="../images/smallsousuo.png">
       </span>
@@ -59,6 +63,7 @@ export default {
   data() {
     return {
       showlogo: true,
+
       searchStr: "",
       hide: "",
       rightWinShow: false
@@ -160,6 +165,19 @@ export default {
 }
 .header_input span img {
   width: 100%;
+}
+.public_header_back{
+  vertical-align:middle;
+  width: 17px;
+  height: 30px;
+  margin-right:90px;
+  margin-left:46px;
+  margin-top:15px;
+  float: left;
+
+}
+.public_header_back img{
+  width: 100%
 }
 .selIcon_box {
   float: left;
