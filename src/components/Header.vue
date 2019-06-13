@@ -38,7 +38,7 @@
             </span>
             <span>门店切换</span>
           </li>
-          <li>
+          <li @click="scan">
             <span>
               <img src="../images/saoma.png">
             </span>

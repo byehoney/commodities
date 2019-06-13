@@ -9,14 +9,14 @@
         >
             <li v-for="(item,index) in list" :key="index" class="listItem">
                 <div class="left">
-                    <img src="../images/shopcar.png" alt="">
+                    <img :src="item.url" alt="">
                 </div>
                 <div class="right">
                     <div class="top">
-                        <div class="bName">烟花商品名称</div>
-                        <div class="fName">河北保定星星烟花制造厂</div>
-                        <div class="size">规格：35g*1支</div>
-                        <div class="saled">已销：700件</div>
+                        <div class="bName">{{item.productname}}</div>
+                        <div class="fName">{{item.cj}}</div>
+                        <div class="size">规格：{{item.hlgg}}</div>
+                        <!-- <div class="saled">已销：700件</div> -->
                     </div>
                     <div class="bottom">
                         <div class="nPrice">￥6.50</div>
@@ -28,18 +28,72 @@
     </div>
 </template>
 <script>
+import { Toast } from "mint-ui";
 import TopNav from '@/components/TopNav'
+import {mapGetters} from 'vuex'
+import { getOrderStatuList } from '@/api/index'
 export default {
     data(){
         return{
             loading:false,
-            list:[1,2,3]
+            list:[],
+            moreLoading:false,
+            pageSize:10,
+            pageNum:1,
+            noData:false,//是否有数据
+            hasMore:true
         }
     },
+    computed:{
+        ...mapGetters('login',['token','userId','corpCode','companyId','userRole'])
+    },
+    mounted(){
+        this.getData();
+    },
     methods:{
+        async getData(){
+            let defaulParams = {
+                token:this.token,
+                userId:this.userId,
+                corpCode:this.corpCode,
+                companyId:this.companyId,
+                userRole:this.userRole,
+                pageNum:this.pageNum,
+                pageSize:this.pageSize
+            };
+            let res = await getOrderStatuList({...defaulParams,orderId:this.$route.query.id,orderStatus:'待发货'})
+            if(res.code == 0){
+                if(!res.data.list.length){
+                    this.hasMore = false;
+                    this.moreLoading = false;
+                    if(this.pageNum!=1){
+                        Toast({
+                            message: "已经到底了~",
+                            position: "middle",
+                            duration: 2000
+                        });
+                    }else{
+                        Toast({
+                            message: "暂无数据",
+                            position: "middle",
+                            duration: 2000
+                        });
+                    }
+                    return;
+                }else{
+                    this.hasMore = true;
+                    this.moreLoading = false;
+                }
+                
+                this.list = [...this.list,...res.data.list];
+            }
+        },
         loadMore(){
-            let data = ['load','load','load'];
-            this.list = [...this.list,...data];
+            if(this.moreLoading||!this.hasMore){
+                return;
+            }
+            this.pageNum = this.pageNum+1;
+            this.getData();
         }
     },
     components:{

@@ -1,5 +1,5 @@
 <template>
-    <div class="refuseContainer">
+    <div class="refuseContainer" style="opacity:1">
         <TopNav></TopNav>
         <ul
             class="content"
@@ -7,58 +7,102 @@
             infinite-scroll-disabled="loading"
             infinite-scroll-distance="10"
         >
-            <li v-for="(item,index) in list" :key="index" class="listItem" @click="selGoods(index)">
+            <li v-for="(item,index) in list" :key="index" class="listItem">
                 <!-- <img class="sel" v-if="item.isActive" src="../images/car_checkcircle.png" alt="">
                 <img class="sel" v-else src="../images/car_circle.png" alt=""> -->
                 <div class="left">
-                    <img src="../images/shopcar.png" alt="">
+                    <img :src="item.url" alt="" />
                 </div>
                 <div class="right">
                     <div class="top">
                         <div class="bName">
-                            <span class="name">烟花商品名称</span>
-                            <span class="num">20件</span>
+                            <span class="name">{{item.productname}}</span>
+                            <span class="num">{{item.cgl}}件</span>
                         </div>
-                        <div class="fName">河北保定星星烟花制造厂</div>
-                        <div class="size">规格：35g*1支</div>
-                        <div class="saled">已销：700件</div>
+                        <div class="fName">{{item.cj}}</div>
+                        <div class="size">规格：{{item.hlgg}}</div>
+                        <!-- <div class="saled">已销：700件</div> -->
                     </div>
                     <div class="bottom">
-                        <div class="nPrice">￥6.50</div>
-                        <div class="logBtn">提醒发货</div>
+                        <div class="nPrice">￥{{item.cgjg}}</div>
+                        <!-- <div class="logBtn">提醒发货</div> -->
                         <!-- <div class="oPrice">8.80</div> -->
                     </div>
                 </div>
             </li>
         </ul>
-        <div class="nextBtn">
+        <!-- <div class="nextBtn">
             到货
-        </div>
+        </div> -->
     </div>
 </template>
 <script>
+import { Toast } from "mint-ui";
 import TopNav from '@/components/TopNav'
+import {mapGetters} from 'vuex'
+import { getOrderStatuList } from '@/api/index'
 export default {
     data(){
         return{
             loading:false,
-            list:[]
+            list:[],
+            moreLoading:false,
+            pageSize:10,
+            pageNum:1,
+            noData:false,//是否有数据
+            hasMore:true
         }
     },
+    computed:{
+        ...mapGetters('login',['token','userId','corpCode','companyId','userRole'])
+    },
     mounted(){
-        let dataList = [{title:'1'},{title:'2'}];
-        dataList.map((item,index)=>{
-            item.isActive = false;
-        })
-       this.list = dataList;
+        this.getData();
     },
     methods:{
-        selGoods(index){
-           this.$set(this.list[index], 'isActive', !this.list[index].isActive);
+        async getData(){
+            let defaulParams = {
+                token:this.token,
+                userId:this.userId,
+                corpCode:this.corpCode,
+                companyId:this.companyId,
+                userRole:this.userRole,
+                pageNum:this.pageNum,
+                pageSize:this.pageSize
+            };
+            let res = await getOrderStatuList({...defaulParams,orderId:this.$route.query.id,orderStatus:'待发货'})
+            if(res.code == 0){
+                if(!res.data.list.length){
+                    this.hasMore = false;
+                    this.moreLoading = false;
+                    if(this.pageNum!=1){
+                        Toast({
+                            message: "已经到底了~",
+                            position: "middle",
+                            duration: 2000
+                        });
+                    }else{
+                        Toast({
+                            message: "暂无数据",
+                            position: "middle",
+                            duration: 2000
+                        });
+                    }
+                    return;
+                }else{
+                    this.hasMore = true;
+                    this.moreLoading = false;
+                }
+                
+                this.list = [...this.list,...res.data.list];
+            }
         },
         loadMore(){
-            let data = ['load','load','load'];
-            this.list = [...this.list,...data];
+            if(this.moreLoading||!this.hasMore){
+                return;
+            }
+            this.pageNum = this.pageNum+1;
+            this.getData();
         }
     },
     components:{
@@ -76,7 +120,7 @@ export default {
         }
         .content{
             padding-top: 92px;
-            padding-bottom: 120px;
+            // padding-bottom: 120px;
             background-color: #fff;
             .listItem{
                 display: flex;

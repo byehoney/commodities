@@ -1,5 +1,5 @@
 <template>
-    <div class="refuseContainer">
+    <div class="refuseContainer" style="opacity:1">
         <TopNav></TopNav>
         <div class="orderTabs">
             <div :class="['tabItem',actIndex==index?'active':'']" v-for="(item,index) in tabList" :key="index" @click="selType(index)">
@@ -14,7 +14,34 @@
             infinite-scroll-distance="10"
         >
             <li v-for="(item,index) in list" :key="index" class="listItem">
-                <div class="listInner" v-if="actIndex==0">
+                <div class="listInner">
+                    <div class="top">
+                        <div class="topInfo">
+                            <div class="orderNum">{{item.orderid}}</div>
+                            <div class="orderState">{{item.orderstatus}}</div>
+                        </div>
+                        <div class="topImgs" @click="checkDetailInfo(item.orderid)">
+                            <template v-for="(mtem,jIndex) in item.urls" >
+                                <img :src="mtem" :key="jIndex" alt="" v-if="jIndex<4">
+                            </template>
+                        </div>
+                        <div class="topDetail">
+                            <div class="total">共{{item.bdpgs}}件商品</div>
+                            <div class="name">金额：</div>
+                            <div class="num">￥{{item.bdje}}</div>
+                        </div>
+                    </div>
+                    <div class="bottom">
+                        <div class="scanBtn" @click="scanOper" v-if="actIndex!=3||actIndex!=4">
+                            <img src="../images/saoma.png" alt="">
+                            <span>付款码</span>
+                        </div>
+                        <router-link v-if="item.status=='是'&&actIndex!=4" class="askBack" :to="{name:'applyReturn',query:{id:item.orderid}}">申请退货</router-link>
+                        <router-link class="goEva" v-if="actIndex==3" :to="{name:'evaForOrder',query:{id:item.orderid,url:item.url}}">评价</router-link>
+                        <router-link class="goDetail" :to="{name:'orderDetail',query:{id:item.orderid}}">查看详情</router-link>
+                    </div>
+                </div>
+                <!-- <div class="listInner" v-if="actIndex==0">
                     <div class="top">
                         <div class="topInfo">
                             <div class="orderNum">{{item.orderid}}</div>
@@ -22,9 +49,6 @@
                         </div>
                         <div class="topImgs">
                             <img :src="item.url" alt="">
-                            <!-- <img src="../images/shopcar.png" alt="">
-                            <img src="../images/shopcar.png" alt="">
-                            <img src="../images/shopcar.png" alt=""> -->
                         </div>
                         <div class="topDetail">
                             <div class="total">共{{item.bdpgs}}件商品</div>
@@ -126,7 +150,7 @@
                     <div class="backBottom">
                         <div class="backBtn">查看详情</div>
                     </div>
-                </div>
+                </div> -->
             </li>
         </ul>
     </div>
@@ -156,12 +180,14 @@ export default {
     },
     activated(){
         this.loading = false;
-        let setTab = this.$router.history.current.query.showTab;
-        this.actIndex = setTab;
-        this.pageNum = 1;
-        this.list = [];
-        this.hasMore = true;
-        this.getData();
+        if (!this.$route.meta.canKeep) {
+            let setTab = this.$router.history.current.query.showTab;
+            this.actIndex = setTab;
+            this.pageNum = 1;
+            this.list = [];
+            this.hasMore = false;
+            this.getData();
+        }
     },
     deactivated(){
         this.loading = true;
@@ -246,6 +272,9 @@ export default {
                 
                 this.list = [...this.list,...res.data.list];
             }
+        },
+        checkDetailInfo(id){
+            this.$router.push({name:'orderDetail',query:{id:id}})
         }
     },
     components:{
@@ -530,13 +559,16 @@ export default {
                         .topImgs{
                             display: flex;
                             flex-wrap: wrap;
-                            justify-content: space-between;
+                            // justify-content: space-between;
                             margin-bottom: 20px;
                             img{
                                 width: 150px;
                                 height: 120px;
                                 object-fit: scale-down;
-                                // margin-right: 20px;
+                                margin-right: 20px;
+                                &:last-child{
+                                    margin-right: 0;
+                                }
                             }
                         }
                         .topDetail{
@@ -568,7 +600,7 @@ export default {
                             display: flex;
                             justify-content: center;
                             align-items: center;
-                            background:-webkit-linear-gradient(left,#ff6238ed,#ff1240);
+                            background:linear-gradient(180deg,rgba(245,81,81,0.8) 0%,rgba(195,41,24,1) 100%);
                             margin-right: 20px;
                             border-radius: 5px;
                             img{
@@ -595,17 +627,31 @@ export default {
                             text-align: center;
                             border-radius: 5px;
                         }
-                        .goEva{
-                            width: 128px;
+                        .askBack{
+                            width: 164px;
                             height: 64px;
-                            border:2px solid #d0021b;
-                            border-radius: 50px;
                             line-height: 64px;
-                            font-size:24px;
+                            border: 2px solid #999;
+                            border-radius: 8px;
+                            text-align: center;
+                            font-size:26px;
+                            color:rgba(153,153,153,1);
+                            letter-spacing:1px;
+                            margin-right: 20px;
+                        }
+                        .goEva{
+                            width: 164px;
+                            height: 64px;
+                            line-height: 64px;
+                            border:2px solid #d0021b;
+                            border-radius: 8px;
+                            text-align: center;
+                            font-size:26px;
                             color:rgba(208,2,27,1);
                             letter-spacing:1px;
                             display: block;
                             text-align: center;
+                            margin-right: 20px;
                         }
                         .hasEva{
                             width: 128px;

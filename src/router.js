@@ -323,7 +323,7 @@ const router = new Router({
                 import(/* webpackChunkName: "confirmOrders" */ './views/ConfirmOrders.vue'),
             meta: {
                 auth: false,
-                keepAlive: true,
+                keepAlive: false,
                 title: '确认订单',
                 canKeep: false
             }
@@ -401,7 +401,7 @@ const router = new Router({
                 import(/* webpackChunkName: "applyReturn" */ './views/ApplyReturn.vue'),
             meta: {
                 auth: false,
-                keepAlive: true,
+                keepAlive: false,
                 title: '申请退货'
             }
         },

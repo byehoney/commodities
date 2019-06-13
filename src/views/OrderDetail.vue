@@ -1,55 +1,111 @@
 <template>
-    <div class="detailContainer">
+    <div class="detailContainer" style="opacity:1">
         <TopNav></TopNav>
         <div class="main">
             <div class="header">
-                <span>部分到货</span>
+                <span>{{status==0?'全部到货':'部分到货'}}</span>
             </div>
             <div class="addInfo">
                 <img class="left" src="../images/local_icon.png" alt="">
                 <div class="mid">
-                    <div class="top">张建 139****0381</div>
-                    <div class="bottom">辽宁 沈阳市 铁西区 肇工北街4甲1号15门</div>
+                    <div class="top">{{name}} {{tel.substr(0,3)+'****'+tel.substr(7,11)}}</div>
+                    <div class="bottom">{{addr}}</div>
                 </div>
                 <img class="right" src="../images/arrow_right.png" alt="">
             </div>
             <div class="shopInfo">
-                <div class="infoBox">
+                <div class="infoBox" v-if="cjjk.length">
                     <div class="shopItem">
-                        <div class="imgBox">
-                            <img src="" alt="">
-                        </div>
-                        <div class="imgBox">
-                            <img src="" alt="">
-                        </div>
-                        <div class="imgBox">
-                            <img src="" alt="">
-                        </div>
+                        <template v-for="(item,index) in cjjk">
+                            <div class="imgBox"  :key="index" v-if="index<3">
+                                <img :src="item.url" alt="">
+                            </div>
+                        </template>
                     </div>
-                    <div class="shopRight">
+                    <div class="shopRight" @click="goRefuse">
                         <div class="shopDes">
-                            <div class="desState">未到货</div>
-                            <div class="desNum">未到货24件</div>
+                            <div class="desState">{{cjjk[0].ordertype}}</div>
+                            <div class="desNum">共{{cjjk.length}}件</div>
                         </div>
                         <img class="desIcon" src="../images/arrow_right.png" alt="">
                     </div>
                 </div>
-                <div class="infoBox">
+                <div class="infoBox" v-if="dfh.length">
                     <div class="shopItem">
-                        <div class="imgBox">
-                            <img src="" alt="">
-                        </div>
-                        <div class="imgBox">
-                            <img src="" alt="">
-                        </div>
-                        <div class="imgBox">
-                            <img src="" alt="">
-                        </div>
+                        <template v-for="(item,index) in dfh">
+                            <div class="imgBox"  :key="index" v-if="index<3">
+                                <img :src="item.url" alt="">
+                            </div>
+                        </template>
                     </div>
-                    <div class="shopRight">
+                    <div class="shopRight" @click="goWaiteSend">
                         <div class="shopDes">
-                            <div class="desState">厂商拒开</div>
-                            <div class="desNum">未到货24件</div>
+                            <div class="desState">{{dfh[0].ordertype}}</div>
+                            <div class="desNum">共{{dfh.length}}件</div>
+                        </div>
+                        <img class="desIcon" src="../images/arrow_right.png" alt="">
+                    </div>
+                </div>
+                <div class="infoBox" v-if="dsh.length">
+                    <div class="shopItem">
+                        <template v-for="(item,index) in dsh">
+                            <div class="imgBox"  :key="index" v-if="index<3">
+                                <img :src="item.url" alt="">
+                            </div>
+                        </template>
+                    </div>
+                    <div class="shopRight" @click="goWaiteGet">
+                        <div class="shopDes">
+                            <div class="desState">{{dsh[0].ordertype}}</div>
+                            <div class="desNum">共{{dsh.length}}件</div>
+                        </div>
+                        <img class="desIcon" src="../images/arrow_right.png" alt="">
+                    </div>
+                </div>
+                <div class="infoBox" v-if="th.length">
+                    <div class="shopItem">
+                        <template v-for="(item,index) in th">
+                            <div class="imgBox"  :key="index" v-if="index<3">
+                                <img :src="item.url" alt="">
+                            </div>
+                        </template>
+                    </div>
+                    <div class="shopRight" @click="goReturn">
+                        <div class="shopDes">
+                            <div class="desState">{{th[0].ordertype}}</div>
+                            <div class="desNum">共{{th.length}}件</div>
+                        </div>
+                        <img class="desIcon" src="../images/arrow_right.png" alt="">
+                    </div>
+                </div>
+                <div class="infoBox" v-if="ypj.length">
+                    <div class="shopItem">
+                        <template v-for="(item,index) in ypj">
+                            <div class="imgBox"  :key="index" v-if="index<3">
+                                <img :src="item.url" alt="">
+                            </div>
+                        </template>
+                    </div>
+                    <div class="shopRight" @click="goEvaList">
+                        <div class="shopDes">
+                            <div class="desState">{{ypj[0].ordertype}}</div>
+                            <div class="desNum">共{{ypj.length}}件</div>
+                        </div>
+                        <img class="desIcon" src="../images/arrow_right.png" alt="">
+                    </div>
+                </div>
+                <div class="infoBox" v-if="ysh.length">
+                    <div class="shopItem">
+                        <template v-for="(item,index) in ysh">
+                            <div class="imgBox"  :key="index" v-if="index<3">
+                                <img :src="item.url" alt="">
+                            </div>
+                        </template>
+                    </div>
+                    <div class="shopRight" @click="goEvaForOrder">
+                        <div class="shopDes">
+                            <div class="desState">{{ysh[0].ordertype}}</div>
+                            <div class="desNum">共{{ysh.length}}件</div>
                         </div>
                         <img class="desIcon" src="../images/arrow_right.png" alt="">
                     </div>
@@ -57,24 +113,24 @@
             </div>
             <div class="orderInfo">
                 <div class="orderItem">
-                    订单编号：987539759348
+                    订单编号：{{orderId}}
                 </div>
                 <div class="orderItem">
-                    创建时间：2019-04-25 14：19：00
+                    创建时间：{{time}}
                 </div>
             </div>
             <div class="priceInfo">
                 <div class="priceItem">
                     <div class="left">商品总额</div>
-                    <div class="right">￥120</div>
+                    <div class="right">￥{{zjg}}</div>
                 </div>
                 <div class="priceItem">
                     <div class="left">立减优惠</div>
-                    <div class="right red">￥120</div>
+                    <div class="right red">￥{{ljyh}}</div>
                 </div>
                 <div class="priceItem">
                     <div class="left">实付金额</div>
-                    <div class="right red">￥120</div>
+                    <div class="right red">￥{{sfje}}</div>
                 </div>
             </div>
             <div class="nextBtn">
@@ -86,14 +142,81 @@
 </template>
 <script>
 import TopNav from "@/components/TopNav";
+import { getOrderDetail } from '@/api/index';
+import {mapGetters} from 'vuex'
 export default {
     data(){
         return{
-            
+            status:0,
+            name:'',
+            tel:'',
+            addr:'',
+            cjjk:[],//厂家拒开
+            dfh:[],//待发货
+            dsh:[],//待收货
+            th:[],//退货
+            ypj:[],//已评价
+            ysh:[],//已收货
+            orderId:'',
+            time:'',
+            zjg:'',
+            sfje:'',
+            ljyh:''
         }
+    },
+    computed:{
+        ...mapGetters('login',['token','userId','corpCode','companyId','userRole'])
     },
     components: {
         TopNav,
+    },
+    async mounted() {
+
+        let defaulParams = {
+            token:this.token,
+            userId:this.userId,
+            corpCode:this.corpCode,
+            companyId:this.companyId,
+            userRole:this.userRole,
+        };
+        let res = await getOrderDetail({...defaulParams,orderId:this.$route.query.id});
+        if(res.code == 0){
+            this.name = res.data.sjr;
+            this.tel = res.data.mobile;
+            this.addr = res.data.address;
+            this.orderId = res.data.orderid;
+            this.time = res.data.createtime;
+            this.cjjk = res.data.cjjk;
+            this.dfh = res.data.dfh;
+            this.dsh = res.data.dsh;
+            this.th = res.data.th;
+            this.ypj = res.data.ypj;
+            this.ysh = res.data.ysh;
+            this.status = res.data.status;
+            this.zjg = res.data.zjg;
+            this.sfje = res.data.sfje;
+            this.ljyh = res.data.ljyh;
+        }
+    },
+    methods: {
+        goRefuse(){
+            this.$router.push({name:'refuseList',query:{id:this.orderId}})
+        },
+        goWaiteSend(){
+            this.$router.push({name:'waiteSend',query:{id:this.orderId}})
+        },
+        goWaiteGet(){
+            this.$router.push({name:'waiteGet',query:{id:this.orderId}})
+        },
+        goReturn(){
+            this.$router.push({name:'returnGoods',query:{id:this.orderId}})
+        },
+        goEvaList(){
+            this.$router.push({name:'hasEva',query:{id:this.orderId}})
+        },
+        goEvaForOrder(){
+            this.$router.push({name:'evaForOrder',query:{id:this.orderId}})
+        }
     },
 }
 </script>
@@ -179,7 +302,9 @@ export default {
                     background:rgba(235,235,235,1);
                     margin-right: 24px;
                     img{
-                        object-fit: contain;
+                        width: 100%;
+                        height: 100%;
+                        object-fit: scale-down;
                     }
                 }
             }
@@ -190,7 +315,7 @@ export default {
                     display: flex;
                     flex-direction: column;
                     margin-right: 10px;
-                    width: 110px;
+                    width: 130px;
                     text-align: center;
                     .desState{
                         font-size:24px;
@@ -229,6 +354,7 @@ export default {
         .priceInfo{
             background-color: #fff;
             width: 100%;
+            margin-bottom: 100px;
             .priceItem{
                 width: 660px;
                 display: flex;

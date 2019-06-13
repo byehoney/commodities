@@ -125,14 +125,21 @@ function getMoreKindsBranch(params){//获取更多分类里 小类
 }
 
 function getOrdersList(params){//获取订单列表   type  0 全部 1 待发货 2 待收货 3 待评价 4 退货
-    // let data = {...defaulParams,...params}
     return post('/order/get/type.do', params)
 }
+
+function getOrderDetail(params){//获取订单详情  
+    return post('/order/get/info.do', params)
+}
+
 function evaForOrder(params){//订单评价
     return post('/order/add/comment.do', params)
 }
 function getEvaList(params){//获取订单评价列表
     return post('/order/get/comment.do', params)
+}
+function getOrderStatuList(params){//根据订单状态获取对应列表
+    return post('/order/pruduct/orderstatus.do', params)
 }
 
 function getViewLogist(params){//获取物流信息
@@ -196,9 +203,11 @@ export {
     getChooseList,
     getChooseDetail,
     getOrdersList,
+    getOrderDetail,
     evaForOrder,
     getEvaList,
     getViewLogist,
+    getOrderStatuList,
     switchCompanyList,
     getMoreKindsMain,
     getMoreKindsBranch,

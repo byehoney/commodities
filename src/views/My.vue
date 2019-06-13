@@ -137,7 +137,10 @@ export default {
 </script>
 <style lang="scss" scoped>
     html{
-        background-color: #ebebeb;
+        background-color: #ebebeb !important;
+    }
+    .myContainer{
+        min-height: 99vh;
     }
     .info_area{
         display: flex;

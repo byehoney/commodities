@@ -6,7 +6,7 @@
         <img class="delect" src="../images/close.png" @click="delect(index)">
       </div>
     </template>
-    <div class="selPic"  v-if="imgUrls.length<6">
+    <div class="selPic"  v-if="imgUrls.length<1">
       <img src="../images/upload_icon.png" name="avatar">
       <!-- <span>{{pictureNums}}</span> -->
       <input type="file" maxlength="" class="input-file" multiple="multiple" name="avatar" ref="avatarInput" @change="changeImage($event)" accept="image/*">
@@ -23,7 +23,7 @@ export default {
   data () {
     return {
       showBigImg: false,
-      maxImages: 6,
+      maxImages: 1,
       leftImages: 0,
       pictureNums: '上传图片',
       imgUrls: [],
