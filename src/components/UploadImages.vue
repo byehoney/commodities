@@ -1,13 +1,14 @@
 <template>
   <div class="avatar">
-    <template v-if="imgUrls.length>0">
+    <!-- <template v-if="imgUrls.length>0">
       <div class="hasPic"  v-for="(item,index) in imgUrls" :key="index">
         <img class="seledPic" ref="picture" :src="item?item:require('../images/upload_icon.png')" name="avatar" @click="bigImg(index)">
         <img class="delect" src="../images/close.png" @click="delect(index)">
       </div>
-    </template>
-    <div class="selPic"  v-if="imgUrls.length<1">
-      <img src="../images/upload_icon.png" name="avatar">
+    </template> -->
+    <div class="selPic">
+      <img :src="imgUrls[0]" alt="" class="selImg">
+      <img src="../images/upload_icon.png" name="avatar" v-if="!imgUrls.length">
       <!-- <span>{{pictureNums}}</span> -->
       <input type="file" maxlength="" class="input-file" multiple="multiple" name="avatar" ref="avatarInput" @change="changeImage($event)" accept="image/*">
     </div>
@@ -58,6 +59,7 @@ export default {
           if (!e.target.files[0].size) return;
           this.file= e.target.files[0]
           this.file_key = e.target.files[0].name
+          this.imgUrls=[];
           e.target.value = ''
           var data = new FormData();//重点在这里 如果使用 var data = {}; data.inputfile=... 这样的方式不能正常上传
           data.append('token', this.token);
@@ -150,6 +152,15 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center; 
+    .selImg{
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      left: 0;
+      top: 0;
+      z-index: 90;
+      object-fit: scale-down;
+    }
   }
   .selPic img{
     // position: absolute;
