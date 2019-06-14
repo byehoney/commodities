@@ -67,10 +67,10 @@
       </div>
     </div>
     <div class="act_area" v-if="showTc||showMz">
-      <router-link to="/" v-if="showTc">
+      <router-link to="/hotSuit" v-if="showTc">
         <img src="../images/suit_banner.png" alt="">
       </router-link>
-      <router-link to="/" v-if="showMz">
+      <router-link to="/bestGoods" v-if="showMz">
         <img src="../images/specil_banner.png" alt="">
       </router-link>
     </div>
@@ -277,7 +277,7 @@ export default {
 .loop_pic {
   width: 750px;
   height: 613px;
-  margin-bottom: 15px;
+  // margin-bottom: 15px;
   /* background: #ccc; */
   position: relative;
 }

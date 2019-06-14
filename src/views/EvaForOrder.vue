@@ -66,6 +66,7 @@ let starOffImg = require("@/images/star_grey.png");
 let starOnImg = require("@/images/eva_star.png");
 import {evaForOrder} from '@/api/index'
 import {mapGetters} from 'vuex'
+import { setTimeout } from 'timers';
 export default {
   data() {
     return {
@@ -184,7 +185,14 @@ export default {
       };
       let res = await evaForOrder(defaulParams);
       if(res.code==0){
-        this.$router.go(-1)
+        Toast({
+            message: "评价成功",
+            position: "middle",
+            duration: 2000
+        });
+        setTimeout(()=>{
+          this.$router.go(-1)
+        },3000)
       }
     },
     rating(index, type,starNum,score,arr) {

@@ -158,6 +158,10 @@ function getSuitList(params){//获取套餐列表
     return post('/index/get/taocan.do', params)
 }
 
+function getBestGoodsList(params){//获取精品买赠列表
+    return post('/index/get/maiz.do', params)
+}
+
 function getHeatList(params) {//获取首页热门分类
     // let data = {...defaulParams,...params}
     return post('/index/heat/list.do', params)
@@ -212,6 +216,7 @@ export {
     getMoreKindsMain,
     getMoreKindsBranch,
     getActivityInfo,
+    getBestGoodsList,
     getSuitList,
     getHeatList,
     getSpecialList,

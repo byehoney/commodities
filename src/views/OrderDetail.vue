@@ -102,7 +102,7 @@
                             </div>
                         </template>
                     </div>
-                    <div class="shopRight" @click="goEvaForOrder">
+                    <div class="shopRight" @click="goEvaForOrder(ysh[0].url)">
                         <div class="shopDes">
                             <div class="desState">{{ysh[0].ordertype}}</div>
                             <div class="desNum">共{{ysh.length}}件</div>
@@ -214,8 +214,8 @@ export default {
         goEvaList(){
             this.$router.push({name:'hasEva',query:{id:this.orderId}})
         },
-        goEvaForOrder(){
-            this.$router.push({name:'evaForOrder',query:{id:this.orderId}})
+        goEvaForOrder(url){
+            this.$router.push({name:'evaForOrder',query:{id:this.orderId,url:url}})
         }
     },
 }

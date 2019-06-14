@@ -1,5 +1,5 @@
 <template>
-  <div class="telContainer">
+  <div class="telContainer" style="opacity:1">
     <TopNav></TopNav>
     <div class="telContent">
       <div
@@ -27,9 +27,9 @@
                 <div class="fun">
                   <p class="nPrice">￥6.50</p>
                   <div class="counter">
-                    <p class="reduce">-</p>
-                    <p class="num">0</p>
-                    <p class="add">+</p>
+                    <p class="reduce" @click="reduce(index)">-</p>
+                    <p class="num" @click="popInput(index)">0</p>
+                    <p class="add" @click="add(index)">+</p>
                   </div>
                 </div>
               </div>
@@ -61,19 +61,78 @@
         </ul>
       </div>
     </div>
+    <div class="mask" v-show="showInput">
+      <div class="inputModal">
+        <p class="title">修改购买数量</p>
+        <div class="funArea">
+          <div class="reduce" @click="popReduce">-</div>
+          <input type="number" min="1" v-model="num" class="num">
+          <div class="add" @click="popAdd">+</div>
+        </div>
+        <div class="btnGroup">
+          <div class="cancel btn" @click="closeInput">取消</div>
+          <div class="confirm btn" @click="confirmInput">确定</div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
 import { Toast } from "mint-ui";
 import TopNav from "@/components/TopNav";
+import { getBestGoodsList } from '@/api/index'
+import {mapGetters} from 'vuex'
 export default {
   data() {
-    return {};
+    return {
+      showInput:true,//是否显示输入框
+      num:1,//输入框内数字
+    };
+  },
+  computed:{
+    ...mapGetters('login',['token','userId','corpCode','companyId','userRole'])
   },
   components: {
     TopNav
   },
+  mounted() {
+    this.getData();
+  },
   methods: {
+    popReduce(){
+      if(this.num<=1){
+        this.num = 1;
+        return;
+      }else{
+        this.num = this.num-1;
+      }
+    },
+    popAdd(){
+      this.num = this.num+1;
+    },
+    popInput(){
+      this.showInput = true;
+      this.num = 1;
+    },
+    closeInput(){
+      this.showInput = false;
+    },
+    confirmInput(){
+      this.showInput = false;
+    },
+    handlerClick(){
+
+    },
+    async getData(){
+      let defaulParams = {
+        token:this.token,
+        userId:this.userId,
+        corpCode:this.corpCode,
+        companyId:this.companyId,
+        userRole:this.userRole,
+      };
+      let res = await getBestGoodsList(defaulParams);
+    },
     loadMore() {}
   }
 };
@@ -85,6 +144,83 @@ export default {
   background: rgba(235, 235, 235, 1);
   .nav {
     border-bottom: 2px solid #ebebeb;
+  }
+  .mask{
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,1);
+    z-index: 1000;
+    .inputModal{
+      width: 500px;
+      height: 250px;
+      background-color: #fff;
+      border-radius: 10px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin-top: -125px;
+      margin-left: -250px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      .btnGroup{
+        display: flex;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 60px;
+        border-top: 2px solid #ebebeb;
+        .btn{
+          width: 50%;
+          text-align: center;
+          line-height: 60px;
+          font-size: 26px;
+          &.confirm{
+            background-color: #ff1900;
+            color: #fff;
+            padding-right: 2px;
+          }
+        }
+      }
+      .title{
+        font-size: 26px;
+        color: rgba(102, 102, 102, 1);
+        line-height: 35px;
+        letter-spacing: 2px;
+        text-align: center;
+        padding: 30px 0;
+      }
+      .funArea{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .reduce,.add{
+          width: 50px;
+          height: 50px;
+          border: 2px solid #ebebeb;
+          font-size: 26px;
+          line-height: 50px;
+          text-align: center;
+        }
+        .num{
+          width: 100px;
+          height: 50px;
+          border-left: none;
+          border-right: none;
+          border-top: 2px solid #ebebeb;
+          border-bottom: 2px solid #ebebeb;
+          text-align: center;
+          font-size: 26px;
+          line-height: 50px;
+          outline: none;
+          color:#333;
+        }
+      }
+    }
   }
   .telContent {
     padding-top: 92px;

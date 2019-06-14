@@ -32,7 +32,7 @@
                         </div>
                     </div>
                     <div class="bottom">
-                        <div class="scanBtn" @click="scanOper" v-if="actIndex!=3||actIndex!=4">
+                        <div class="scanBtn" @click="scanOper" v-if="actIndex!=3&&actIndex!=4">
                             <img src="../images/saoma.png" alt="">
                             <span>付款码</span>
                         </div>
@@ -198,7 +198,7 @@ export default {
         next()
     },
     beforeRouteEnter (to, from, next) {
-        if(from.name == 'orderDetail'){
+        if(from.name == 'orderDetail'||from.name == 'evaForOrder'){
             to.meta.canKeep = true;
             next(vm => {
                 // 通过 `vm` 访问组件实例
@@ -600,7 +600,10 @@ export default {
                             display: flex;
                             justify-content: center;
                             align-items: center;
-                            background:linear-gradient(180deg,rgba(245,81,81,0.8) 0%,rgba(195,41,24,1) 100%);
+                            background: #ff1240;
+                            background: -webkit-linear-gradient(to right, #ff6238ed, #ff1240);
+                            background: linear-gradient(to right, #ff6238ed, #ff1240);
+                            background:linear-gradient(to right,rgba(245,81,81,1) 0%,rgba(195,41,24,1) 100%);
                             margin-right: 20px;
                             border-radius: 5px;
                             img{

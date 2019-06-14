@@ -19,8 +19,8 @@
                         <!-- <div class="saled">已销：700件</div> -->
                     </div>
                     <div class="bottom">
-                        <div class="nPrice">￥6.50</div>
-                        <div class="oPrice">8.80</div>
+                        <div class="nPrice">￥{{item.cgjg}}</div>
+                        <div class="oPrice">{{item.yj}}</div>
                     </div>
                 </div>
             </li>
@@ -61,7 +61,7 @@ export default {
                 pageNum:this.pageNum,
                 pageSize:this.pageSize
             };
-            let res = await getOrderStatuList({...defaulParams,orderId:this.$route.query.id,orderStatus:'待发货'})
+            let res = await getOrderStatuList({...defaulParams,orderId:this.$route.query.id,orderStatus:'厂商拒开'})
             if(res.code == 0){
                 if(!res.data.list.length){
                     this.hasMore = false;
@@ -124,6 +124,7 @@ export default {
                     img{
                         width: 100%;
                         height: 100%;
+                        object-fit: scale-down;
                     }
                 }
                 .right{

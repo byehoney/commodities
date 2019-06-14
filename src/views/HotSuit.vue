@@ -1,7 +1,7 @@
 <template>
     <div class="hotContainer">
         <TopNav></TopNav>
-        <div class="top">
+        <!-- <div class="top">
             <div class="left">
                 <img src="../images/car_dianpu.png" alt="">
                 <span>万家灯火烟花有限公司</span>
@@ -9,59 +9,32 @@
             <div class="right">
                 每日采集额：999
             </div>
-        </div>
-        <div
-        class="scrollBox"
-        style="max-height: 100vh; overflow-y: auto;"
-        v-infinite-scroll="loadMore"
-        infinite-scroll-disabled="loading"
-        infinite-scroll-distance="10">
-            <div class="scrollItem">
+        </div> -->
+        <div class="scrollBox">
+            <div class="scrollItem" v-for="(item,index) in list" :key="index">
                 <div class="left">
-                    <img src="../images/shopcar.png" alt="">
+                    <img :src="item.tctp" alt="">
                 </div>
                 <div class="right">
                     <div class="title">
                         <img src="../images/suit_icon.png" alt="">
-                        <span>2019新春红色大礼包套餐</span>
+                        <span>{{item.kbtcms}}</span>
                     </div>
-                    <div class="size">规格：100g</div>
-                    <div class="more">剩余：50</div>
+                    <!-- <div class="size">规格：100g</div> -->
+                    <div class="more">剩余：{{item.sytckszs}}</div>
                     <div class="price_btn">
                         <div class="price">
-                            <span class="nPrice">￥6.50</span>
-                            <span class="oPrice">原价：￥8.80</span>
+                            <span class="nPrice">￥{{item.tchdj}}</span>
+                            <span class="oPrice">原价：￥{{item.tcyj}}</span>
                         </div>
-                        <div class="btn">
-                            加入购物车
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="scrollItem">
-                <div class="left">
-                    <img src="../images/shopcar.png" alt="">
-                </div>
-                <div class="right">
-                    <div class="title">
-                        <img src="../images/suit_icon.png" alt="">
-                        <span>2019新春红色大礼包套餐</span>
-                    </div>
-                    <div class="size">规格：100g</div>
-                    <div class="more">剩余：50</div>
-                    <div class="price_btn">
-                        <div class="price">
-                            <span class="nPrice">￥6.50</span>
-                            <span class="oPrice">原价：￥8.80</span>
-                        </div>
-                        <div class="btn">
+                        <div class="btn" @click="addShopCar(item.kbtcbm)">
                             加入购物车
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="bottom">
+        <!-- <div class="bottom">
             <div class="left">
                 <img src="../images/choose_car.png" alt="">
                 <span>￥0</span>
@@ -69,7 +42,7 @@
             <div class="right">
                 确定
             </div>
-        </div>
+        </div> -->
     </div>
 </template>
 <script>
@@ -79,7 +52,7 @@ import TopNav from '@/components/TopNav'
 export default {
     data(){
         return{
-            
+            list:[]
         }
     },
     computed:{
@@ -92,6 +65,9 @@ export default {
         this.getData();
     },
     methods: {
+        addShopCar(id){
+            
+        },
         async getData(){
             let defaulParams = {
                 token:this.token,
@@ -101,17 +77,17 @@ export default {
                 userRole:this.userRole,
             };
             let res = await getSuitList(defaulParams);
+            if(res.code==0){
+                this.list = res.data.list;
+            }
         },
-        loadMore(){
-
-        }
     },
 }
 </script>
 <style lang="scss" scoped>
 .hotContainer{
     width: 100vw;
-    min-height: 100vh;
+    // min-height: 100vh;
     background:rgba(235,235,235,1);
     .nav{
         border-bottom: 2px solid #e5e5e5;
@@ -186,6 +162,7 @@ export default {
     .scrollBox{
         padding-left: 38px;
         background-color: #fff;
+        margin-top: 88px;
         .scrollItem{
             display: flex;
             align-items: center;
@@ -260,6 +237,7 @@ export default {
                         text-align: center;
                         color: #fff;
                         font-size: 22px;
+                        padding:0 5px;
                     }
                 }
             }

@@ -1,5 +1,5 @@
 <template>
-    <div class="hasEvaContainer">
+    <div class="hasEvaContainer" style="opacity:1">
         <TopNav></TopNav>
         <ul
             class="content"
@@ -9,18 +9,18 @@
         >
             <li class="listItem" v-for="(item,index) in list" :key="index">
                 <div class="top">
-                    <img src="../images/shopcar.png" class="left" alt="">
+                    <img :src="item.url" class="left" alt="">
                     <div class="mid">
-                        <div class="name">烟花商品名称</div>
+                        <div class="name">{{item.productname}}</div>
                         <div class="evaLeval">
                             <span class="text">评分</span>
-                            <img class="star" v-for="n in 4" :key="n" src="../images/eva_star.png" alt="">
+                            <img class="star" v-for="n in Math.ceil(parseInt(item.bzpj)+parseInt(item.psypj)+parseInt(item.shsdpj))/3" :key="n" src="../images/eva_star.png" alt="">
                         </div>
                     </div>
-                    <div class="right">2019-05-12</div>
+                    <div class="right">{{item.time.split(' ')[0]}}</div>
                 </div>
                 <div class="bottom">
-                    一直都买，用的非常好
+                    {{item.comment}}
                 </div>
             </li>
         </ul>
@@ -124,6 +124,7 @@ export default {
                     .left{
                         width: 172px;
                         height: 122px;
+                        object-fit: scale-down;
                     }
                     .mid{
                         display: flex;
