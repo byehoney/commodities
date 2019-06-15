@@ -150,6 +150,11 @@ function getActivityInfo(params){//首页 是否显示套餐 买赠活动
     return post('/index/mztc/status.do', params)
 }
 
+function getMyUserOrderNum(params){//获取我的页面 各种订单状态数
+    return post('/user/order/num.do', params)
+}
+
+
 function switchCompanyList(params){//首页切换门店 门店数据
     return post('/client/list/usercode.do', params)
 }
@@ -203,6 +208,7 @@ export {
     upDateAddr,
     setDefaultAddr,
     getMyInfo,
+    getMyUserOrderNum,
     getCompanyInfo,
     getChooseList,
     getChooseDetail,

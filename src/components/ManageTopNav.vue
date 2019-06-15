@@ -35,6 +35,7 @@ export default {
         left: 0;
         z-index: 1000;
         .leftIcon{
+            width: 60px;
             position: absolute;
             top: 25px;
             left: 30px;

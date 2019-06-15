@@ -26,17 +26,29 @@ const router = new Router({
             path: "/list",
             name: "list",
             component: () =>
-                import(/* webpackChunkName: "list" */ './views/List.vue')
+                import(/* webpackChunkName: "list" */ './views/List.vue'),
+                meta: {
+                    auth: true,
+                    keepAlive: false,
+                }
         }, {
             path: "/detail",
             name: "detail",
             component: () =>
-                import(/* webpackChunkName: "detail" */ './views/Detail.vue')
+                import(/* webpackChunkName: "detail" */ './views/Detail.vue'),
+                meta: {
+                    auth: true,
+                    keepAlive: false,
+                }
         }, {
             path: "/flashdetail",
             name: "flashdetail",
             component: () =>
-                import(/* webpackChunkName: "flashdetail" */ './views/FlashDetail.vue')
+                import(/* webpackChunkName: "flashdetail" */ './views/FlashDetail.vue'),
+                meta: {
+                    auth: true,
+                    keepAlive: false,
+                }
         }, {
             path: "/watch",
             name: "watch",
@@ -52,7 +64,7 @@ const router = new Router({
             component: () =>
                 import(/* webpackChunkName: "choose" */ './views/Choose.vue'),
             meta: {
-                auth: false,
+                auth: true,
                 keepAlive: true,
                 canKeep: false
             }
@@ -66,7 +78,7 @@ const router = new Router({
             component: () =>
                 import(/* webpackChunkName: "shopcar" */ './views/ShopCar.vue'),
             meta: {
-                auth: false,
+                auth: true,
                 keepAlive: false
             }
         },
@@ -104,7 +116,7 @@ const router = new Router({
             component: () =>
                 import(/* webpackChunkName: "search" */ './views/Search.vue'),
             meta: {
-                auth: false,
+                auth: true,
                 keepAlive: false
             }
         },
@@ -130,7 +142,7 @@ const router = new Router({
             component: () =>
                 import(/* webpackChunkName: "baseInfo" */ './views/BaseInfo.vue'),
             meta: {
-                auth: false,
+                auth: true,
                 keepAlive: false,
                 title: '个人中心',
             }
@@ -144,7 +156,7 @@ const router = new Router({
             component: () =>
                 import(/* webpackChunkName: "address" */ './views/Address.vue'),
             meta: {
-                auth: false,
+                auth: true,
                 keepAlive: false
             }
         },
@@ -294,7 +306,7 @@ const router = new Router({
             component: () =>
                 import(/* webpackChunkName: "addNewAdr" */ './views/AddNewAdr.vue'),
             meta: {
-                auth: false,
+                auth: true,
                 keepAlive: false,
                 title: '新增收货地址'
             }
@@ -316,7 +328,7 @@ const router = new Router({
             component: () =>
                 import(/* webpackChunkName: "myOrders" */ './views/MyOrders.vue'),
             meta: {
-                auth: false,
+                auth: true,
                 keepAlive: true,
                 title: '我的订单',
                 canKeep: false
@@ -328,7 +340,7 @@ const router = new Router({
             component: () =>
                 import(/* webpackChunkName: "confirmOrders" */ './views/ConfirmOrders.vue'),
             meta: {
-                auth: false,
+                auth: true,
                 keepAlive: false,
                 title: '确认订单',
                 canKeep: false
@@ -373,7 +385,7 @@ const router = new Router({
             component: () =>
                 import(/* webpackChunkName: "waiteGet" */ './views/WaiteGet.vue'),
             meta: {
-                auth: false,
+                auth: true,
                 keepAlive: false,
                 title: '待收货'
             }
@@ -384,7 +396,7 @@ const router = new Router({
             component: () =>
                 import(/* webpackChunkName: "waiteSend" */ './views/WaiteSend.vue'),
             meta: {
-                auth: false,
+                auth: true,
                 keepAlive: false,
                 title: '待发货'
             }
@@ -395,7 +407,7 @@ const router = new Router({
             component: () =>
                 import(/* webpackChunkName: "returnGoods" */ './views/ReturnGoods.vue'),
             meta: {
-                auth: false,
+                auth: true,
                 keepAlive: false,
                 title: '退货'
             }
@@ -406,7 +418,7 @@ const router = new Router({
             component: () =>
                 import(/* webpackChunkName: "applyReturn" */ './views/ApplyReturn.vue'),
             meta: {
-                auth: false,
+                auth: true,
                 keepAlive: false,
                 title: '申请退货'
             }
@@ -449,7 +461,7 @@ const router = new Router({
             component: () =>
                 import(/* webpackChunkName: "hotSuit" */ './views/HotSuit.vue'),
             meta: {
-                auth: false,
+                auth: true,
                 keepAlive: true,
                 title: '人气套餐'
             }
@@ -460,7 +472,7 @@ const router = new Router({
             component: () =>
                 import(/* webpackChunkName: "suitDetail" */ './views/SuitDetail.vue'),
             meta: {
-                auth: false,
+                auth: true,
                 keepAlive: true,
                 title: '套餐详情'
             }
@@ -510,6 +522,17 @@ const router = new Router({
             }
         },
         {
+            path: '/manageCustomerRank',//销售走向图
+            name: 'manageCustomerRank',
+            component: () =>
+                import(/* webpackChunkName: "manageCustomerRank" */ './views/ManageCustomerRank.vue'),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title: 'xx店铺'
+            }
+        },
+        {
             path: '/agreement',
             name: 'agreement',
             component: () =>
@@ -528,7 +551,7 @@ const router = new Router({
             meta: {
                 auth: true,
                 keepAlive: true,
-                title: '人云科技软件服务及隐私协议'
+                title: '更多分类'
             }
         },
         {

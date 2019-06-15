@@ -24,22 +24,22 @@
             <div class="op_item" @click="goOrders(1)">
                 <img src="../images/waite_send.png" class="op_icon" alt="">
                 <p class="op_text">待发货</p>
-                <span class="op_num">3</span>
+                <span class="op_num" v-if="wsNum>0">{{wsNum}}</span>
             </div>
             <div class="op_item" @click="goOrders(2)">
                 <img src="../images/waite_get.png" class="op_icon" alt="">
                 <p class="op_text">待收货</p>
-                <span class="op_num">3</span>
+                <span class="op_num" v-if="wgNum>0">{{wgNum}}</span>
             </div>
             <div class="op_item" @click="goOrders(3)">
                 <img src="../images/waite_eva.png" class="op_icon" alt="">
                 <p class="op_text">待评价</p>
-                <span class="op_num">3</span>
+                <span class="op_num" v-if="weNum>0">{{weNum}}</span>
             </div>
             <div class="op_item" @click="goOrders(4)">
                 <img src="../images/waite_send.png" class="op_icon" alt="">
                 <p class="op_text">退货</p>
-                <!-- <span class="op_num">3</span> -->
+                <span class="op_num" v-if="tNum>0">{{tNum}}</span>
             </div>
             <div class="op_item" @click="goOrders(0)">
                 <img src="../images/all_order.png" class="op_icon" alt="">
@@ -86,12 +86,16 @@
 <script>
 import { mapState ,mapMutations,mapGetters} from 'vuex';
 import TabBarBottom from '@/components/TabBarBottom';
-import {getMyInfo} from '@/api/index';
+import {getMyInfo,getMyUserOrderNum} from '@/api/index';
 // import CityPicker from '@/components/CityPicker'
 export default {
     name:'my',
     data(){
         return{
+            wsNum:0,
+            wgNum:0,
+            weNum:0,
+            tNum:0,
             addr:''
         }
     },
@@ -113,7 +117,12 @@ export default {
             userRole:this.userRole,
         } 
         let res = await getMyInfo(defaulParams)
+        let result = await getMyUserOrderNum(defaulParams);
         this.addr = res.data.clientMap.cvName;
+        this.wsNum = result.data.dfhnum;
+        this.wgNum = result.data.dshnum;
+        this.weNum = result.data.dpjnum;
+        this.tNum = result.data.thnum;
     },
     methods:{
         ...mapMutations('login',['LOGOUT']),
@@ -140,7 +149,7 @@ export default {
         background-color: #ebebeb !important;
     }
     .myContainer{
-        min-height: 99vh;
+        // min-height: 99vh;
     }
     .info_area{
         display: flex;
