@@ -1,12 +1,9 @@
 import * as type from './mutations_types'
-import { stat } from 'fs';
+import { getCarList } from "../../../api/index"
 export default {
     namespaced: true,
     state: {
-        shopData:{
-            head:"",
-            cjl:"",
-        },
+        shopData: { },
         shopResult: false,
         fetchData: {
             list: [
@@ -131,18 +128,33 @@ export default {
 
     },
     mutations: {
-     
+        [type.GET_SHOP_LIST](state, res) {
+            state.shopData = res.data
+        },
         manage(state) {
             state.fetchData.is_success = !state.fetchData.is_success
         },
 
+
     },
     actions: {
-        chooseOnly({ commit }) {
-            commit("type.CHOOSYALL")
-        },
-        chooseAll({commit}){
-            commit("shopchoose")
+        async getShopMsg({ commit }, data) {
+            let res = await getCarList({
+                token: data.token,
+                userId: data.userId,
+                corpCode: data.corpCode,
+                companyId: data.companyId,
+                userRole: data.userRole
+            })
+            if(res.code==0){
+                console.log(res.data.list)
+                res.data.list.forEach(item => {
+                    item.checked=false
+                    item.allnum=0
+                });
+                commit(type.GET_SHOP_LIST, res)
+            }
+           
         }
     }
 }

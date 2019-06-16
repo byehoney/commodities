@@ -1,35 +1,35 @@
 <template>
   <div>
-    <div class="list_shopcar fix" v-for="(item,index) in fetchData.list" :key="index">
+    <div class="list_shopcar fix" >
       <div>
         <div class="list_shopcar_title">
           <div class="list_shopcar_name">
             <div
               class="list_shopcar_circle"
-              :class="item.check?'checked':''"
+              :class="checked?'checked':''"
               @click="shopchoose(item)"
             ></div>
-            <span>{{shopResult.shopHead.syname}}</span>
+            <span>{{shopData.head.syname}}</span>
           </div>
-          <div class="list_shopcar_desc">每日采集额:{{shopResult.shopHead.cjl}}</div>
+          <div class="list_shopcar_desc">每日采集额:{{shopData.head.cjl}}</div>
         </div>
-        <div class="list_shopcar_content fix" v-for="(list,index) in item.products" :key="index">
+        <div class="list_shopcar_content fix" v-for="(list,index) in shopData.list" :key="index">
           <div
             class="list_shopcar_circle"
             :class="list.checked?'checked':''"
-            @click="choose(item,list)"
+            @click="choose(list)"
           ></div>
           <div class="com_add">
             <div class="list_shopcar_pic">
-              <img :src="item.pro_img">
+              <img :src="list.imgurl">
             </div>
             <div class="list_shopcar_com fix">
               <div class="list_shopcar_com_top fix">
                 <div class="list_shopcar_com_top_title">
-                  <p>{{list.pro_text}}</p>
-                  <p>{{list.pro_place}}</p>
-                  <p>{{list.pro_depot}}</p>
-                  <p>原价:{{list.pro_price}}</p>
+                  <p>{{list.formalname}}</p>
+                  <p>{{list.factory}}</p>
+                  <p>{{list.specification}}</p>
+                  <p>原价:{{list.platformprice}}</p>
                 </div>
               </div>
               <div class="list_shopcar_com_bottom fix">
@@ -40,7 +40,7 @@
                     <li>
                       <input
                         type="number"
-                        v-model="list.pro_num"
+                        v-model="list.packnumber"
                         class="sum"
                         v-on:input="calculate(pro)"
                       >
@@ -89,7 +89,7 @@
           </div>
           <div class="shop_footer_result">
             <span>结算</span>
-            <span>({{this.fetchData.allnum}})</span>
+            <span>({{shopData.list.allnum}})</span>
           </div>
         </div>
         <div class="shop_footer_right" v-else>
@@ -102,7 +102,6 @@
 
 <script>
 import { getCarList } from "@/api/index";
-
 import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
 export default {
   data() {
@@ -110,13 +109,6 @@ export default {
       is_checked: 0,
       checked: false,   //是否选中
       menuShow:0,       //商品活动的展开或折叠
-      shopResult:{
-          shopHead:{
-               title:"",
-               cjl:""
-          }
-
-      }
     };
   },
   computed: {
@@ -136,16 +128,16 @@ export default {
     ])
   },
   methods: {
+    ...mapActions("shopCar", ["getShopMsg"]),
     changeMenu(index) {
      if(this.menuShow==index){
        this.menuShow=-1
      }else{
        this.menuShow=index
      }
-        
-    
     },
-    choosetrue(item, pro) {
+    choosetrue(pro) {
+      console.log(pro)
       pro.checked = true; //将商品选中状态改为true
       ++item.choose === item.products.length ? (item.check = true) : ""; //这里执行了两部，选中商品数量先+1，再与该店铺商品数量比较，如果相等就更改店铺选中状态为true
       item.check
@@ -156,20 +148,20 @@ export default {
       this.fetchData.allsum += pro.pro_sum;
       this.fetchData.allnum += pro.pro_num;
     },
-    choosefalse(item, pro) {
+    choosefalse(pro) {
       pro.checked = false; //将商品选中状态改为false
       --item.choose; //选中商品数量-1
       if (item.check) {
         //如果店铺是被选中的，更改店铺选中状态
-        item.check = false;
+        // item.check = false;
         --this.fetchData.allchoose; //并且选中店铺数量-1
       }
       this.fetchData.status = false; //无论之前全选的状态，将其改为false就行
       this.fetchData.allsum -= pro.pro_sum; //商品总计价格变动
       this.fetchData.allnum -= pro.pro_num;
     },
-    choose(item, pro) {
-      !pro.checked ? this.choosetrue(item, pro) : this.choosefalse(item, pro);
+    choose(pro) {
+      !pro.checked ? this.choosetrue(pro) : this.choosefalse(pro);
     },
     shoptrue(item) {
       item.products.forEach(pro => {
@@ -260,10 +252,14 @@ export default {
       companyId: this.companyId,
       userRole: this.userRole
     };
-    let { data } = await getCarList(defaulParams);
-    this.shopResult.shopHead=data.head
-    console.log(this.shopResult)
-  }
+    // let { data } = await getCarList(defaulParams);
+    // this.shopResult.shopHead=data.head
+    console.log(this.shopData)
+    this.getShopMsg(defaulParams)
+
+    
+
+  }  
 };
 </script>
 
@@ -339,6 +335,7 @@ export default {
 }
 .list_shopcar_pic img {
   width: 100%;
+  height: 100%;
 }
 .list_shopcar_com {
   float: left;
