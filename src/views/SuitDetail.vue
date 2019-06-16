@@ -10,14 +10,14 @@
             <div class="suitInfo">
                 <div class="top">
                     <img src="../images/suit_icon.png" alt="">
-                    <span>2019新春红色大礼包套餐</span>
+                    <span>{{$route.query.kbtcms}}</span>
                 </div>
                 <div class="bottom">
                     <div class="price">
-                        <span class="nPrice">￥15</span>
-                        <span class="oPrice">￥18</span>
+                        <span class="nPrice">￥{{$route.query.tchdj}}</span>
+                        <span class="oPrice">￥{{$route.query.tcyj}}</span>
                     </div>
-                    <div class="btn">
+                    <div class="btn" @click="confirm">
                         加入购物车
                     </div>
                 </div>
@@ -38,8 +38,8 @@
                             <p class="size">规格：{{item.guige}}</p>
                             <p class="leave">剩余：{{item.sytckszs}}</p>
                             <p class="price">
-                                <span class="nPrice">￥{{item.dptcjg}}</span>
-                                <span class="oPrice">原价：￥{{item.dpyj}}</span>
+                                <span class="nPrice">￥{{item.tchdj}}</span>
+                                <span class="oPrice">原价：￥{{item.tcyj}}</span>
                             </p>
                         </div>   
                     </div> 
@@ -59,8 +59,8 @@
 </template>
 <script>
 import { Toast } from "mint-ui";
-import { mapGetters } from 'vuex'
-import { getSuitDetail } from '@/api/index'
+import { mapGetters,mapState } from 'vuex'
+import { getSuitDetail,addToCar } from '@/api/index'
 import TopNav from '@/components/TopNav'
 export default {
     data(){
@@ -70,6 +70,7 @@ export default {
     },
     computed:{
         ...mapGetters('login',['token','userId','corpCode','companyId','userRole']),
+        ...mapState('login',['user']),
     },
     components:{
         TopNav,
@@ -89,7 +90,43 @@ export default {
         }
     },
     methods:{
-        
+        async confirm(){
+            let defaulParams = {
+                token:this.token,
+                userId:this.userId,
+                corpCode:this.corpCode,
+                companyId:this.companyId,
+                userRole:this.userRole,
+            }; 
+            let selArr = [];
+            this.list.forEach((item,index)=>{
+                selArr.push({
+                    mzhdlx:'套餐',
+                    pzlx:false,
+                    ghsbm:'',
+                    hdms:item.kbtcms,
+                    hddz:item.tctp,
+                    tcj:item.tchdj,
+                    gmsz:1,
+                    hdbm:item.kbtcbm,
+                    jghdlx:'无',
+                    productId:item.productcode,
+                    cartNum:item.mzdpgmsl,
+                    pzdj:item.dptcjg,
+                    pzyj:item.dpyj,
+                    mobile:this.user.mobile
+                })
+            })
+            let res = await addToCar({...defaulParams,jsonStr:JSON.stringify(selArr)});
+            if(res.code == 0){
+                Toast({
+                    message: "加入购物车成功", //弹窗内容
+                    position: "middle", //弹窗位置
+                    duration: 1000 //弹窗时间毫秒,如果值为-1，则不会消失
+                });
+            }
+            console.log(selArr)
+        }
     }
 }
 </script>

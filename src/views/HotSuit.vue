@@ -11,7 +11,7 @@
             </div>
         </div> -->
         <div class="scrollBox">
-            <div class="scrollItem" v-for="(item,index) in list" :key="index" @click="goDetail(item.kbtcbm)">
+            <div class="scrollItem" v-for="(item,index) in list" :key="index" @click="goDetail(item.kbtcbm,item.tcyj,item.tchdj,item.kbtcms)">
                 <div class="left">
                     <img :src="item.tctp" alt="">
                 </div>
@@ -27,7 +27,7 @@
                             <span class="nPrice">￥{{item.tchdj}}</span>
                             <span class="oPrice">原价：￥{{item.tcyj}}</span>
                         </div>
-                        <div class="btn" @click="addShopCar($event,item.kbtcbm)">
+                        <div class="btn" @click="addShopCar($event,index)">
                             加入购物车
                         </div>
                     </div>
@@ -47,8 +47,8 @@
 </template>
 <script>
 import { Toast } from "mint-ui";
-import { mapGetters } from 'vuex'
-import { getSuitList } from '@/api/index'
+import { mapGetters,mapState } from 'vuex'
+import { getSuitList ,addToCar} from '@/api/index'
 import TopNav from '@/components/TopNav'
 export default {
     data(){
@@ -58,6 +58,7 @@ export default {
     },
     computed:{
         ...mapGetters('login',['token','userId','corpCode','companyId','userRole']),
+        ...mapState('login',['user'])
     },
     components:{
         TopNav,
@@ -66,11 +67,45 @@ export default {
         this.getData();
     },
     methods: {
-        addShopCar(e,id){
+        async addShopCar(e,index){
             e.stopPropagation();
+            let defaulParams = {
+                token:this.token,
+                userId:this.userId,
+                corpCode:this.corpCode,
+                companyId:this.companyId,
+                userRole:this.userRole,
+            }; 
+            let selArr = [];
+            this.list[index].list.forEach((item,index)=>{
+                selArr.push({
+                    mzhdlx:'套餐',
+                    pzlx:false,
+                    ghsbm:'',
+                    hdms:item.kbtcms,
+                    hddz:item.tctp,
+                    tcj:item.tchdj,
+                    gmsz:1,
+                    hdbm:item.kbtcbm,
+                    jghdlx:'无',
+                    productId:item.productcode,
+                    cartNum:item.mzdpgmsl,
+                    pzdj:item.dptcjg,
+                    pzyj:item.dpyj,
+                    mobile:this.user.mobile
+                })
+            })
+            let res = await addToCar({...defaulParams,jsonStr:JSON.stringify(selArr)});
+            if(res.code == 0){
+                Toast({
+                    message: "加入购物车成功", //弹窗内容
+                    position: "middle", //弹窗位置
+                    duration: 1000 //弹窗时间毫秒,如果值为-1，则不会消失
+                });
+            }
         },
-        goDetail(id){
-            this.$router.push({name:'suitDetail',query:{id:id}})
+        goDetail(id,tcyj,tchdj,kbtcms){
+            this.$router.push({name:'suitDetail',query:{id:id,tcyj:tcyj,tchdj:tchdj,kbtcms:kbtcms}})
         },
         async getData(){
             let defaulParams = {
