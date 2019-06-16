@@ -17,13 +17,13 @@
             <img class="sel_icon" @click="checkedPo(index,jIndex,pterm.productcode)" :src="pterm.checked?require('../images/car_checkcircle.png'):require('../images/car_circle.png')" alt>
             <div class="box">
               <div class="left">
-                <img :src="pterm.dptplj?pterm.dptplj:require('../images/logo.png')" alt>
+                <img :src="pterm.dptplj?pterm.dptplj:require('../images/default_logo.jpg')" alt>
               </div>
               <div class="right">
                 <p class="name">{{pterm.productname}}</p>
                 <p class="factory">{{pterm.cj}}</p>
                 <p class="size">规格：{{pterm.guige}}</p>
-                <p class="oPrice">原价：￥{{pterm.dj}}</p>
+                <p class="oPrice">原价：￥{{pterm.pzyj}}</p>
                 <div class="fun">
                   <p class="nPrice">￥{{pterm.dj}}</p>
                   <div class="counter">
@@ -44,8 +44,7 @@
               <div class="shop_gift_right">
                 <p>累积购买可获赠品，点击查看更多活动规则</p>
                 <div class="activity" v-if="item[0].showAct">
-                  <p>累积购买可获赠品，点击查看更多活动规则</p>
-                  <p>累积购买可获赠品，点击查看更多活动规则</p>
+                  <p v-for="(act,index) in item[0].sphd.split(',')" :key="index">{{act}}</p>
                 </div>
               </div>
               <img class="arrIcon" :src="item[0].showAct?require('../images/arrow_down.png'):require('../images/arrow_up.png')" alt="" @click="showActDetail(index)">
@@ -88,7 +87,7 @@
 import { Toast } from "mint-ui";
 import TopNav from "@/components/TopNav";
 import { getBestGoodsList ,addToCar} from '@/api/index'
-import {mapGetters} from 'vuex'
+import {mapGetters,mapState} from 'vuex'
 export default {
   data() {
     return {
@@ -101,6 +100,7 @@ export default {
     };
   },
   computed:{
+    ...mapState('login',['user']),
     ...mapGetters('login',['token','userId','corpCode','companyId','userRole'])
   },
   components: {
@@ -147,7 +147,7 @@ export default {
       this.$set(this.list[this.cIndex][this.cJindex],'num',this.num);
       this.countMoney();
     },
-    handlerClick(){
+    async handlerClick(){
       let defaulParams = {
         token:this.token,
         userId:this.userId,
@@ -155,10 +155,43 @@ export default {
         companyId:this.companyId,
         userRole:this.userRole,
       };
-      let josnStr = [];
-      // this.list.forEach((item,index)=>{
-      //   item.forEach
-      // })
+      let selArr = [];
+      this.list.forEach((item,index)=>{
+        item.forEach((ls,ln)=>{
+          if(ls.checked){
+            selArr.push({
+              mzhdlx:'买赠',
+              pzlx:false,
+              ghsbm:'',
+              hdbm:ls.mzhdbm,
+              jghdlx:'无',
+              productId:ls.productcode,
+              cartNum:ls.num,
+              pzdj:ls.dj,
+              pzyj:ls.pzyj,
+              mobile:this.user.mobile
+            })
+          }
+        })
+      })
+      let res = await addToCar({...defaulParams,jsonStr:JSON.stringify(selArr)})
+      if(res.code==0){
+        Toast({
+          message: "加入购物车成功", //弹窗内容
+          position: "middle", //弹窗位置
+          duration: 1000 //弹窗时间毫秒,如果值为-1，则不会消失
+        });
+        this.resetList();
+      }
+    },
+    resetList(){//加入完购物车以后清空之前选择的数据
+      this.list.forEach((item,index)=>{
+        item.forEach((ls,ln)=>{
+          ls.num = 1;
+          ls.checked = false
+        })
+      })
+      this.money = 0;
     },
     checkedPo(index,jIndex,proCode){
       this.$set(this.list[index][jIndex],'checked',!this.list[index][jIndex].checked);
@@ -220,13 +253,13 @@ export default {
     z-index: 1000;
     .inputModal{
       width: 500px;
-      height: 250px;
+      height: 300px;
       background-color: #fff;
       border-radius: 10px;
       position: absolute;
       top: 50%;
       left: 50%;
-      margin-top: -125px;
+      margin-top: -150px;
       margin-left: -250px;
       display: flex;
       flex-direction: column;
@@ -238,12 +271,12 @@ export default {
         bottom: 0;
         left: 0;
         width: 100%;
-        height: 60px;
+        height: 80px;
         border-top: 2px solid #ebebeb;
         .btn{
           width: 50%;
           text-align: center;
-          line-height: 60px;
+          line-height: 80px;
           font-size: 26px;
           &.confirm{
             background-color: #ff1900;

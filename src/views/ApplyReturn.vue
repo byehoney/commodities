@@ -136,6 +136,7 @@ export default {
                 height:184px;
                 border:2px solid rgba(151,151,151,1);
                 margin-bottom: 62px;
+                padding-top: 5px;
                 textarea{
                     width: 624px;
                     height: 146px;

@@ -146,6 +146,10 @@ function getViewLogist(params){//获取物流信息
     return post('/order/get/express.do', params)
 }
 
+function backGOods(params){//退货
+    return post('order/status/tuihuo.do', params)
+}
+
 function getActivityInfo(params){//首页 是否显示套餐 买赠活动
     return post('/index/mztc/status.do', params)
 }
@@ -238,6 +242,7 @@ export {
     getMoreKindsBranch,
     getActivityInfo,
     getBestGoodsList,
+    backGOods,
     getPub,
     addToCar,
     getCarList,

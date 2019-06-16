@@ -69,7 +69,7 @@
                 <ul>
                   <li>
                     所在地区：
-                    <a>广东省</a>
+                    <a>{{shopDetail.szdq}}</a>
                   </li>
                 </ul>
               </div>
@@ -104,7 +104,7 @@
         <div class="storesave_list bd fix">
           <ul>
             <li>活动</li>
-            <li>满88 减40</li>
+            <li>{{shopDetail.hdname}}</li>
           </ul>
         </div>
       </div>
@@ -114,7 +114,7 @@
           <ul>
             <li>
               <span>所在地区：</span>
-              <span>北京</span>
+              <span>{{shopDetail.szdq}}</span>
             </li>
             <li>
               <span>销量：</span>
@@ -131,7 +131,7 @@
             </li>
             <li>
               <span>活动</span>
-              <span>满88员，省10元</span>
+              <span>{{shopDetail.hdname}}</span>
             </li>
           </ul>
         </div>
@@ -211,7 +211,7 @@
           <ul>
             <li>
               <img src="../images/shopcar.png">
-              <p class="badge">{{shopnum}}</p>
+              <p class="badge">0</p>
             </li>
             <li>
               <img src="../images/kefu.png">
@@ -252,7 +252,7 @@
             </div>
           </div>
           <div>
-            <span>单品合记：</span>
+            <span>单品合计：</span>
             <span>¥{{money}}</span>
           </div>
         </div>
@@ -332,11 +332,21 @@ export default {
           cartNum:this.shopnum,
           pzdj:this.shopDetail.cxj,
           pzyj:this.shopDetail.ptsj,
-          userMobile:this.user.mobile
+          mobile:this.user.mobile
         }]
       )
       if(this.type == 'add'){
         let res = await addToCar({...defaulParams,jsonStr:jsonStr});
+        if(res.code == 0){
+          Toast({
+            message: "加入购物车成功", //弹窗内容
+            position: "middle", //弹窗位置
+            duration: 1000 //弹窗时间毫秒,如果值为-1，则不会消失
+          });
+          this.num = 1;
+          this.shopnum = 1;
+          this.popupVisible = false;
+        }
       }
     },
     popReduce(){
@@ -495,6 +505,7 @@ a {
   img {
     width: 100%;
     height: 100%;
+    object-fit: cover;
   }
 }
 .detail_content {
@@ -928,13 +939,13 @@ span {
     z-index: 10000;
     .inputModal{
       width: 500px;
-      height: 250px;
+      height: 300px;
       background-color: #fff;
       border-radius: 10px;
       position: absolute;
       top: 50%;
       left: 50%;
-      margin-top: -125px;
+      margin-top: -150px;
       margin-left: -250px;
       display: flex;
       flex-direction: column;
@@ -946,12 +957,12 @@ span {
         bottom: 0;
         left: 0;
         width: 100%;
-        height: 60px;
+        height: 80px;
         border-top: 2px solid #ebebeb;
         .btn{
           width: 50%;
           text-align: center;
-          line-height: 60px;
+          line-height: 80px;
           font-size: 26px;
           &.confirm{
             background-color: #ff1900;

@@ -2,9 +2,9 @@
     <div class="suitContainer">
         <TopNav></TopNav>
         <div class="content">
-            <mt-swipe :auto="4000" class="suit_swiper">
+            <mt-swipe :auto="0" class="suit_swiper">
                 <mt-swipe-item v-for="(item,index) in list" :key="index">
-                    <img class="banner" :src="item.tctp" alt="">
+                    <img class="banner" :src="item.dptplj" alt="">
                 </mt-swipe-item>
             </mt-swipe>
             <div class="suitInfo">
