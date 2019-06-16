@@ -3,6 +3,10 @@ import { stat } from 'fs';
 export default {
     namespaced: true,
     state: {
+        shopData:{
+            head:"",
+            cjl:"",
+        },
         shopResult: false,
         fetchData: {
             list: [
@@ -127,9 +131,11 @@ export default {
 
     },
     mutations: {
+     
         manage(state) {
             state.fetchData.is_success = !state.fetchData.is_success
-        }
+        },
+
     },
     actions: {
         chooseOnly({ commit }) {

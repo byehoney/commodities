@@ -2,7 +2,7 @@ import axios from 'axios'
 import qs from 'qs'
 import store from 'store/index'
 import { Indicator, Toast } from 'mint-ui'
-axios.defaults.timeout = 360000 // 请求超时时间
+axios.defaults.timeout = 100000 // 请求超时时间
 axios.defaults.baseURL = process.env.VUE_APP_BASE_API
 
 axios.defaults.headers.post['Content-Type'] =

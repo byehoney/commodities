@@ -9,9 +9,9 @@
               :class="item.check?'checked':''"
               @click="shopchoose(item)"
             ></div>
-            <span>{{item.shop_name}}</span>
+            <span>{{shopResult.shopHead.syname}}</span>
           </div>
-          <div class="list_shopcar_desc">{{item.pro_brand}}</div>
+          <div class="list_shopcar_desc">每日采集额:{{shopResult.shopHead.cjl}}</div>
         </div>
         <div class="list_shopcar_content fix" v-for="(list,index) in item.products" :key="index">
           <div
@@ -108,8 +108,15 @@ export default {
   data() {
     return {
       is_checked: 0,
-      checked: false,
-      menuShow:0
+      checked: false,   //是否选中
+      menuShow:0,       //商品活动的展开或折叠
+      shopResult:{
+          shopHead:{
+               title:"",
+               cjl:""
+          }
+
+      }
     };
   },
   computed: {
@@ -117,7 +124,8 @@ export default {
       // 获取所有数据
       fetchData: state => state.shopCar.fetchData,
       // 获取管理和完成的状态
-      shopResult: state => state.shopCar.fetchData.is_success
+      shopResult: state => state.shopCar.fetchData.is_success,
+      shopData:state=>state.shopCar.shopData
     }),
     ...mapGetters("login", [
       "token",
@@ -244,12 +252,7 @@ export default {
       }
     }
   },
-
-  // methods:{
-  //     ...mapActions("chooseAll",["CHOOSEALL"])
-  // },
   async mounted() {
-    console.log(getCarList());
     let defaulParams = {
       token: this.token,
       userId: this.userId,
@@ -257,9 +260,9 @@ export default {
       companyId: this.companyId,
       userRole: this.userRole
     };
-    console.log(getCarList(defaulParams));
     let { data } = await getCarList(defaulParams);
-    console.log(data);
+    this.shopResult.shopHead=data.head
+    console.log(this.shopResult)
   }
 };
 </script>
