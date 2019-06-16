@@ -29,6 +29,7 @@
                   <p>{{list.pro_text}}</p>
                   <p>{{list.pro_place}}</p>
                   <p>{{list.pro_depot}}</p>
+                  <p>原价:{{list.pro_price}}</p>
                 </div>
               </div>
               <div class="list_shopcar_com_bottom fix">
@@ -36,7 +37,14 @@
                 <div class="list_shopcar_com_num">
                   <ul>
                     <li @click="reduce(list)">-</li>
-                    <li> <input type="number" v-model="list.pro_num" class="sum" v-on:input="calculate(pro)"></li>
+                    <li>
+                      <input
+                        type="number"
+                        v-model="list.pro_num"
+                        class="sum"
+                        v-on:input="calculate(pro)"
+                      >
+                    </li>
                     <li @click="add(list)">+</li>
                   </ul>
                 </div>
@@ -44,11 +52,19 @@
             </div>
           </div>
           <div class="shop_gift">
-            <div class="shop_gift_top">
+            <div class="shop_gift_top fix">
               <div class="shop_gift_left">
                 <h3>商品活动</h3>
               </div>
-              <div class="shop_gift_right">累积购买可或赠品，点击查看更多活动规则</div>
+              <div class="shop_gift_right">
+                <div>累积购买可或赠品，点击查看更多活动规则</div>
+                <div class="gift_tips" @click="changeMenu(index)">
+                  <div :class="menuShow==index?'':'gift_tips_gift'" >累积购买可或赠品，点击查看更多活动规则点击查看更多活动规则</div>
+                  <div class="gift_tips_menu">
+                    <span :class="menuShow==index?'gift_tips_menu_down':'gift_tips_menu_up'"></span>
+                  </div>
+                </div>
+              </div>
             </div>
             <div class="shop_gift_bottom">
               <router-link to="/choosegift">选择赠品</router-link>
@@ -85,12 +101,15 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations } from "vuex";
+import { getCarList } from "@/api/index";
+
+import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
 export default {
   data() {
     return {
       is_checked: 0,
-      checked: false
+      checked: false,
+      menuShow:0
     };
   },
   computed: {
@@ -99,9 +118,25 @@ export default {
       fetchData: state => state.shopCar.fetchData,
       // 获取管理和完成的状态
       shopResult: state => state.shopCar.fetchData.is_success
-    })
+    }),
+    ...mapGetters("login", [
+      "token",
+      "userId",
+      "corpCode",
+      "companyId",
+      "userRole"
+    ])
   },
   methods: {
+    changeMenu(index) {
+     if(this.menuShow==index){
+       this.menuShow=-1
+     }else{
+       this.menuShow=index
+     }
+        
+    
+    },
     choosetrue(item, pro) {
       pro.checked = true; //将商品选中状态改为true
       ++item.choose === item.products.length ? (item.check = true) : ""; //这里执行了两部，选中商品数量先+1，再与该店铺商品数量比较，如果相等就更改店铺选中状态为true
@@ -148,12 +183,13 @@ export default {
         : this.fetchData.list.forEach(item => this.shopfalse(item)); //根据取反后的状态进行相应的店铺按钮操作
     },
     add(pro) {
-      console.log(pro)
+      console.log(pro);
+      pro.checked = true;
       pro.pro_num++;
       pro.pro_sum += pro.pro_price;
       if (pro.checked) {
         this.fetchData.allnum++;
-        this.fetchData.allsum += pro.price;
+        this.fetchData.allsum += pro.pro_price;
       }
     },
     reduce(pro) {
@@ -169,7 +205,9 @@ export default {
       let oldsum = pro.pro_sum; //之前的总价
       let oldnum = oldsum / pro.pro_price; //之前的数量
       pro.pro_num = parseInt(pro.pro_num);
-      pro.pro_num > 0 ? (pro.pro_sum = pro.pro_num * pro.pro_price) : (pro.pro_num = oldnum); //如果输入数量大于0，计算价格，否则返回之前的数量
+      pro.pro_num > 0
+        ? (pro.pro_sum = pro.pro_num * pro.pro_price)
+        : (pro.pro_num = oldnum); //如果输入数量大于0，计算价格，否则返回之前的数量
       let diffsum = pro.pro_sum - oldsum; //差价
       let diffnum = pro.pro_num - oldnum; //差量
       if (pro.checked) {
@@ -184,11 +222,11 @@ export default {
       for (var i = 0; i < data.length; i++) {
         if (data[i].check) {
           data.splice(i, 1);
-          console.log(this.fetchData.status)
-         this.fetchData.allchoose--
-         console.log(this.fetchData)
-         console.log(this.fetchData.allnum)
-          this.fetchData.status=false
+          console.log(this.fetchData.status);
+          this.fetchData.allchoose--;
+          console.log(this.fetchData);
+          console.log(this.fetchData.allnum);
+          this.fetchData.status = false;
           i--;
         } else {
           for (var j = 0; j < data[i].products.length; j++) {
@@ -210,7 +248,19 @@ export default {
   // methods:{
   //     ...mapActions("chooseAll",["CHOOSEALL"])
   // },
-  mounted() {}
+  async mounted() {
+    console.log(getCarList());
+    let defaulParams = {
+      token: this.token,
+      userId: this.userId,
+      corpCode: this.corpCode,
+      companyId: this.companyId,
+      userRole: this.userRole
+    };
+    console.log(getCarList(defaulParams));
+    let { data } = await getCarList(defaulParams);
+    console.log(data);
+  }
 };
 </script>
 
@@ -274,7 +324,7 @@ export default {
   background-size: 100%;
 }
 .com_add {
-  min-height: 206px;
+  min-height: 219px;
   border-bottom: 1px solid #d8d8d8;
 }
 .list_shopcar_pic {
@@ -293,7 +343,7 @@ export default {
   /* min-height: 70px; */
 }
 .list_shopcar_com_top {
-  margin-bottom: 25px;
+  /* margin-bottom: 25px; */
 }
 .list_shopcar_com_top_title {
   float: left;
@@ -302,12 +352,50 @@ export default {
   font-size: 18px;
 }
 .list_shopcar_com_top_title p:first-child {
-  font-size: 24px;
+  font-size: 26px;
 }
 .list_shopcar_com_top_gift {
   float: right;
   color: #ff0000;
   font-size: 18px;
+}
+.gift_tips {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+}
+.gift_tips_gift {
+  height: 40px;
+  overflow: hidden;
+}
+.gift_tips_menu {
+  position: relative;
+}
+.gift_tips_menu_up {
+  display: block;
+  position: absolute;
+  top: 17px;
+  height: 10px;
+  width: 10px;
+  transform: rotate(316deg);
+  -webkit-transform: rotate(316deg);
+  border-left: 2px solid transparent;
+  border-bottom: 2px solid transparent;
+  border-right: 2px solid #999999;
+  border-top: 2px solid #999999;
+}
+.gift_tips_menu_down {
+  display: block;
+  position: absolute;
+  top: 10px;
+  height: 10px;
+  width: 10px;
+  transform: rotate(316deg);
+  -webkit-transform: rotate(316deg);
+  border-left: 2px solid #999;
+  border-bottom: 2px solid #999;
+  border-right: 2px solid transparent;
+  border-top: 2px solid transparent;
 }
 .shop_gift {
   margin-left: 47px;
@@ -326,6 +414,7 @@ export default {
 .shop_gift_left h3 {
   color: #ff1900;
   font-weight: 400;
+  width: 100px;
   margin-right: 26px;
 }
 .shop_gift_bottom {
@@ -335,12 +424,14 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #4a90e2;
   border-radius: 4px;
+}
+.shop_gift_bottom a {
+  color: #4a90e2;
 }
 .list_shopcar_com_price {
   float: left;
-  margin-top: 20px;
+  margin-top: 10px;
   font-size: 28px;
   color: #ff0000;
 }
@@ -352,14 +443,18 @@ export default {
   height: 48px;
   float: left;
   border: 1px solid #ccc;
-  line-height: 48px;
+  line-height: 47px;
   text-align: center;
 }
-.list_shopcar_com_num ul li input{
-  width: 47px;
-  height: 47px;
-  border: 1px solid #ccc;
-  border-left: none;
+.list_shopcar_com_num ul li:nth-of-type(2) {
+  width: 80px;
+}
+.list_shopcar_com_num ul li input {
+  width: 70px;
+  height: 43px;
+  /* border: 1px solid #ccc; */
+  /* border-left:none;
+  border-top:none; */
   text-align: center;
 }
 .list_shopcar_com_num ul li:nth-of-type(2),

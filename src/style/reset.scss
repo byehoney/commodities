@@ -18,3 +18,9 @@
   }
 .fix{*zoom:1;}
 .fix:after{display:block; content:"clear"; height:0; clear:both; overflow:hidden; visibility:hidden;}
+input{
+  border:none;
+  outline: none;
+  -webkit-appearance: none;
+  border-radius: 0;
+}
