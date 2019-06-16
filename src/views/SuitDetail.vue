@@ -3,14 +3,8 @@
         <TopNav></TopNav>
         <div class="content">
             <mt-swipe :auto="4000" class="suit_swiper">
-                <mt-swipe-item>
-                    <img class="banner" src="" alt="">
-                </mt-swipe-item>
-                <mt-swipe-item>
-                    <img class="banner"  src="" alt="">
-                </mt-swipe-item>
-                <mt-swipe-item>
-                    <img class="banner"  src="" alt="">
+                <mt-swipe-item v-for="(item,index) in list" :key="index">
+                    <img class="banner" :src="item.tctp" alt="">
                 </mt-swipe-item>
             </mt-swipe>
             <div class="suitInfo">
@@ -31,28 +25,28 @@
             <div class="suitDetail">
                 <div class="suit_title">套餐包含</div>
                 <div class="details">
-                    <div class="detail_item">
+                    <div class="detail_item" v-for="(item,index) in list" :key="index">
                         <div class="left">
-                            <img src="../images/shopcar.png" alt="">
+                            <img :src="item.dptplj" alt="">
                         </div> 
                         <div class="right">
-                            <p class="name">烟花商品名称</p>    
+                            <p class="name">{{item.productname}}</p>    
                             <p class="factory">
-                                河北保定星星烟花制造厂
+                                {{item.cj}}
                             </p>
-                            <p class="num">数量：10</p>
-                            <p class="size">规格：35g*1支</p>
-                            <p class="leave">剩余：50</p>
+                            <p class="num">数量：{{item.mzdpgmsl}}</p>
+                            <p class="size">规格：{{item.guige}}</p>
+                            <p class="leave">剩余：{{item.sytckszs}}</p>
                             <p class="price">
-                                <span class="nPrice">￥6.50</span>
-                                <span class="oPrice">原价：￥8.80</span>
+                                <span class="nPrice">￥{{item.dptcjg}}</span>
+                                <span class="oPrice">原价：￥{{item.dpyj}}</span>
                             </p>
                         </div>   
                     </div> 
                 </div>
             </div>
         </div>
-        <div class="bottom">
+        <!-- <div class="bottom">
             <div class="left">
                 <img src="../images/choose_car.png" alt="">
                 <span>￥0</span>
@@ -60,31 +54,49 @@
             <div class="right">
                 确定
             </div>
-        </div>
+        </div> -->
     </div>
 </template>
 <script>
 import { Toast } from "mint-ui";
+import { mapGetters } from 'vuex'
+import { getSuitDetail } from '@/api/index'
 import TopNav from '@/components/TopNav'
 export default {
     data(){
         return{
-           
+           list:[]
         }
+    },
+    computed:{
+        ...mapGetters('login',['token','userId','corpCode','companyId','userRole']),
     },
     components:{
         TopNav,
     },
+    async mounted(){
+        let defaulParams = {
+            token:this.token,
+            userId:this.userId,
+            corpCode:this.corpCode,
+            companyId:this.companyId,
+            userRole:this.userRole,
+            suiteBuyCode:this.$route.query.id
+        };
+        let res = await getSuitDetail(defaulParams);
+        if(res.code == 0){
+            this.list = res.data.list
+        }
+    },
     methods:{
         
-
     }
 }
 </script>
 <style lang="scss" scoped>
 .suitContainer{
     width: 100vw;
-    min-height: 100vh;
+    // min-height: 100vh;
     background:rgba(235,235,235,1);
     .nav{
         border-bottom: 2px solid #ebebeb;
@@ -156,7 +168,7 @@ export default {
                             .oPrice{
                                 font-size:18px;
                                 color:rgba(153,153,153,1);
-                                line-height:24px;
+                                line-height:10px;
                                 text-decoration: line-through;
                                 position: relative;
                                 top: -8px;
@@ -176,8 +188,8 @@ export default {
                 align-items: center;
                 margin-bottom: 25px;
                 img{
-                    width: 46px;
-                    height: 36px;
+                    width: 39px;
+                    height: 23px;
                     margin-right: 8px;
                 }
                 span{
@@ -201,7 +213,7 @@ export default {
                     .oPrice{
                         font-size:22px;
                         color:rgba(153,153,153,1);
-                        line-height:29px;
+                        line-height:34px;
                         letter-spacing:2px;
                         margin-left: 40px;
                         text-decoration: line-through;
@@ -226,46 +238,46 @@ export default {
             .banner{
                 width: 100%;
                 height: 100%;
-                object-fit: scale-down;
+                object-fit: cover;
             }
         }
     }
-    .bottom{
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 98px;
-        display: flex;
-        background-color: #fff;
-        justify-content: space-between;
-        .left{
-            display: flex;
-            align-items: center;
-            img{
-                width: 62px;
-                height: 62px;
-                margin-left:39px; 
-            }
-            span{
-                font-size:32px;
-                font-weight:bold;
-                color:rgba(255,25,0,1);
-                line-height:42px;
-                margin-left: 16px;
-            }
-        }
-        .right{
-            width: 244px;
-            height: 98px;
-            background: url('../images/result.png') no-repeat 0 0;
-            background-size: 100% 100%;
-            font-size:32px;
-            color:rgba(255,255,255,1);
-            line-height:98px;
-            letter-spacing:3px;
-            text-align: center;
-        }
-    }
+    // .bottom{
+    //     position: fixed;
+    //     bottom: 0;
+    //     left: 0;
+    //     width: 100%;
+    //     height: 98px;
+    //     display: flex;
+    //     background-color: #fff;
+    //     justify-content: space-between;
+    //     .left{
+    //         display: flex;
+    //         align-items: center;
+    //         img{
+    //             width: 62px;
+    //             height: 62px;
+    //             margin-left:39px; 
+    //         }
+    //         span{
+    //             font-size:32px;
+    //             font-weight:bold;
+    //             color:rgba(255,25,0,1);
+    //             line-height:42px;
+    //             margin-left: 16px;
+    //         }
+    //     }
+    //     .right{
+    //         width: 244px;
+    //         height: 98px;
+    //         background: url('../images/result.png') no-repeat 0 0;
+    //         background-size: 100% 100%;
+    //         font-size:32px;
+    //         color:rgba(255,255,255,1);
+    //         line-height:98px;
+    //         letter-spacing:3px;
+    //         text-align: center;
+    //     }
+    // }
 }
 </style>

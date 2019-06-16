@@ -9,27 +9,27 @@
         infinite-scroll-disabled="loading"
         infinite-scroll-distance="10"
       >
-        <div class="scrollItem">
+        <div class="scrollItem" v-for="(item,index) in list" :key="index">
           <div class="top">
-            <div class="title">XXX精品活动 满10赠4</div>
+            <div class="title">{{item[0].mzhdms}}</div>
           </div>
-          <div class="bottom">
-            <img class="sel_icon" src="../images/car_circle.png" alt>
+          <div class="bottom" v-for="(pterm,jIndex) in item" :key="pterm.productcode">
+            <img class="sel_icon" @click="checkedPo(index,jIndex,pterm.productcode)" :src="pterm.checked?require('../images/car_checkcircle.png'):require('../images/car_circle.png')" alt>
             <div class="box">
               <div class="left">
-                <img src="../images/shopcar.png" alt>
+                <img :src="pterm.dptplj?pterm.dptplj:require('../images/logo.png')" alt>
               </div>
               <div class="right">
-                <p class="name">春日大地红喜庆12响</p>
-                <p class="factory">河北保定星星烟花制造厂</p>
-                <p class="size">规格：35g*1支</p>
-                <p class="oPrice">原价：￥8.80</p>
+                <p class="name">{{pterm.productname}}</p>
+                <p class="factory">{{pterm.cj}}</p>
+                <p class="size">规格：{{pterm.guige}}</p>
+                <p class="oPrice">原价：￥{{pterm.dj}}</p>
                 <div class="fun">
-                  <p class="nPrice">￥6.50</p>
+                  <p class="nPrice">￥{{pterm.dj}}</p>
                   <div class="counter">
-                    <p class="reduce" @click="reduce(index)">-</p>
-                    <p class="num" @click="popInput(index)">0</p>
-                    <p class="add" @click="add(index)">+</p>
+                    <p class="reduce" @click="reduce(index,jIndex)">-</p>
+                    <p class="num" @click="popInput(index,jIndex)">{{pterm.num}}</p>
+                    <p class="add" @click="add(index,jIndex)">+</p>
                   </div>
                 </div>
               </div>
@@ -41,7 +41,14 @@
               <div class="shop_gift_left">
                 <h3>商品活动</h3>
               </div>
-              <div class="shop_gift_right">累积购买可或赠品，点击查看更多活动规则</div>
+              <div class="shop_gift_right">
+                <p>累积购买可获赠品，点击查看更多活动规则</p>
+                <div class="activity" v-if="item[0].showAct">
+                  <p>累积购买可获赠品，点击查看更多活动规则</p>
+                  <p>累积购买可获赠品，点击查看更多活动规则</p>
+                </div>
+              </div>
+              <img class="arrIcon" :src="item[0].showAct?require('../images/arrow_down.png'):require('../images/arrow_up.png')" alt="" @click="showActDetail(index)">
             </div>
           </div>
         </div>
@@ -51,7 +58,7 @@
     <div class="footer_guide fix">
       <div class="footer_guide_left fix">
         <p class="badge"></p>
-        <p>¥0</p>
+        <p>¥{{money}}</p>
       </div>
       <div class="footer_guide_right fix">
         <ul>
@@ -80,13 +87,17 @@
 <script>
 import { Toast } from "mint-ui";
 import TopNav from "@/components/TopNav";
-import { getBestGoodsList } from '@/api/index'
+import { getBestGoodsList ,addToCar} from '@/api/index'
 import {mapGetters} from 'vuex'
 export default {
   data() {
     return {
-      showInput:true,//是否显示输入框
+      showInput:false,//是否显示输入框
       num:1,//输入框内数字
+      list:[],
+      cIndex:0,//当前活动序号
+      cJindex:0,//当前活动商品序号
+      money:0,//总金额
     };
   },
   computed:{
@@ -99,6 +110,18 @@ export default {
     this.getData();
   },
   methods: {
+    reduce(index,jIndex){
+      if(this.list[index][jIndex].num<=1){
+        this.list[index][jIndex].num=1
+      }else{
+        this.list[index][jIndex].num--;
+      }
+      this.countMoney();
+    },
+    add(index,jIndex){
+      this.list[index][jIndex].num++;
+      this.countMoney();
+    },
     popReduce(){
       if(this.num<=1){
         this.num = 1;
@@ -110,18 +133,50 @@ export default {
     popAdd(){
       this.num = this.num+1;
     },
-    popInput(){
+    popInput(index,jIndex){
       this.showInput = true;
-      this.num = 1;
+      this.num = this.list[index][jIndex].num;
+      this.cIndex = index;
+      this.cJindex = jIndex;
     },
     closeInput(){
       this.showInput = false;
     },
     confirmInput(){
       this.showInput = false;
+      this.$set(this.list[this.cIndex][this.cJindex],'num',this.num);
+      this.countMoney();
     },
     handlerClick(){
-
+      let defaulParams = {
+        token:this.token,
+        userId:this.userId,
+        corpCode:this.corpCode,
+        companyId:this.companyId,
+        userRole:this.userRole,
+      };
+      let josnStr = [];
+      // this.list.forEach((item,index)=>{
+      //   item.forEach
+      // })
+    },
+    checkedPo(index,jIndex,proCode){
+      this.$set(this.list[index][jIndex],'checked',!this.list[index][jIndex].checked);
+      this.countMoney();
+    },
+    countMoney(){
+      var money = 0;
+      this.list.forEach((item,index)=>{
+        item.forEach((ls,ln)=>{
+          if(ls.checked){
+            money+=(parseFloat(ls.dj)*1000)*ls.num/1000;
+          }
+        })
+      })
+      this.money = money;
+    },
+    showActDetail(index){
+      this.$set(this.list[index][0],'showAct',!this.list[index][0].showAct)
     },
     async getData(){
       let defaulParams = {
@@ -132,6 +187,16 @@ export default {
         userRole:this.userRole,
       };
       let res = await getBestGoodsList(defaulParams);
+      if(res.code==0){
+        res.data.list.forEach(item => {
+          item[0].showAct = false;
+          item.forEach(jterm=>{
+            jterm.num = 1;
+            jterm.checked = false;
+          })
+        });
+        this.list = res.data.list;
+      }
     },
     loadMore() {}
   }
@@ -224,12 +289,16 @@ export default {
     }
   }
   .telContent {
-    padding-top: 92px;
-    background-color: #fff;
+    padding: 92px 0;
+    background-color: #E5E5E5;
     .scrollBox {
-      padding-left: 44px;
+      // padding-left: 44px;
+      
     }
     .scrollItem {
+      background-color: #fff;
+      padding-left: 44px;
+      margin-bottom: 14px;
       .top {
         font-size: 26px;
         color: rgba(102, 102, 102, 1);
@@ -237,14 +306,16 @@ export default {
         letter-spacing: 2px;
         padding: 17px 39px 20px 0;
         border-bottom: 2px solid #ebebeb;
-        margin-bottom: 24px;
+        // margin-bottom: 24px;
       }
       .bottom {
         display: flex;
         align-items: center;
+        padding: 24px 0 18px 0;
         .sel_icon {
           width: 40px;
           height: 40px;
+          margin-right: 14px;
         }
         .box {
           display: flex;
@@ -256,6 +327,7 @@ export default {
           .left {
             width: 220px;
             height: 176px;
+            margin-right: 26px;
             img {
               width: 100%;
               height: 100%;
@@ -332,7 +404,7 @@ export default {
   width: 618px;
   min-height: 40px;
   margin-top: 12px;
-  margin-bottom: 15px;
+  padding-bottom: 15px;
   line-height: 40px;
   font-size: 20px;
 }
@@ -340,6 +412,16 @@ export default {
   display: flex;
   color: #999;
   margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  .shop_gift_right{
+    width: 425px;
+  }
+  .arrIcon{
+    width: 24px;
+    height: 15px;
+  }
 }
 .shop_gift_left h3 {
   color: #ff1900;

@@ -496,6 +496,13 @@ a {
   background: url("../images/resultgray.png") no-repeat top;
   background-size: 100%;
 }
+span {
+  display: inline-block;
+  font-size: 12px;
+}
+.footer_guide_right ul li span{
+  font-size: 30px;
+}
 .footer_guide_right ul li:nth-of-type(2) {
   background: url("../images/result.png") no-repeat top;
   background-size: 100%;
@@ -503,10 +510,7 @@ a {
 .on {
   color: #02a774;
 }
-span {
-  display: inline-block;
-  font-size: 12px;
-}
+
 .badge {
   width: 29px;
   height: 29px;

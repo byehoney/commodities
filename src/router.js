@@ -86,13 +86,13 @@ const router = new Router({
             path: "/choosegift",
             name: "choosegift",
             component: () =>
-                import("./views/ChooseGift.vue")
+                import(/* webpackChunkName: "choosegift" */ "./views/ChooseGift.vue")
         },
         {
             path: "/public",
             name: "public",
             component: () =>
-                import("./views/public.vue")
+                import(/* webpackChunkName: "public" */ "./views/public.vue")
         },
         {
             path: '/my',
@@ -462,7 +462,7 @@ const router = new Router({
                 import(/* webpackChunkName: "hotSuit" */ './views/HotSuit.vue'),
             meta: {
                 auth: true,
-                keepAlive: true,
+                keepAlive: false,
                 title: '人气套餐'
             }
         },
@@ -473,7 +473,7 @@ const router = new Router({
                 import(/* webpackChunkName: "suitDetail" */ './views/SuitDetail.vue'),
             meta: {
                 auth: true,
-                keepAlive: true,
+                keepAlive: false,
                 title: '套餐详情'
             }
         },
@@ -484,8 +484,19 @@ const router = new Router({
                 import(/* webpackChunkName: "bestGoods" */ './views/BestGoods.vue'),
             meta: {
                 auth: true,
-                keepAlive: true,
+                keepAlive: false,
                 title: '精品买赠'
+            }
+        },
+        {
+            path: '/newShopCar',
+            name: 'newShopCar',
+            component: () =>
+                import(/* webpackChunkName: "newShopCar" */ './views/NewShopCar.vue'),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title: '购物车'
             }
         },
         {
@@ -539,7 +550,7 @@ const router = new Router({
                 import(/* webpackChunkName: "agreement" */ './views/Agreement.vue'),
             meta: {
                 auth: false,
-                keepAlive: true,
+                keepAlive: false,
                 title: '人云科技软件服务及隐私协议'
             }
         },

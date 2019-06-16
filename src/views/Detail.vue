@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="detail_header">
-      <div class="detail_back" @click="$router.go(-1)">返回</div>
+      <img class="detail_back" @click="$router.go(-1)" src="../images/publicback.png">
       <div class="detail_title">商品详情</div>
     </div>
     <div class="detail_loop">
@@ -15,10 +15,13 @@
       <div class="detail_content_onece fix" v-if="!contentShow">
         <div class="detail_content_onece_left">
           <ul>
-            <li>¥{{shopDetail.cxj}}</li>
             <li>
-              <p>$50</p>
-              <p>仅剩50件</p>
+              <i class="unit">¥</i>
+              {{shopDetail.cxj}}
+            </li>
+            <li>
+              <p class="oPrice">¥ {{shopDetail.ptsj}}</p>
+              <p>仅剩{{shopDetail.dqkc}}件</p>
             </li>
             <li>限购{{shopDetail.xgl}}件</li>
           </ul>
@@ -32,9 +35,9 @@
               <span>限时秒杀</span>
             </li>
             <li>
-              <span>10</span>:
-              <span>10</span>:
-              <span>10</span>
+              <span>{{H}}</span>:
+              <span>{{M}}</span>:
+              <span>{{S}}</span>
             </li>
           </ul>
         </div>
@@ -42,68 +45,68 @@
       <!-- 限时秒杀广告栏位 -->
       <!-- 价格栏位 -->
       <div class="detail_content_one">
-        <div class="detail_content_title">{{shopDetail.cj}}</div>
+        <div class="detail_content_title">{{shopDetail.spmc}}</div>
         <div class="detail_content_content">
           <div class="detail_content_tag">
-            <span>
+            <span v-if="shopDetail.sfzt&&shopDetail.sfzt!='false'">
               <img src="../images/detail_xing.png">
             </span>
-            <span>
-              <img src="../images/detail_sale.png">
+            <span v-if="shopDetail.hdlx=='打折'" class="dis">
+              {{shopDetail.cxj|formatDis(shopDetail.ptsj)}}折
             </span>
             <div class="detail_content_price" v-if="contentShow">
               <ul>
-                <li>原价：4590</li>
+                <li class="oPrice">原价：¥ {{shopDetail.ptsj}}</li>
               </ul>
             </div>
             <div v-if="!contentShow">
-            <div class="detail_content_price" >
-              <ul>
-                <li>销量：23</li>
-              </ul>
+              <div class="detail_content_price">
+                <ul>
+                  <li class="saleNum">销量：<span class="num">{{shopDetail.jxsl}}件</span></li>
+                </ul>
+              </div>
+              <div class="detail_content_price">
+                <ul>
+                  <li>
+                    所在地区：
+                    <a>广东省</a>
+                  </li>
+                </ul>
+              </div>
             </div>
-            <div class="detail_content_price" >
-              <ul>
-                <li>
-                  所在地区：
-                  <a>广东省</a>
-                </li>
-              </ul>
-            </div>
-          </div>
           </div>
         </div>
-        <div class="newprice">¥{{shopDetail.cxj}}</div>
+        <div class="newprice" v-if="contentShow"><i class="unit">¥</i> {{shopDetail.cxj}}</div>
         <div style="clear:both"></div>
       </div>
       <!-- 库存 -->
       <div v-if="!contentShow">
-      <div class="storesave fix">
-        <div class="storesave_left">
+        <div class="storesave fix">
+          <div class="storesave_left">
+            <ul>
+              <li></li>
+              <li>限时限量 疯狂抢购</li>
+            </ul>
+          </div>
+          <div class="storesave_right">
+            <ul>
+              <li>库存：</li>
+              <li>{{shopDetail.dqkc}}</li>
+            </ul>
+          </div>
+        </div>
+        <div class="storesave_list fix">
           <ul>
-            <li></li>
-            <li>限时限量 疯狂抢购</li>
+            <li>优惠</li>
+            <li>{{shopDetail.hdlx}}</li>
           </ul>
         </div>
-        <div class="storesave_right">
+        <div class="storesave_list bd fix">
           <ul>
-            <li>库存：</li>
-            <li>{{shopDetail.dqkc}}</li>
+            <li>活动</li>
+            <li>满88 减40</li>
           </ul>
         </div>
-      </div>
-      <div class="storesave_list fix">
-        <ul>
-          <li>优惠</li>
-          <li>优惠文案相关展示内容</li>
-        </ul>
-      </div>
-      <div class="storesave_list bd fix">
-        <ul>
-          <li>活动</li>
-          <li>满88 减40</li>
-        </ul>
-      </div>
       </div>
       <!-- 所在地区 -->
       <div class="detail_content_two" v-if="contentShow">
@@ -115,7 +118,7 @@
             </li>
             <li>
               <span>销量：</span>
-              <span>{{shopDetail.ljsl}}</span>
+              <span>{{shopDetail.ljsl}} 件</span>
             </li>
           </ul>
         </div>
@@ -124,7 +127,7 @@
           <ul>
             <li>
               <span>优惠</span>
-              <span>优惠相关文案展示内容</span>
+              <span>{{shopDetail.hdlx}}</span>
             </li>
             <li>
               <span>活动</span>
@@ -138,7 +141,7 @@
         <div style="clear:both"></div>
       </div>
       <!-- 商品信息栏位 -->
-      <div class="detail_content_three" v-if="contentShow">
+      <!-- <div class="detail_content_three" v-if="contentShow">
         <div class="detail_content_three_header">
           <span></span>
           <span>商品信息</span>
@@ -168,12 +171,12 @@
             </li>
           </ul>
         </div>
-      </div>
+      </div> -->
       <!-- 秒杀 -->
-      <div class="detail_content_three" v-if="!contentShow">
+      <div class="detail_content_three" >
         <div class="detail_content_three_header">
           <span></span>
-          <span>商品信息</span>
+          <span class="infoTitle">商品信息</span>
         </div>
         <div class="detail_content_three_desc">
           <ul>
@@ -185,26 +188,22 @@
               <p>销售单位：{{shopDetail.dw}}</p>
             </li>
             <li>
-              <p>[规格]{{shopDetail.bzgg}}</p>
-              <p></p>
-              <p></p>
-              <p></p>
+              <p>[规格]： {{shopDetail.bzgg}}</p>
+              <p>[批准文号]： {{shopDetail.pzwh}}</p>
+              <p v-if="shopDetail.gjwm!=''">[国家本位码]： {{shopDetail.gjwm}}</p>
+              <p>[最近效期]： {{shopDetail.kczjxq}}</p>
               <p></p>
             </li>
             <li>
-              <p>最小包装：{{shopDetail.xbz}}g</p>
+              <p>最小包装：{{shopDetail.xbz}}</p>
               <p>采集量:{{shopDetail.cjl}}</p>
               <p>中包装:{{shopDetail.zbz}}</p>
               <p></p>
               <p></p>
             </li>
-            
           </ul>
         </div>
       </div>
-      
-
-
 
       <!-- 底部 -->
       <div class="footer_guide fix">
@@ -222,10 +221,10 @@
         <div class="footer_guide_right fix">
           <ul>
             <li>
-              <span @click="addshop">加入购物车</span>
+              <span @click="handlerClick('add')">加入购物车</span>
             </li>
             <li>
-              <span @click="handlerClick">立即购买</span>
+              <span @click="handlerClick('buy')">立即购买</span>
             </li>
           </ul>
         </div>
@@ -236,47 +235,73 @@
       <mt-popup v-model="popupVisible" position="bottom" class="detail_popup_content">
         <div class="detail_popup">
           <div class="detail_popup_title">
-            <span>苏丹诺夫结果</span>
+            <span>{{shopDetail.spmc}}</span>
             <span @click="popupVisible = !popupVisible">
               <img src="../images/close.png">
             </span>
           </div>
-          <div class="detail_popup_price">¥3200</div>
+          <div class="detail_popup_price">¥{{shopDetail.cxj}}</div>
           <div class="detail_popup_num">
             <div class="detail_popup_num_left">购买数量</div>
             <div class="detail_popup_num_right">
               <ul>
                 <li @click="reduce">-</li>
-                <li>{{shopnum}}</li>
+                <li @click="popInput">{{shopnum}}</li>
                 <li @click="add">+</li>
               </ul>
             </div>
           </div>
           <div>
-            <span>单品合集：</span>
-            <span>¥3200</span>
+            <span>单品合记：</span>
+            <span>¥{{money}}</span>
           </div>
         </div>
-        <div class="detail_popup_num_shop">立即购买</div>
+        <div class="detail_popup_num_shop" @click="confirmOper">确定</div>
       </mt-popup>
+    </div>
+    <div class="mask" v-show="showInput">
+      <div class="inputModal">
+        <p class="title">修改购买数量</p>
+        <div class="funArea">
+          <div class="reduce" @click="popReduce">-</div>
+          <input type="number" min="1" v-model="num" class="num">
+          <div class="add" @click="popAdd">+</div>
+        </div>
+        <div class="btnGroup">
+          <div class="cancel btn" @click="closeInput">取消</div>
+          <div class="confirm btn" @click="confirmInput">确定</div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import { Toast } from "mint-ui";
-import { getChooseDetail } from "@/api/index";
+import { getChooseDetail,addToCar } from "@/api/index";
 import { mapState, mapGetters } from "vuex";
 export default {
   data() {
     return {
-      shopnum: 1,
+      num:1,//计数
+      shopnum: 1,//实际购买数
+      money:0,
       popupVisible: false,
       shopDetail: [],
-      contentShow:true,
-      commonShow:true
+      contentShow: true,
+      commonShow: true,
+      showInput:false,
+      H:'00',
+      M:'00',
+      S:'00',
+      type:'',//add  添加购物车   buy  购买
     };
   },
+  filters:{
+      formatDis(nPrice,oPrice){
+          return Math.floor((parseFloat(nPrice)/parseFloat(oPrice))*100)/10
+      },
+    },
   computed: {
     ...mapState("login", ["user"]),
     ...mapGetters("login", [
@@ -288,6 +313,88 @@ export default {
     ])
   },
   methods: {
+    async confirmOper(){
+      let defaulParams = {
+        token: this.token,
+        userId: this.userId,
+        corpCode: this.corpCode,
+        companyId: this.companyId,
+        userRole: this.userRole,
+        productId: this.$route.query.id
+      };
+      let jsonStr = JSON.stringify(
+        [{
+          mzhdlx:'无',
+          pzlx:false,
+          ghsbm:this.shopDetail.ghsbm,
+          jghdlx:this.shopDetail.hdlx,
+          productId:this.shopDetail.priductid,
+          cartNum:this.shopnum,
+          pzdj:this.shopDetail.cxj,
+          pzyj:this.shopDetail.ptsj,
+          userMobile:this.user.mobile
+        }]
+      )
+      if(this.type == 'add'){
+        let res = await addToCar({...defaulParams,jsonStr:jsonStr});
+      }
+    },
+    popReduce(){
+      if(this.num<=1){
+        this.num = 1;
+      }else{
+        this.num = this.num-1;
+      }
+  
+    },
+    popAdd(){
+      this.num = this.num+1;
+    },
+    popInput(index,jIndex){
+      this.showInput = true;
+      this.num = this.shopnum;
+    },
+    closeInput(){
+      this.showInput = false;
+    },
+    confirmInput(){
+      this.showInput = false;
+      this.shopnum = this.num;
+      this.countMoney();
+    },
+    countMoney(){
+      this.money = parseInt(this.shopnum)*(parseFloat(this.shopDetail.cxj)*1000)/1000;
+    },
+    count() {
+      this.timer = setInterval(() => {
+        let nowH = new Date().getHours();
+        let nowM = new Date().getMinutes();
+        let nowS = new Date().getSeconds();
+        let endTime = this.shopDetail.endtime.split(':');
+        let leftsecond =  (parseInt(endTime[0]) * 60 * 60 + parseInt(endTime[1])*60 + parseInt(endTime[2])) - (nowH * 60 * 60 + nowM * 60 + nowS);
+        // console.log(leftsecond)
+        // leftsecond--;
+        if (leftsecond >= 0) {
+          this.H =
+            parseInt((leftsecond / 3600) % 24) < 10
+              ? "0" + parseInt((leftsecond / 3600) % 24)
+              : parseInt((leftsecond / 3600) % 24);
+          this.M =
+            parseInt((leftsecond / 60) % 60) < 10
+              ? "0" + parseInt((leftsecond / 60) % 60)
+              : parseInt((leftsecond / 60) % 60);
+          this.S =
+            parseInt(leftsecond % 60) < 10
+              ? "0" + parseInt(leftsecond % 60)
+              : parseInt(leftsecond % 60);
+        } else {
+          this.H = "00";
+          this.M = "00";
+          this.S = "00";
+          clearInterval(this.timer);
+        }
+      }, 1000);
+    },
     addshop() {
       Toast({
         message: "加入购物车成功", //弹窗内容
@@ -296,14 +403,18 @@ export default {
       });
       this.shopnum += 1;
     },
-    handlerClick() {
+    handlerClick(type) {
+      this.type = type;
       this.popupVisible = true;
+      this.countMoney();
     },
     add() {
       this.shopnum += 1;
+      this.countMoney();
     },
     reduce() {
-      this.shopnum == 0 ? (this.shopnum = 0) : this.shopnum--;
+      this.shopnum <= 1 ? (this.shopnum = 1) : this.shopnum--;
+      this.countMoney();
     },
     async getShopDetail() {
       let defaulParams = {
@@ -318,10 +429,11 @@ export default {
       this.shopDetail = result.data;
       console.log(this.shopDetail.hdlx);
       if (this.shopDetail.hdlx == "秒杀") {
-          this.contentShow=false
-      }else{
-          this.commonShow=true
-          this.contentShow=true
+        this.contentShow = false;
+        this.count();
+      } else {
+        this.commonShow = true;
+        this.contentShow = true;
       }
     }
   },
@@ -361,6 +473,9 @@ a {
 .detail_back {
   position: absolute;
   margin-left: 46px;
+  width: 17px;
+  height: 30px;
+  top: 35px;
 }
 .detail_title {
   text-align: center;
@@ -396,11 +511,18 @@ a {
   float: left;
 }
 .detail_content_onece_left ul li {
-  width: 110px;
+  // width: 110px;
   float: left;
   font-size: 22px;
   margin-left: 46px;
   color: #fff;
+  .oPrice {
+    text-decoration: line-through;
+  }
+}
+.detail_content_onece_left .unit {
+  font-size: 24px;
+  font-style: normal;
 }
 .detail_content_onece_left ul li:nth-of-type(1) {
   font-size: 50px;
@@ -414,7 +536,7 @@ a {
 }
 .detail_content_onece_left ul li:nth-of-type(3) {
   margin-top: 45px;
-  width: 120px;
+  // width: 120px;
 }
 .detail_content_onece_right {
   width: 260px;
@@ -470,7 +592,7 @@ a {
   color: #333;
 }
 .detail_content_tag {
-  height: 43px;
+  // height: 43px;
   line-height: 43px;
   margin-bottom: 20px;
 }
@@ -479,6 +601,17 @@ a {
   width: 60px;
   height: 30px;
   margin-right: 10px;
+  &.dis{
+    width: 58px;
+    height: 28px;
+    line-height: 30px;
+    text-align: center;
+    border: 1px solid #FF1900;
+    color:#FF1900;
+    border-radius: 5px;
+    position: relative;
+    top: -5px;
+  }
 }
 .detail_content_tag span img {
   width: 100%;
@@ -487,6 +620,16 @@ a {
 .detail_content_price {
   min-height: 61px;
   line-height: 61px;
+  .oPrice{
+    text-decoration: line-through;
+  }
+  .saleNum{
+    text-decoration: none!important;
+    .num{
+      color:#FF1900;
+      font-size:22px;
+    }
+  }
 }
 .detail_content_price:first-child ul li {
   text-decoration: line-through;
@@ -592,6 +735,14 @@ a {
   font-size: 28px;
   color: #333;
   margin-bottom: 31px;
+  display: flex;
+  align-items: center;
+  .infoTitle{
+    font-size:28px;
+    color:rgba(102,102,102,1);
+    line-height:37px;
+    letter-spacing:2px;
+  }
 }
 .detail_content_three_header span:nth-of-type(1) {
   background: url("../images/home/block.png") no-repeat center;
@@ -632,6 +783,9 @@ a {
   float: left;
   margin-left: 49px;
 }
+.footer_guide_right ul li span {
+  font-size: 30px;
+}
 .footer_guide_left ul li:nth-of-type(1) {
   position: relative;
 }
@@ -667,7 +821,7 @@ a {
 }
 span {
   display: inline-block;
-  font-size: 12px;
+  font-size: 22px;
 }
 .badge {
   width: 29px;
@@ -718,9 +872,13 @@ span {
 }
 .newprice {
   float: right;
-  font-size: 50px;
+  font-size: 30px;
   color: #ff0000;
   margin-top: 30px;
+  .unit{
+    font-style: normal;
+    font-size: 22px;
+  }
 }
 .detail_popup_price {
   margin-bottom: 24px;
@@ -760,4 +918,82 @@ span {
   text-align: center;
   cursor: pointer;
 }
+.mask{
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.3);
+    z-index: 10000;
+    .inputModal{
+      width: 500px;
+      height: 250px;
+      background-color: #fff;
+      border-radius: 10px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin-top: -125px;
+      margin-left: -250px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow: hidden;
+      .btnGroup{
+        display: flex;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 60px;
+        border-top: 2px solid #ebebeb;
+        .btn{
+          width: 50%;
+          text-align: center;
+          line-height: 60px;
+          font-size: 26px;
+          &.confirm{
+            background-color: #ff1900;
+            color: #fff;
+            padding-right: 2px;
+          }
+        }
+      }
+      .title{
+        font-size: 26px;
+        color: rgba(102, 102, 102, 1);
+        line-height: 35px;
+        letter-spacing: 2px;
+        text-align: center;
+        padding: 30px 0;
+      }
+      .funArea{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .reduce,.add{
+          width: 50px;
+          height: 50px;
+          border: 2px solid #ebebeb;
+          font-size: 26px;
+          line-height: 50px;
+          text-align: center;
+        }
+        .num{
+          width: 100px;
+          height: 50px;
+          border-left: none;
+          border-right: none;
+          border-top: 2px solid #ebebeb;
+          border-bottom: 2px solid #ebebeb;
+          text-align: center;
+          font-size: 26px;
+          line-height: 50px;
+          outline: none;
+          color:#333;
+        }
+      }
+    }
+  }
 </style>

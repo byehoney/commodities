@@ -163,8 +163,23 @@ function getSuitList(params){//获取套餐列表
     return post('/index/get/taocan.do', params)
 }
 
+function getSuitDetail(params){//获取套餐详情
+    return post('/product/setmeal/detail.do', params)
+}
+
 function getBestGoodsList(params){//获取精品买赠列表
     return post('/index/get/maiz.do', params)
+}
+
+function getPub(params){//获取门店公告
+    return post('/client/get/gongg.do', params)
+}
+
+function addToCar(params){//添加到购物车
+    return post('/product/add/cart.do', params)
+}
+function getCarList(params){//获取购物车列表参数
+    return post('/product/get/cartlist.do', params)
 }
 
 function getHeatList(params) {//获取首页热门分类
@@ -223,7 +238,11 @@ export {
     getMoreKindsBranch,
     getActivityInfo,
     getBestGoodsList,
+    getPub,
+    addToCar,
+    getCarList,
     getSuitList,
+    getSuitDetail,
     getHeatList,
     getSpecialList,
     secKill

@@ -41,6 +41,13 @@ Vue.prototype.$md5 = md5;
 Object.keys(filters).forEach(item => {
     Vue.filter(item, filters[item])
 })
+Vue.Cancel = [];
+router.beforeEach((to, from, next) => {   
+    while (Vue.Cancel.length > 0) {        
+        Vue.Cancel.shift()('cancel');   
+    }    
+    next();
+})
 // const wx = Vue.wechat;
 // wx.config({
 //     appId: '',

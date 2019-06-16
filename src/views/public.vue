@@ -6,24 +6,24 @@
         <img src alt>
       </div>
       <div class="public_pic_right">
-        <div class="public_pic_right_title">河北佳和万家烟花有限公司</div>
+        <div class="public_pic_right_title">{{clientname}}</div>
         <div class="public_pic_right_desc">
           <p>
-            <span>上架999种</span>
-            <span>发货999万件</span>
+            <span>上架{{sjpzs}}种</span>
+            <span>发货{{fhnum}}万件</span>
           </p>
-          <p>(300元起配)</p>
+          <p>({{qsjg}}元起配)</p>
         </div>
         <div class="public_pic_right_user">
           <ul>
             <li>
               <span>综合评分:</span>
-              <span>8.5</span>
+              <span>{{zhpf}}</span>
               <span></span>
             </li>
             <li>
               <span>用户评价:</span>
-              <span>10.0</span>
+              <span>{{yhpj}}</span>
               <span class="you"></span>
             </li>
           </ul>
@@ -39,7 +39,7 @@
           <p>商家首页</p>
         </li>
         <li>
-          <p>6780</p>
+          <p class="num">{{qbsp}}</p>
           <p>全部商品</p>
         </li>
         <li>
@@ -49,7 +49,7 @@
           <p>待收货</p>
         </li>
         <li>
-          <p>3250</p>
+          <p class="num">{{cjbs}}</p>
           <p>成交量</p>
         </li>
         <li>
@@ -74,7 +74,7 @@
           </li>
           <li>
             <span>配送</span>
-            <span>300元起送，车配</span>
+            <span>{{qsjg}}元起送，车配</span>
           </li>
           <li>
             <span>发票</span>
@@ -90,22 +90,56 @@
         </h3>
       </div>
       <div class="public_msg_info">
-          <p>商家公告文案占位符商家公告文案占位符，商家公告文案占位 商家公告文案占位符。商家公告文案占位符，商家公告文案占 位符，商家公告文案占位符。 商家公告文案占位符，商家公告文案占位符商家公告文案占位符，商家公告文案占位 商家公告文案占位符。商家公告文案占位符，商家公告文案占 位符，商家公告文案占位符。 商家公告文案占位符，商家公告文案占位符商家公告文案占位符，商家公告文案占位 商家公告文案占位符。商家公告文案占位符，商家公告文案占 位符，商家公告文案占位符。 商家公告文案占位符，商家公告文案占位符商家公告文案占位符，商家公告文案占位 商家公告文案占位符。商家公告文案占位符，商家公告文案占 位符，商家公告文案占位符。</p>
+          <p>{{sjgg}}</p>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { Toast } from "mint-ui";
+import { mapGetters } from 'vuex';
+import { getPub } from '@/api/index'
 import LocalHeader from "@/components/Header";
 export default {
   data() {
     return {
-      notice: "notice"
+      notice: "notice",
+      clientname:'',
+      sjpzs:'',
+      fhnum:'',
+      qsjg:'',
+      zhpf:"",
+      yhpj:"",
+      qbsp:"",
+      cjbs:"",
+      sjgg:""
     };
+  },
+  computed:{
+    ...mapGetters('login',['token','userId','corpCode','companyId','userRole']),
   },
   components: {
     LocalHeader
+  },
+  async mounted(){
+    let defaulParams = {
+      token:this.token,
+      userId:this.userId,
+      corpCode:this.corpCode,
+      companyId:this.companyId,
+      userRole:this.userRole,
+    };
+    let res = await getPub(defaulParams);
+    this.clientname = res.data.clientname;
+    this.sjpzs = res.data.sjpzs;
+    this.fhnum = res.data.fhnum;
+    this.qsjg = res.data.qsjg;
+    this.zhpf = res.data.zhpf;
+    this.yhpj = res.data.yhpj;
+    this.qbsp = res.data.qbsp;
+    this.cjbs = res.data.cjbs;
+    this.sjgg = res.data.sjgg;
   }
 };
 </script>
@@ -135,12 +169,12 @@ export default {
     color: #fff;
     .public_pic_right_title {
       margin-bottom: 20px;
-      margin-left: 33px;
+      // margin-left: 33px;
     }
     .public_pic_right_desc {
       font-size: 26px;
       margin-bottom: 25px;
-      margin-left: 33px;
+      // margin-left: 33px;
       p {
         margin-bottom: 4px;
         span {
@@ -202,6 +236,15 @@ export default {
   margin: 0 auto;
   margin-bottom: 19px;
   text-align: center;
+  &.num{
+    width: 100%!important;
+    text-align: center!important;
+    font-size:29px;
+    font-weight:bold;
+    color:rgba(102,102,102,1);
+    line-height:58px;
+    letter-spacing:1px;
+  }
   img {
     width: 100%;
   }
@@ -228,6 +271,8 @@ export default {
     font-size: 24px;
     margin-bottom: 40px;
     color: #333;
+    display: flex;
+    align-items: center;
     span:nth-of-type(1) {
       display: inline-block;
       color: #f5a623;

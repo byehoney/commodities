@@ -11,7 +11,7 @@
             </div>
         </div> -->
         <div class="scrollBox">
-            <div class="scrollItem" v-for="(item,index) in list" :key="index">
+            <div class="scrollItem" v-for="(item,index) in list" :key="index" @click="goDetail(item.kbtcbm)">
                 <div class="left">
                     <img :src="item.tctp" alt="">
                 </div>
@@ -27,7 +27,7 @@
                             <span class="nPrice">￥{{item.tchdj}}</span>
                             <span class="oPrice">原价：￥{{item.tcyj}}</span>
                         </div>
-                        <div class="btn" @click="addShopCar(item.kbtcbm)">
+                        <div class="btn" @click="addShopCar($event,item.kbtcbm)">
                             加入购物车
                         </div>
                     </div>
@@ -46,6 +46,7 @@
     </div>
 </template>
 <script>
+import { Toast } from "mint-ui";
 import { mapGetters } from 'vuex'
 import { getSuitList } from '@/api/index'
 import TopNav from '@/components/TopNav'
@@ -65,8 +66,11 @@ export default {
         this.getData();
     },
     methods: {
-        addShopCar(id){
-            
+        addShopCar(e,id){
+            e.stopPropagation();
+        },
+        goDetail(id){
+            this.$router.push({name:'suitDetail',query:{id:id}})
         },
         async getData(){
             let defaulParams = {

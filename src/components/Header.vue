@@ -1,7 +1,7 @@
 <template>
   <div class="header">
     <!-- 头部logo -->
-    <div class="header_logo" v-if="showlogo"></div>
+    <div class="header_logo" v-if="showlogo" @click="goShop"></div>
     <!-- 公告的返回 -->
     <!-- <div class="public_header_back" v-else>
         <img src="../images/publicback.png"/>
@@ -70,6 +70,9 @@ export default {
     };
   },
   methods: {
+    goShop(){
+      this.$router.push('/public');
+    },
     SearchVal() {
       if (this.searchStr.trim()) {
         this.$emit("receve", this.searchStr.trim());
