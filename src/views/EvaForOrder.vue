@@ -183,9 +183,9 @@ export default {
         shsdpj:this.speedNum,
         psypj:this.sendNum  
       };
-      let res = await evaForOrder(defaulParams);
+      let res = await evaForOrder(defaulParams);   
       if(res.code==0){
-        Toast({
+        Toast({  
             message: "评价成功",
             position: "middle",
             duration: 2000

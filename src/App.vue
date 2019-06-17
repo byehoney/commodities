@@ -30,6 +30,6 @@ html{
     background:rgba(235,235,235,1);
 }
 #app{
-    background: #e5e5e5
+    background: #ebebeb;
 }
 </style>
