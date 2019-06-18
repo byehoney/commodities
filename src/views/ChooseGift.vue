@@ -1,13 +1,14 @@
 <template>
   <!-- 选择赠品 -->
   <div class="gift_wrap">
-    <div>
+    <!-- <div>
       <mt-header title="选择赠品" class="shopgift_header">
-        <router-link to="/shopcar" slot="left">
+        <router-link to="/newshopcar" slot="left">
           <mt-button icon="back" class="text"></mt-button>
         </router-link>
       </mt-header>
-    </div>
+    </div> -->
+    <TopNav></TopNav>
     <div class="shopgift_subheader">
       <h3>组合满10件可选择以下商品</h3>
     </div>
@@ -45,7 +46,7 @@
       <div class="footer_guide_right fix">
         <ul>
           <li>
-            <span @click="addshop">清空</span>
+            <span @click="clear">清空</span>
           </li>
           <li>
             <span @click="handlerClick">确定</span>
@@ -57,33 +58,27 @@
 </template>
 
 <script>
-import { constants } from "crypto";
+import { Toast } from "mint-ui";
+import TopNav from "@/components/TopNav";
+// import { constants } from "crypto";
 export default {
   data() {
     return {
       list: {
-        product: [
-          {
-            name: "赠品冷焰火",
-            address: "河北保定星星烟花制造厂",
-            sum: "规格：35g*1支",
-            price: "￥0.00",
-            num: "2",
-            checked: false
-          },
-          {
-            name: "赠品冷焰火",
-            address: "河北保定星星烟花制造厂",
-            sum: "规格：35g*1支",
-            price: "￥0.00",
-            num: "3",
-            checked: false
-          }
-        ]
+        product: []
       }
     };
   },
+  components: {
+    TopNav,
+  },
   methods: {
+    handlerClick(){
+
+    },
+    clear(){
+
+    },
     checkgift(item) {
       item.checked ? (item.checked = false) : (item.checked = true);
     }
@@ -94,6 +89,7 @@ export default {
 <style scoped lang="scss">
 .gift_wrap {
   background: #fff;
+  padding-top: 88px;
 }
 .shopgift_header {
   background: #fff;
@@ -228,7 +224,7 @@ export default {
 }
 span {
   display: inline-block;
-  font-size: 12px;
+  font-size: 32px;
 }
 .badge {
   font-size: 26px;

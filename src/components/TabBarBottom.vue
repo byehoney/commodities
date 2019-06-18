@@ -53,7 +53,7 @@ export default {
                     this.$router.push('/choose');
                 break;
                 case 'shopcar':
-                    this.$router.push('/shopcar');
+                    this.$router.push('/newShopcar');
                 break;
                 case 'my':
                     this.$router.push('/my');

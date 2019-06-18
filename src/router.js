@@ -86,7 +86,12 @@ const router = new Router({
             path: "/choosegift",
             name: "choosegift",
             component: () =>
-                import(/* webpackChunkName: "choosegift" */ "./views/ChooseGift.vue")
+                import(/* webpackChunkName: "choosegift" */ "./views/ChooseGift.vue"),
+                meta: {
+                    auth: true,
+                    keepAlive: false,
+                    title:'选择赠品'
+                }
         },
         {
             path: "/public",
