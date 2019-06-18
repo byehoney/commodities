@@ -1,24 +1,19 @@
 <template>
   <div>
-    <div class="list_shopcar fix" >
+    <div class="list_shopcar fix">
       <div>
         <div class="list_shopcar_title">
           <div class="list_shopcar_name">
             <div
               class="list_shopcar_circle"
               :class="checked?'checked':''"
-              @click="shopchoose(item)"
             ></div>
-            <span>{{shopData.head.syname}}</span>
+            <span>{{shopHead.syname}}</span>
           </div>
-          <div class="list_shopcar_desc">每日采集额:{{shopData.head.cjl}}</div>
+          <div class="list_shopcar_desc">每日采集额:{{shopHead.cjl}}</div>
         </div>
         <div class="list_shopcar_content fix" v-for="(list,index) in shopData.list" :key="index">
-          <div
-            class="list_shopcar_circle"
-            :class="list.checked?'checked':''"
-            @click="choose(list)"
-          ></div>
+          <div class="list_shopcar_circle" :class="list.checked?'checked':''" @click="choose(list)"></div>
           <div class="com_add">
             <div class="list_shopcar_pic">
               <img :src="list.imgurl">
@@ -33,7 +28,7 @@
                 </div>
               </div>
               <div class="list_shopcar_com_bottom fix">
-                <div class="list_shopcar_com_price">¥{{list.pro_price}}</div>
+                <div class="list_shopcar_com_price">¥{{list.price}}</div>
                 <div class="list_shopcar_com_num">
                   <ul>
                     <li @click="reduce(list)">-</li>
@@ -59,7 +54,7 @@
               <div class="shop_gift_right">
                 <div>累积购买可或赠品，点击查看更多活动规则</div>
                 <div class="gift_tips" @click="changeMenu(index)">
-                  <div :class="menuShow==index?'':'gift_tips_gift'" >累积购买可或赠品，点击查看更多活动规则点击查看更多活动规则</div>
+                  <div :class="menuShow==index?'':'gift_tips_gift'">累积购买可或赠品，点击查看更多活动规则点击查看更多活动规则</div>
                   <div class="gift_tips_menu">
                     <span :class="menuShow==index?'gift_tips_menu_down':'gift_tips_menu_up'"></span>
                   </div>
@@ -85,11 +80,11 @@
           <div class="shop_footer_price">
             <span>合计：</span>
             <span>¥</span>
-            <span>{{this.fetchData.allsum}}</span>
+            <span>{{allnum}}</span>
           </div>
           <div class="shop_footer_result">
             <span>结算</span>
-            <span>({{shopData.list.allnum}})</span>
+            <!-- <span>({{allnum}})</span> -->
           </div>
         </div>
         <div class="shop_footer_right" v-else>
@@ -107,8 +102,10 @@ export default {
   data() {
     return {
       is_checked: 0,
-      checked: false,   //是否选中
-      menuShow:0,       //商品活动的展开或折叠
+      checked: false, //是否选中
+      menuShow: 0, //商品活动的展开或折叠,
+      shopTitle: "", //商店名称
+      allnum: "" //价格
     };
   },
   computed: {
@@ -117,7 +114,8 @@ export default {
       fetchData: state => state.shopCar.fetchData,
       // 获取管理和完成的状态
       shopResult: state => state.shopCar.fetchData.is_success,
-      shopData:state=>state.shopCar.shopData
+      shopData: state => state.shopCar.shopData,
+      shopHead: state => state.shopCar.shopHead
     }),
     ...mapGetters("login", [
       "token",
@@ -130,93 +128,29 @@ export default {
   methods: {
     ...mapActions("shopCar", ["getShopMsg"]),
     changeMenu(index) {
-     if(this.menuShow==index){
-       this.menuShow=-1
-     }else{
-       this.menuShow=index
-     }
-    },
-    choosetrue(pro) {
-      console.log(pro)
-      pro.checked = true; //将商品选中状态改为true
-      ++item.choose === item.products.length ? (item.check = true) : ""; //这里执行了两部，选中商品数量先+1，再与该店铺商品数量比较，如果相等就更改店铺选中状态为true
-      item.check
-        ? ++this.fetchData.allchoose === this.fetchData.list.length
-          ? (this.fetchData.status = true)
-          : (this.fetchData.status = false)
-        : ""; //如果店铺选中状态改为true，选中店铺数量先+1，再与店铺数量比较，如果相等就更改全选选中状态为true
-      this.fetchData.allsum += pro.pro_sum;
-      this.fetchData.allnum += pro.pro_num;
-    },
-    choosefalse(pro) {
-      pro.checked = false; //将商品选中状态改为false
-      --item.choose; //选中商品数量-1
-      if (item.check) {
-        //如果店铺是被选中的，更改店铺选中状态
-        // item.check = false;
-        --this.fetchData.allchoose; //并且选中店铺数量-1
+      if (this.menuShow == index) {
+        this.menuShow = -1;
+      } else {
+        this.menuShow = index;
       }
-      this.fetchData.status = false; //无论之前全选的状态，将其改为false就行
-      this.fetchData.allsum -= pro.pro_sum; //商品总计价格变动
-      this.fetchData.allnum -= pro.pro_num;
     },
     choose(pro) {
-      !pro.checked ? this.choosetrue(pro) : this.choosefalse(pro);
-    },
-    shoptrue(item) {
-      item.products.forEach(pro => {
-        pro.checked === false && this.choosetrue(item, pro); //循环店铺中的商品，先筛选出目前没选中的商品，给它执行choosetrue函数
-      });
-    },
-    shopfalse(item) {
-      item.products.forEach(pro => {
-        pro.checked === true && this.choosefalse(item, pro); //循环店铺中的商品，先筛选出目前被选中的商品，给它执行choosefalse函数
-      });
-    },
-    shopchoose(item) {
-      !item.check ? this.shoptrue(item) : this.shopfalse(item);
-    },
-    cartchoose() {
-      this.fetchData.status = !this.fetchData.status; //取反改变状态
-      this.fetchData.status
-        ? this.fetchData.list.forEach(item => this.shoptrue(item))
-        : this.fetchData.list.forEach(item => this.shopfalse(item)); //根据取反后的状态进行相应的店铺按钮操作
-    },
-    add(pro) {
-      console.log(pro);
-      pro.checked = true;
-      pro.pro_num++;
-      pro.pro_sum += pro.pro_price;
-      if (pro.checked) {
-        this.fetchData.allnum++;
-        this.fetchData.allsum += pro.pro_price;
+      if (!pro.checked) {
+        pro.checked = true;
+        this.allnum+= pro.price;
+      } else {
+        pro.checked = false;
+        this.allnum -= pro.price;
+        console.log(this.allnum)
+        console.log(pro.price)
       }
     },
-    reduce(pro) {
-      if (pro.pro_num === 1) return;
-      pro.pro_num--;
-      pro.pro_sum -= pro.pro_price;
-      if (pro.checked) {
-        this.fetchData.allnum--;
-        this.fetchData.allsum -= pro.pro_price;
-      }
-    },
-    calculate(pro) {
-      let oldsum = pro.pro_sum; //之前的总价
-      let oldnum = oldsum / pro.pro_price; //之前的数量
-      pro.pro_num = parseInt(pro.pro_num);
-      pro.pro_num > 0
-        ? (pro.pro_sum = pro.pro_num * pro.pro_price)
-        : (pro.pro_num = oldnum); //如果输入数量大于0，计算价格，否则返回之前的数量
-      let diffsum = pro.pro_sum - oldsum; //差价
-      let diffnum = pro.pro_num - oldnum; //差量
-      if (pro.checked) {
-        //如果商品被选中
-        this.fetchData.allsum += diffsum; //计算总价
-        this.fetchData.allnum += diffnum; //计算总量
-      }
-    },
-
+     getCarList(){
+        var list=this.$store.state.shopCar.shopData.list
+        for(var i=0;i<list.length;i++){
+            this.allnum=list[i].allnum
+        }
+     },
     del(data) {
       var data = data.list;
       for (var i = 0; i < data.length; i++) {
@@ -252,14 +186,11 @@ export default {
       companyId: this.companyId,
       userRole: this.userRole
     };
-    // let { data } = await getCarList(defaulParams);
-    // this.shopResult.shopHead=data.head
-    console.log(this.shopData)
-    this.getShopMsg(defaulParams)
 
-    
-
-  }  
+    await this.getShopMsg(defaulParams);
+    await this.getCarList()
+    // console.log(this.$store.state.shopCar.shopData.list)
+  }
 };
 </script>
 
@@ -350,9 +281,18 @@ export default {
 }
 .list_shopcar_com_top_title p {
   font-size: 18px;
+  width: 250px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .list_shopcar_com_top_title p:first-child {
   font-size: 26px;
+}
+.list_shopcar_com_top_title p:last-child {
+  text-decoration: line-through;
+  text-decoration-color: red;
+  -moz-text-decoration-color: red; /* 针对 Firefox 的代码 */
 }
 .list_shopcar_com_top_gift {
   float: right;
@@ -488,7 +428,7 @@ export default {
 .checked {
   width: 40px;
   height: 40px;
-  margin-right: 11px;
+  /* margin-right: 11px; */
   position: relative;
   /* top: 10px; */
   background: url("../images/car_checkcircle.png") no-repeat left 50%;

@@ -200,7 +200,6 @@ export default {
     //精品推荐
     let specialData = await getSpecialList({...defaulParams,pageSize:4});
     this.boutique = specialData.data.list;
-    console.log(this.boutique);
     //限时秒杀
     let killdata = await secKill({...defaulParams,pageSize: 3});
     this.secKillList = killdata.data.list;

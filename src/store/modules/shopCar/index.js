@@ -3,7 +3,8 @@ import { getCarList } from "../../../api/index"
 export default {
     namespaced: true,
     state: {
-        shopData: { },
+        shopHead:{},
+        shopData: {},
         shopResult: false,
         fetchData: {
             list: [
@@ -130,6 +131,7 @@ export default {
     mutations: {
         [type.GET_SHOP_LIST](state, res) {
             state.shopData = res.data
+            state.shopHead=res.data.head
         },
         manage(state) {
             state.fetchData.is_success = !state.fetchData.is_success
@@ -147,7 +149,6 @@ export default {
                 userRole: data.userRole
             })
             if(res.code==0){
-                console.log(res.data.list)
                 res.data.list.forEach(item => {
                     item.checked=false
                     item.allnum=0

@@ -63,7 +63,6 @@ export default {
   data() {
     return {
       showlogo: true,
-
       searchStr: "",
       hide: "",
       rightWinShow: false
