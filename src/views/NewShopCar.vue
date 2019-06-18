@@ -85,7 +85,7 @@
         </div>
       </div>
       <!-- 满赠 -->
-      <div v-for="(mzlist,index) in mzList" :key="index" class="area">
+      <div v-for="(mzlist,index) in mzList" :key="index" class="area act">
         <div class="list_shopcar_title">
           <div class="list_shopcar_name">
             <div
@@ -313,6 +313,7 @@ export default {
             result =  false; 
           }else{
             this.showErr = false;
+            this.$set(this.list[index],'showTip',false)
           }
         }
       })
@@ -340,10 +341,12 @@ export default {
               result =  false; 
             }else{
               this.showErr = false;
+              this.$set(this.mzList[jIndex][index],'showTip',false)
             }
           }
         })
       })
+      // let top = document.getElementsByClassName('err')
     },
     showAct(type,index,jIndex){
       if(type == 'common'){
@@ -446,7 +449,6 @@ export default {
       if(type=='common'){
         this.$set(this.list[index],'checked',!this.list[index].checked);
       }else{
-        console.log(this.mzList[index])
         this.$set(this.mzList[index][jIndex],'checked',!this.mzList[index][jIndex].checked);
         let checkMzNum = 0;//买赠活动单品选择数
         this.mzList[index].forEach((pterm,pIndex)=>{
@@ -515,6 +517,7 @@ export default {
       })
       this.countTotal();
       this.isShowGift();
+      this.isShowTip();
       if(this.sumNum==this.total){
         this.checkedAll = true;
       }else{
@@ -618,13 +621,15 @@ export default {
       this.list = res.data.list;
       this.mzList = res.data.mzList;
       this.count();
-      console.log(this.list)
     }
   }  
 };
 </script>
 
 <style lang="scss" scoped>
+.act .errTip{
+  margin-left: 47px;
+}
 .giftTip{
   width:100%;
   height:60px;

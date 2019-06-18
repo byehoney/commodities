@@ -183,6 +183,10 @@ function addToCar(params){//添加到购物车
     return post('/product/add/cart.do', params)
 }
 
+function getGiftList(params){//获取赠品列表
+    return post('/product/get/zpin.do', params)
+}
+
 function delFromCar(params){//从购物车删除
     return post('/product/update/cart.do', params)
 }
@@ -249,6 +253,7 @@ export {
     backGOods,
     getPub,
     addToCar,
+    getGiftList,
     delFromCar,
     getCarList,
     getSuitList,
