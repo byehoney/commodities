@@ -182,6 +182,10 @@ function getPub(params){//获取门店公告
 function addToCar(params){//添加到购物车
     return post('/product/add/cart.do', params)
 }
+
+function delFromCar(params){//从购物车删除
+    return post('/product/update/cart.do', params)
+}
 function getCarList(params){//获取购物车列表参数
     return post('/product/get/cartlist.do', params)
 }
@@ -245,6 +249,7 @@ export {
     backGOods,
     getPub,
     addToCar,
+    delFromCar,
     getCarList,
     getSuitList,
     getSuitDetail,

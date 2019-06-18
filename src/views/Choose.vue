@@ -69,7 +69,7 @@
                                     <span class="oPrice">{{item.ptsj}}</span>
                                 </div>
                             </div>
-                            <div class="bot_right">
+                            <div class="bot_right" @click="buyPro($event,item)">
                                 <img class="car" src="../images/choose_car.png" alt="">
                                 <div class="saled">已销：{{item.ys}}件</div>
                             </div>
@@ -124,7 +124,7 @@ import { Toast } from "mint-ui";
 import SimpleCropper from "../components/SimpleCropper"
 import TabBarBottom from '@/components/TabBarBottom'
 import LocalHeader from "@/components/Header";
-import {getChooseList} from '@/api/index'
+import {getChooseList,addToCar} from '@/api/index'
 import {mapState,mapGetters} from 'vuex'
 export default {
     data(){
@@ -299,6 +299,37 @@ export default {
         },
         goDetail(id){   
             this.$router.push({name:'detail',query:{id:id}});
+        },
+        async buyPro(e,item){
+            e.stopPropagation();
+            let defaulParams = {
+                token: this.token,
+                userId: this.userId,
+                corpCode: this.corpCode,
+                companyId: this.companyId,
+                userRole: this.userRole,
+                productId: this.$route.query.id
+            };
+            let jsonStr = JSON.stringify(
+                [{
+                mzhdlx:'无',
+                pzlx:false,
+                jghdlx:item.hdlx,
+                productId:item.spbm,
+                cartNum:1,
+                pzdj:item.cxj,
+                pzyj:item.ptsj,
+                mobile:this.user.mobile
+                }]
+            )
+            let res = await addToCar({...defaulParams,jsonStr:jsonStr});
+            if(res.code == 0){
+                Toast({
+                    message: "加入购物车成功", //弹窗内容
+                    position: "middle", //弹窗位置
+                    duration: 1000 //弹窗时间毫秒,如果值为-1，则不会消失
+                });
+            }
         }
     }
 }

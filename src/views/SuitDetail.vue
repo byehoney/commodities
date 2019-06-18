@@ -107,6 +107,7 @@ export default {
                     hdms:item.kbtcms,
                     hddz:item.tctp,
                     tcj:item.tchdj,
+                    zzysj:item.tcyj,
                     gmsz:1,
                     hdbm:item.kbtcbm,
                     jghdlx:'无',
