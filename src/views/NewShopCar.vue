@@ -1,5 +1,5 @@
 <template>
-  <div style="opacity:1">
+  <div style="opacity:1" :class="[popupVisible?'popContainer':'']">
     <mt-header title="购物车" class="shopCar_header">
       <router-link to="/" slot="left">
         <mt-button icon="back" class="text"></mt-button>
@@ -146,7 +146,7 @@
           </div>
           <div class="shop_gift" v-if="mzList[index][0].canSelGift&&jIndex==mzList[index].length-1">
             <div class="shop_gift_bottom">
-              <router-link to="/choosegift">选择赠品</router-link>
+              <span @click="chooseGift(index,mzList[index][0].productcode)">{{mzList[index][0].selGifts==''?'选择赠品':'已选择'}}</span>
             </div>
           </div>
         </div>
@@ -202,17 +202,69 @@
         <p class="confirm" @click="closeTip">确定</p>
       </div>
     </div>
+    <mt-popup
+      @touchmove.stop="" 
+      v-model="popupVisible"
+      position="bottom">
+      <div class="gift_wrap">
+        <div class="shopgift_list" v-for="(item,index) in giftList" :key="index">
+          <div class="shopgift_list_content">
+            <div
+              class="list_shopcar_circle"
+              :class="item.checked?'checked':''"
+              @click="checkgift(index)"
+            ></div>
+            <div class="shopgift_list_pic">
+              <img alt="" :src="item.url"/>
+            </div>
+            <div class="shopgift_list_text">
+              <div class="shopgift_text_top">
+                <h3>{{item.zpmc}}</h3>
+                <p>{{item.cj}}</p>
+                <p>规格：{{item.guige}}</p>
+              </div>
+              <div class="shopgift_text_bottom">
+                <ul>
+                  <li>￥{{item.zpjj}}</li>
+                  <li>{{item.zssl}} 件</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- 底部 -->
+        <div class="footer_guide fix">
+          <div class="footer_guide_left fix">
+            <p class="badge">
+              已选择
+              <span>{{giftNum}} </span>件
+            </p>
+          </div>
+          <div class="footer_guide_right fix">
+            <ul>
+              <li>
+                <span @click="clear">清空</span>
+              </li>
+              <li>
+                <span @click="confirmGift">确定</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </mt-popup>
   </div>
 </template>
 
 <script>
 import { Toast } from "mint-ui";
-import { getCarList,delFromCar } from "@/api/index";
+import { getCarList,delFromCar ,getGiftList,getCarTip,settleAcount} from "@/api/index";
 import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
 import { setTimeout } from 'timers';
 export default {
   data() {
     return {
+      popupVisible:false,//赠品弹出
       showInput:false,
       timer:null,
       H:'00',
@@ -237,12 +289,17 @@ export default {
       errText:'',//错误提示文案
       giftTipShow:false,//是否显示可选择赠品文案
       gitTipText:'',
+      giftList:[],//可选择赠品列表
+      giftNum:0,//选择赠品的数量
+      curGiftIndex:0,//当前选择赠品活动index
+      canClick:true,
     };
   },
   computed: {
     ...mapGetters('login',['token','userId','corpCode','companyId','userRole']),
   },
   methods: {
+    ...mapMutations('login',['saveOrderInfo']),
     async del(){
       let defaulParams = {
         token: this.token,
@@ -251,29 +308,48 @@ export default {
         companyId: this.companyId,
         userRole: this.userRole
       };
-      let selPro = [];
-      this.list.forEach((item,index)=>{
-        if(item.checked){
-          if(item.promotionflag=='套餐'){
-            selPro.push(item.promotioncode);
-          }else{
-            selPro.push(item.productcode);
-          }
-        }
-      })
-      this.mzList.forEach((item,index)=>{
-        item.forEach((pterm,jIndex)=>{
-          if(pterm.checked){
-            selPro.push(pterm.productcode)
+      let jsonStr = '';
+      if(!this.checkedAll){
+        let selPro = [];
+        this.list.forEach((item,index)=>{
+          if(item.checked){
+            if(item.promotionflag=='套餐'){
+              selPro.push({data:item.promotioncode,type:2});
+            }else{
+              selPro.push({data:item.productcode,type:1});
+            }
           }
         })
-      })
-      let res = await delFromCar({...defaulParams,data:JSON.stringify(selPro),})
+        this.mzList.forEach((item,index)=>{
+          item.forEach((pterm,jIndex)=>{
+            if(pterm.checked){
+              selPro.push({data:pterm.productcode,type:1})
+            }
+          })
+        })
+        jsonStr = JSON.stringify(selPro);
+      }else{
+        jsonStr = JSON.stringify([{"data":"","type":"3"}]);
+      }
+      
+      let res = await delFromCar({...defaulParams,jsonStr:jsonStr});
+      if(res.code==0){
+        this.getData();
+        Toast({
+            message: "删除成功", //弹窗内容
+            position: "middle", //弹窗位置
+            duration: 1000 //弹窗时间毫秒,如果值为-1，则不会消失
+        });
+      }
     },
     closeTip(){
       this.showErr = false;
     },
-    goNext(){//订单结算
+    async goNext(){//订单结算
+      if(!this.canClick){
+        return;
+      }
+      this.canClick = false;
       if(this.sumMoney<this.head.cjl){
         this.showErr = true;
         this.errText = '无效的采集额';
@@ -282,38 +358,84 @@ export default {
         this.showErr = false;
       }
       this.isShowTip();
+      if(document.getElementsByClassName('errTip').length>0){
+        let top = document.getElementsByClassName('errTip')[0].offsetTop-document.body.scrollTop;
+        window.scrollTo(0,top-200);
+        return;
+      }
+      this.saveOrderInfo({list:this.list,mzList:this.mzList});
+      let defaulParams = {
+        token: this.token,
+        userId: this.userId,
+        corpCode: this.corpCode,
+        companyId: this.companyId,
+        userRole: this.userRole
+      };
+      let res = await getCarTip({...defaulParams,money:this.sumMoney});
+      if(res.code == 0&&res.data.hdms){
+        this.giftTipShow = true;
+        this.gitTipText = res.data.hdms;
+      }
+      setTimeout(()=>{
+        this.giftTipShow = false;
+        this.submitCar(defaulParams);
+      },2000)
+    },
+    async submitCar(defaulParams){
+      let suits=[];
+      let items = [];
+      this.list.forEach((item,index)=>{
+        if(item.checked){
+          if(item.promotionflag=='套餐'){
+            suits.push({billSub:item.subcode,suiteCode:item.promotioncode,buyNumber:item.suitebuynumber})
+          }else{
+            items.push({billSub:item.subcode,itemCode:item.productcode,quantity:item.quantity,price:item.price,buyNumber:0})
+          }
+        }
+      })
+      this.mzList.forEach((item)=>{
+        item.forEach(pterm=>{
+          if(pterm.checked){
+            items.push({billSub:item.subcode,itemCode:item.productcode,quantity:item.quantity,price:item.price,buyNumber:0})
+          }
+        })
+      })
+      let jsonStr = JSON.stringify({suites:suits,items:items});
+      let result =  await settleAcount({...defaulParams,jsonStr:jsonStr});
+      // this.$router.push({name:'confirmOrders'});
     },
     isShowTip(){
-      let result = false;
+      let result = 0;
       this.list.forEach((item,index)=>{
         if(item.checked){
           if(item.quantity<item.packnumber){
-            this.showErr = true;
-            this.errText="无效的采集量";
+            // this.showErr = true;
+            // this.errText="无效的采集量";
             this.$set(this.list[index],'errTip','无效的采集量');
             this.$set(this.list[index],'showTip',true)
-            result = false; 
+            result++; 
           }else if(item.quantity>item.stock){
-            this.showErr = true;
-            this.errText="库存不足";
+            // this.showErr = true;
+            // this.errText="库存不足";
             this.$set(this.list[index],'errTip','库存不足');
             this.$set(this.list[index],'showTip',true)
-            result =  false; 
+            result++; 
           }else if(item.maxpackquantity!='NA'&&item.quantity>item.maxpackquantity){
-            this.showErr = true;
-            this.errText = '超过今日限购量';
+            // this.showErr = true;
+            // this.errText = '超过今日限购量';
             this.$set(this.list[index],'errTip','超过今日限购量');
             this.$set(this.list[index],'showTip',true)
-            result =  false; 
+            result++; 
           }else if(item.quantity>item.promotionnum&&item.schemetype=='秒杀'){
-            this.showErr = true;
-            this.errText = '超过秒杀单店限购量';
+            // this.showErr = true;
+            // this.errText = '超过秒杀单店限购量';
             this.$set(this.list[index],'errTip','超过秒杀单店限购量');
             this.$set(this.list[index],'showTip',true)
-            result =  false; 
+            result++; 
           }else{
             this.showErr = false;
-            this.$set(this.list[index],'showTip',false)
+            this.$set(this.list[index],'showTip',false);
+            result = 0;
           }
         }
       })
@@ -322,31 +444,37 @@ export default {
         pterm.forEach((item,index)=>{
           if(item.checked){
             if(item.quantity<item.packnumber){
-              this.showErr = true;
-              this.errText = '无效的采集量';
+              // this.showErr = true;
+              // this.errText = '无效的采集量';
               this.$set(this.mzList[jIndex][index],'errTip','无效的采集量');
               this.$set(this.mzList[jIndex][index],'showTip',true)
-              result = false; 
+              result++; 
             }else if(item.quantity>item.stock){
-              this.showErr = true;
-              this.errText = '库存不足';
+              // this.showErr = true;
+              // this.errText = '库存不足';
               this.$set(this.mzList[jIndex][index],'errTip','库存不足');
               this.$set(this.mzList[jIndex][index],'showTip',true)
-              result =  false; 
+              result++; 
             }else if(item.maxpackquantity!='NA'&&item.quantity>item.maxpackquantity){
-              this.showErr = true;
-              this.errText = '超过今日限购量';
+              // this.showErr = true;
+              // this.errText = '超过今日限购量';
               this.$set(this.mzList[jIndex][index],'errTip','超过今日限购量');
               this.$set(this.mzList[jIndex][index],'showTip',true)
-              result =  false; 
+              result++; 
             }else{
               this.showErr = false;
-              this.$set(this.mzList[jIndex][index],'showTip',false)
+              this.$set(this.mzList[jIndex][index],'showTip',false);
+              result = 0;
             }
           }
         })
       })
-      // let top = document.getElementsByClassName('err')
+      // setTimeout(()=>{
+      //   let top = document.getElementsByClassName('errTip')[0].offsetTop;
+      //   this.top = top;
+      // console.log(top)
+      // },1000)
+      return result;
     },
     showAct(type,index,jIndex){
       if(type == 'common'){
@@ -590,43 +718,116 @@ export default {
         }
       }, 1000);
     },
-  },
-  async mounted() {
-    let defaulParams = {
-      token: this.token,
-      userId: this.userId,
-      corpCode: this.corpCode,
-      companyId: this.companyId,
-      userRole: this.userRole
-    };
-    let res = await getCarList(defaulParams);
-    if(res.code==0){
-      res.data.list.forEach((item,index)=>{
-        item.checked = false;
-        item.showAct = false;
-        item.showTip = false;
-        item.errTip = '';
-      })
-      res.data.mzList.forEach((item,index)=>{
-        item.forEach((pterm,jIndex)=>{
-          pterm.checked = false;
-          pterm.allChecked = false;
-          pterm.showAct = false;
-          pterm.canSelGift = false;
-          pterm.showTip = false;
-          pterm.errTip = '';
+    async getData(){
+      let defaulParams = {
+        token: this.token,
+        userId: this.userId,
+        corpCode: this.corpCode,
+        companyId: this.companyId,
+        userRole: this.userRole
+      };
+      let res = await getCarList(defaulParams);
+      if(res.code==0){
+        res.data.list.forEach((item,index)=>{
+          item.checked = false;
+          item.showAct = false;
+          item.showTip = false;
+          item.errTip = '';
         })
+        res.data.mzList.forEach((item,index)=>{
+          item.forEach((pterm,jIndex)=>{
+            pterm.checked = false;
+            pterm.allChecked = false;
+            pterm.showAct = false;
+            pterm.canSelGift = false;
+            pterm.showTip = false;
+            pterm.errTip = '';
+            pterm.selGifts="";
+          })
+        })
+        this.head = res.data.head;
+        this.list = res.data.list;
+        this.mzList = res.data.mzList;
+        if(this.list.length){
+          this.count();
+        }
+      }
+    },
+    chooseGift(index,id){
+      this.popupVisible = true;
+      this.curGiftIndex = index;
+      let selGifts = this.mzList[index][0].selGifts;
+      this.getGiftData(index,id,selGifts);
+    },
+    confirmGift(){
+      this.popupVisible = false;
+      let selGift = [];
+      this.giftList.forEach((item)=>{
+        if(item.checked){
+          selGift.push(item);
+        }
       })
-      this.head = res.data.head;
-      this.list = res.data.list;
-      this.mzList = res.data.mzList;
-      this.count();
+      this.$set(this.mzList[this.curGiftIndex][0],'selGifts',selGift);
+    },
+    async getGiftData(index,id,selGifts){
+      console.log(selGifts)
+      let defaulParams = {
+        token:this.token,
+        userId:this.userId,
+        corpCode:this.corpCode,
+        companyId:this.companyId,
+        userRole:this.userRole,
+      }; 
+      let res = await getGiftList({...defaulParams,productId:id});
+      res.data.list.forEach(item => {
+        item.checked =false;
+      });
+      if(res.code ==0){
+        this.giftList = res.data.list;
+        if(selGifts){
+          selGifts.forEach((item,index)=>{
+            let gIndex = this.giftList.findIndex((pterm)=>pterm.zpbm==item.zpbm);
+            this.$set(this.giftList[gIndex],'checked',true)
+          })
+        }
+      }
+    },
+    clear(){
+      this.giftList.forEach((item)=>{
+        item.checked = false;
+      })
+      this.countGiftNum();
+    },
+    countGiftNum(){
+      let num = 0;
+      this.giftList.forEach((item,index)=>{
+        if(item.checked){
+          num ++;
+        }
+      })
+      this.giftNum = num;
+    },
+    checkgift(index) {
+      this.$set(this.giftList[index],'checked',!this.giftList[index].checked);
+      this.countGiftNum();
     }
+  },
+  mounted() {
+    this.getData();
   }  
 };
 </script>
 
 <style lang="scss" scoped>
+.popContainer{
+  overflow: hidden;
+  height: 100vh;
+}
+.mint-popup-bottom{
+  width: 100%;
+  height: 100%;
+  background-color: #ebebeb;
+}
 .act .errTip{
   margin-left: 47px;
 }
@@ -915,7 +1116,7 @@ export default {
   border: 2px solid #4a90e2;
   border-radius: 5px;
 }
-.shop_gift_bottom a {
+.shop_gift_bottom span {
   color: #4a90e2;
 }
 .list_shopcar_com_price {
@@ -1103,5 +1304,170 @@ export default {
       }
     }
   }
+.gift_wrap {
+  background: #fff;
+  // padding-top: 88px;
+  .shopgift_list .shopgift_list_content:last-child{
+    border: none;
+  }
+  .shopgift_header {
+    background: #fff;
+    color: #333333;
+    font-size: 30px;
+    .text {
+      font-size: 30px;
+    }
+  }
+  .list_shopcar_circle {
+    width: 40px;
+    height: 40px;
+    background: url("../images/car_circle.png") no-repeat center;
+    background-size: 100%;
+    margin-right: 8px;
+    float: left;
+  }
+  .checked {
+    background: url("../images/car_checkcircle.png") no-repeat center;
+    background-size: 100%;
+  }
+  .shopgift_subheader {
+    min-height: 42px;
+    line-height: 42px;
+    color: #8b572a;
+    background: #ffe6bc;
+    margin-bottom: 19px;
+    h3 {
+      font-weight: 400;
+      margin-left: 38px;
+      font-size: 20px;
+    }
+  }
+  .shopgift_list {
+    min-height: 221px;
+    font-size: 18px;
+    padding-left: 45px;
+    background: #fff;
+    margin-bottom: 10px;
+    border-bottom: 2px solid #ebebeb;
+    &:last-child{
+      border: none;
+    }
+    .shopgift_list_content {
+      width: 705px;
+      display: flex;
+      border-bottom: 1px solid #e5e5e5;
+      padding-bottom: 26px;
+      padding-top: 40px;
+    }
+    .shopgift_list_pic {
+      width: 220px;
+      height: 176px;
+      // background: #ccc;
+      margin-right: 26px;
+      img{
+        width: 100%;
+        height: 100%;
+        object-fit: scale-down;
+      }
+    }
+    .shopgift_text_top h3 {
+      font-size: 24px;
+      color: #666;
+      line-height: 40px;
+    }
+    .shopgift_text_top p {
+      color: #999;
+      line-height: 35px;
+    }
+  }
+  .shopgift_text_bottom {
+    width: 400px;
+    color: #999;
+    margin-top: 46px;
+  }
+  .shopgift_text_bottom ul li {
+    float: left;
+    height: 40px;
+    width: 180px;
+  }
+  .shopgift_text_bottom ul li:nth-of-type(2) {
+    float: right;
+    text-align: center;
+  }
+  /* 底部样式 */
+  .footer_guide {
+    border-top: 5px solid #e4e4e4;
+    position: fixed;
+    z-index: 100;
+    left: 0;
+    right: 0;
+    bottom: 1px;
+    background-color: #fff;
+    width: 100%;
+    height: 95px;
+    line-height: 95px;
+  }
+  .footer_guide_left {
+    width: 262px;
+    float: left;
+    min-height: 100px;
+  }
+  .footer_guide_left ul li {
+    width: 62px;
+    height: 62px;
+    float: left;
+    margin-left: 49px;
+  }
+  .footer_guide_left ul li:nth-of-type(1) {
+    position: relative;
+  }
+  .footer_guide_left ul li:nth-of-type(2) {
+    width: 49px;
+    height: 62px;
+    float: left;
+  }
+  .footer_guide_left ul li img,
+  .footer_guide_right ul li img {
+    width: 100%;
+  }
+  .footer_guide_right {
+    width: 488px;
+    float: left;
+    text-align: center;
+    color: #fff;
+  }
+  .footer_guide_right ul li {
+    width: 244px;
+    height: 100px;
+    line-height: 50px;
+    float: left;
+    background: url("../images/resultgray.png") no-repeat top;
+    background-size: 100%;
+  }
+  .footer_guide_right ul li:nth-of-type(2) {
+    background: url("../images/result.png") no-repeat top;
+    background-size: 100%;
+  }
+  .on {
+    color: #02a774;
+  }
+  span {
+    display: inline-block;
+    font-size: 32px;
+  }
+  .badge {
+    font-size: 26px;
+    text-align: center;
+    color: #666;
+    line-height: 95px;
+    span {
+      color: #ff0000;
+      font-size: 26px;
+    }
+  }
+  .iconfont {
+    font-size: 22px;
+  }
+}
 </style>
 
