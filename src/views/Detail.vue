@@ -211,7 +211,7 @@
           <ul>
             <li>
               <img src="../images/shopcar.png">
-              <p class="badge">0</p>
+              <p class="badge">{{buyNum}}</p>
             </li>
             <li>
               <img src="../images/kefu.png">
@@ -278,7 +278,7 @@
 
 <script>
 import { Toast } from "mint-ui";
-import { getChooseDetail,addToCar } from "@/api/index";
+import { getChooseDetail,addToCar ,getCartNum} from "@/api/index";
 import { mapState, mapGetters } from "vuex";
 export default {
   data() {
@@ -295,6 +295,7 @@ export default {
       M:'00',
       S:'00',
       type:'',//add  添加购物车   buy  购买
+      buyNum:0,
     };
   },
   filters:{
@@ -346,9 +347,23 @@ export default {
           this.num = 1;
           this.shopnum = 1;
           this.popupVisible = false;
+          this.getShopCarNum();
         }
       }
     },
+    async getShopCarNum(){
+      let defaulParams = {
+        token: this.token,
+        userId: this.userId,
+        corpCode: this.corpCode,
+        companyId: this.companyId,
+        userRole: this.userRole,
+      };
+      let res = await getCartNum(defaulParams);
+      if(res.code==0){
+        this.buyNum = res.data.countitem;
+      }
+    },  
     popReduce(){
       if(this.num<=1){
         this.num = 1;
@@ -455,6 +470,7 @@ export default {
       this.$router.push({ name: "flashdetail", query: { id: id } });
     }
     this.getShopDetail();
+    this.getShopCarNum();
   }
 };
 </script>

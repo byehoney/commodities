@@ -44,7 +44,7 @@
         <div class="selItem" @click="selTicket">
           <div class="selLeft">发票</div>
           <div class="selRight">
-            <span class="text">请选择发票类型</span>
+            <span class="text">{{sel_value}}</span>
             <img src="../images/arrow_right.png" class="rightIcon" alt>
           </div>
         </div>
@@ -69,7 +69,7 @@
     </div>
     <mt-popup v-model="popupVisible" position="bottom">
       <mt-picker
-        value-key="businessName"
+        value-key="fptype"
         ref="picker"
         :slots="slots"
         @change="onValuesChange"
@@ -92,17 +92,17 @@
               @click="checkgift(index)"
             ></div>
             <div class="shopgift_list_pic">
-              <img alt :src="item.url">
+              <img alt :src="item.url?item.url:require('../images/default_logo.jpg')">
             </div>
             <div class="shopgift_list_text">
               <div class="shopgift_text_top">
-                <h3>{{item.zpmc}}</h3>
+                <h3>{{item.zpname}}</h3>
                 <p>{{item.cj}}</p>
-                <p>规格：{{item.guige}}</p>
+                <p>规格：{{item.guig}}</p>
               </div>
               <div class="shopgift_text_bottom">
                 <ul>
-                  <li>￥{{item.zpjj}}</li>
+                  <li>￥{{item.zpdj}}</li>
                   <li>{{item.zssl}} 件</li>
                 </ul>
               </div>
@@ -134,7 +134,7 @@
 </template>
 <script>
 import { Toast } from "mint-ui";
-import { getAddrList, confirmGetInfo } from "@/api/index";
+import { getAddrList, confirmGetInfo,getFullList, getTicket} from "@/api/index";
 import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
 export default {
   data() {
@@ -175,6 +175,7 @@ export default {
   mounted() {
     this.getAddr();
     this.getOrderInfo();
+    this.getTicketInfo();
   },
   methods: {
     async getAddr() {
@@ -209,6 +210,22 @@ export default {
       };
       let res = await confirmGetInfo(defaulParams);
     },
+    async getTicketInfo(){
+      let defaulParams = {
+        token: this.token,
+        userId: this.userId,
+        corpCode: this.corpCode,
+        companyId: this.companyId,
+        userRole: this.userRole
+      };
+      let res = await getTicket(defaulParams);
+      if(res.code==0){
+        this.$set(this.slots[0],'values',res.data.list);
+        this.sel_value = res.data.moren.fptype;
+        let index = res.data.list.findIndex(item=>item.fptype==res.data.moren.fptype);
+        this.selCode = res.data.list[index].code;
+      }
+    },
     selTicket() {
       this.popupVisible = !this.popupVisible;
     },
@@ -216,8 +233,8 @@ export default {
       if (!values.length || !values[0]) {
         return;
       }
-      this.set_value = values[0].businessName;
-      this.setCode = values[0].businessCode;
+      this.set_value = values[0].fptype;
+      this.setCode = values[0].code;
     },
     handleCancel() {
       this.popupVisible = false;
@@ -235,6 +252,7 @@ export default {
     },
     chooseGift() {
       this.giftVisible = true;
+      this.getGiftData();
     },
     confirmGift() {
         this.giftVisible = false;
@@ -247,7 +265,7 @@ export default {
         companyId: this.companyId,
         userRole: this.userRole
       };
-      let res = await getGiftList({ ...defaulParams, productId: id });
+      let res = await getFullList({ ...defaulParams,money:this.$route.query.money});
       if (res.code == 0) {
         res.data.list.forEach(item => {
           item.checked = false;

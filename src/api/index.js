@@ -186,6 +186,9 @@ function addToCar(params){//添加到购物车
 function getGiftList(params){//获取赠品列表
     return post('/product/get/zpin.do', params)
 }
+function getCartNum(params){//获取购物车数量
+    return post('/purchase/get/num.do', params)
+}
 
 function delFromCar(params){//从购物车删除
     return post('/product/update/cart.do', params)
@@ -206,6 +209,9 @@ function confirmGetInfo(params){//确认订单获取订单信息
 
 function getTicket(params){//获取发票
     return post('/order/fapiao/info.do', params)
+}
+function getFullList(params){//获取满赠列表
+    return post('/order/manez/list.do', params)
 }
 
 function getHeatList(params) {//获取首页热门分类
@@ -267,10 +273,12 @@ export {
     backGOods,
     getPub,
     getTicket,
+    getFullList,
     confirmGetInfo,
     settleAcount,
     getCarTip,
     addToCar,
+    getCartNum,
     getGiftList,
     delFromCar,
     getCarList,

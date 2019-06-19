@@ -203,6 +203,7 @@
       </div>
     </div>
     <mt-popup
+      class="gitPop"
       @touchmove.stop="" 
       v-model="popupVisible"
       position="bottom">
@@ -396,13 +397,13 @@ export default {
       this.mzList.forEach((item)=>{
         item.forEach(pterm=>{
           if(pterm.checked){
-            items.push({billSub:item.subcode,itemCode:item.productcode,quantity:item.quantity,price:item.price,buyNumber:0})
+            items.push({billSub:pterm.subcode,itemCode:pterm.productcode,quantity:pterm.quantity,price:pterm.price,buyNumber:0})
           }
         })
       })
       let jsonStr = JSON.stringify({suites:suits,items:items});
       let result =  await settleAcount({...defaulParams,jsonStr:jsonStr});
-      // this.$router.push({name:'confirmOrders'});
+      this.$router.push({name:'confirmOrders',query:{money:this.sumMoney}});
     },
     isShowTip(){
       let result = 0;
@@ -1304,9 +1305,12 @@ export default {
       }
     }
   }
+.gitPop{
+  min-height: 100vh;
+  // padding-bottom: 100px;
+}
 .gift_wrap {
   background: #fff;
-  // padding-top: 88px;
   .shopgift_list .shopgift_list_content:last-child{
     border: none;
   }
@@ -1337,9 +1341,10 @@ export default {
     background: #ffe6bc;
     margin-bottom: 19px;
     h3 {
-      font-weight: 400;
-      margin-left: 38px;
-      font-size: 20px;
+      font-size:26px;
+      color:rgba(51,51,51,1);
+      line-height:35px;
+      letter-spacing:2px;
     }
   }
   .shopgift_list {
@@ -1353,11 +1358,11 @@ export default {
       border: none;
     }
     .shopgift_list_content {
-      width: 705px;
       display: flex;
       border-bottom: 1px solid #e5e5e5;
       padding-bottom: 26px;
       padding-top: 40px;
+      padding-right: 40px;
     }
     .shopgift_list_pic {
       width: 220px;
@@ -1381,9 +1386,13 @@ export default {
     }
   }
   .shopgift_text_bottom {
-    width: 400px;
     color: #999;
     margin-top: 46px;
+    ul{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
   }
   .shopgift_text_bottom ul li {
     float: left;
