@@ -9,27 +9,27 @@
       </mt-header>
     </div> -->
     <TopNav></TopNav>
-    <div class="shopgift_subheader">
+    <!-- <div class="shopgift_subheader">
       <h3>组合满10件可选择以下商品</h3>
-    </div>
-    <div class="shopgift_list" v-for="(item,index) in list.product" :key="index">
+    </div> -->
+    <div class="shopgift_list" v-for="(item,index) in list" :key="index">
       <div class="shopgift_list_content">
         <div
           class="list_shopcar_circle"
           :class="item.checked?'checked':''"
-          @click="checkgift(item)"
+          @click="checkgift(index)"
         ></div>
         <div class="shopgift_list_pic"></div>
         <div class="shopgift_list_text">
           <div class="shopgift_text_top">
-            <h3>{{item.name}}</h3>
-            <p>{{item.address}}</p>
-            <p>{{item.sum}}</p>
+            <h3>{{item.zpmc}}</h3>
+            <p>{{item.cj}}</p>
+            <p>规格：{{item.guige}}</p>
           </div>
           <div class="shopgift_text_bottom">
             <ul>
-              <li>{{item.price}}</li>
-              <li>{{item.num}}件</li>
+              <li>￥{{item.zpjj}}</li>
+              <li>{{item.mzsl}}件</li>
             </ul>
           </div>
         </div>
@@ -60,33 +60,68 @@
 <script>
 import { Toast } from "mint-ui";
 import TopNav from "@/components/TopNav";
+import { mapGetters,mapState } from 'vuex'
+import { getGiftList } from '@/api/index';
 // import { constants } from "crypto";
 export default {
   data() {
     return {
-      list: {
-        product: []
-      }
+      list: [],
     };
+  },
+  mounted() {
+    this.getData();
+  },
+  computed:{
+    ...mapGetters('login',['token','userId','corpCode','companyId','userRole']),
+    ...mapState('login',['user'])
   },
   components: {
     TopNav,
   },
   methods: {
+    async getData(){
+      let defaulParams = {
+        token:this.token,
+        userId:this.userId,
+        corpCode:this.corpCode,
+        companyId:this.companyId,
+        userRole:this.userRole,
+      }; 
+      let res = await getGiftList({...defaulParams,productId:this.$route.query.id});
+      res.data.list.forEach(item => {
+        item.checked =false;
+      });
+      if(res.code ==0){
+        this.list = res.data.list;
+      }
+    },
     handlerClick(){
-
+      this.list.forEach((item)=>{
+        if(item.checked){
+          
+        }
+      })
     },
     clear(){
-
+      this.list.forEach((item)=>{
+        item.checked = false;
+      })
     },
-    checkgift(item) {
-      item.checked ? (item.checked = false) : (item.checked = true);
+    checkgift(index) {
+      this.$set(this.list[index],'checked',!this.list[index].checked);
     }
   }
 };
 </script>
 
 <style scoped lang="scss">
+.shopgift_list .shopgift_list_content:last-child{
+  border: none;
+}
+.nav{
+  border-bottom: 2px solid #ebebeb;
+}
 .gift_wrap {
   background: #fff;
   padding-top: 88px;
@@ -134,6 +169,7 @@ export default {
     display: flex;
     border-bottom: 1px solid #e5e5e5;
     padding-bottom: 26px;
+    padding-top: 40px;
   }
   .shopgift_list_pic {
     width: 220px;

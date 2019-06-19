@@ -1,6 +1,44 @@
 <template>
   <div>
-    <LocalHeader :data="notice"></LocalHeader>
+    <div class="header">
+      <!-- 公告的返回 -->
+      <div class="public_header_back" @click="goHome">
+        <img src="../images/publicback.png">
+      </div>
+      <!-- 头部切换的输入框 -->
+      <div class="header_input newheader">
+        <span>
+          <img src="../images/smallsousuo.png">
+        </span>
+        <input type="text" v-model="searchStr" @click="search" placeholder="请输入烟花名称">
+      </div>
+      <div class="header_search" @click="showcode">
+        <img src="../images/home/home_list.png">
+      </div>
+      <div class="tips_wrap" v-show="hide">
+        <div class="tips_deg"></div>
+        <div class="tips">
+          <ul>
+            <li @click="change">
+              <span>
+                <img src="../images/change.png">
+              </span>
+              <span>门店切换</span>
+            </li>
+            <li>
+              <span>
+                <img src="../images/saoma.png">
+              </span>
+              <span class="remove">扫码文案</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <!-- 侧滑 -->
+      <DrawRight v-show="rightWinShow" :rightHide="hide" @getRight="remove"/>
+    </div>
+
+    <!-- 头部结束 -->
     <div class="public_pic">
       <div class="public_pic_left">
         <img src alt>
@@ -90,7 +128,7 @@
         </h3>
       </div>
       <div class="public_msg_info">
-          <p>{{sjgg}}</p>
+        <p>{{sjgg}}</p>
       </div>
     </div>
   </div>
@@ -98,37 +136,72 @@
 
 <script>
 import { Toast } from "mint-ui";
-import { mapGetters } from 'vuex';
-import { getPub } from '@/api/index'
-import LocalHeader from "@/components/Header";
+import { mapGetters } from "vuex";
+import { getPub } from "@/api/index";
+import DrawRight from "../components/DrawerRight";
 export default {
   data() {
     return {
-      notice: "notice",
-      clientname:'',
-      sjpzs:'',
-      fhnum:'',
-      qsjg:'',
-      zhpf:"",
-      yhpj:"",
-      qbsp:"",
-      cjbs:"",
-      sjgg:""
+      searchStr: "",
+      hide: "",
+      rightWinShow: false,
+      clientname: "",
+      sjpzs: "",
+      fhnum: "",
+      qsjg: "",
+      zhpf: "",
+      yhpj: "",
+      qbsp: "",
+      cjbs: "",
+      sjgg: ""
     };
   },
-  computed:{
-    ...mapGetters('login',['token','userId','corpCode','companyId','userRole']),
+  methods: {
+    SearchVal() {
+      if (this.searchStr.trim()) {
+        this.$emit("receve", this.searchStr.trim());
+        this.searchStr = "";
+      }
+    },
+    goHome() {
+      this.$router.push("/");
+    },
+    change() {
+      this.rightWinShow = !this.rightWinShow;
+      this.hide = false;
+    },
+    remove(val) {
+      this.rightWinShow = val;
+    },
+    showcode() {
+      if (this.rightWinShow) {
+      } else {
+        this.hide = !this.hide;
+      }
+    },
+    search() {
+      this.$router.push("/search");
+    }
+  },
+  computed: {
+    ...mapGetters("login", [
+      "token",
+      "userId",
+      "corpCode",
+      "companyId",
+      "userRole"
+    ])
   },
   components: {
-    LocalHeader
+    DrawRight
   },
-  async mounted(){
+  async mounted() {
     let defaulParams = {
-      token:this.token,
-      userId:this.userId,
-      corpCode:this.corpCode,
-      companyId:this.companyId,
-      userRole:this.userRole,
+      token: this.token,
+      userId: this.userId,
+      corpCode: this.corpCode,
+      companyId: this.companyId,
+      userRole: this.userRole
     };
     let res = await getPub(defaulParams);
     this.clientname = res.data.clientname;
@@ -145,6 +218,130 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.header {
+  width: 708px;
+  height: 58px;
+  background: #ff1240;
+  background: -webkit-linear-gradient(to right, #ff6238ed, #ff1240);
+  background: linear-gradient(to right, #ff6238ed, #ff1240);
+  background: linear-gradient(
+    to right,
+    rgba(245, 81, 81, 1) 0%,
+    rgba(195, 41, 24, 1) 100%
+  );
+  font-size: 25px;
+  padding: 15px 21px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+}
+.newheader {
+  width: 505px !important;
+}
+
+.header_input {
+  width: 456px;
+  height: 58px;
+  border: 1px solid #fff;
+  border-radius: 29px;
+  float: left;
+  background: #fff;
+}
+.header_input input {
+  width: 80%;
+  height: 58px;
+  outline: none;
+  border: none;
+  background: none;
+  padding-left: 15px;
+  border-radius: 29px;
+}
+.header_input span {
+  display: inline-block;
+  width: 26px;
+  height: 26px;
+  margin-left: 21px;
+  vertical-align: sub;
+}
+.header_input span img {
+  width: 100%;
+}
+.public_header_back {
+  vertical-align: middle;
+  width: 17px;
+  height: 30px;
+  margin-right: 90px;
+  margin-left: 25px;
+  margin-top: 15px;
+  float: left;
+}
+.public_header_back img {
+  width: 100%;
+}
+.header_search {
+  width: 17px;
+  height: 58px;
+  float: left;
+  margin-top: 3px;
+  margin-left: 30px;
+}
+.header_search img {
+  width: 100%;
+}
+.header_search_copy ul li {
+  float: left;
+  color: #fff;
+  font-size: 28px;
+  margin-top: 15px;
+  margin-left: 22px;
+}
+.tips_wrap {
+  width: 300px;
+  height: 264px;
+  background: #4a4a4a;
+  position: absolute;
+  right: 0;
+  top: 108px;
+  color: #fff;
+  border-radius: 10px;
+}
+.tips_deg {
+  width: 0;
+  height: 0;
+  border-width: 0 20px 20px;
+  border-style: solid;
+  border-color: transparent transparent #333; /*透明 透明  灰*/
+  position: absolute;
+  top: -20px;
+  right: 9px;
+}
+.tips ul li {
+  height: 135px;
+  line-height: 135px;
+  font-size: 30px;
+}
+.tips ul li span {
+  display: inline-block;
+}
+.tips ul li span:nth-of-type(1) {
+  width: 60px;
+  height: 60px;
+  margin-right: 7px;
+  margin-left: 34px;
+}
+.tips ul li span img {
+  width: 100%;
+  vertical-align: middle;
+}
+.tips ul li span:nth-of-type(2) {
+  width: 197px;
+  border-bottom: 1px solid #666666;
+  text-indent: 30px;
+}
+.tips ul li span.remove {
+  border-bottom: none;
+}
 .public_pic {
   width: 750px;
   min-height: 320px;
@@ -236,25 +433,27 @@ export default {
   margin: 0 auto;
   margin-bottom: 19px;
   text-align: center;
-  &.num{
-    width: 100%!important;
-    text-align: center!important;
-    font-size:29px;
-    font-weight:bold;
-    color:rgba(102,102,102,1);
-    line-height:58px;
-    letter-spacing:1px;
+  &.num {
+    width: 100% !important;
+    text-align: center !important;
+    font-size: 29px;
+    font-weight: bold;
+    color: rgba(102, 102, 102, 1);
+    line-height: 58px;
+    letter-spacing: 1px;
   }
   img {
     width: 100%;
   }
 }
-.public_bill,.public_msg{
+.public_bill,
+.public_msg {
   width: 664px;
   min-height: 251px;
   padding: 33px 41px 47px 45px;
   background: #fff;
-  .public_bill_header h3 ,.public_msg h3{
+  .public_bill_header h3,
+  .public_msg h3 {
     color: #ff0000;
     font-size: 28px;
     font-weight: 400;
@@ -286,11 +485,11 @@ export default {
     }
   }
 }
-.public_msg{
-   margin-top:10px;
-   .public_msg_info{
-       color:#666;
-       font-size: 24px;
-   }
+.public_msg {
+  margin-top: 10px;
+  .public_msg_info {
+    color: #666;
+    font-size: 24px;
+  }
 }
 </style>

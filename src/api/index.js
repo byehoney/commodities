@@ -193,6 +193,20 @@ function delFromCar(params){//从购物车删除
 function getCarList(params){//获取购物车列表参数
     return post('/product/get/cartlist.do', params)
 }
+function getCarTip(params){//获取购物车金额达到标准提示
+    return post('/product/cart/title.do', params)
+}
+
+function settleAcount(params){//购物车结算
+    return post('/settlement/order.do', params)
+}
+function confirmGetInfo(params){//确认订单获取订单信息
+    return post('/order/queren/info.do', params)
+}
+
+function getTicket(params){//获取发票
+    return post('/order/fapiao/info.do', params)
+}
 
 function getHeatList(params) {//获取首页热门分类
     // let data = {...defaulParams,...params}
@@ -252,6 +266,10 @@ export {
     getBestGoodsList,
     backGOods,
     getPub,
+    getTicket,
+    confirmGetInfo,
+    settleAcount,
+    getCarTip,
     addToCar,
     getGiftList,
     delFromCar,

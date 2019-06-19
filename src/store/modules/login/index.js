@@ -5,7 +5,8 @@ export default {
     namespaced: true,
     state: {
         token: localStorage.getItem('token') || '',
-        user: JSON.parse(localStorage.getItem('userData')) || {}
+        user: JSON.parse(localStorage.getItem('userData')) || {},
+        orderInfo:{},
     },
     mutations: {
         [type.LOGIN](state, data) {
@@ -41,6 +42,9 @@ export default {
             state.user.mobile = mobile;
             let userDate = state.user;
             localStorage.setItem('userData', JSON.stringify(userDate))
+        },
+        saveOrderInfo(state,data){
+            state.orderInfo = data
         }
     },
     actions: {
