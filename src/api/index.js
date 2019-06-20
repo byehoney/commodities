@@ -195,7 +195,7 @@ function getCartNum(params){//获取购物车数量
     return post('/purchase/get/num.do', params)
 }
 function recordCartNum(params){//记录购物车商品加减数量
-    return post('/cache/set/purchase.do', params)
+    return post('/cache/purchase/list.do', params)
 }
 
 

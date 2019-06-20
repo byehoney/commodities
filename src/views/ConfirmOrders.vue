@@ -69,7 +69,7 @@
         <span class="text">实付款</span>
         <span class="price">￥120</span>
       </div>
-      <div class="right">提交订单</div>
+      <div class="right" @click="submitOrder">提交订单</div>
     </div>
     <mt-popup v-model="popupVisible" position="bottom">
       <mt-picker
@@ -190,6 +190,9 @@ export default {
   },
   methods: {
     ...mapMutations('login',['restOrderInfo']),
+    submitOrder(){
+      this.addGiftToCart();
+    },
     async addGiftToCart(){
         let defaulParams = {
             token: this.token,
@@ -241,6 +244,7 @@ export default {
                 productId:item.zpcode,
                 cartNum:item.zsjh,
                 pzdj:item.zpdj,
+                pzyj:item.zpyj,
                 mobile:this.user.mobile
             })
         })

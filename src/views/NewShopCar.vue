@@ -35,7 +35,7 @@
               </div>
               <div class="com_add_bottom">
                 <div class="list_shopcar_pic">
-                  <img :src="list.imgurl">
+                  <img :src="list.imgurl?list.imgurl:require('../images/default_logo.jpg')">
                 </div>
                 <div class="list_shopcar_com fix">
                   <div class="list_shopcar_com_top fix">
@@ -102,7 +102,7 @@
             <div class="com_add">
               <div class="com_add_bottom">
                 <div class="list_shopcar_pic">
-                  <img :src="pmlist.imgurl">
+                  <img :src="pmlist.imgurl?pmlist.imgurl:require('../images/default_logo.jpg')">
                 </div>
                 <div class="list_shopcar_com fix">
                   <div class="list_shopcar_com_top fix">
@@ -829,7 +829,33 @@ export default {
   },
   mounted() {
     this.getData();
-  }  
+  },
+  destroyed(){
+    let defaulParams = {
+      token:this.token,
+      userId:this.userId,
+      corpCode:this.corpCode,
+      companyId:this.companyId,
+      userRole:this.userRole,
+    };
+    let  jsonStr = {zcData:{},tcData:{},mzData:{}};
+    if(!this.list.length&&!this.mzList.length){
+      return;
+    }
+    this.list.forEach((item)=>{
+      if(item.promotionflag=='套餐'){
+        jsonStr.tcData[item.promotioncode]=item.quantity;
+      }else{
+        jsonStr.zcData[item.productcode]=item.quantity;
+      }
+    })
+    this.mzList.forEach((item)=>{
+      item.forEach((pterm)=>{
+        jsonStr.mzData[pterm.productcode]=pterm.quantity;
+      })
+    })
+    recordCartNum({...defaulParams,jsonStr:JSON.stringify(jsonStr)})
+  },  
 };
 </script>
 
