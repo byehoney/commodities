@@ -34,7 +34,7 @@
         <img src="../images/arrow_right.png" class="rightIcon" alt>
       </div>
       <div class="orderSelInfo">
-        <div class="selItem">
+        <div class="selItem" v-if="giftList.length">
           <div class="selLeft">赠品选择</div>
           <div class="selRight" @click="chooseGift">
             <span class="text">请选择</span>
@@ -57,6 +57,10 @@
         <div class="priceItem">
           <div class="priceLeft">商品金额</div>
           <div class="priceRight">￥120</div>
+        </div>
+        <div class="priceItem">
+          <div class="priceLeft">活动优惠</div>
+          <div class="priceRight">-￥120</div>
         </div>
       </div>
     </div>
@@ -103,7 +107,7 @@
               <div class="shopgift_text_bottom">
                 <ul>
                   <li>￥{{item.zpdj}}</li>
-                  <li>{{item.zssl}} 件</li>
+                  <li>{{item.zsjh}} 件</li>
                 </ul>
               </div>
             </div>
@@ -134,7 +138,7 @@
 </template>
 <script>
 import { Toast } from "mint-ui";
-import { getAddrList, confirmGetInfo,getFullList, getTicket} from "@/api/index";
+import { getAddrList, confirmGetInfo,getFullList, getTicket,addToCar} from "@/api/index";
 import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
 export default {
   data() {
@@ -160,10 +164,12 @@ export default {
         }
       ],
       giftList: [],
-      giftNum: 0
+      giftNum: 0,
+      selMzGift:[],
     };
   },
   computed: {
+    ...mapState('login',['orderInfo','user']),
     ...mapGetters("login", [
       "token",
       "userId",
@@ -173,11 +179,75 @@ export default {
     ])
   },
   mounted() {
+    console.log(this.orderInfo)
     this.getAddr();
     this.getOrderInfo();
     this.getTicketInfo();
+    this.getGiftData();
+  },
+  destroyed(){
+    this.restOrderInfo();
   },
   methods: {
+    ...mapMutations('login',['restOrderInfo']),
+    async addGiftToCart(){
+        let defaulParams = {
+            token: this.token,
+            userId: this.userId,
+            corpCode: this.corpCode,
+            companyId: this.companyId,
+            userRole: this.userRole
+        };
+        let giftArr = [];
+        if(this.orderInfo.mzList&&this.orderInfo.mzList.length){
+            this.orderInfo.mzList.forEach((item,index)=>{
+                if(item[0].selGifts.length){
+                    item[0].selGifts.forEach((pterm)=>{
+                        if(pterm.promotionflag=='买赠'&&pterm.numberormny=='数量满足'){
+                            giftArr.push({
+                                mzhdlx:'买赠',
+                                pzlx:true,
+                                ghsbm:'',
+                                gmsz:pterm.hdbm,
+                                productId:pterm.zpbm,
+                                cartNum:pterm.zssl,
+                                pzdj:pterm.zpjj,
+                                mobile:this.user.mobile
+                            })
+                        }else if(pterm.promotionflag=='买赠'&&pterm.numberormny=='金额满足'){
+                            giftArr.push({
+                                mzhdlx:'满额赠',
+                                pzlx:false,
+                                ghsbm:'',
+                                gmsz:pterm.hdbm,
+                                jghdlx:'无',
+                                productId:pterm.zpbm,
+                                cartNum:pterm.zssl,
+                                pzdj:pterm.zpjj,
+                                mobile:this.user.mobile
+                            })
+                        }
+                    })
+                }
+            })
+        }
+        this.selMzGift.forEach((item)=>{
+            giftArr.push({
+                mzhdlx:'整单满额赠',
+                pzlx:true,
+                ghsbm:'',
+                gmsz:item.hdcode,
+                jghdlx:'无',
+                productId:item.zpcode,
+                cartNum:item.zsjh,
+                pzdj:item.zpdj,
+                mobile:this.user.mobile
+            })
+        })
+        if(giftArr.length){
+            let res = await addToCar({...defaulParams,jsonStr:JSON.stringify(giftArr)});
+        }
+    },
     async getAddr() {
       let defaulParams = {
         token: this.token,
@@ -252,10 +322,18 @@ export default {
     },
     chooseGift() {
       this.giftVisible = true;
-      this.getGiftData();
+    //   this.getGiftData();
     },
     confirmGift() {
+        console.log(this.orderInfo)
         this.giftVisible = false;
+        let selMzGift = [];
+        this.giftList.forEach((item)=>{
+            if(item.checked){
+                selMzGift.push(item);
+                this.selMzGift = selMzGift;
+            }
+        })
     },
     async getGiftData() {
       let defaulParams = {

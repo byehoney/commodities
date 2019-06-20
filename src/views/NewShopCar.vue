@@ -259,7 +259,7 @@
 
 <script>
 import { Toast } from "mint-ui";
-import { getCarList,delFromCar ,getGiftList,getCarTip,settleAcount} from "@/api/index";
+import { getCarList,delFromCar ,getGiftList,getCarTip,settleAcount,recordCartNum} from "@/api/index";
 import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
 import { setTimeout } from 'timers';
 export default {
@@ -294,6 +294,7 @@ export default {
       giftNum:0,//选择赠品的数量
       curGiftIndex:0,//当前选择赠品活动index
       canClick:true,
+      canSelMz:0,
     };
   },
   computed: {
@@ -354,6 +355,7 @@ export default {
       if(this.sumMoney<this.head.cjl){
         this.showErr = true;
         this.errText = '无效的采集额';
+        this.canClick = true;
         return 
       }else{
         this.showErr = false;
@@ -362,6 +364,7 @@ export default {
       if(document.getElementsByClassName('errTip').length>0){
         let top = document.getElementsByClassName('errTip')[0].offsetTop-document.body.scrollTop;
         window.scrollTo(0,top-200);
+        this.canClick = true;
         return;
       }
       this.saveOrderInfo({list:this.list,mzList:this.mzList});
@@ -376,6 +379,7 @@ export default {
       if(res.code == 0&&res.data.hdms){
         this.giftTipShow = true;
         this.gitTipText = res.data.hdms;
+        this.canSelMz =1;
       }
       setTimeout(()=>{
         this.giftTipShow = false;
@@ -403,7 +407,7 @@ export default {
       })
       let jsonStr = JSON.stringify({suites:suits,items:items});
       let result =  await settleAcount({...defaulParams,jsonStr:jsonStr});
-      this.$router.push({name:'confirmOrders',query:{money:this.sumMoney}});
+      this.$router.push({name:'confirmOrders',query:{money:this.sumMoney,canSelMz:this.canSelMz}});
     },
     isShowTip(){
       let result = 0;
@@ -811,6 +815,16 @@ export default {
     checkgift(index) {
       this.$set(this.giftList[index],'checked',!this.giftList[index].checked);
       this.countGiftNum();
+    },
+    async saveCartNum(id,type,num){
+      let defaulParams = {
+        token:this.token,
+        userId:this.userId,
+        corpCode:this.corpCode,
+        companyId:this.companyId,
+        userRole:this.userRole,
+      }; 
+      let res = await recordCartNum({...defaulParams,productId:id,type:type,num:num})
     }
   },
   mounted() {

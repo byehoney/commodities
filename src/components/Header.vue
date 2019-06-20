@@ -42,7 +42,7 @@
             </span>
             <span>门店切换</span>
           </li>
-          <li>
+          <li @click="scan">
             <span>
               <img src="../images/saoma.png">
             </span>
@@ -58,6 +58,7 @@
 
 <script>
 import DrawRight from "./DrawerRight";
+let scan = null;
 export default {
   props: ["data"],
   data() {
@@ -65,7 +66,8 @@ export default {
       showlogo: true,
       searchStr: "",
       hide: "",
-      rightWinShow: false
+      rightWinShow: false,
+      showScan:false
     };
   },
   methods: {
@@ -99,6 +101,9 @@ export default {
     },
     goMore(){
       this.$router.push({name:'classify'})
+    },
+    scan(){
+      
     }
   },
   mounted() {
@@ -115,7 +120,30 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+.scan {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10000001;
+    background: rgba(0,0,0,0);
+    #bcid {
+      width: 80%;
+      height: 60%;
+      position: absolute;
+      left: 10%;
+      right: 0;
+      top: 20%;
+      text-align: center;
+      color: #fff;
+      background: rgba(0,0,0,0);
+      z-index: 100000001;
+    }
+}
 .header {
   width: 708px;
   height: 58px;
@@ -128,7 +156,7 @@ export default {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 1000;
+  z-index: 10000;
 }
 .newheader {
   width: 505px !important;

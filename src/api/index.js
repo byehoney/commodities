@@ -183,12 +183,21 @@ function addToCar(params){//添加到购物车
     return post('/product/add/cart.do', params)
 }
 
+function buyCheckNum(params){//立即购买前购买数量验证
+    return post('/product/check/productnum.do', params)
+}
+
+
 function getGiftList(params){//获取赠品列表
     return post('/product/get/zpin.do', params)
 }
 function getCartNum(params){//获取购物车数量
     return post('/purchase/get/num.do', params)
 }
+function recordCartNum(params){//记录购物车商品加减数量
+    return post('/cache/set/purchase.do', params)
+}
+
 
 function delFromCar(params){//从购物车删除
     return post('/product/update/cart.do', params)
@@ -272,11 +281,13 @@ export {
     getBestGoodsList,
     backGOods,
     getPub,
+    recordCartNum,
     getTicket,
     getFullList,
     confirmGetInfo,
     settleAcount,
     getCarTip,
+    buyCheckNum,
     addToCar,
     getCartNum,
     getGiftList,

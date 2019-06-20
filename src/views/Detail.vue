@@ -278,7 +278,7 @@
 
 <script>
 import { Toast } from "mint-ui";
-import { getChooseDetail,addToCar ,getCartNum} from "@/api/index";
+import { getChooseDetail,addToCar ,getCartNum,buyCheckNum} from "@/api/index";
 import { mapState, mapGetters } from "vuex";
 export default {
   data() {
@@ -348,6 +348,11 @@ export default {
           this.shopnum = 1;
           this.popupVisible = false;
           this.getShopCarNum();
+        }
+      }else{
+        let res = await buyCheckNum({...defaulParams,productId:this.shopDetail.priductid,num:this.shopnum});
+        if(res.code==0&&res.data.ckeckResult){
+          this.$router.push({name:'confirmOrders',money:this.money})
         }
       }
     },

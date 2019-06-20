@@ -131,15 +131,15 @@ export default {
                     const centerPoint = view.center; //获取最佳视角的中心点
                     this.myMap.centerAndZoom(centerPoint, zoom);  // 编写自定义函数，创建标注 
                     
-                    let myIcon1 = new BMap.Icon(require("../images/local_icon.png"), new BMap.Size(64, 64), {    
+                    let myIcon1 = new BMap.Icon(require("../images/start_point.png"), new BMap.Size(25, 30), {    
                         anchor: new BMap.Size(64, 64),    
                         imageOffset: new BMap.Size(0, 0)   // 设置图片偏移    
                     });      
-                    let myIcon2 = new BMap.Icon(require("../images/local_icon.png"), new BMap.Size(64, 64), {    
+                    let myIcon2 = new BMap.Icon(require("../images/end_point.png"), new BMap.Size(25, 30), {    
                         anchor: new BMap.Size(64, 64),    
                         imageOffset: new BMap.Size(0, 0)   // 设置图片偏移    
                     });      
-                    let myIcon3 = new BMap.Icon(require("../images/local_icon.png"), new BMap.Size(64, 64), {    
+                    let myIcon3 = new BMap.Icon(require("../images/mid_point.png"), new BMap.Size(25, 30), {    
                         anchor: new BMap.Size(64, 64),    
                         imageOffset: new BMap.Size(0, 0)   // 设置图片偏移    
                     });      

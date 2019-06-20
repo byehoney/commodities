@@ -45,6 +45,9 @@ export default {
         },
         saveOrderInfo(state,data){
             state.orderInfo = data
+        },
+        restOrderInfo(state){
+            state.orderInfo={};
         }
     },
     actions: {
