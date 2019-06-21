@@ -682,9 +682,11 @@ export default {
               this.$set(this.mzList[index][0],'canSelGift',true);
             }else{
               this.$set(this.mzList[index][0],'canSelGift',false);
+              this.$set(this.mzList[index][0],'selGifts',[]);
             }
           }else{
             this.$set(this.mzList[index][0],'canSelGift',false);
+            this.$set(this.mzList[index][0],'selGifts',[]);
           }
         })
       })
@@ -747,7 +749,7 @@ export default {
             pterm.canSelGift = false;
             pterm.showTip = false;
             pterm.errTip = '';
-            pterm.selGifts="";
+            pterm.selGifts=[];
           })
         })
         this.head = res.data.head;
@@ -789,7 +791,7 @@ export default {
       });
       if(res.code ==0){
         this.giftList = res.data.list;
-        if(selGifts){
+        if(selGifts&&selGifts.length){
           selGifts.forEach((item,index)=>{
             let gIndex = this.giftList.findIndex((pterm)=>pterm.zpbm==item.zpbm);
             this.$set(this.giftList[gIndex],'checked',true)
