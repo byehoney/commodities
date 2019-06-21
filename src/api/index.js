@@ -222,6 +222,9 @@ function getTicket(params){//获取发票
 function getFullList(params){//获取满赠列表
     return post('/order/manez/list.do', params)
 }
+function autoSearch(params){//智能搜索
+    return post('/get/zhineng/list.do', params)
+}
 
 function getHeatList(params) {//获取首页热门分类
     // let data = {...defaulParams,...params}
@@ -293,6 +296,7 @@ export {
     getGiftList,
     delFromCar,
     getCarList,
+    autoSearch,
     getSuitList,
     getSuitDetail,
     getHeatList,

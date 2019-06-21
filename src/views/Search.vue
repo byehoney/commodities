@@ -40,6 +40,7 @@
   </div>
 </template>
 <script>
+import {autoSearch} from '@/api/index'
 import LocalHeader from "../components/Header";
 export default {
   data() {
