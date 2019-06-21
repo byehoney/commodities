@@ -133,14 +133,14 @@ export default {
 <style lang="scss" scoped>
     .refuseContainer{
         width: 100vw;
-        min-height: 100vh;
+        // min-height: 100vh;
         background:rgba(235,235,235,1);
         padding-bottom: 100px;
         .nav{
             border-bottom: 2px solid #ebebeb;
         }
         .content{
-            padding-top: 92px;
+            margin-top: 92px;
             background-color: #fff;
             .listItem{
                 display: flex;

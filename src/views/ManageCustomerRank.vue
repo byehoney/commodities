@@ -3,7 +3,7 @@
         <ManageTopNav></ManageTopNav>
         <div class="main">
             <div class="top">
-                <div :class="['date',dateActive?'active':'']" @click="selDate">
+                <div :class="['date long',dateActive?'active':'']" @click="selDate">
                     {{dateList[curDateIndex]}}
                     <div class="dataList" v-if="showDateList">
                         <p :class="['dataItem',curDateIndex==index?'active':'']" @click="selCurDate($event,index)" v-for="(item,index) in dateList" :key="index">{{item}}</p>
@@ -15,7 +15,7 @@
                         <p :class="['typeItem',curTypeIndex==index?'active':'']" @click="selCurType($event,index)" v-for="(item,index) in typeList" :key="index">{{item}}</p>
                     </div>
                 </div>
-                <div :class="['type',areaActive?'active':'']" @click="selArea">
+                <div :class="['area',areaActive?'active':'']" @click="selArea">
                     {{areaList[curAreaIndex]}}
                     <div class="typeList" v-if="showAreaList">
                         <p :class="['typeItem',curAreaIndex==index?'active':'']" @click="selCurArea($event,index)" v-for="(item,index) in areaList" :key="index">{{item}}</p>
@@ -210,8 +210,9 @@ export default {
             .top{
                 display: flex;
                 align-items: center;
+                justify-content: space-between;
                 margin-left: 39px;
-                padding: 31px 0 ;
+                padding: 31px 37px 31px 0 ;
                 height: 30px;
                 border-bottom: 2px solid #ebebeb;
                 .total{
@@ -219,15 +220,18 @@ export default {
                     color:rgba(102,102,102,1);
                     line-height:29px;
                     letter-spacing:2px;
-                    margin-left: 65px;
+                    // margin-left: 65px;
                 }
-                .date,.type{
+                .date,.type,.area{
                     position: relative;
                     width: 115px;
                     font-size:22px;
                     color:rgba(153,153,153,1);
                     letter-spacing:2px;
                     padding-left: 26px;
+                    &.long{
+                        width: 150px;
+                    }
                     &.active{
                         color: #007AFF;
                         &::after{
