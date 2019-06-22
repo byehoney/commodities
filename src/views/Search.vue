@@ -1,6 +1,6 @@
 <template>
   <div>
-    <LocalHeader :data="search" @receve="getval" :showHistory="showHistory"/>
+    <LocalHeader :data="search" @receve="getval" :showHistory="showHistory" @closehistory="closehistory"/>
     <div class="history_wrap" v-if="showHistory">
       <!-- 历史搜索 -->
       <div class="history_list" v-if="HistoryList.length">
@@ -40,10 +40,8 @@
   </div>
 </template>
 <script>
-import { autoSearch } from "@/api/index";
 import LocalHeader from "../components/Header";
 import { mapGetters } from "vuex";
-
 export default {
   data() {
     return {
@@ -78,9 +76,12 @@ export default {
     this.HistoryList = history;
   },
   mounted() {
-
   },
   methods: {
+    closehistory(newclose){
+      console.log(newclose)
+      this.showHistory=newclose
+    },
     getval(newval) {
       let val = newval; // 清除空格
       this.inputVal = newval;
