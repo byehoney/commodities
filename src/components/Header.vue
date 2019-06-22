@@ -66,7 +66,8 @@ export default {
       hide: "",
       rightWinShow: false,
       showScan: false,
-      newHistory:this.showHistory
+      newHistory:false,
+      oldHistory:true
     };
   },
   computed: {
@@ -99,13 +100,14 @@ export default {
       };
       this.$emit("closelist",this.showlist)
       this.$router.push("/search");
-      if (this.searchStr == null) {
-          this.newHistory=true
-        return;
+      if (this.searchStr.length == 0) {
+        console.log("top"+this.searchStr.length)
+          this.$emit("closehistory",this.oldHistory)
+           return;
       } else {
-        this.newHistory=false
+        this.$emit("closehistory",this.newHistory)
         console.log(this.searchStr.length);
-        autoSearch({ ...defaulParams, fITerm: this.searchStr });
+        autoSearch({ ...defaulParams, flTerm: this.searchStr });
       }
     },
     cancelSearch() {
