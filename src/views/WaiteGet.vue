@@ -32,10 +32,10 @@
             </li>
         </ul>
         <div class="fixBottom">
-            <div class="nextBtn left">
+            <div class="nextBtn left" @click="returnGoods">
                 退货
             </div>
-            <div class="nextBtn right">
+            <div class="nextBtn right" @click="confirmReciveGoods">
                 收货
             </div>
         </div>
@@ -45,7 +45,7 @@
 import { Toast } from "mint-ui";
 import TopNav from '@/components/TopNav'
 import {mapGetters} from 'vuex'
-import { getOrderStatuList } from '@/api/index'
+import { getOrderStatuList ,reciveGOods} from '@/api/index'
 export default {
     data(){
         return{
@@ -66,13 +66,60 @@ export default {
         this.getData();
     },
     methods:{
+        async confirmReciveGoods(){
+            if(!this.selIds.length){
+                Toast({
+                    message: "请选择收货商品",
+                    position: "middle",
+                    duration: 2000
+                });
+                return;
+            }
+            let defaulParams = {
+                token:this.token,
+                userId:this.userId,
+                corpCode:this.corpCode,
+                companyId:this.companyId,
+                userRole:this.userRole,
+            };
+            let res = await reciveGOods({
+                ...defaulParams,
+                productId:this.selIds[0],
+                orderId:this.$route.query.id
+            })
+            if(res.code==0){
+                let index = this.list.findIndex(item=>item.productid==this.selIds[0]);
+                this.list.splice(index,1);
+                this.selIds = [];
+                Toast({
+                    message: "操作成功",
+                    position: "middle",
+                    duration: 2000
+                });
+            }
+        },
+        returnGoods(){
+            if(!this.selIds.length){
+                Toast({
+                    message: "请选择退货商品",
+                    position: "middle",
+                    duration: 2000
+                });
+                return;
+            }
+            this.$router.push({name:'applyReturn',query:{id:this.selIds[0],orderId:this.$route.query.id}})
+        },
         selGoods(index){
+            this.list.forEach((item,index)=>{
+                this.$set(this.list[index], 'isActive', false);
+            })
             this.$set(this.list[index], 'isActive', !this.list[index].isActive);
             let selList = this.list.filter(item=>item.isActive==true);
             this.selIds = [];
             selList.forEach(item => {
                 this.selIds.push(item.productid);
             });
+            console.log(this.selIds)
         },
         checkViewLogist(e,id){
             e.stopPropagation();
