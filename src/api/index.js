@@ -150,6 +150,10 @@ function backGOods(params){//退货
     return post('order/status/tuihuo.do', params)
 }
 
+function reciveGOods(params){//收货
+    return post('/order/status/shouhuo.do', params)
+}
+
 function getActivityInfo(params){//首页 是否显示套餐 买赠活动
     return post('/index/mztc/status.do', params)
 }
@@ -279,6 +283,7 @@ export {
     getActivityInfo,
     getBestGoodsList,
     backGOods,
+    reciveGOods,
     getPub,
     recordCartNum,
     getTicket,

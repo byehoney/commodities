@@ -3,25 +3,15 @@
     <TopNav></TopNav>
     <div class="orderInfo">
       <span>订单编号：</span>
-      <span>BJ5332100986457</span>
+      <span>{{$route.query.orderId}}</span>
     </div>
     <div class="evaArea">
       <div class="top">
         <div class="selArea">
-          <div class="selItem">
-            <img src="../images/car_circle.png" v-if="!qCheck" alt>
+          <div class="selItem" v-for="(item,index) in reasons" :key="index" @click="selReason(index)">
+            <img src="../images/car_circle.png" v-if="!item.checked" alt>
             <img src="../images/car_checkcircle.png" v-else alt>
-            <p>质量问题</p>
-          </div>
-          <div class="selItem">
-            <img src="../images/car_circle.png" v-if="!sCheck" alt>
-            <img src="../images/car_checkcircle.png" v-else alt>
-            <p>物流速度太慢</p>
-          </div>
-          <div class="selItem">
-            <img src="../images/car_circle.png" v-if="!oCheck" alt>
-            <img src="../images/car_checkcircle.png" v-else alt>
-            <p>其他原因</p>
+            <p>{{item.reason}}</p>
           </div>
         </div>
         <div class="tipArea">
@@ -50,28 +40,57 @@
 <script>
 import TopNav from "@/components/TopNav";
 import UploadImages from "@/components/UploadImages";
-let starOffImg = require("@/images/star_grey.png");
-let starOnImg = require("@/images/eva_star.png");
+import { backGOods } from "@/api/index";
+import {mapGetters} from 'vuex'
 export default {
   data() {
     return {
-      qCheck:false,
-      sCheck:false,
-      oCheck:false,
+      reasons:[{reason:'质量问题',checked:false},{reason:'物流速度太慢',checked:false},{reason:'其他原因',checked:false}],
       evaContent: "",
-      imgList: []
+      imgList: [],
+      flag:'',//退货理由
     };
   },
   components: {
     TopNav,
     UploadImages
   },
+  computed:{
+    ...mapGetters('login',['token','userId','corpCode','companyId','userRole'])
+  },
   methods: {
-    setImgList(list) {
-      console.log(list);
+    selReason(index){
+      this.reasons.forEach((item,index)=>{
+        item.checked = false;
+      })
+      this.$set(this.reasons[index],'checked',!this.reasons[index].checked);
+      this.flag = this.reasons[index].reason;
     },
-    sendEva() {
-      console.log(this.imgList);
+    setImgList(list) {
+      this.imgList = list;
+    },
+    async sendEva() {
+      let defaulParams = {
+        token:this.token,
+        userId:this.userId,
+        corpCode:this.corpCode,
+        companyId:this.companyId,
+        userRole:this.userRole,
+      };
+      let res = await backGOods({
+        ...defaulParams,
+        productId:this.$route.query.id,
+        orderId:this.$route.query.orderId,
+        comment:this.evaContent,
+        flag:this.flag
+      })
+      if(res.code==0){
+        Toast({  
+            message: "提交成功",
+            position: "middle",
+            duration: 2000
+        });
+      }
     }
   }
 };

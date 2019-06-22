@@ -36,7 +36,7 @@
                             <img src="../images/saoma.png" alt="">
                             <span>付款码</span>
                         </div>
-                        <router-link v-if="item.status=='是'&&actIndex!=4" class="askBack" :to="{name:'applyReturn',query:{id:item.orderid}}">申请退货</router-link>
+                        <!-- <router-link v-if="item.status=='是'&&actIndex!=4" class="askBack" :to="{name:'applyReturn',query:{id:item.orderid}}">申请退货</router-link> -->
                         <router-link class="goEva" v-if="actIndex==3" :to="{name:'evaForOrder',query:{id:item.orderid,url:item.url}}">评价</router-link>
                         <router-link class="goDetail" :to="{name:'orderDetail',query:{id:item.orderid}}">查看详情</router-link>
                     </div>
