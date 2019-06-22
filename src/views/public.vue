@@ -29,7 +29,7 @@
               <span>
                 <img src="../images/saoma.png">
               </span>
-              <span class="remove">扫码文案</span>
+              <span class="remove">扫码</span>
             </li>
           </ul>
         </div>
