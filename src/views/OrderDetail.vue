@@ -231,7 +231,7 @@ export default {
         .header{
             width: 100%;
             height: 168px;
-            background:linear-gradient(182deg,rgba(245,81,81,0.9) 0%,rgba(195,41,24,1) 100%);
+            background:linear-gradient(85deg,rgba(255,98,56,1) 0%,rgba(255,18,64,1) 100%);
             margin-top: 92px;
             span{
                 font-size:30px;
@@ -319,7 +319,7 @@ export default {
                     text-align: center;
                     .desState{
                         font-size:24px;
-                        color:rgba(255,0,0,1);
+                        color:#FF0304;
                         line-height:31px;
                         letter-spacing:1px;
                     }
@@ -375,7 +375,7 @@ export default {
                     line-height:31px;
                     letter-spacing:1px;
                     &.red{
-                        color:rgba(255,0,0,1);
+                        color:#FF0304;
                     }
                 }
             }
@@ -400,7 +400,7 @@ export default {
             }
             span{
                 font-size:26px;
-                color:rgba(255,0,0,1);
+                color:#FF0304;
                 line-height:35px;
                 letter-spacing:2px;
                 position: relative;

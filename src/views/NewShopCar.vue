@@ -938,7 +938,7 @@ export default {
     margin-bottom: 20px;
     .ms{
         font-size:20px;
-        color:rgba(255,0,31,1);
+        color:#FF0304;
         line-height:26px;
         margin-right: 27px;
     }
@@ -1074,7 +1074,7 @@ export default {
 }
 .list_shopcar_com_top_gift {
   float: right;
-  color: #ff0000;
+  color: #FF0304;
   font-size: 18px;
 }
 .gift_tips {
@@ -1143,7 +1143,7 @@ export default {
   }
 }
 .shop_gift_left h3 {
-  color: #ff1900;
+  color: #FF0304;
   font-weight: 400;
   width: 100px;
   margin-right: 26px;
@@ -1166,7 +1166,7 @@ export default {
   float: left;
   margin-top: 10px;
   font-size: 28px;
-  color: #ff0000;
+  color: #FF0304;
 }
 .list_shopcar_com_num {
   float: right;
@@ -1240,9 +1240,9 @@ export default {
   height: 68px;
   line-height: 70px;
   text-align: center;
-  color: #ff0000;
+  color: #FF0304;
   font-size: 28px;
-  border: 2px solid #ff0000;
+  border: 2px solid #FF0304;
   border-radius: 50px;
   float: right;
   margin-top: 15px;
@@ -1253,7 +1253,7 @@ export default {
   // margin-left: 90px;
 }
 .shop_footer_price span {
-  color: #ff0000;
+  color: #FF0304;
 }
 .shop_footer_price span:first-child {
   color: #333;
@@ -1305,7 +1305,7 @@ export default {
           line-height: 80px;
           font-size: 26px;
           &.confirm{
-            background-color: #ff1900;
+            background-color: #FF0304;
             color: #fff;
             padding-right: 2px;
           }
@@ -1512,7 +1512,7 @@ export default {
     color: #666;
     line-height: 95px;
     span {
-      color: #ff0000;
+      color: #FF0304;
       font-size: 26px;
     }
   }

@@ -259,7 +259,7 @@ export default {
                         .nPrice{
                             font-size:32px;
                             font-weight:bold;
-                            color:rgba(255,25,0,1);
+                            color:#FF0304;
                             line-height:42px;
                         }
                         .oPrice{
@@ -310,7 +310,7 @@ export default {
               background-color: #666;
           }
           &.right{
-              background-color: #FF513A
+              background-color: #FF0304
           }
         }
     }

@@ -334,13 +334,13 @@ export default {
   height: 613px;
 }
 .item:nth-of-type(1) {
-  background: #f00;
+  background: #FF0304;
 }
 .item:nth-of-type(2) {
   background: #ccc;
 }
 .item:nth-of-type(3) {
-  background: #f00;
+  background: #FF0304;
 }
 .loop_pic {
   margin-top: 80px;
@@ -434,7 +434,7 @@ export default {
   background: #fff;
 }
 .special_header span:nth-of-type(3) {
-  color: #ed5f45;
+  color: #FF0304;
   margin-left: 8px;
 }
 .special_header span:nth-of-type(3) div {
@@ -442,7 +442,7 @@ export default {
   width: 33px;
   height: 33px;
   color: #fff;
-  background: #ed5f45;
+  background: #FF0304;
   text-align: center;
   line-height: 34px;
   font-size: 18px;
@@ -460,10 +460,10 @@ export default {
 .special_content_left {
   width: 224px;
   height: 229px;
-  background: #ebebeb;
+  background: #fff;
   margin-right: 12px;
-  border: 11px solid #eee;
-  border-radius: 10px;
+  border: 2px solid #FF0304;
+  border-radius: 8px;
   font-size: 18px;
   position: relative;
 }
@@ -484,8 +484,8 @@ export default {
   width: 28px;
   height: 30px;
   position: absolute;
-  top: -11px;
-  left: 0;
+  top: 0;
+  left: 14px;
 }
 .special_content_left:nth-of-type(3) {
   margin-right: 0;

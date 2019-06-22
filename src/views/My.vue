@@ -37,7 +37,7 @@
                 <span class="op_num" v-if="weNum>0">{{weNum}}</span>
             </div>
             <div class="op_item" @click="goOrders(4)">
-                <img src="../images/waite_send.png" class="op_icon" alt="">
+                <img src="../images/waite_back.png" class="op_icon" alt="">
                 <p class="op_text">退货</p>
                 <span class="op_num" v-if="tNum>0">{{tNum}}</span>
             </div>
@@ -155,7 +155,7 @@ export default {
         display: flex;
         flex-direction: column;
         padding-top: 50px;
-        background-color: #ff2c3e;
+        background-color:  #FF0304;
         font-family:'MicrosoftYaHei';
         height: 340px;
         .topArea{

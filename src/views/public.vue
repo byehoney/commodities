@@ -221,14 +221,7 @@ export default {
 .header {
   width: 708px;
   height: 58px;
-  background: #ff1240;
-  background: -webkit-linear-gradient(to right, #ff6238ed, #ff1240);
-  background: linear-gradient(to right, #ff6238ed, #ff1240);
-  background: linear-gradient(
-    to right,
-    rgba(245, 81, 81, 1) 0%,
-    rgba(195, 41, 24, 1) 100%
-  );
+  background: #FF0304;
   font-size: 25px;
   padding: 15px 21px;
   position: fixed;
@@ -454,7 +447,7 @@ export default {
   background: #fff;
   .public_bill_header h3,
   .public_msg h3 {
-    color: #ff0000;
+    color: #FF0304;
     font-size: 28px;
     font-weight: 400;
     margin-bottom: 21px;

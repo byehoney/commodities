@@ -310,7 +310,7 @@ export default {
                 letter-spacing:2px;
                 &.active{
                     font-size:28px;
-                    color:rgba(255,25,0,1);
+                    color: #FF0304;
                     letter-spacing:2px;
                 }
             }
@@ -584,7 +584,7 @@ export default {
                             }
                             .num{
                                 font-size:24px;
-                                color:rgba(255,0,0,1);
+                                color: #FF0304;
                                 line-height:31px;
                                 letter-spacing:3px;
                             }
@@ -600,10 +600,7 @@ export default {
                             display: flex;
                             justify-content: center;
                             align-items: center;
-                            background: #ff1240;
-                            background: -webkit-linear-gradient(to right, #ff6238ed, #ff1240);
-                            background: linear-gradient(to right, #ff6238ed, #ff1240);
-                            background:linear-gradient(to right,rgba(245,81,81,1) 0%,rgba(195,41,24,1) 100%);
+                            background:  #FF0304;
                             margin-right: 20px;
                             border-radius: 5px;
                             img{
@@ -646,11 +643,11 @@ export default {
                             width: 164px;
                             height: 64px;
                             line-height: 64px;
-                            border:2px solid #d0021b;
+                            border:2px solid  #FF0304;
                             border-radius: 8px;
                             text-align: center;
                             font-size:26px;
-                            color:rgba(208,2,27,1);
+                            color: #FF0304;
                             letter-spacing:1px;
                             display: block;
                             text-align: center;

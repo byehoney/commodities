@@ -495,7 +495,7 @@ a {
 .detail_header {
   width: 750px;
   min-height: 100px;
-  background: #c32918;
+  background: #FF0304;
   font-size: 30px;
   line-height: 100px;
   position: relative;
@@ -638,8 +638,8 @@ a {
     height: 28px;
     line-height: 30px;
     text-align: center;
-    border: 1px solid #FF1900;
-    color:#FF1900;
+    border: 1px solid #FF0304;
+    color:#FF0304;
     border-radius: 5px;
     position: relative;
     top: -5px;
@@ -658,7 +658,7 @@ a {
   .saleNum{
     text-decoration: none!important;
     .num{
-      color:#FF1900;
+      color:#FF0304;
       font-size:22px;
     }
   }
@@ -675,7 +675,7 @@ a {
 }
 .detail_content_price ul li:nth-of-type(2) {
   font-size: 28px;
-  color: #ff0000;
+  color: #FF0304;
   float: right;
 }
 /* 库存 */
@@ -684,7 +684,7 @@ a {
   min-height: 70px;
   background: #ffefef;
   line-height: 70px;
-  color: #ff0000;
+  color: #FF0304;
   padding: 0 47px;
   font-size: 24px;
 }
@@ -727,7 +727,7 @@ a {
   margin-left: 49px;
 }
 .storesave_list ul li:nth-of-type(1) {
-  color: #ff0000;
+  color: #FF0304;
 }
 .detail_content_two_left {
   width: 610px;
@@ -743,14 +743,14 @@ a {
   float: right;
 }
 .detail_content_two_left span:nth-of-type(2) {
-  color: #ff0000;
+  color: #FF0304;
 }
 .detail_content_add ul li {
   line-height: 30px;
   color: #666;
 }
 .detail_content_add ul li span:nth-of-type(1) {
-  color: #ff0000;
+  color: #FF0304;
   margin-right: 25px;
 }
 .detail_content_two_right {
@@ -860,7 +860,7 @@ span {
   height: 29px;
   line-height: 30px;
   border-radius: 50%;
-  background: #f00;
+  background: #F5A41A;
   position: absolute;
   z-index: 100;
   top: 10px;
@@ -905,7 +905,7 @@ span {
 .newprice {
   float: right;
   font-size: 30px;
-  color: #ff0000;
+  color: #FF0304;
   margin-top: 30px;
   .unit{
     font-style: normal;
@@ -928,7 +928,7 @@ span {
   text-align: center;
   line-height: 100px;
   color: #fff;
-  background: #c32918;
+  background: #FF0304;
   width: 750px;
   font-size: 30px;
 }
@@ -986,7 +986,7 @@ span {
           line-height: 80px;
           font-size: 26px;
           &.confirm{
-            background-color: #ff1900;
+            background-color: #FF0304;
             color: #fff;
             padding-right: 2px;
           }
