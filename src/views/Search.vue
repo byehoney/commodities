@@ -1,8 +1,8 @@
 <template>
   <div>
-    <LocalHeader :data="search" @receve="getval"/>
+    <LocalHeader :data="search" @receve="getval" :showHistory="showHistory"/>
     <div class="history_wrap" v-if="showHistory">
-        <!-- 历史搜索 -->
+      <!-- 历史搜索 -->
       <div class="history_list" v-if="HistoryList.length">
         <h3>
           <span>历史搜索</span>
@@ -32,7 +32,7 @@
       </div>
     </div>
     <!-- 下拉菜单 -->
-    <div class="search_list">
+    <div class="search_list" v-else>
       <ul>
         <li>泡泡冷烟花</li>
       </ul>
@@ -40,15 +40,18 @@
   </div>
 </template>
 <script>
-import {autoSearch} from '@/api/index'
+import { autoSearch } from "@/api/index";
 import LocalHeader from "../components/Header";
+import { mapGetters } from "vuex";
+
 export default {
   data() {
     return {
       showHistory:true,
       HistoryList: [],
-      hotList:[],
+      hotList: [],
       timer: null,
+      inputVal: "",
       D: 0,
       H: 0,
       M: 0,
@@ -59,19 +62,28 @@ export default {
   components: {
     LocalHeader
   },
+  computed: {
+    ...mapGetters("login", [
+      "token",
+      "userId",
+      "corpCode",
+      "companyId",
+      "userRole"
+    ])
+  },
   created() {
     let history = localStorage.getItem("HistoryList")
       ? JSON.parse(localStorage.getItem("HistoryList").split(","))
       : [];
     this.HistoryList = history;
-    // this.countTime();
   },
   mounted() {
-     
+
   },
   methods: {
     getval(newval) {
       let val = newval; // 清除空格
+      this.inputVal = newval;
       if (this.HistoryList.length > 0) {
         // 有数据的话 判断
         if (this.HistoryList.indexOf(val) !== -1) {
@@ -96,7 +108,7 @@ export default {
     delSearch() {
       //   this.HistoryList.splice(index, 1);
       //   localStorage.setItem("HistoryList", JSON.stringify(this.HistoryList));
-      localStorage.removeItem('HistoryList');
+      localStorage.removeItem("HistoryList");
       this.HistoryList = [];
     },
     countTime() {
@@ -203,16 +215,17 @@ a {
   margin-right: 28px;
   margin-top: 28px;
 }
-.search_list{
+.search_list {
   width: 750px;
-  background: #fff
+  background: #fff;
+  margin-top:84px;
 }
-.search_list ul li{
+.search_list ul li {
   min-height: 85px;
   line-height: 85px;
   border-bottom: 1px solid #eee;
   font-size: 26px;
-  color:#666;
-  margin-left:39px;
+  color: #666;
+  margin-left: 39px;
 }
 </style>

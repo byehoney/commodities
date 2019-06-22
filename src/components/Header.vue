@@ -2,23 +2,19 @@
   <div class="header">
     <!-- 头部logo -->
     <div class="header_logo" v-if="showlogo" @click="goShop"></div>
-    <!-- 公告的返回 -->
-    <!-- <div class="public_header_back" v-else>
-        <img src="../images/publicback.png"/>
-    </div> -->
     <!-- 头部input输入框 -->
     <div class="header_input" v-if="showlogo">
       <span>
         <img src="../images/smallsousuo.png">
       </span>
-      <input type="text" v-model="searchStr" @click="search" placeholder="请输入烟花名称">
+      <input type="text" v-model="searchStr" @focus="search" placeholder="请输入烟花名称">
     </div>
     <!-- 头部切换的输入框 -->
-    <div class="header_input newheader" v-else  ref="sel">
+    <div class="header_input newheader" v-else ref="sel">
       <span>
         <img src="../images/smallsousuo.png">
       </span>
-      <input type="text" v-model="searchStr" @click="search" placeholder="请输入烟花名称">
+      <input type="text" v-model="searchStr" @keyup="search" placeholder="请输入烟花名称">
     </div>
     <div class="selIcon_box" v-if="showlogo" @click="goMore">
       <img class="selIcon" src="../images/sel_ld_icon.png" alt>
@@ -58,30 +54,59 @@
 
 <script>
 import DrawRight from "./DrawerRight";
+import { autoSearch } from "@/api/index";
+import { mapGetters } from "vuex";
 let scan = null;
 export default {
-  props: ["data"],
+  props: ["data","showHistory"],
   data() {
     return {
       showlogo: true,
       searchStr: "",
       hide: "",
       rightWinShow: false,
-      showScan:false
+      showScan: false,
+      newHistory:this.showHistory
     };
   },
+  computed: {
+    ...mapGetters("login", [
+      "token",
+      "userId",
+      "corpCode",
+      "companyId",
+      "userRole"
+    ])
+  },
   methods: {
-    goShop(){
-      this.$router.push('/public');
+    goShop() {
+      this.$router.push("/public");
     },
     SearchVal() {
       if (this.searchStr.trim()) {
         this.$emit("receve", this.searchStr.trim());
-        this.searchStr = '';
+        this.searchStr = "";
       }
     },
     search() {
+      // 智能搜索
+      let defaulParams = {
+        token: this.token,
+        userId: this.userId,
+        corpCode: this.corpCode,
+        companyId: this.companyId,
+        userRole: this.userRole
+      };
+      this.$emit("closelist",this.showlist)
       this.$router.push("/search");
+      if (this.searchStr == null) {
+          this.newHistory=true
+        return;
+      } else {
+        this.newHistory=false
+        console.log(this.searchStr.length);
+        autoSearch({ ...defaulParams, fITerm: this.searchStr });
+      }
     },
     cancelSearch() {
       this.$router.history.push("/");
@@ -99,14 +124,12 @@ export default {
       this.rightWinShow = !this.rightWinShow;
       this.hide = false;
     },
-    goMore(){
-      this.$router.push({name:'classify'})
+    goMore() {
+      this.$router.push({ name: "classify" });
     },
-    scan(){
-      
-    }
+    scan() {}
   },
-  mounted() {
+  async mounted() {
     if (this.data == "search") {
       this.showlogo = false;
     } else {
@@ -122,27 +145,27 @@ export default {
 
 <style lang="scss" scoped>
 .scan {
-    width: 100vw;
-    height: 100vh;
-    position: fixed;
-    top: 0;
-    left: 0;
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10000001;
+  background: rgba(0, 0, 0, 0);
+  #bcid {
+    width: 80%;
+    height: 60%;
+    position: absolute;
+    left: 10%;
     right: 0;
-    bottom: 0;
-    z-index: 10000001;
-    background: rgba(0,0,0,0);
-    #bcid {
-      width: 80%;
-      height: 60%;
-      position: absolute;
-      left: 10%;
-      right: 0;
-      top: 20%;
-      text-align: center;
-      color: #fff;
-      background: rgba(0,0,0,0);
-      z-index: 100000001;
-    }
+    top: 20%;
+    text-align: center;
+    color: #fff;
+    background: rgba(0, 0, 0, 0);
+    z-index: 100000001;
+  }
 }
 .header {
   width: 708px;
@@ -150,7 +173,11 @@ export default {
   background: #ff1240;
   background: -webkit-linear-gradient(to right, #ff6238ed, #ff1240);
   background: linear-gradient(to right, #ff6238ed, #ff1240);
-  background:linear-gradient(to right,rgba(245,81,81,1) 0%,rgba(195,41,24,1) 100%);
+  background: linear-gradient(
+    to right,
+    rgba(245, 81, 81, 1) 0%,
+    rgba(195, 41, 24, 1) 100%
+  );
   font-size: 25px;
   padding: 15px 21px;
   position: fixed;
@@ -196,18 +223,17 @@ export default {
 .header_input span img {
   width: 100%;
 }
-.public_header_back{
-  vertical-align:middle;
+.public_header_back {
+  vertical-align: middle;
   width: 17px;
   height: 30px;
-  margin-right:90px;
-  margin-left:46px;
-  margin-top:15px;
+  margin-right: 90px;
+  margin-left: 46px;
+  margin-top: 15px;
   float: left;
-
 }
-.public_header_back img{
-  width: 100%
+.public_header_back img {
+  width: 100%;
 }
 .selIcon_box {
   float: left;
