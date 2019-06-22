@@ -27,28 +27,28 @@ const router = new Router({
             name: "list",
             component: () =>
                 import(/* webpackChunkName: "list" */ './views/List.vue'),
-                meta: {
-                    auth: true,
-                    keepAlive: false,
-                }
+            meta: {
+                auth: true,
+                keepAlive: false,
+            }
         }, {
             path: "/detail",
             name: "detail",
             component: () =>
                 import(/* webpackChunkName: "detail" */ './views/Detail.vue'),
-                meta: {
-                    auth: true,
-                    keepAlive: false,
-                }
+            meta: {
+                auth: true,
+                keepAlive: false,
+            }
         }, {
             path: "/flashdetail",
             name: "flashdetail",
             component: () =>
                 import(/* webpackChunkName: "flashdetail" */ './views/FlashDetail.vue'),
-                meta: {
-                    auth: true,
-                    keepAlive: false,
-                }
+            meta: {
+                auth: true,
+                keepAlive: false,
+            }
         }, {
             path: "/watch",
             name: "watch",
@@ -87,11 +87,11 @@ const router = new Router({
             name: "choosegift",
             component: () =>
                 import(/* webpackChunkName: "choosegift" */ "./views/ChooseGift.vue"),
-                meta: {
-                    auth: true,
-                    keepAlive: false,
-                    title:'选择赠品'
-                }
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title: '选择赠品'
+            }
         },
         {
             path: "/public",
@@ -516,6 +516,61 @@ const router = new Router({
             }
         },
         {
+            path: '/manageadduser',//销售走向图
+            name: 'manageAddUser',
+            component: () =>
+                import(/* webpackChunkName: "manageCustomerRank" */ './views/ManageAddUser.vue'),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title: 'xx店铺3'
+            }
+        },
+        {
+            path: '/managestock',//库存不足7日商品
+            name: 'managestock',
+            component: () =>
+                import(/* webpackChunkName: "manageCustomerRank" */ './views/ManageStock.vue'),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title: 'xx店铺3'
+            }
+        },
+        {
+            path: '/manageshortstock',//库存不足7日商品
+            name: 'manageshortstock',
+            component: () =>
+                import(/* webpackChunkName: "manageCustomerRank" */ './views/ManageShortStock.vue'),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title: 'xx店铺3'
+            }
+        },
+        {
+            path: '/manageuncelled',//库存不足7日商品
+            name: 'manageuncelled',
+            component: () =>
+                import(/* webpackChunkName: "manageCustomerRank" */ './views/ManageUncelled.vue'),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title: 'xx店铺3'
+            }
+        },
+        {
+            path: '/manageshop',//未处理采购门店
+            name: 'manageshop',
+            component: () =>
+                import(/* webpackChunkName: "manageCustomerRank" */ './views/ManageShop.vue'),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title: 'xx店铺3'
+            }
+        },
+        {
             path: '/salesTrend',//销售走向图
             name: 'salesTrend',
             component: () =>
@@ -529,8 +584,7 @@ const router = new Router({
         {
             path: '/manageSaleRank',//销售走向图
             name: 'manageSaleRank',
-            component: () =>
-                import(/* webpackChunkName: "manageSaleRank" */ './views/ManageSaleRank.vue'),
+            component: () => import(/* webpackChunkName: "manageSaleRank" */ './views/ManageSaleRank.vue'),
             meta: {
                 auth: true,
                 keepAlive: false,
@@ -542,17 +596,6 @@ const router = new Router({
             name: 'manageCustomerRank',
             component: () =>
                 import(/* webpackChunkName: "manageCustomerRank" */ './views/ManageCustomerRank.vue'),
-            meta: {
-                auth: true,
-                keepAlive: false,
-                title: 'xx店铺3'
-            }
-        },
-        {
-            path: '/manageAddUser',//销售走向图
-            name: 'manageAddUser',
-            component: () =>
-                import(/* webpackChunkName: "manageCustomerRank" */ './views/ManageAddUser.vue'),
             meta: {
                 auth: true,
                 keepAlive: false,
