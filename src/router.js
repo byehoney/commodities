@@ -523,7 +523,7 @@ const router = new Router({
             meta: {
                 auth: true,
                 keepAlive: false,
-                title: 'xx店铺'
+                title: 'xx店铺1'
             }
         },
         {
@@ -534,7 +534,7 @@ const router = new Router({
             meta: {
                 auth: true,
                 keepAlive: false,
-                title: 'xx店铺'
+                title: 'xx店铺2'
             }
         },
         {
@@ -545,7 +545,18 @@ const router = new Router({
             meta: {
                 auth: true,
                 keepAlive: false,
-                title: 'xx店铺'
+                title: 'xx店铺3'
+            }
+        },
+        {
+            path: '/manageAddUser',//销售走向图
+            name: 'manageAddUser',
+            component: () =>
+                import(/* webpackChunkName: "manageCustomerRank" */ './views/ManageAddUser.vue'),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title: 'xx店铺3'
             }
         },
         {
