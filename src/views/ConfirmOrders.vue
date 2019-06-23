@@ -20,24 +20,18 @@
       </div>
       <div class="orderDetailInfo">
         <div class="proImgs">
-          <div class="imgBox">
-            <img src="../images/shopcar.png" alt>
-          </div>
-          <div class="imgBox">
-            <img src="../images/shopcar.png" alt>
-          </div>
-          <div class="imgBox">
-            <img src="../images/shopcar.png" alt>
+          <div class="imgBox" v-for="(url,index) in urls" :key="index">
+            <img :src="url.imgurl?url.imgurl:require('../images/default_logo.jpg')" alt>
           </div>
         </div>
-        <div class="proNum">共100件</div>
+        <div class="proNum">共{{productnum}}件</div>
         <img src="../images/arrow_right.png" class="rightIcon" alt>
       </div>
       <div class="orderSelInfo">
         <div class="selItem" v-if="giftList.length">
           <div class="selLeft">赠品选择</div>
           <div class="selRight" @click="chooseGift">
-            <span class="text">请选择</span>
+            <span class="text">{{giftNum>0?'已选择':'请选择'}}</span>
             <img src="../images/arrow_right.png" class="rightIcon" alt>
           </div>
         </div>
@@ -50,24 +44,24 @@
         </div>
         <div class="selItem">
           <div class="selLeft">备注</div>
-          <input type="text" placeholder="请输入备注">
+          <input type="text" v-model="note" placeholder="请输入备注">
         </div>
       </div>
       <div class="orderPriceInfo">
         <div class="priceItem">
           <div class="priceLeft">商品金额</div>
-          <div class="priceRight">￥120</div>
+          <div class="priceRight">￥{{spje}}</div>
         </div>
         <div class="priceItem">
           <div class="priceLeft">活动优惠</div>
-          <div class="priceRight">-￥120</div>
+          <div class="priceRight">￥{{yhje}}</div>
         </div>
       </div>
     </div>
     <div class="fixBottom">
       <div class="left">
         <span class="text">实付款</span>
-        <span class="price">￥120</span>
+        <span class="price">￥{{sfje}}</span>
       </div>
       <div class="right" @click="submitOrder">提交订单</div>
     </div>
@@ -138,7 +132,7 @@
 </template>
 <script>
 import { Toast } from "mint-ui";
-import { getAddrList, confirmGetInfo,getFullList, getTicket,addToCar} from "@/api/index";
+import { getAddrList, confirmGetInfo,submitOrder,getFullList, getTicket,addToCar} from "@/api/index";
 import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
 export default {
   data() {
@@ -148,6 +142,8 @@ export default {
       tel: "",
       city: "",
       cvPosition: "",
+      warehouseCode:'',
+      note:'',//备注
       popupVisible: false,
       giftVisible: false,
       warehouseAddr: "",
@@ -166,6 +162,11 @@ export default {
       giftList: [],
       giftNum: 0,
       selMzGift:[],
+      productnum:0,
+      urls:[],
+      spje:'',
+      sfje:'',
+      yhje: ''
     };
   },
   computed: {
@@ -180,7 +181,7 @@ export default {
   },
   mounted() {
     console.log(this.orderInfo)
-    this.getAddr();
+    // this.getAddr();
     this.getOrderInfo();
     this.getTicketInfo();
     this.getGiftData();
@@ -194,19 +195,21 @@ export default {
       this.addGiftToCart();
     },
     async addGiftToCart(){
+        console.log(this.orderInfo);
+       
         let defaulParams = {
             token: this.token,
             userId: this.userId,
             corpCode: this.corpCode,
             companyId: this.companyId,
-            userRole: this.userRole
+            userRole: this.userRole,
         };
         let giftArr = [];
         if(this.orderInfo.mzList&&this.orderInfo.mzList.length){
             this.orderInfo.mzList.forEach((item,index)=>{
                 if(item[0].selGifts.length){
                     item[0].selGifts.forEach((pterm)=>{
-                        if(pterm.promotionflag=='买赠'&&pterm.numberormny=='数量满足'){
+                        if(item[0].promotionflag=='买赠'&&item[0].numberormny=='数量满足'){
                             giftArr.push({
                                 mzhdlx:'买赠',
                                 pzlx:true,
@@ -217,7 +220,7 @@ export default {
                                 pzdj:pterm.zpjj,
                                 mobile:this.user.mobile
                             })
-                        }else if(pterm.promotionflag=='买赠'&&pterm.numberormny=='金额满足'){
+                        }else if(item[0].promotionflag=='买赠'&&item[0].numberormny=='金额满足'){
                             giftArr.push({
                                 mzhdlx:'满额赠',
                                 pzlx:false,
@@ -248,8 +251,24 @@ export default {
                 mobile:this.user.mobile
             })
         })
-        if(giftArr.length){
-            let res = await addToCar({...defaulParams,jsonStr:JSON.stringify(giftArr)});
+        
+        let res = await submitOrder({
+          ...defaulParams,
+          morenReginCode:this.warehouseCode,
+          jsonStr:JSON.stringify(giftArr),
+          orderText:this.note,
+          userName:this.person,
+          userMobile:this.tel,
+        });
+        if(res.code==0){
+          Toast({
+            message: "提交成功", //弹窗内容
+            position: "middle", //弹窗位置
+            duration: 2000 //弹窗时间毫秒,如果值为-1，则不会消失
+          });
+          setTimeout(()=>{
+            this.$router.push({name:'newShopCar'})
+          },2100)
         }
     },
     async getAddr() {
@@ -280,9 +299,24 @@ export default {
         userId: this.userId,
         corpCode: this.corpCode,
         companyId: this.companyId,
-        userRole: this.userRole
+        userRole: this.userRole,
+        money:this.$route.query.money
       };
       let res = await confirmGetInfo(defaulParams);
+      if (res.data.info.status == "默认") {
+        this.hasDefault = true;
+        this.person = res.data.info.person;
+        this.tel = res.data.info.tel;
+        this.city = res.data.info.city;
+        this.cvPosition = res.data.info.cvPosition;
+        this.warehouseAddr = res.data.info.warehouseAddr;
+        this.warehouseCode = res.data.info.warehouseCode;
+      }
+      this.productnum = res.data.productnum;
+      this.urls = res.data.urls;
+      this.spje = res.data.spje;
+      this.sfje = res.data.sfje;
+      this.yhje = res.data.yhje;
     },
     async getTicketInfo(){
       let defaulParams = {
@@ -519,7 +553,7 @@ export default {
         color: rgba(102, 102, 102, 1);
         line-height: 31px;
         letter-spacing: 1px;
-        margin-left: 32px;
+        margin-left: 30px;
       }
       .rightIcon {
         width: 17px;

@@ -209,7 +209,7 @@
       <div class="footer_guide fix">
         <div class="footer_guide_left fix">
           <ul>
-            <li>
+            <li @click="goShopCar">
               <img src="../images/shopcar.png">
               <p class="badge">{{buyNum}}</p>
             </li>
@@ -314,6 +314,9 @@ export default {
     ])
   },
   methods: {
+    goShopCar(){
+      this.$router.push({name:'newShopCar'})
+    },
     async confirmOper(){
       let defaulParams = {
         token: this.token,

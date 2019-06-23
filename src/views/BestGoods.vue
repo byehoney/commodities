@@ -55,7 +55,7 @@
     </div>
     <!-- 底部 -->
     <div class="footer_guide fix">
-      <div class="footer_guide_left fix">
+      <div class="footer_guide_left fix" @click="goShopCar">
         <p class="badge"></p>
         <p>¥{{money}}</p>
       </div>
@@ -110,6 +110,9 @@ export default {
     this.getData();
   },
   methods: {
+    goShopCar(){
+      this.$router.push({name:'newShopCar'})
+    },
     reduce(index,jIndex){
       if(this.list[index][jIndex].num<=1){
         this.list[index][jIndex].num=1

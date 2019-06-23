@@ -1,8 +1,8 @@
 <template>
   <div style="opacity:1" :class="[popupVisible?'popContainer':'']">
     <mt-header title="购物车" class="shopCar_header">
-      <router-link to="/" slot="left">
-        <mt-button icon="back" class="text"></mt-button>
+      <router-link to="" slot="left">
+        <mt-button @click.native="$router.go(-1)" icon="back" class="text"></mt-button>
       </router-link>
       <mt-button title="管理" slot="right" class="text">
         <span @click="complete">{{result?'管理':'完成'}}</span>
@@ -11,7 +11,7 @@
     <div class="list_shopcar fix" >
       <!--普通 -->
       <div class="area">
-        <div class="list_shopcar_title">
+        <div class="list_shopcar_title" v-if="head">
           <div class="list_shopcar_name">
             <div
               class="list_shopcar_circle"
@@ -407,7 +407,7 @@ export default {
       })
       let jsonStr = JSON.stringify({suites:suits,items:items});
       let result =  await settleAcount({...defaulParams,jsonStr:jsonStr});
-      this.$router.push({name:'confirmOrders',query:{money:this.sumMoney,canSelMz:this.canSelMz}});
+      this.$router.push({name:'confirmOrders',query:{money:this.sumMoney.toFixed(3),canSelMz:this.canSelMz}});
     },
     isShowTip(){
       let result = 0;

@@ -111,7 +111,7 @@ export default {
       }
     },
     cancelSearch() {
-      this.$router.history.push("/");
+      this.$router.history.go("-1");
     },
     showcode() {
       if (this.rightWinShow) {

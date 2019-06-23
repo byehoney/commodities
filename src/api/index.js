@@ -222,6 +222,11 @@ function getTicket(params){//获取发票
 function getFullList(params){//获取满赠列表
     return post('/order/manez/list.do', params)
 }
+
+function submitOrder(params){//提交订单
+    return post('/product/submit/order.do', params)
+}
+
 function autoSearch(params){//智能搜索
     return post('/get/zhineng/list.do', params)
 }
@@ -297,6 +302,7 @@ export {
     getGiftList,
     delFromCar,
     getCarList,
+    submitOrder,
     autoSearch,
     getSuitList,
     getSuitDetail,
