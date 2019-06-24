@@ -32,7 +32,7 @@
     <!-- 门店列表 -->
     <div class="manageChooseList">
       <ul>
-        <li v-for="item in chooseList">
+        <li v-for="(item,index) in chooseList" :key="index">
           <div class="manageChoose_pic">
             <img src="../images/dianpu_m.png">
           </div>
