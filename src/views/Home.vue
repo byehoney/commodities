@@ -100,20 +100,32 @@
       </div>
     </div>
     <!-- special 结束 -->
-    <div class="home_video" style="display:none">
+    <div class="home_video" style="display:n-one">
       <div class="home_video_list">
         <div class="home_video_list_header">
           <h3>标题</h3>
         </div>
         <div class="home_video_list_content">
-          <video-player
+          <!-- <video-player
             class="video-player-box video-player vjs-custom-skin"
             ref="videoPlayer"
             :playsinline="true"
             :options="playerOptions"
             @play="onPlayerPlay($event)"
             @pause="onPlayerPause($event)"
-          ></video-player>
+          ></video-player> -->
+          <video
+            class="myVideo"
+            playsinline="true"
+            x-webkit-airplay="true" 
+            x5-playsinline="true"
+            webkit-playsinline="true" 
+            x5-video-player-type="h5"
+            poster="../images/banner_01.jpg"
+            controls
+          >
+            <source src="http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4" type="video/mp4">
+          </video>
         </div>
       </div>
     </div>
@@ -162,6 +174,10 @@ export default {
         aspectRatio: "16:9", // 将播放器置于流畅模式，并在计算播放器的动态大小时使用该值。值应该代表一个比例 - 用冒号分隔的两个数字（例如"16:9"或"4:3"）
         fluid: true, // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
         sources: [
+          {
+            type: "",
+            src: "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4" //你的视频地址（必填）
+          },
           {
             type: "",
             src: "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4" //你的视频地址（必填）
@@ -269,6 +285,10 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.home_video_list_content .myVideo{
+  width: 100%;
+  height: 500px;
+}
 .homeContainer {
   padding-bottom: 120px;
   opacity: 1;
