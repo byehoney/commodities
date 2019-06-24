@@ -516,6 +516,17 @@ const router = new Router({
             }
         },
         {
+            path: '/kpiCheck',
+            name: 'kpiCheck',
+            component: () =>
+                import(/* webpackChunkName: "kpiCheck" */ './views/KPIcheck.vue'),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title: '业绩查询'
+            }
+        },
+        {
             path: '/manageadduser',//销售走向图
             name: 'manageAddUser',
             component: () =>

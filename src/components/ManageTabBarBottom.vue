@@ -6,7 +6,7 @@
         </mt-tab-item>
         <mt-tab-item id="choose">
             <img slot="icon" :src="selected==='choose'?tabs[1][1]:tabs[1][0]">
-            选品
+            报表
         </mt-tab-item>
         <mt-tab-item id="shopcar">
             <img slot="icon" :src="selected==='shopcar'?tabs[2][1]:tabs[2][0]">
