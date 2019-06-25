@@ -593,6 +593,17 @@ const router = new Router({
             }
         },
         {
+            path: '/manageorder',//今日订单
+            name: 'manageorder',
+            component: () =>
+                import(/* webpackChunkName: "manageCustomerRank" */ './views/ManageOrder.vue'),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title: 'xx店铺3'
+            }
+        },
+        {
             path: '/salesTrend',//销售走向图
             name: 'salesTrend',
             component: () =>
