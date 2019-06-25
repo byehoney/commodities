@@ -1,8 +1,10 @@
 <template>
     <div class="mangeContainer">
         <div class="manageHeader">
-            <img @click="goBack" src="../images/leftArrow.png" class="leftIcon" alt="">
-            <input type="text" placeholder="请输入搜索内容" class="input">
+            <img @click="goBack" src="../images/arrow_left_white.png" class="leftIcon" alt="">
+            <div class="inputArea">
+                <input type="text" placeholder="请输入搜索内容" class="input">
+            </div>
             <span>搜索</span>
         </div>
     </div>
@@ -35,12 +37,19 @@ export default {
             width: 100%;
             height: 93px;
             display: flex;
+            justify-content: space-around;
             align-items: center;
             background:linear-gradient(180deg,rgba(0,122,255,1) 0%,rgba(24,152,247,1) 100%);
-            border-radius: 30px;
             .leftIcon{
                 width: 17px;
                 height: 30px;
+            }
+            .inputArea{
+                width: 506px;
+                height: 58px;
+                background-color: #fff;
+                border-radius: 30px;
+                position: relative;
             }
             .input{
                 width: 506px;
@@ -50,6 +59,13 @@ export default {
                 color:#999;
                 line-height:30px;
                 letter-spacing:2px;
+                border: none;
+                outline: none;
+                position: absolute;
+                top: 0;
+                left: 0;
+                border-radius: 30px;
+                padding-left: 21px;
             }
             span{
                 font-size:28px;

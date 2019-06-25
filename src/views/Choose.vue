@@ -164,9 +164,10 @@ export default {
     activated(){
         this.loading = false;
         if (!this.$route.meta.canKeep) {
-            let showTab = this.$router.history.current.query.showTab;
-            let flTerm = this.$router.history.current.query.flTerm;
-            let cjTerm = this.$router.history.current.query.cjTerm;
+            let showTab = this.$route.query.showTab?this.$route.query.showTab:'';
+            let flTerm = this.$route.query.flTerm?this.$route.query.flTerm:'';
+            let cjTerm = this.$route.query.cjTerm?this.$route.query.cjTerm:'';
+            let pzTerm = this.$route.query.pzTerm?this.$route.query.pzTerm:'';
             if(showTab!=''&&showTab!=undefined){
                 this.curType = showTab;
             }else{
@@ -176,6 +177,11 @@ export default {
                 this.flTerm = flTerm;
             }else{
                  this.flTerm = '';
+            }
+            if(pzTerm!=''&&pzTerm!=undefined){
+                this.pzTerm = pzTerm;
+            }else{
+                 this.pzTerm = '';
             }
             if(cjTerm!=''&&cjTerm!=undefined){
                 this.cjTerm = cjTerm;
