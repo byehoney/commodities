@@ -538,6 +538,17 @@ const router = new Router({
             }
         },
         {
+            path: '/kpiCheckList',
+            name: 'kpiCheckList',
+            component: () =>
+                import(/* webpackChunkName: "kpiCheckList" */ './views/KPIcheckList.vue'),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title: '业绩查询'
+            }
+        },
+        {
             path: '/manageadduser',//销售走向图
             name: 'manageAddUser',
             component: () =>

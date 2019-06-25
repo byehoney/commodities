@@ -2,7 +2,7 @@
     <div class="pcContainer">
         <TopNav></TopNav>
         <div class="loginArea">
-            <img src="../images/shopcar.png" alt="">
+            <img src="../images/pc_icon.png" alt="">
             <p class="tip">Pc 登录确认</p>
             <div class="loginBtn" @click="loginPc">登录</div>
             <div class="noLogin" @click="canCelLogin">取消登录</div>
