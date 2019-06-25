@@ -11,7 +11,7 @@
                 <img class="sel" v-if="item.isActive" src="../images/car_checkcircle.png" alt="">
                 <img class="sel" v-else src="../images/car_circle.png" alt="">
                 <div class="left">
-                    <img :src="item.url" alt="">
+                    <img :src="item.url?item.url:require('../images/default_logo.jpg')" alt="">
                 </div>
                 <div class="right">
                     <div class="top">

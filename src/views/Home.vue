@@ -100,7 +100,7 @@
       </div>
     </div>
     <!-- special 结束 -->
-    <div class="home_video" style="display:n-one">
+    <div class="home_video" style="display:none">
       <div class="home_video_list">
         <div class="home_video_list_header">
           <h3>标题</h3>
@@ -146,7 +146,7 @@ import { videoPlayer } from "vue-video-player";
 // //引入hls.js
 // import "videojs-contrib-hls.js/src/videojs.hlsjs";
 
-import { getHeatList, getSpecialList, secKill ,getActivityInfo} from "@/api/index";
+import { getHeatList,getIndexInfo, getSpecialList, secKill ,getActivityInfo} from "@/api/index";
 import { mapState,mapGetters } from "vuex";
 import { setInterval } from "timers";
 export default {
@@ -210,20 +210,29 @@ export default {
         companyId:this.companyId,
         userRole:this.userRole,
     } 
-    //热门分类
-    let { data } = await getHeatList(defaulParams);
-    this.heatList = data.list;
-    //精品推荐
-    let specialData = await getSpecialList({...defaulParams,pageSize:4});
-    this.boutique = specialData.data.list;
-    //限时秒杀
-    let killdata = await secKill({...defaulParams,pageSize: 3});
-    this.secKillList = killdata.data.list;
-    this.count();
-    // 是否显示精品买赠 套餐活动
-    let actInfo = await getActivityInfo(defaulParams);
-    this.showTc = actInfo.data.tcCount>0?true:false;
-    this.showMz = actInfo.data.mzCount>0?true:false;
+    let res = await getIndexInfo(defaulParams);
+    if(res.code==0){
+      this.heatList = res.data.rmList;
+      this.boutique = res.data.tjList;
+      this.secKillList = res.data.msList.splice(0,3);
+      this.count();
+      this.showTc = res.data.tcCount>0?true:false;
+      this.showMz = res.data.mzCount>0?true:false;
+    }
+    // //热门分类
+    // let { data } = await getHeatList(defaulParams);
+    // this.heatList = data.list;
+    // //精品推荐
+    // let specialData = await getSpecialList({...defaulParams,pageSize:4});
+    // this.boutique = specialData.data.list;
+    // //限时秒杀
+    // let killdata = await secKill({...defaulParams,pageSize: 3});
+    // this.secKillList = killdata.data.list;
+    // this.count();
+    // // 是否显示精品买赠 套餐活动
+    // let actInfo = await getActivityInfo(defaulParams);
+    // this.showTc = actInfo.data.tcCount>0?true:false;
+    // this.showMz = actInfo.data.mzCount>0?true:false;
   },
   methods: {
     goChoose(index){

@@ -6,6 +6,10 @@
           <img src="../images/guanbi.png">
         </div>
         <div class="draw_title">选择门店</div>
+        <div class="serchArea">
+          <input v-model="shopStr" @input="searchShop" type="text" class="input" placeholder="请输入搜索门店">
+          <img class="searchIcon" src="../images/smallsousuo.png">
+        </div>
         <div class="draw_list">
           <ul :style="win">
             <li :class="[item.companyId==user.companyId?'active':'']" v-for="(item,index) in list" :key="index" @click="selCompany(item.companyId)">{{item.companyName}}</li>
@@ -38,7 +42,10 @@ export default {
   props: ["rightHide"],
   data() {
     return {
-      list:[],
+      list:[],//渲染门店列表数据
+      searchList:[],//搜索门店列表数
+      oList:[],//初始门店列表数据
+      shopStr:'',
       win: {
         height: document.documentElement.clientHeight + "px"
       },
@@ -54,6 +61,13 @@ export default {
   },
   methods: {
     ...mapMutations('login',['saveCompany']),
+    searchShop(){
+      if(!this.shopStr.trim()){
+        this.list = this.oList;
+      }else{
+        this.list = this.list.filter((item)=>item['companyName'].indexOf(this.shopStr)>-1);
+      }
+    },
     close() {
       this.rightWin = this.rightHide;
       this.$emit("getRight", this.rightWin);
@@ -74,13 +88,44 @@ export default {
       let res = await switchCompanyList(defaulParams);
       if(res.code==0){
         this.list = res.data.list;
+        this.oList = res.data.list;
       }
     }
   }
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+.serchArea{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width:400px;
+  height:60px;
+  background:rgba(235,235,235,1);
+  border-radius:30px;
+  border:1px solid rgba(222,222,222,1);
+  position: relative;
+  margin: 0  0 20px 39px;
+  .input{
+    width: 96%;
+    height: 98%;
+    border: none;
+    outline: none;
+    position: relative;
+    top: 1%;
+    left: 2%;
+    background-color:rgba(235,235,235,0);
+    padding-left:20px;
+  }
+  .searchIcon{
+    position: absolute;
+    width: 36px;
+    height: 36px;
+    top: 12px;
+    right: 20px;
+  }
+}
 .right-slide-enter,
 .right-slide-leave-active {
   transform: translateX(597px);

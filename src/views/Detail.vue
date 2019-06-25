@@ -220,11 +220,11 @@
         </div>
         <div class="footer_guide_right fix">
           <ul>
-            <li>
-              <span @click="handlerClick('add')">加入购物车</span>
+            <li @click="handlerClick('add')">
+              <span>加入购物车</span>
             </li>
-            <li>
-              <span @click="handlerClick('buy')">立即购买</span>
+            <li @click="handlerClick('buy')">
+              <span>立即购买</span>
             </li>
           </ul>
         </div>
@@ -355,7 +355,13 @@ export default {
       }else{
         let res = await buyCheckNum({...defaulParams,productId:this.shopDetail.priductid,num:this.shopnum});
         if(res.code==0&&res.data.ckeckResult){
-          this.$router.push({name:'confirmOrders',money:this.money})
+          this.$router.push({name:'confirmOrders',query:{money:this.money,type:0}});
+        }else{
+          Toast({
+            message: res.msg, 
+            position: "middle", 
+            duration: 2000 
+          });
         }
       }
     },

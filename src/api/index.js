@@ -216,6 +216,10 @@ function confirmGetInfo(params){//确认订单获取订单信息
     return post('/order/queren/info.do', params)
 }
 
+function getConfirmProducts(params){//获取订单确认商品列表
+    return post('/order/queren/products.do', params)
+}
+
 function getTicket(params){//获取发票
     return post('/order/fapiao/info.do', params)
 }
@@ -231,6 +235,13 @@ function autoSearch(params){//智能搜索
     return post('/get/zhineng/list.do', params)
 }
 
+function pcLogin(params){//pc扫码登陆
+    return post('/login/user/scan.do', params)
+}
+
+function getIndexInfo(params){
+    return post('/index/gather/info.do', params)
+}
 function getHeatList(params) {//获取首页热门分类
     // let data = {...defaulParams,...params}
     return post('/index/heat/list.do', params)
@@ -302,10 +313,13 @@ export {
     getGiftList,
     delFromCar,
     getCarList,
+    getConfirmProducts,
     submitOrder,
     autoSearch,
     getSuitList,
     getSuitDetail,
+    pcLogin,
+    getIndexInfo,
     getHeatList,
     getSpecialList,
     secKill

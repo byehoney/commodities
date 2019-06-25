@@ -505,6 +505,17 @@ const router = new Router({
             }
         },
         {
+            path: '/productsList',
+            name: 'productsList',
+            component: () =>
+                import(/* webpackChunkName: "productsList" */ './views/ProductsList.vue'),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title: '商品列表'
+            }
+        },
+        {
             path: '/manageHome',
             name: 'manageHome',
             component: () =>

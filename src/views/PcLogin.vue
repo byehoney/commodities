@@ -4,21 +4,54 @@
         <div class="loginArea">
             <img src="../images/shopcar.png" alt="">
             <p class="tip">Pc 登录确认</p>
-            <div class="loginBtn">登录</div>
-            <div class="noLogin">取消登录</div>
+            <div class="loginBtn" @click="loginPc">登录</div>
+            <div class="noLogin" @click="canCelLogin">取消登录</div>
         </div>
     </div>
 </template>
 <script>
+import { Toast } from "mint-ui";
+import { mapGetters } from 'vuex'
+import { pcLogin } from '@/api/index'
 import TopNav from '@/components/TopNav'
+import { setTimeout } from 'timers';
 export default {
     data(){
         return{
             
         }
     },
+    computed:{
+        ...mapGetters('login',['token','userId','corpCode','companyId','userRole'])
+    },
     components:{
         TopNav,
+    },
+    methods: {
+        async loginPc(){
+            let defaulParams = {
+                token:this.token,
+                userId:this.userId,
+                corpCode:this.corpCode,
+                companyId:this.companyId,
+                userRole:this.userRole,
+                code:this.$route.query.code
+            };
+            let res = await pcLogin(defaulParams);
+            if(res.code==0){
+                Toast({
+                    message: "登陆成功", //弹窗内容
+                    position: "middle", //弹窗位置
+                    duration: 2000 //弹窗时间毫秒,如果值为-1，则不会消失
+                });
+                setTimeout(()=>{
+                    this.$router.go(-1);
+                },2100)
+            }
+        },
+        canCelLogin(){
+            this.$router.go(-1);
+        }
     },
 }
 </script>

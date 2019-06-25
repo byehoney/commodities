@@ -243,11 +243,11 @@
           </div>
           <div class="footer_guide_right fix">
             <ul>
-              <li>
-                <span @click="clear">清空</span>
+              <li @click="clear">
+                <span>清空</span>
               </li>
-              <li>
-                <span @click="confirmGift">确定</span>
+              <li @click="confirmGift">
+                <span>确定</span>
               </li>
             </ul>
           </div>
@@ -295,6 +295,7 @@ export default {
       curGiftIndex:0,//当前选择赠品活动index
       canClick:true,
       canSelMz:0,
+      scrollTop:0,//页面滚动的距离
     };
   },
   computed: {
@@ -352,7 +353,7 @@ export default {
         return;
       }
       this.canClick = false;
-      if(this.sumMoney<this.head.cjl){
+      if(this.sumMoney<this.head.cjl||parseFloat(this.sumMoney)==0){
         this.showErr = true;
         this.errText = '无效的采集额';
         this.canClick = true;
@@ -407,7 +408,7 @@ export default {
       })
       let jsonStr = JSON.stringify({suites:suits,items:items});
       let result =  await settleAcount({...defaulParams,jsonStr:jsonStr});
-      this.$router.push({name:'confirmOrders',query:{money:this.sumMoney.toFixed(3),canSelMz:this.canSelMz}});
+      this.$router.push({name:'confirmOrders',query:{money:this.sumMoney.toFixed(3),canSelMz:this.canSelMz,type:1}});
     },
     isShowTip(){
       let result = 0;
@@ -761,6 +762,11 @@ export default {
       }
     },
     chooseGift(index,id){
+      if(document.documentElement&&document.documentElement.scrollTop){
+        this.scrollTop=document.documentElement.scrollTop;
+      }else if(document.body){
+        this.scrollTop=document.body.scrollTop;
+      }
       this.popupVisible = true;
       this.curGiftIndex = index;
       let selGifts = this.mzList[index][0].selGifts;
@@ -775,6 +781,9 @@ export default {
         }
       })
       this.$set(this.mzList[this.curGiftIndex][0],'selGifts',selGift);
+      setTimeout(()=>{
+        window.scrollTo(0,this.scrollTop);
+      },100)
     },
     async getGiftData(index,id,selGifts){
       console.log(selGifts)
@@ -1145,7 +1154,7 @@ export default {
 .shop_gift_left h3 {
   color: #FF0304;
   font-weight: 400;
-  width: 100px;
+  width: 120px;
   margin-right: 26px;
 }
 .shop_gift_bottom {

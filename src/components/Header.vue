@@ -153,12 +153,20 @@ export default {
       this.$router.push({ name: "classify" });
     },
     scan() {
-      if(this.isAndroid()){
+      var u_agent = navigator.userAgent;
+      if(!this.isAndroid()){
+        window.webkit.messageHandlers.scanQRCode.postMessage({});
+      }else{
         window.android.scanQRCode();
       }
+      // if(this.isAndroid()){
+      //   window.android.scanQRCode();
+      // }else{
+      //   window.webkit.messageHandlers.scanQRCode.postMessage();
+      // }
     },
     scanResult(str){
-      alert(JSON.stringify(str))
+      this.$router.push({name:'pcLogin',query:{code:str}})
     }
   },
   async mounted() {

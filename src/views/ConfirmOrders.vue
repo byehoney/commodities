@@ -3,7 +3,7 @@
     <div class="nav">
       <img @click="goBack" src="../images/leftArrow.png" class="leftIcon" alt>
       <span class="title">确认订单</span>
-      <span class="btn">完成</span>
+      <span class="btn" style="display:none">完成</span>
     </div>
     <div class="main">
       <div class="orderAddInfo">
@@ -18,7 +18,7 @@
         </div>
         <img src="../images/arrow_right.png" class="rightIcon" alt>
       </div>
-      <div class="orderDetailInfo">
+      <div class="orderDetailInfo" @click="goProList">
         <div class="proImgs">
           <div class="imgBox" v-for="(url,index) in urls" :key="index">
             <img :src="url.imgurl?url.imgurl:require('../images/default_logo.jpg')" alt>
@@ -117,11 +117,11 @@
           </div>
           <div class="footer_guide_right fix">
             <ul>
-              <li>
-                <span @click="clear">清空</span>
+              <li @click="clear">
+                <span >清空</span>
               </li>
-              <li>
-                <span @click="confirmGift">确定</span>
+              <li @click="confirmGift">
+                <span>确定</span>
               </li>
             </ul>
           </div>
@@ -191,6 +191,9 @@ export default {
   },
   methods: {
     ...mapMutations('login',['restOrderInfo']),
+    goProList(){
+      this.$router.push({name:'productsList'})
+    },
     submitOrder(){
       this.addGiftToCart();
     },
@@ -214,10 +217,12 @@ export default {
                                 mzhdlx:'买赠',
                                 pzlx:true,
                                 ghsbm:'',
-                                gmsz:pterm.hdbm,
+                                hdbm:pterm.hdbm,
+                                jghdlx:'无',
                                 productId:pterm.zpbm,
                                 cartNum:pterm.zssl,
                                 pzdj:pterm.zpjj,
+                                pzyj:pterm.zpjj,
                                 mobile:this.user.mobile
                             })
                         }else if(item[0].promotionflag=='买赠'&&item[0].numberormny=='金额满足'){
@@ -225,11 +230,12 @@ export default {
                                 mzhdlx:'满额赠',
                                 pzlx:false,
                                 ghsbm:'',
-                                gmsz:pterm.hdbm,
+                                hdbm:pterm.hdbm,
                                 jghdlx:'无',
                                 productId:pterm.zpbm,
                                 cartNum:pterm.zssl,
                                 pzdj:pterm.zpjj,
+                                pzyj:pterm.zpjj,
                                 mobile:this.user.mobile
                             })
                         }
@@ -242,7 +248,7 @@ export default {
                 mzhdlx:'整单满额赠',
                 pzlx:true,
                 ghsbm:'',
-                gmsz:item.hdcode,
+                hdbm:item.hdcode,
                 jghdlx:'无',
                 productId:item.zpcode,
                 cartNum:item.zsjh,
@@ -259,6 +265,7 @@ export default {
           orderText:this.note,
           userName:this.person,
           userMobile:this.tel,
+          type:this.$route.query.type
         });
         if(res.code==0){
           Toast({
