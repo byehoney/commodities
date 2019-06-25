@@ -231,6 +231,10 @@ function submitOrder(params){//提交订单
     return post('/product/submit/order.do', params)
 }
 
+function nowBuy(params){//立即购买添加购物车
+    return post('/product/ljgm/cart.do', params)
+}
+
 function autoSearch(params){//智能搜索
     return post('/get/zhineng/list.do', params)
 }
@@ -315,6 +319,7 @@ export {
     getCarList,
     getConfirmProducts,
     submitOrder,
+    nowBuy,
     autoSearch,
     getSuitList,
     getSuitDetail,

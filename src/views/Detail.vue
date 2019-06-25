@@ -278,7 +278,7 @@
 
 <script>
 import { Toast } from "mint-ui";
-import { getChooseDetail,addToCar ,getCartNum,buyCheckNum} from "@/api/index";
+import { getChooseDetail,addToCar ,getCartNum,buyCheckNum,nowBuy} from "@/api/index";
 import { mapState, mapGetters } from "vuex";
 export default {
   data() {
@@ -355,7 +355,23 @@ export default {
       }else{
         let res = await buyCheckNum({...defaulParams,productId:this.shopDetail.priductid,num:this.shopnum});
         if(res.code==0&&res.data.ckeckResult){
-          this.$router.push({name:'confirmOrders',query:{money:this.money,type:0}});
+          let jsonStr = {
+            mzhdlx:'无',
+            pzlx:false,
+            jghdlx:this.shopDetail.hdlx,
+            productId:this.shopDetail.priductid,
+            cartNum:this.shopnum,
+            pzdj:this.shopDetail.cxj,
+            pzyj:this.shopDetail.ptsj,
+            mobile:this.user.mobile
+          }
+          let result = await nowBuy({
+            ...defaulParams,
+            jsonStr:JSON.stringify(jsonStr)
+          })
+          if(result.code == 0){
+            this.$router.push({name:'confirmOrders',query:{money:this.money,type:0}});
+          }
         }else{
           Toast({
             message: res.msg, 

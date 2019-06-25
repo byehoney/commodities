@@ -208,7 +208,7 @@ export default {
             userRole: this.userRole,
         };
         let giftArr = [];
-        if(this.orderInfo.mzList&&this.orderInfo.mzList.length){
+        if(this.orderInfo.mzList&&this.orderInfo.mzList.length&&this.$route.query.type==1){
             this.orderInfo.mzList.forEach((item,index)=>{
                 if(item[0].selGifts.length){
                     item[0].selGifts.forEach((pterm)=>{
@@ -274,7 +274,11 @@ export default {
             duration: 2000 //弹窗时间毫秒,如果值为-1，则不会消失
           });
           setTimeout(()=>{
-            this.$router.push({name:'newShopCar'})
+            if(this.$route.query.type==0){
+              this.$router.go(-1);
+            }else{
+              this.$router.push({name:'newShopCar'});
+            }
           },2100)
         }
     },
@@ -561,6 +565,8 @@ export default {
         line-height: 31px;
         letter-spacing: 1px;
         margin-left: 30px;
+        width: 120px;
+        flex-shrink: 0;
       }
       .rightIcon {
         width: 17px;
