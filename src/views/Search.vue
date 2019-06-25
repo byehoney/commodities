@@ -1,6 +1,6 @@
 <template>
   <div>
-    <LocalHeader :data="search" @receve="getval" :showHistory="showHistory" @closehistory="closehistory"/>
+    <LocalHeader :data="search" @receve="getval" :showHistory="showHistory" @closehistory="closehistory" @searchRes="result"/>
     <div class="history_wrap" v-if="showHistory">
       <!-- 历史搜索 -->
       <div class="history_list" v-if="HistoryList.length">
@@ -34,7 +34,7 @@
     <!-- 下拉菜单 -->
     <div class="search_list" v-else>
       <ul>
-        <li>泡泡冷烟花</li>
+        <li v-for="item in searchList" :key="item.productcode" @click="goChoose(item)">{{item.name}}</li>
       </ul>
     </div>
   </div>
@@ -54,7 +54,8 @@ export default {
       H: 0,
       M: 0,
       S: 0,
-      search: "search"
+      search: "search",
+      searchList:[]
     };
   },
   components: {
@@ -76,10 +77,10 @@ export default {
     this.HistoryList = history;
   },
   mounted() {
+      this.result()
   },
   methods: {
     closehistory(newclose){
-      console.log(newclose)
       this.showHistory=newclose
     },
     getval(newval) {
@@ -156,6 +157,13 @@ export default {
       });
       console.log("次数最多的元素为:" + maxEle + ", 次数为:" + obj[maxEle]);
       return "次数最多的元素为:" + maxEle + ", 次数为:" + obj[maxEle];
+    },
+    result(val){
+      this.searchList=val
+    },
+    goChoose(item){
+      this.$router.push("/choose?fiTerm="+item.name)
+
     }
   }
 };

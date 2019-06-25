@@ -58,7 +58,7 @@ import { autoSearch } from "@/api/index";
 import { mapGetters } from "vuex";
 let scan = null;
 export default {
-  props: ["data","showHistory"],
+  props: ["data", "showHistory"],
   data() {
     return {
       showlogo: true,
@@ -66,8 +66,9 @@ export default {
       hide: "",
       rightWinShow: false,
       showScan: false,
-      newHistory:false,
-      oldHistory:true
+      newHistory: false,
+      oldHistory: true,
+      searchResult: []
     };
   },
   computed: {
@@ -80,27 +81,30 @@ export default {
     ])
   },
   methods: {
-    isAndroid(){
-      var browser={
-        versions:function(){
-          var u = navigator.userAgent, app = navigator.appVersion;
+    isAndroid() {
+      var browser = {
+        versions: (function() {
+          var u = navigator.userAgent,
+            app = navigator.appVersion;
           return {
-            trident: u.indexOf('Trident') > -1, //IE内核
-            presto: u.indexOf('Presto') > -1, //opera内核
-            webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
-            gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1,//火狐内核
+            trident: u.indexOf("Trident") > -1, //IE内核
+            presto: u.indexOf("Presto") > -1, //opera内核
+            webKit: u.indexOf("AppleWebKit") > -1, //苹果、谷歌内核
+            gecko: u.indexOf("Gecko") > -1 && u.indexOf("KHTML") == -1, //火狐内核
             mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
             ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
-            android: u.indexOf('Android') > -1 || u.indexOf('Adr') > -1, //android终端
-            iPhone: u.indexOf('iPhone') > -1 , //是否为iPhone或者QQHD浏览器
-            iPad: u.indexOf('iPad') > -1, //是否iPad
-            webApp: u.indexOf('Safari') == -1, //是否web应该程序，没有头部与底部
-            weixin: u.indexOf('MicroMessenger') > -1, //是否微信 （2015-01-22新增）
+            android: u.indexOf("Android") > -1 || u.indexOf("Adr") > -1, //android终端
+            iPhone: u.indexOf("iPhone") > -1, //是否为iPhone或者QQHD浏览器
+            iPad: u.indexOf("iPad") > -1, //是否iPad
+            webApp: u.indexOf("Safari") == -1, //是否web应该程序，没有头部与底部
+            weixin: u.indexOf("MicroMessenger") > -1, //是否微信 （2015-01-22新增）
             qq: u.match(/\sQQ/i) == " qq" //是否QQ
           };
-        }(),
-        language:(navigator.browserLanguage || navigator.language).toLowerCase()  
-      }
+        })(),
+        language: (
+          navigator.browserLanguage || navigator.language
+        ).toLowerCase()
+      };
       return browser.versions.android;
     },
     goShop() {
@@ -112,7 +116,7 @@ export default {
         this.searchStr = "";
       }
     },
-    search() {
+    async search() {
       // 智能搜索
       let defaulParams = {
         token: this.token,
@@ -121,16 +125,17 @@ export default {
         companyId: this.companyId,
         userRole: this.userRole
       };
-      this.$emit("closelist",this.showlist)
+      this.$emit("closelist", this.showlist);
       this.$router.push("/search");
       if (this.searchStr.length == 0) {
-        console.log("top"+this.searchStr.length)
-          this.$emit("closehistory",this.oldHistory)
-           return;
+        this.$emit("closehistory", this.oldHistory);
+        return;
       } else {
-        this.$emit("closehistory",this.newHistory)
-        console.log(this.searchStr.length);
-        autoSearch({ ...defaulParams, flTerm: this.searchStr });
+        this.$emit("closehistory", this.newHistory);
+        let data = await autoSearch({ ...defaulParams, fullText: this.searchStr });
+        this.searchResult = data.data.list;
+        console.log(this.searchResult)
+        this.$emit("searchRes",this.searchResult)
       }
     },
     cancelSearch() {
@@ -154,9 +159,9 @@ export default {
     },
     scan() {
       var u_agent = navigator.userAgent;
-      if(!this.isAndroid()){
+      if (!this.isAndroid()) {
         window.webkit.messageHandlers.scanQRCode.postMessage({});
-      }else{
+      } else {
         window.android.scanQRCode();
       }
       // if(this.isAndroid()){
@@ -165,8 +170,8 @@ export default {
       //   window.webkit.messageHandlers.scanQRCode.postMessage();
       // }
     },
-    scanResult(str){
-      this.$router.push({name:'pcLogin',query:{code:str}})
+    scanResult(str) {
+      this.$router.push({ name: "pcLogin", query: { code: str } });
     }
   },
   async mounted() {
@@ -211,7 +216,7 @@ export default {
 .header {
   width: 708px;
   height: 58px;
-  background: #FF0304;
+  background: #ff0304;
   font-size: 25px;
   padding: 15px 21px;
   position: fixed;
