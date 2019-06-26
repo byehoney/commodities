@@ -810,7 +810,7 @@ a {
 }
 .detail_content_three_desc {
   color: #666;
-  font-size: 22px;
+  font-size: 26px;
 }
 .detail_content_three_desc ul li {
   margin-bottom: 30px;
@@ -929,12 +929,13 @@ span {
 }
 .newprice {
   float: right;
-  font-size: 30px;
+  font-size: 50px;
   color: #FF0304;
   margin-top: 30px;
+  // font-weight: bold;
   .unit{
     font-style: normal;
-    font-size: 22px;
+    font-size: 36px;
   }
 }
 .detail_popup_price {

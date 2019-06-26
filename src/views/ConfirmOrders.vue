@@ -82,6 +82,10 @@
     </mt-popup>
     <mt-popup class="gitPop" @touchmove.stop v-model="giftVisible" position="bottom">
       <div class="gift_wrap">
+        <div class="nav">
+          <img @click="closePop" src="../images/leftArrow.png" class="leftIcon" alt="">
+          <span class="title">选择赠品</span>
+        </div>
         <div class="shopgift_list" v-for="(item,index) in giftList" :key="index">
           <div class="shopgift_list_content">
             <div
@@ -220,7 +224,7 @@ export default {
                                 hdbm:pterm.hdbm,
                                 jghdlx:'无',
                                 productId:pterm.zpbm,
-                                cartNum:pterm.zssl,
+                                cartNum:pterm.userGiftNum,
                                 pzdj:pterm.zpjj,
                                 pzyj:pterm.zpjj,
                                 mobile:this.user.mobile
@@ -233,7 +237,7 @@ export default {
                                 hdbm:pterm.hdbm,
                                 jghdlx:'无',
                                 productId:pterm.zpbm,
-                                cartNum:pterm.zssl,
+                                cartNum:pterm.userGiftNum,
                                 pzdj:pterm.zpjj,
                                 pzyj:pterm.zpjj,
                                 mobile:this.user.mobile
@@ -277,7 +281,7 @@ export default {
             if(this.$route.query.type==0){
               this.$router.go(-1);
             }else{
-              this.$router.push({name:'newShopCar'});
+              this.$router.replace({name:'newShopCar'});
             }
           },2100)
         }
@@ -418,6 +422,9 @@ export default {
     checkgift(index) {
       this.$set(this.giftList[index], "checked", !this.giftList[index].checked);
       this.countGiftNum();
+    },
+    closePop(){
+      this.giftVisible = false;
     }
   }
 };
@@ -552,6 +559,7 @@ export default {
           width: 146px;
           height: 116px;
           border: 2px solid #ebebeb;
+          margin-right: 8px;
           img {
             width: 100%;
             height: 100%;
@@ -710,6 +718,29 @@ export default {
     }
     .gift_wrap {
       background: #fff;
+      .nav{
+        width: 100%;
+        height: 88px;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #fff;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+        .leftIcon{
+            width: 17px;
+            height: 30px;
+            position: absolute;
+            top: 29px;
+            left: 30px;
+        }
+        .title{
+            font-size: 30px;
+        }
+    }
       // padding-top: 88px;
       .shopgift_list .shopgift_list_content:last-child {
         border: none;
@@ -753,6 +784,7 @@ export default {
         background: #fff;
         margin-bottom: 10px;
         border-bottom: 2px solid #ebebeb;
+        margin-top: 93px;
         &:last-child {
           border: none;
         }

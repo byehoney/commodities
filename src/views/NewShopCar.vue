@@ -146,7 +146,7 @@
           </div>
           <div class="shop_gift" v-if="mzList[index][0].canSelGift&&jIndex==mzList[index].length-1">
             <div class="shop_gift_bottom">
-              <span @click="chooseGift(index,mzList[index][0].productcode)">{{mzList[index][0].selGifts==''?'选择赠品':'已选择'}}</span>
+              <span @click="chooseGift(index,mzList[index][0].productcode,mzList[index][0].numberormny,mzList[index][0].userBuyNum,mzList[index][0].userBuyMoney)">{{mzList[index][0].selGifts==''?'选择赠品':'已选择'}}</span>
             </div>
           </div>
         </div>
@@ -208,6 +208,10 @@
       v-model="popupVisible"
       position="bottom">
       <div class="gift_wrap">
+        <div class="nav">
+          <img @click="closePop" src="../images/leftArrow.png" class="leftIcon" alt="">
+          <span class="title">选择赠品</span>
+        </div>
         <div class="shopgift_list" v-for="(item,index) in giftList" :key="index">
           <div class="shopgift_list_content">
             <div
@@ -227,7 +231,7 @@
               <div class="shopgift_text_bottom">
                 <ul>
                   <li>￥{{item.zpjj}}</li>
-                  <li>{{item.zssl}} 件</li>
+                  <li>{{item.userGiftNum}} 件</li>
                 </ul>
               </div>
             </div>
@@ -607,10 +611,17 @@ export default {
     blockChoose(curIndex){//买赠块级选择  可全选该块商品
       this.sumMoney = 0;
       this.sumNum =0;
-      this.mzList[curIndex].forEach((pterm,jIndex)=>{
-        this.$set(this.mzList[curIndex][jIndex],'allChecked',!this.mzList[curIndex][jIndex].allChecked);
-        this.$set(this.mzList[curIndex][jIndex],'checked',!this.mzList[curIndex][jIndex].checked);
-      })
+      if(this.mzList[curIndex][0].allChecked){
+        this.mzList[curIndex].forEach((pterm,jIndex)=>{
+          this.$set(this.mzList[curIndex][jIndex],'allChecked',false);
+          this.$set(this.mzList[curIndex][jIndex],'checked',false);
+        })
+      }else{
+        this.mzList[curIndex].forEach((pterm,jIndex)=>{
+          this.$set(this.mzList[curIndex][jIndex],'allChecked',true);
+          this.$set(this.mzList[curIndex][jIndex],'checked',true);
+        })
+      }
       
       this.countMoney();
     },
@@ -683,18 +694,21 @@ export default {
           if(pterm.checked){
             totalNum+=parseInt(pterm.quantity);
             totalMoney+=parseInt(pterm.quantity)*(parseInt(pterm.price*1000))/1000;
-            if(pterm.numberormny == '数量满足'&&pterm.satisfyNumber<=totalNum){
-              this.$set(this.mzList[index][0],'canSelGift',true);
-            }else if(pterm.numberormny == '金额满足'&&pterm.satisfyNumber<=totalMoney){
-              this.$set(this.mzList[index][0],'canSelGift',true);
-            }else{
-              this.$set(this.mzList[index][0],'canSelGift',false);
-              this.$set(this.mzList[index][0],'selGifts',[]);
-            }
+          }
+          if(pterm.numberormny == '数量满足'&&pterm.satisfyNumber<=totalNum){
+            this.$set(this.mzList[index][0],'canSelGift',true);
+          }else if(pterm.numberormny == '金额满足'&&pterm.satisfyNumber<=totalMoney){
+            this.$set(this.mzList[index][0],'canSelGift',true);
           }else{
             this.$set(this.mzList[index][0],'canSelGift',false);
             this.$set(this.mzList[index][0],'selGifts',[]);
           }
+          this.$set(this.mzList[index][0],'userBuyNum',totalNum);
+          this.$set(this.mzList[index][0],'userBuyMoney',totalMoney);
+          // else{
+          //   this.$set(this.mzList[index][0],'canSelGift',false);
+          //   this.$set(this.mzList[index][0],'selGifts',[]);
+          // }
         })
       })
     },
@@ -702,11 +716,15 @@ export default {
       this.result = !this.result;
     },
     count() {
+      let msIndex = this.list.findIndex((item,index,arr)=>(item.schemetype=='秒杀'));
+      if(msIndex==-1){
+        return;
+      }
       this.timer = setInterval(() => {
         let nowH = new Date().getHours();
         let nowM = new Date().getMinutes();
         let nowS = new Date().getSeconds();
-        let msIndex = this.list.findIndex((item,index,arr)=>(item.schemetype=='秒杀'));
+        
         let endTime = this.list[msIndex].promotionendtime.split(':');
         let leftsecond =  (parseInt(endTime[0]) * 60 * 60 + parseInt(endTime[1])*60 + parseInt(endTime[2])) - (nowH * 60 * 60 + nowM * 60 + nowS);
         // console.log(leftsecond)
@@ -757,6 +775,8 @@ export default {
             pterm.showTip = false;
             pterm.errTip = '';
             pterm.selGifts=[];
+            pterm.userBuyNum = 0;
+            pterm.userBuyMoney = 0;
           })
         })
         this.head = res.data.head;
@@ -767,7 +787,8 @@ export default {
         }
       }
     },
-    chooseGift(index,id){
+    chooseGift(index,id,type,userBuyNum,userBuyMoney){
+      console.log(userBuyNum,userBuyMoney)
       if(document.documentElement&&document.documentElement.scrollTop){
         this.scrollTop=document.documentElement.scrollTop;
       }else if(document.body){
@@ -776,7 +797,7 @@ export default {
       this.popupVisible = true;
       this.curGiftIndex = index;
       let selGifts = this.mzList[index][0].selGifts;
-      this.getGiftData(index,id,selGifts);
+      this.getGiftData(index,id,selGifts,type,userBuyNum,userBuyMoney);
     },
     confirmGift(){
       this.popupVisible = false;
@@ -791,7 +812,7 @@ export default {
         window.scrollTo(0,this.scrollTop);
       },100)
     },
-    async getGiftData(index,id,selGifts){
+    async getGiftData(index,id,selGifts,type,userBuyNum,userBuyMoney){
       console.log(selGifts)
       let defaulParams = {
         token:this.token,
@@ -806,6 +827,11 @@ export default {
       });
       if(res.code ==0){
         this.giftList = res.data.list;
+        if(type=='数量满足'){
+          this.$set(this.giftList[0],'userGiftNum',parseInt(parseInt(userBuyNum)/parseInt(this.giftList[0].mzsl)));
+        }else if(type=='金额满足'){
+          this.$set(this.giftList[0],'userGiftNum',parseInt(parseFloat(userBuyMoney)/parseFloat(this.giftList[0].mzsl)));
+        }
         if(selGifts&&selGifts.length){
           selGifts.forEach((item,index)=>{
             let gIndex = this.giftList.findIndex((pterm)=>pterm.zpbm==item.zpbm);
@@ -842,12 +868,19 @@ export default {
         userRole:this.userRole,
       }; 
       let res = await recordCartNum({...defaulParams,productId:id,type:type,num:num})
+    },
+    closePop(){
+      this.popupVisible = false;
+      setTimeout(()=>{
+        window.scrollTo(0,this.scrollTop);
+      },100)
     }
   },
   mounted() {
     this.getData();
   },
   destroyed(){
+    clearInterval(this.timer);
     let defaulParams = {
       token:this.token,
       userId:this.userId,
@@ -1368,6 +1401,29 @@ export default {
 }
 .gift_wrap {
   background: #fff;
+  .nav{
+        width: 100%;
+        height: 88px;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #fff;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+        .leftIcon{
+            width: 17px;
+            height: 30px;
+            position: absolute;
+            top: 29px;
+            left: 30px;
+        }
+        .title{
+            font-size: 30px;
+        }
+    }
   .shopgift_list .shopgift_list_content:last-child{
     border: none;
   }
@@ -1411,6 +1467,7 @@ export default {
     background: #fff;
     margin-bottom: 10px;
     border-bottom: 2px solid #ebebeb;
+    margin-top: 93px;
     &:last-child{
       border: none;
     }

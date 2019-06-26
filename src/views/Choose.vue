@@ -453,8 +453,8 @@ export default {
                 position: relative;
                 .ms_icon{
                     position: absolute;
-                    width: 28px;
-                    height: 30px;
+                    width: 45px;
+                    height: 47px;
                     top: 0;
                     right: 5px;
                 }
