@@ -57,7 +57,7 @@ export default {
     ...mapGetters('login',['token','userId','corpCode','companyId','userRole'])
   },
   mounted(){
-    this.getList();
+    // this.getList();
   },
   methods: {
     ...mapMutations('login',['saveCompany']),

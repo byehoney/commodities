@@ -239,6 +239,11 @@ function autoSearch(params){//智能搜索
     return post('/get/zhineng/list.do', params)
 }
 
+function getHotSearchList(params){//热门搜索
+    return post('/get/remen/list.do', params)
+}
+
+
 function pcLogin(params){//pc扫码登陆
     return post('/login/user/scan.do', params)
 }
@@ -321,6 +326,7 @@ export {
     submitOrder,
     nowBuy,
     autoSearch,
+    getHotSearchList,
     getSuitList,
     getSuitDetail,
     pcLogin,

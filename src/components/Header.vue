@@ -48,7 +48,7 @@
       </div>
     </div>
     <!-- 侧滑 -->
-    <DrawRight v-show="rightWinShow" :rightHide="hide" @getRight="remove"/>
+    <DrawRight v-show="rightWinShow" :rightHide="hide" @getRight="remove" ref="rightMenu"/>
   </div>
 </template>
 
@@ -68,7 +68,8 @@ export default {
       showScan: false,
       newHistory: false,
       oldHistory: true,
-      searchResult: []
+      searchResult: [],
+      fromPath:'',//来源页面路由
     };
   },
   computed: {
@@ -139,7 +140,7 @@ export default {
       }
     },
     cancelSearch() {
-      this.$router.history.go("-1");
+      this.$router.push({name:this.fromPath})
     },
     showcode() {
       if (this.rightWinShow) {
@@ -153,6 +154,7 @@ export default {
     change() {
       this.rightWinShow = !this.rightWinShow;
       this.hide = false;
+      this.$refs.rightMenu.getList();
     },
     goMore() {
       this.$router.push({ name: "classify" });
@@ -172,6 +174,11 @@ export default {
     },
     scanResult(str) {
       this.$router.push({ name: "pcLogin", query: { code: str } });
+    }
+  },
+  watch: {
+    '$route' (val, old) {
+      this.fromPath = old.name;
     }
   },
   async mounted() {

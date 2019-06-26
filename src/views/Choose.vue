@@ -348,6 +348,7 @@ export default {
     .container{
         display: flex;
         flex-direction: column;
+        padding-bottom: 100px;
     }
     .topFix{
         position: fixed;
@@ -425,7 +426,6 @@ export default {
     }
     .scrollBox{
         margin-top: 187px;
-        padding-bottom: 100px;
         background-color: #fff;
         .scrollItem{
             display: flex;

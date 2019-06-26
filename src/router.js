@@ -664,7 +664,7 @@ const router = new Router({
                 import(/* webpackChunkName: "classify" */"./views/Classify.vue"),
             meta: {
                 auth: true,
-                keepAlive: true,
+                keepAlive: false,
                 title: '更多分类'
             }
         },
