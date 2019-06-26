@@ -11,10 +11,13 @@
           <img src="../images/banner_01.jpg" alt="">
         </mt-swipe-item>
         <mt-swipe-item class="item">
-          <img src="../images/banner_01.jpg" alt="">
+          <img src="../images/banner_02.png" alt="">
         </mt-swipe-item>
         <mt-swipe-item class="item">
-          <img src="../images/banner_01.jpg" alt="">
+          <img src="../images/banner_03.png" alt="">
+        </mt-swipe-item>
+        <mt-swipe-item class="item">
+          <img src="../images/banner_04.png" alt="">
         </mt-swipe-item>
       </mt-swipe>
       <!-- </div> -->
