@@ -1,19 +1,18 @@
 <template>
   <div>
-    <LocalHeader :data="search" @receve="getval" :showHistory="showHistory" @closehistory="closehistory" @searchRes="result"/>
+    <LocalHeader :data="search"  @searchStr="getSearchStr"  @receve="getval" :showHistory="showHistory" @closehistory="closehistory" @searchRes="result"/>
     <div class="history_wrap" v-if="showHistory">
       <!-- 历史搜索 -->
       <div class="history_list" v-if="HistoryList.length">
         <h3>
           <span>历史搜索</span>
-          <span @click="delSearch(index)">
+          <span @click="delSearch()">
             <img src="../images/remove.png">
           </span>
         </h3>
         <ul>
-          <li v-for="(item,index) in HistoryList" :key="index">
+          <li v-for="(item,index) in HistoryList" :key="index" @click="listSearch(item)">
             {{item}}
-            <!-- <span @click="delSearch(index)">X</span> -->
           </li>
         </ul>
         <div style="clear:both"></div>
@@ -26,7 +25,6 @@
         <ul>
           <li v-for="(item,index) in HistoryList" :key="index">
             {{item}}
-            <!-- <span @click="delSearch(index)">X</span> -->
           </li>
         </ul>
       </div>
@@ -54,8 +52,12 @@ export default {
       H: 0,
       M: 0,
       S: 0,
+      // 判断是否执行搜索的字段
       search: "search",
-      searchList:[]
+      // 接受查询到的列表
+      searchList:[],
+      // 点击查询到的列表传到input的值
+      listval:""
     };
   },
   components: {
@@ -78,6 +80,7 @@ export default {
   },
   mounted() {
       this.result()
+      
   },
   methods: {
     closehistory(newclose){
@@ -158,12 +161,25 @@ export default {
       console.log("次数最多的元素为:" + maxEle + ", 次数为:" + obj[maxEle]);
       return "次数最多的元素为:" + maxEle + ", 次数为:" + obj[maxEle];
     },
+    // 得到查询到的数据列表
     result(val){
       this.searchList=val
     },
+    // 点击查询到的列表进行跳转
     goChoose(item){
-      this.$router.push("/choose?fiTerm="+item.name)
-
+      this.$router.push("/choose?pzTerm="+item.name)
+      var name=item.name
+      this.getval(name)
+      this.listval=name
+      console.log(this.listval)
+      this.getSearchStr()
+    },
+    // 点击历史记录跳到choose列表
+    listSearch(item){
+      this.$router.push("/choose?pzTerm="+item)
+    },
+    getSearchStr(val){
+        val=this.listval
     }
   }
 };

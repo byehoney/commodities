@@ -82,6 +82,7 @@ export default {
     ])
   },
   methods: {
+    // 判断是否是安卓设备
     isAndroid() {
       var browser = {
         versions: (function() {
@@ -108,9 +109,11 @@ export default {
       };
       return browser.versions.android;
     },
+    // 跳转到商家公告
     goShop() {
       this.$router.push("/public");
     },
+    // 查询input中输入的值
     SearchVal() {
       if (this.searchStr.trim()) {
         this.$emit("receve", this.searchStr.trim());
@@ -133,10 +136,14 @@ export default {
         return;
       } else {
         this.$emit("closehistory", this.newHistory);
-        let data = await autoSearch({ ...defaulParams, fullText: this.searchStr });
+        let data = await autoSearch({
+          ...defaulParams,
+          fullText: this.searchStr
+        });
         this.searchResult = data.data.list;
-        console.log(this.searchResult)
-        this.$emit("searchRes",this.searchResult)
+        this.$emit("searchRes", this.searchResult);
+        // 往search组件里面传递input的值
+        this.$emit("searchStr", this.searchStr);
       }
     },
     cancelSearch() {
@@ -148,14 +155,17 @@ export default {
         this.hide = !this.hide;
       }
     },
+    // 关闭右侧菜单
     remove(val) {
       this.rightWinShow = val;
     },
+    // 显示或隐藏右侧菜单
     change() {
       this.rightWinShow = !this.rightWinShow;
       this.hide = false;
       this.$refs.rightMenu.getList();
     },
+    // 跳转到分类
     goMore() {
       this.$router.push({ name: "classify" });
     },
