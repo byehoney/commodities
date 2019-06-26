@@ -56,6 +56,7 @@
 import DrawRight from "./DrawerRight";
 import { autoSearch } from "@/api/index";
 import { mapGetters } from "vuex";
+import { setTimeout } from 'timers';
 let scan = null;
 export default {
   props: ["data", "showHistory"],
@@ -69,7 +70,7 @@ export default {
       newHistory: false,
       oldHistory: true,
       searchResult: [],
-      fromPath:'',//来源页面路由
+      fromPath:'home',//来源页面路由
     };
   },
   computed: {
@@ -130,7 +131,7 @@ export default {
         userRole: this.userRole
       };
       this.$emit("closelist", this.showlist);
-      this.$router.push("/search");
+      this.$router.push({name:'search',query:{backPath:this.$route.path}});
       if (this.searchStr.length == 0) {
         this.$emit("closehistory", this.oldHistory);
         return;
@@ -147,9 +148,13 @@ export default {
       }
     },
     cancelSearch() {
-      this.$router.push({name:this.fromPath})
+      this.$router.push(this.$route.query.backPath)
     },
     showcode() {
+      if(!this.token||!this.userId){
+        this.$router.push({path: '/login',query: {redirect: this.$route.fullPath}})
+        return;
+      }
       if (this.rightWinShow) {
       } else {
         this.hide = !this.hide;
@@ -187,11 +192,14 @@ export default {
     }
   },
   watch: {
-    '$route' (val, old) {
-      this.fromPath = old.name;
+    '$route' (val, old) { 
+      if(val.query.pzTerm){
+        this.searchStr = val.query.pzTerm;
+      }
     }
   },
   async mounted() {
+    console.log(this.$route)
     window.scanResult = this.scanResult;
     if (this.data == "search") {
       this.showlogo = false;

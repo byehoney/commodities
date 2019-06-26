@@ -393,7 +393,7 @@ export default {
       this.list.forEach((item,index)=>{
         if(item.checked){
           if(item.promotionflag=='套餐'){
-            suits.push({billSub:item.subcode,suiteCode:item.promotioncode,buyNumber:item.suitebuynumber})
+            suits.push({billSub:item.subcode,suiteCode:item.promotioncode,buyNumber:item.quantity})
           }else{
             items.push({billSub:item.subcode,itemCode:item.productcode,quantity:item.quantity,price:item.price,buyNumber:0})
           }
@@ -420,7 +420,13 @@ export default {
             this.$set(this.list[index],'errTip','无效的采集量');
             this.$set(this.list[index],'showTip',true)
             result++; 
-          }else if(item.quantity>item.stock){
+          }else if(item.quantity>item.stock&&item.promotionflag=='无'){
+            // this.showErr = true;
+            // this.errText="库存不足";
+            this.$set(this.list[index],'errTip','库存不足');
+            this.$set(this.list[index],'showTip',true)
+            result++; 
+          }else if((parseInt(item.quantity)>item.promotionremainquantity)&&item.promotionflag=='套餐'){
             // this.showErr = true;
             // this.errText="库存不足";
             this.$set(this.list[index],'errTip','库存不足');

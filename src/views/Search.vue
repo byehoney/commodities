@@ -22,10 +22,12 @@
         <h3>
           <span style="color:#c32918">热门搜索</span>
         </h3>
-        <ul>
-          <li v-for="(item,index) in HistoryList" :key="index">
-            {{item}}
-          </li>
+        <ul class="hotLists">
+          <template v-for="(item,index) in hotList">
+            <li  v-if="item.name&&item.name!='undefined'" :key="index" @click="listSearch(item.name)">
+              {{item.name}}
+            </li>
+          </template>
         </ul>
       </div>
     </div>
@@ -40,6 +42,7 @@
 <script>
 import LocalHeader from "../components/Header";
 import { mapGetters } from "vuex";
+import { getHotSearchList } from '@/api/index';
 export default {
   data() {
     return {
@@ -79,10 +82,23 @@ export default {
     this.HistoryList = history;
   },
   mounted() {
-      this.result()
-      
+    this.result()
+    this.getHostList();
   },
   methods: {
+    async getHostList(){
+      let defaulParams = {
+        token: this.token,
+        userId: this.userId,
+        corpCode: this.corpCode,
+        companyId: this.companyId,
+        userRole: this.userRole,
+      };
+      let res = await getHotSearchList(defaulParams);
+      if(res.code==0){
+        this.hotList = res.data.list;
+      }
+    },
     closehistory(newclose){
       this.showHistory=newclose
     },
@@ -196,10 +212,13 @@ a {
   text-decoration: none;
   color: #333;
 }
+.hotLists{
+  overflow: hidden;
+}
 .history_wrap {
   width: 671px;
   min-height: 700px;
-  padding: 98px 34px 0px 45px;
+  padding: 98px 34px 50px 45px;
   background: #fff;
   margin-top: 13px;
   font-size: 28px;

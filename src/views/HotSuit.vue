@@ -77,7 +77,7 @@ export default {
                 userRole:this.userRole,
             }; 
             let selArr = [];
-            this.list[index].list.forEach((item,index)=>{
+            this.list[index].list.forEach((item)=>{
                 selArr.push({
                     mzhdlx:'套餐',
                     pzlx:false,

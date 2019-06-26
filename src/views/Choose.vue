@@ -50,7 +50,7 @@
             <div v-for="(item,index) in list" :key="index" @click="goDetail(item.spbm)">
                 <div class="scrollItem" v-if="curType==0||curType==1||curType==2">
                     <div class="left">
-                        <img :src="item.url" alt="">
+                        <img :src="item.url?item.url:require('../images/default_logo.jpg')" alt="">
                         <img v-if="item.hdlx=='秒杀'" class="ms_icon" src="../images/ms_icon.png" alt="">
                     </div>
                     <div class="right">
@@ -80,7 +80,7 @@
                     <div class="scrollItem ms_item">
                         <div class="left">
                             <div class="limt">限{{item.ddxgl}}件</div>
-                            <img :src="item.url" alt="">
+                            <img :src="item.url?item.url:require('../images/default_logo.jpg')" alt="">
                             <img v-if="item.hdlx=='秒杀'" class="ms_icon" src="../images/ms_icon.png" alt="">
                         </div>
                         <div class="right">
