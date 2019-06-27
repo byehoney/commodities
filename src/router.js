@@ -500,7 +500,7 @@ const router = new Router({
                 import(/* webpackChunkName: "newShopCar" */ './views/NewShopCar.vue'),
             meta: {
                 auth: true,
-                keepAlive: true,
+                keepAlive: false,
                 canKeep: false,
                 title: '购物车'
             }
@@ -694,7 +694,7 @@ router.beforeEach((to, from, next) => {
             next({
                 path: '/login',
                 query: {
-                    redirect: to.fullPath
+                    redirect: '/'
                 }
             })
         }

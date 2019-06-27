@@ -213,7 +213,7 @@
           <ul>
             <li @click="goShopCar">
               <img src="../images/shopcar.png">
-              <p class="badge">{{buyNum}}</p>
+              <p class="badge" v-if="buyNum>0">{{buyNum}}</p>
             </li>
             <li>
               <img src="../images/kefu.png">
@@ -359,7 +359,7 @@ export default {
       };
       if(this.type == 'add'){
         let res = await buyCheckNum({...defaulParams,productId:this.shopDetail.priductid,num:this.shopnum});
-        if(res.code==0&&res.data.ckeckResult){
+        if(res.code==0&&res.data.ckeckResult=="true"){
           let jsonStr = "";
           if((this.shopDetail.mzbj&&this.shopDetail.mzbj.indexOf('买赠')>-1)||(this.shopDetail.mzbj&&(this.shopDetail.mzbj.indexOf('满额赠')>-1))){//买赠 满额赠
             jsonStr = JSON.stringify(
@@ -367,7 +367,7 @@ export default {
                 mzhdlx:'买赠',
                 pzlx:false,
                 ghsbm:this.shopDetail.ghsbm,
-                hdbm:'',//活动编码
+                hdbm:this.shopDetail.mzhdbm,//活动编码
                 jghdlx:this.shopDetail.hdlx,
                 productId:this.shopDetail.priductid,
                 cartNum:this.shopnum,
@@ -391,8 +391,8 @@ export default {
               }]
             )
           }
-          let res = await addToCar({...defaulParams,jsonStr:jsonStr});
-          if(res.code == 0){
+          let result = await addToCar({...defaulParams,jsonStr:jsonStr});
+          if(result.code == 0){
             Toast({
               message: "加入购物车成功", //弹窗内容
               position: "middle", //弹窗位置
@@ -403,16 +403,16 @@ export default {
             this.popupVisible = false;
             this.getShopCarNum();
           }
-        }else{
+        }else if(res.code==0&&res.data.ckeckResult!="true"){
           Toast({
-            message: res.msg, 
+            message: res.data.ckeckResult, 
             position: "middle", 
-            duration: 2000 
+            duration: 2000
           });
         }
       }else{
         let res = await buyCheckNum({...defaulParams,productId:this.shopDetail.priductid,num:this.shopnum});
-        if(res.code==0&&res.data.ckeckResult){
+        if(res.code==0&&res.data.ckeckResult=="true"){
           let jsonStr = {
             mzhdlx:'无',
             pzlx:false,
@@ -430,9 +430,9 @@ export default {
           if(result.code == 0){
             this.$router.push({name:'confirmOrders',query:{money:this.money,type:0}});
           }
-        }else{
+        }else if(res.code==0&&res.data.ckeckResult!="true"){
           Toast({
-            message: res.msg, 
+            message:res.data.ckeckResult,
             position: "middle", 
             duration: 2000 
           });
@@ -564,6 +564,9 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.mint-toast.is-placemiddle{
+  z-index: 10000!important;
+}
 * {
   margin: 0;
   padding: 0;

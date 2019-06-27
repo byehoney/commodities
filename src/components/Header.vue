@@ -160,7 +160,7 @@ export default {
     },
     showcode() {
       if(!this.token||!this.userId){
-        this.$router.push({path: '/login',query: {redirect: this.$route.fullPath}})
+        this.$router.push({path: '/login',query: {redirect: '/'}})
         return;
       }
       if (this.rightWinShow) {

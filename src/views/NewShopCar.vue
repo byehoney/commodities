@@ -716,15 +716,16 @@ export default {
       this.result = !this.result;
     },
     count() {
+      console.log(this.list)
       let msIndex = this.list.findIndex((item,index,arr)=>(item.schemetype=='秒杀'));
+      console.log(msIndex)
       if(msIndex==-1){
         return;
       }
       this.timer = setInterval(() => {
         let nowH = new Date().getHours();
         let nowM = new Date().getMinutes();
-        let nowS = new Date().getSeconds();
-        
+        let nowS = new Date().getSeconds();  
         let endTime = this.list[msIndex].promotionendtime.split(':');
         let leftsecond =  (parseInt(endTime[0]) * 60 * 60 + parseInt(endTime[1])*60 + parseInt(endTime[2])) - (nowH * 60 * 60 + nowM * 60 + nowS);
         // console.log(leftsecond)
@@ -879,24 +880,32 @@ export default {
       this.$router.push({name:'detail',query:{id:id}})
     }
   },
-  activated() {/**  */
-    if (!this.$route.meta.canKeep) {
-      this.getData();
-    }
-  },
-  beforeRouteEnter (to, from, next) {/**  */
-    if(from.name == 'detail'){
-      to.meta.canKeep = true;
-      // to.meta.keepAlive = true;
-      next()   
-    }else{
-      to.meta.canKeep = false;
-      // to.meta.keepAlive = false;
-      next();
-    }
-  },
+  // activated() {/**  */
+  //   if (!this.$route.meta.canKeep) {
+  //     this.checkedAll = false;//是否全选
+  //     this.sumMoney = 0;//总金额
+  //     this.sumNum = 0;//总选择数
+  //     this.total = 0;//购物车总商品数量
+  //     this.list = [];
+  //     this.mzsl = [];
+  //     this.head = {};
+  //     this.getData();
+  //   }
+  // },
+  // beforeRouteEnter (to, from, next) {/**  */
+  //   console.log(from)
+  //   if(from.name == 'detail'){
+  //     to.meta.canKeep = true;
+  //     // to.meta.keepAlive = true;
+  //     next()   
+  //   }else{
+  //     to.meta.canKeep = false;
+  //     // to.meta.keepAlive = false;
+  //     next();
+  //   }
+  // },
   mounted() {
-    // this.getData();
+    this.getData();
   },
   destroyed(){
     clearInterval(this.timer);

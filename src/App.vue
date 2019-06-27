@@ -32,4 +32,7 @@ html{
 #app{
     background: #ebebeb;
 }
+.mint-toast.is-placemiddle{
+  z-index: 10000!important;
+}
 </style>
