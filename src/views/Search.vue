@@ -124,6 +124,7 @@ export default {
         this.HistoryList.pop();
       }
       localStorage.setItem("HistoryList", JSON.stringify(this.HistoryList));
+      this.$router.push("/choose?pzTerm="+newval)
       // this.findMost(this.HistoryList)
     },
     delSearch() {

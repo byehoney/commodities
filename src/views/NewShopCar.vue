@@ -34,7 +34,7 @@
                 <p class="ms_time">{{S}}</p>
               </div>
               <div class="com_add_bottom">
-                <div class="list_shopcar_pic">
+                <div class="list_shopcar_pic" @click="goDetail(list.productcode)">
                   <img :src="list.imgurl?list.imgurl:require('../images/default_logo.jpg')">
                 </div>
                 <div class="list_shopcar_com fix">
@@ -101,7 +101,7 @@
             <div class="list_shopcar_circle" :class="pmlist.checked?'checked':''" @click="chooseSingle(index,'mz',jIndex)"></div>
             <div class="com_add">
               <div class="com_add_bottom">
-                <div class="list_shopcar_pic">
+                <div class="list_shopcar_pic" @click="goDetail(pmlist.productcode)">
                   <img :src="pmlist.imgurl?pmlist.imgurl:require('../images/default_logo.jpg')">
                 </div>
                 <div class="list_shopcar_com fix">
@@ -874,10 +874,29 @@ export default {
       setTimeout(()=>{
         window.scrollTo(0,this.scrollTop);
       },100)
+    },
+    goDetail(id){
+      this.$router.push({name:'detail',query:{id:id}})
+    }
+  },
+  activated() {/**  */
+    if (!this.$route.meta.canKeep) {
+      this.getData();
+    }
+  },
+  beforeRouteEnter (to, from, next) {/**  */
+    if(from.name == 'detail'){
+      to.meta.canKeep = true;
+      // to.meta.keepAlive = true;
+      next()   
+    }else{
+      to.meta.canKeep = false;
+      // to.meta.keepAlive = false;
+      next();
     }
   },
   mounted() {
-    this.getData();
+    // this.getData();
   },
   destroyed(){
     clearInterval(this.timer);

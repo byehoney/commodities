@@ -500,7 +500,8 @@ const router = new Router({
                 import(/* webpackChunkName: "newShopCar" */ './views/NewShopCar.vue'),
             meta: {
                 auth: true,
-                keepAlive: false,
+                keepAlive: true,
+                canKeep: false,
                 title: '购物车'
             }
         },

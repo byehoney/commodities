@@ -15,7 +15,7 @@
           </div>
           <div class="bottom" v-for="(pterm,jIndex) in item" :key="pterm.productcode">
             <img class="sel_icon" @click="checkedPo(index,jIndex,pterm.productcode)" :src="pterm.checked?require('../images/car_checkcircle.png'):require('../images/car_circle.png')" alt>
-            <div class="box">
+            <div class="box" @click="goDetail($event,pterm.productcode)">
               <div class="left">
                 <img :src="pterm.dptplj?pterm.dptplj:require('../images/default_logo.jpg')" alt>
               </div>
@@ -27,9 +27,9 @@
                 <div class="fun">
                   <p class="nPrice">￥{{pterm.dj}}</p>
                   <div class="counter">
-                    <p class="reduce" @click="reduce(index,jIndex)">-</p>
-                    <p class="num" @click="popInput(index,jIndex)">{{pterm.num}}</p>
-                    <p class="add" @click="add(index,jIndex)">+</p>
+                    <p class="reduce" @click="reduce($event,index,jIndex)">-</p>
+                    <p class="num" @click="popInput($event,index,jIndex)">{{pterm.num}}</p>
+                    <p class="add" @click="add($event,index,jIndex)">+</p>
                   </div>
                 </div>
               </div>
@@ -113,7 +113,8 @@ export default {
     goShopCar(){
       this.$router.push({name:'newShopCar'})
     },
-    reduce(index,jIndex){
+    reduce(e,index,jIndex){
+      e.stopPropagation();
       if(this.list[index][jIndex].num<=1){
         this.list[index][jIndex].num=1
       }else{
@@ -121,7 +122,8 @@ export default {
       }
       this.countMoney();
     },
-    add(index,jIndex){
+    add(e,index,jIndex){
+      e.stopPropagation();
       this.list[index][jIndex].num++;
       this.countMoney();
     },
@@ -136,7 +138,8 @@ export default {
     popAdd(){
       this.num = this.num+1;
     },
-    popInput(index,jIndex){
+    popInput(e,index,jIndex){
+      e.stopPropagation();
       this.showInput = true;
       this.num = this.list[index][jIndex].num;
       this.cIndex = index;
@@ -149,6 +152,10 @@ export default {
       this.showInput = false;
       this.$set(this.list[this.cIndex][this.cJindex],'num',this.num);
       this.countMoney();
+    },
+    goDetail(e,id){
+      e.stopPropagation();
+      this.$router.push({name:'detail',query:{id:id}})
     },
     async handlerClick(){
       let defaulParams = {

@@ -6,7 +6,7 @@
     </div>
     <div class="detail_loop">
       <div class="detsil_loop_center">
-        <img :src="shopDetail.slt">
+        <img :src="shopDetail.yt?shopDetail.yt:require('../images/default_logo.jpg')">
       </div>
     </div>
 
@@ -23,7 +23,7 @@
               <p class="oPrice">¥ {{shopDetail.ptsj}}</p>
               <p>仅剩{{shopDetail.dqkc}}件</p>
             </li>
-            <li>限购{{shopDetail.xgl}}件</li>
+            <li>{{shopDetail.xgl==0||!shopDetail.xgl?'不限购':'限购'+shopDetail.xgl+'件'}}</li>
           </ul>
         </div>
         <div class="detail_content_onece_right">
@@ -186,6 +186,8 @@
               <p>生产厂家：{{shopDetail.cj}}</p>
               <p>规格：{{shopDetail.hlgg}}</p>
               <p>销售单位：{{shopDetail.dw}}</p>
+              <p>库存：{{shopDetail.dqkc}}</p>
+              <p>限购量：{{shopDetail.xgl}}</p>
             </li>
             <li>
               <p>[规格]： {{shopDetail.bzgg}}</p>
@@ -318,6 +320,35 @@ export default {
       this.$router.push({name:'newShopCar'})
     },
     async confirmOper(){
+      // if((this.shopnum>this.shopDetail.dqkc)&&this.this.shopDetail.dqkc){
+      //   Toast({
+      //     message: "库存不足", //弹窗内容
+      //     position: "middle", //弹窗位置
+      //     duration: 1000 //弹窗时间毫秒,如果值为-1，则不会消失
+      //   });
+      //   return;
+      // }else if(this.shopDetail.xbz&&(this.shopnum%this.shopDetail.xbz!=0)){
+      //   Toast({
+      //     message: "购买数量应为最小销售数量的整数倍", //弹窗内容
+      //     position: "middle", //弹窗位置
+      //     duration: 1000 //弹窗时间毫秒,如果值为-1，则不会消失
+      //   });
+      //   return;
+      // }else if(this.shopDetail.cjl&&this.shopnum<this.shopDetail.cjl){
+      //   Toast({
+      //     message: "购买数量应大于集采量", //弹窗内容
+      //     position: "middle", //弹窗位置
+      //     duration: 1000 //弹窗时间毫秒,如果值为-1，则不会消失
+      //   });
+      //   return;
+      // }else if(this.shopnum<this.shopDetail.cjl){
+      //   Toast({
+      //     message: "购买数量超过今日剩余可下单数量", //弹窗内容
+      //     position: "middle", //弹窗位置
+      //     duration: 1000 //弹窗时间毫秒,如果值为-1，则不会消失
+      //   });
+      //   return;
+      // }
       let defaulParams = {
         token: this.token,
         userId: this.userId,
@@ -326,31 +357,58 @@ export default {
         userRole: this.userRole,
         productId: this.$route.query.id
       };
-      let jsonStr = JSON.stringify(
-        [{
-          mzhdlx:'无',
-          pzlx:false,
-          ghsbm:this.shopDetail.ghsbm,
-          jghdlx:this.shopDetail.hdlx,
-          productId:this.shopDetail.priductid,
-          cartNum:this.shopnum,
-          pzdj:this.shopDetail.cxj,
-          pzyj:this.shopDetail.ptsj,
-          mobile:this.user.mobile
-        }]
-      )
       if(this.type == 'add'){
-        let res = await addToCar({...defaulParams,jsonStr:jsonStr});
-        if(res.code == 0){
+        let res = await buyCheckNum({...defaulParams,productId:this.shopDetail.priductid,num:this.shopnum});
+        if(res.code==0&&res.data.ckeckResult){
+          let jsonStr = "";
+          if((this.shopDetail.mzbj&&this.shopDetail.mzbj.indexOf('买赠')>-1)||(this.shopDetail.mzbj&&(this.shopDetail.mzbj.indexOf('满额赠')>-1))){//买赠 满额赠
+            jsonStr = JSON.stringify(
+              [{
+                mzhdlx:'买赠',
+                pzlx:false,
+                ghsbm:this.shopDetail.ghsbm,
+                hdbm:'',//活动编码
+                jghdlx:this.shopDetail.hdlx,
+                productId:this.shopDetail.priductid,
+                cartNum:this.shopnum,
+                pzdj:this.shopDetail.cxj,
+                pzyj:this.shopDetail.ptsj,
+                mobile:this.user.mobile
+              }]
+            )
+          }else{//普通
+            jsonStr = JSON.stringify(
+              [{
+                mzhdlx:'无',
+                pzlx:false,
+                ghsbm:this.shopDetail.ghsbm,
+                jghdlx:this.shopDetail.hdlx,
+                productId:this.shopDetail.priductid,
+                cartNum:this.shopnum,
+                pzdj:this.shopDetail.cxj,
+                pzyj:this.shopDetail.ptsj,
+                mobile:this.user.mobile
+              }]
+            )
+          }
+          let res = await addToCar({...defaulParams,jsonStr:jsonStr});
+          if(res.code == 0){
+            Toast({
+              message: "加入购物车成功", //弹窗内容
+              position: "middle", //弹窗位置
+              duration: 1000 //弹窗时间毫秒,如果值为-1，则不会消失
+            });
+            this.num = 1;
+            this.shopnum = 1;
+            this.popupVisible = false;
+            this.getShopCarNum();
+          }
+        }else{
           Toast({
-            message: "加入购物车成功", //弹窗内容
-            position: "middle", //弹窗位置
-            duration: 1000 //弹窗时间毫秒,如果值为-1，则不会消失
+            message: res.msg, 
+            position: "middle", 
+            duration: 2000 
           });
-          this.num = 1;
-          this.shopnum = 1;
-          this.popupVisible = false;
-          this.getShopCarNum();
         }
       }else{
         let res = await buyCheckNum({...defaulParams,productId:this.shopDetail.priductid,num:this.shopnum});
@@ -557,6 +615,7 @@ a {
 .detail_content {
   width: 750px;
   min-height: 199px;
+  padding-bottom: 100px;
 }
 .detail_content_onece {
   min-height: 117px;
@@ -566,6 +625,14 @@ a {
 .detail_content_onece_left {
   width: 480px;
   float: left;
+  ul{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    li{
+      flex-shrink: 0;
+    }
+  }
 }
 .detail_content_onece_left ul li {
   // width: 110px;
@@ -593,6 +660,7 @@ a {
 }
 .detail_content_onece_left ul li:nth-of-type(3) {
   margin-top: 45px;
+  margin-right: 30px;
   // width: 120px;
 }
 .detail_content_onece_right {
@@ -659,11 +727,11 @@ a {
   height: 30px;
   margin-right: 10px;
   &.dis{
-    width: 58px;
+    width: 60px;
     height: 28px;
     line-height: 30px;
     text-align: center;
-    border: 1px solid #FF0304;
+    border: 2px solid #FF0304;
     color:#FF0304;
     border-radius: 5px;
     position: relative;
