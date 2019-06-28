@@ -489,7 +489,8 @@ const router = new Router({
                 import(/* webpackChunkName: "bestGoods" */ './views/BestGoods.vue'),
             meta: {
                 auth: true,
-                keepAlive: false,
+                keepAlive: true,
+                canKeep: false,
                 title: '精品买赠'
             }
         },

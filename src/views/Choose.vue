@@ -314,20 +314,37 @@ export default {
                 corpCode: this.corpCode,
                 companyId: this.companyId,
                 userRole: this.userRole,
-                productId: this.$route.query.id
             };
-            let jsonStr = JSON.stringify(
-                [{
-                mzhdlx:'无',
-                pzlx:false,
-                jghdlx:item.hdlx,
-                productId:item.spbm,
-                cartNum:1,
-                pzdj:item.cxj,
-                pzyj:item.ptsj,
-                mobile:this.user.mobile
-                }]
-            )
+            let jsonStr = "";
+            if((item.mzbj&&item.mzbj.indexOf('买赠')>-1)||(item.mzbj&&(item.mzbj.indexOf('满额赠')>-1))){//买赠 满额赠
+                jsonStr = JSON.stringify(
+                    [{
+                        mzhdlx:'买赠',
+                        pzlx:false,
+                        ghsbm:'',
+                        hdbm:item.mzhdbm,//活动编码
+                        jghdlx:item.hdlx,
+                        productId:item.spbm,
+                        cartNum:item.zxxsbz,
+                        pzdj:item.cxj,
+                        pzyj:item.ptsj,
+                        mobile:this.user.mobile
+                    }]
+                )
+            }else{
+                jsonStr = JSON.stringify(
+                    [{
+                    mzhdlx:'无',
+                    pzlx:false,
+                    jghdlx:item.hdlx,
+                    productId:item.spbm,
+                    cartNum:item.zxxsbz,
+                    pzdj:item.cxj,
+                    pzyj:item.ptsj,
+                    mobile:this.user.mobile
+                    }]
+                )
+            }
             let res = await addToCar({...defaulParams,jsonStr:jsonStr});
             if(res.code == 0){
                 Toast({

@@ -411,6 +411,14 @@ export default {
           });
         }
       }else{
+        if(this.money<this.shopDetail.cje){
+          Toast({
+            message: '无效的采集额', 
+            position: "middle", 
+            duration: 2000
+          });
+          return;
+        }
         let res = await buyCheckNum({...defaulParams,productId:this.shopDetail.priductid,num:this.shopnum});
         if(res.code==0&&res.data.ckeckResult=="true"){
           let jsonStr = {
@@ -554,9 +562,9 @@ export default {
     this.loading = true;
   },
   mounted() {
-    if (this.shopDetail.sfzt == "true") {
-      this.$router.push({ name: "flashdetail", query: { id: id } });
-    }
+    // if (this.shopDetail.sfzt == "true") {
+    //   this.$router.push({ name: "flashdetail", query: { id: id } });
+    // }
     this.getShopDetail();
     this.getShopCarNum();
   }

@@ -20,7 +20,7 @@
             ></div>
             <span>{{head.syname}}</span>
           </div>
-          <div class="list_shopcar_desc">每日采集额:{{head.cjl}}</div>
+          <div class="list_shopcar_desc">每日采集额:{{head.cje}}</div>
         </div>
         <div class="list_shopcar_content fix" v-for="(list,index) in list" :key="index">
           <div class="contentTop">
@@ -93,7 +93,7 @@
               :class="mzlist[0].allChecked?'checked':''"
               @click="blockChoose(index)"
             ></div>
-            <span>{{mzlist[0].buyName}}</span>
+            <span class="actName">{{mzlist[0].buyName}}</span>
           </div>
         </div>
         <div class="list_shopcar_content fix" v-for="(pmlist,jIndex) in mzlist" :key="jIndex">
@@ -231,7 +231,7 @@
               <div class="shopgift_text_bottom">
                 <ul>
                   <li>￥{{item.zpjj}}</li>
-                  <li>{{item.userGiftNum}} 件</li>
+                  <li>{{item.zssl}} 件</li>
                 </ul>
               </div>
             </div>
@@ -357,7 +357,7 @@ export default {
         return;
       }
       this.canClick = false;
-      if(this.sumMoney<this.head.cjl||parseFloat(this.sumMoney)==0){
+      if(this.sumMoney<this.head.cje||parseFloat(this.sumMoney)==0){
         this.showErr = true;
         this.errText = '无效的采集额';
         this.canClick = true;
@@ -421,34 +421,42 @@ export default {
           if(item.quantity<item.packnumber){
             // this.showErr = true;
             // this.errText="无效的采集量";
-            this.$set(this.list[index],'errTip','无效的采集量');
+            this.$set(this.list[index],'errTip','无效的采集量 采集量'+item.packnumber);
+            this.$set(this.list[index],'showTip',true)
+            result++; 
+          }else if(item.quantity%item.minpack!=0){
+            // this.showErr = true;
+            // this.errText="无效的采集量";
+            this.$set(this.list[index],'errTip','无效的采集量 采集量应为'+item.minpack+'的整数倍');
             this.$set(this.list[index],'showTip',true)
             result++; 
           }else if(item.quantity>item.stock&&item.promotionflag=='无'){
             // this.showErr = true;
             // this.errText="库存不足";
-            this.$set(this.list[index],'errTip','库存不足');
+            this.$set(this.list[index],'errTip','库存不足 库存'+item.stock);
             this.$set(this.list[index],'showTip',true)
             result++; 
           }else if((parseInt(item.quantity)>item.promotionremainquantity)&&item.promotionflag=='套餐'){
             // this.showErr = true;
             // this.errText="库存不足";
-            this.$set(this.list[index],'errTip','库存不足');
+            this.$set(this.list[index],'errTip','库存不足 库存'+item.promotionremainquantity);
             this.$set(this.list[index],'showTip',true)
             result++; 
           }else if(item.maxpackquantity!='NA'&&item.quantity>item.maxpackquantity){
             // this.showErr = true;
             // this.errText = '超过今日限购量';
-            this.$set(this.list[index],'errTip','超过今日限购量');
+            this.$set(this.list[index],'errTip','超过今日限购量 今日限购量'+item.maxpackquantity);
             this.$set(this.list[index],'showTip',true)
             result++; 
-          }else if(item.quantity>item.promotionnum&&item.schemetype=='秒杀'){
-            // this.showErr = true;
-            // this.errText = '超过秒杀单店限购量';
-            this.$set(this.list[index],'errTip','超过秒杀单店限购量');
-            this.$set(this.list[index],'showTip',true)
-            result++; 
-          }else{
+          }
+          // else if(item.quantity>item.promotionnum&&item.schemetype=='秒杀'){
+          //   // this.showErr = true;
+          //   // this.errText = '超过秒杀单店限购量';
+          //   this.$set(this.list[index],'errTip','超过秒杀单店限购量');
+          //   this.$set(this.list[index],'showTip',true)
+          //   result++; 
+          // }
+          else{
             this.showErr = false;
             this.$set(this.list[index],'showTip',false);
             result = 0;
@@ -462,19 +470,25 @@ export default {
             if(item.quantity<item.packnumber){
               // this.showErr = true;
               // this.errText = '无效的采集量';
-              this.$set(this.mzList[jIndex][index],'errTip','无效的采集量');
+              this.$set(this.mzList[jIndex][index],'errTip','无效的采集量 采集量'+item.packnumber);
+              this.$set(this.mzList[jIndex][index],'showTip',true)
+              result++; 
+            }else if(item.quantity%item.minpack!=0){
+              // this.showErr = true;
+              // this.errText = '无效的采集量';
+              this.$set(this.mzList[jIndex][index],'errTip','无效的采集量 采集量应为'+item.minpack+'的整数倍');
               this.$set(this.mzList[jIndex][index],'showTip',true)
               result++; 
             }else if(item.quantity>item.stock){
               // this.showErr = true;
               // this.errText = '库存不足';
-              this.$set(this.mzList[jIndex][index],'errTip','库存不足');
+              this.$set(this.mzList[jIndex][index],'errTip','库存不足 库存'+item.stock);
               this.$set(this.mzList[jIndex][index],'showTip',true)
               result++; 
             }else if(item.maxpackquantity!='NA'&&item.quantity>item.maxpackquantity){
               // this.showErr = true;
               // this.errText = '超过今日限购量';
-              this.$set(this.mzList[jIndex][index],'errTip','超过今日限购量');
+              this.$set(this.mzList[jIndex][index],'errTip','超过今日限购量 今日限购量'+item.maxpackquantity);
               this.$set(this.mzList[jIndex][index],'showTip',true)
               result++; 
             }else{
@@ -763,7 +777,7 @@ export default {
       if(res.code==0){
         res.data.list.forEach((item,index)=>{
           item.checked = false;
-          item.showAct = false;
+          item.showAct = true;
           item.showTip = false;
           item.errTip = '';
         })
@@ -771,7 +785,7 @@ export default {
           item.forEach((pterm,jIndex)=>{
             pterm.checked = false;
             pterm.allChecked = false;
-            pterm.showAct = false;
+            pterm.showAct = true;
             pterm.canSelGift = false;
             pterm.showTip = false;
             pterm.errTip = '';
@@ -822,23 +836,23 @@ export default {
         companyId:this.companyId,
         userRole:this.userRole,
       }; 
-      let res = await getGiftList({...defaulParams,productId:id});
-      res.data.list.forEach(item => {
-        item.checked =false;
-      });
+      let res = await getGiftList({...defaulParams,productId:id,count:userBuyNum,money:userBuyMoney});
       if(res.code ==0){
+        res.data.list.forEach(item => {
+          item.checked = false;
+        });
         this.giftList = res.data.list;
-        if(type=='数量满足'){
-          this.$set(this.giftList[0],'userGiftNum',parseInt(parseInt(userBuyNum)/parseInt(this.giftList[0].mzsl)));
-        }else if(type=='金额满足'){
-          this.$set(this.giftList[0],'userGiftNum',parseInt(parseFloat(userBuyMoney)/parseFloat(this.giftList[0].mzsl)));
-        }
-        if(selGifts&&selGifts.length){
-          selGifts.forEach((item,index)=>{
-            let gIndex = this.giftList.findIndex((pterm)=>pterm.zpbm==item.zpbm);
-            this.$set(this.giftList[gIndex],'checked',true)
-          })
-        }
+        // if(type=='数量满足'){
+        //   this.$set(this.giftList[0],'userGiftNum',parseInt(parseInt(userBuyNum)/parseInt(this.giftList[0].mzsl)));
+        // }else if(type=='金额满足'){
+        //   this.$set(this.giftList[0],'userGiftNum',parseInt(parseFloat(userBuyMoney)/parseFloat(this.giftList[0].mzsl)));
+        // }
+        // if(selGifts&&selGifts.length){
+        //   selGifts.forEach((item,index)=>{
+        //     let gIndex = this.giftList.findIndex((pterm)=>pterm.zpbm==item.zpbm);
+        //     this.$set(this.giftList[gIndex],'checked',true)
+        //   })
+        // }
       }
     },
     clear(){
@@ -877,7 +891,7 @@ export default {
       },100)
     },
     goDetail(id){
-      this.$router.push({name:'detail',query:{id:id}})
+      // this.$router.push({name:'detail',query:{id:id}})
     }
   },
   // activated() {/**  */
@@ -916,20 +930,33 @@ export default {
       companyId:this.companyId,
       userRole:this.userRole,
     };
-    let  jsonStr = {zcData:{},tcData:{},mzData:{}};
-    if(!this.list.length&&!this.mzList.length){
-      return;
-    }
+    // let  jsonStr = {zcData:{},tcData:{},mzData:{}};
+    // if(!this.list.length&&!this.mzList.length){
+    //   return;
+    // }
+    // this.list.forEach((item)=>{
+    //   if(item.promotionflag=='套餐'){
+    //     jsonStr.tcData[item.promotioncode]=item.quantity;
+    //   }else{
+    //     jsonStr.zcData[item.productcode]=item.quantity;
+    //   }
+    // })
+    // this.mzList.forEach((item)=>{
+    //   item.forEach((pterm)=>{
+    //     jsonStr.mzData[pterm.productcode]=pterm.quantity;
+    //   })
+    // })
+    let jsonStr = {ptData:[],hdData:[]};
     this.list.forEach((item)=>{
       if(item.promotionflag=='套餐'){
-        jsonStr.tcData[item.promotioncode]=item.quantity;
+        jsonStr.hdData.push({id:'',code:item.promotioncode,num:item.quantity});
       }else{
-        jsonStr.zcData[item.productcode]=item.quantity;
+        jsonStr.ptData.push({id:item.productcode,num:item.quantity,code:''})
       }
     })
     this.mzList.forEach((item)=>{
       item.forEach((pterm)=>{
-        jsonStr.mzData[pterm.productcode]=pterm.quantity;
+        jsonStr.hdData.push({id:pterm.productcode,num:pterm.quantity,code:pterm.buyCode});
       })
     })
     recordCartNum({...defaulParams,jsonStr:JSON.stringify(jsonStr)})
@@ -1061,6 +1088,13 @@ export default {
 }
 .list_shopcar_name {
   float: left;
+  .actName{
+    display: inline-block;
+    width: 6rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 }
 .list_shopcar_name span:nth-of-type(2) {
   display: inline-block;
@@ -1429,6 +1463,8 @@ export default {
 }
 .gift_wrap {
   background: #fff;
+  height: 95vh;
+  overflow-y: scroll;
   .nav{
         width: 100%;
         height: 88px;

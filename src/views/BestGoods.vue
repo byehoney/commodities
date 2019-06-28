@@ -109,6 +109,22 @@ export default {
   mounted() {
     this.getData();
   },
+  activated() {/**  */
+    if (!this.$route.meta.canKeep) {
+      this.list = [];
+      this.money = 0;
+      this.getData();
+    }
+  },
+  beforeRouteEnter (to, from, next) {/**  */
+    if(from.name == 'detail'){
+      to.meta.canKeep = true;
+      next()   
+    }else{
+      to.meta.canKeep = false;
+      next();
+    }
+  },
   methods: {
     goShopCar(){
       this.$router.push({name:'newShopCar'})
@@ -184,14 +200,16 @@ export default {
           }
         })
       })
-      let res = await addToCar({...defaulParams,jsonStr:JSON.stringify(selArr)})
-      if(res.code==0){
-        Toast({
-          message: "加入购物车成功", //弹窗内容
-          position: "middle", //弹窗位置
-          duration: 1000 //弹窗时间毫秒,如果值为-1，则不会消失
-        });
-        this.resetList();
+      if(selArr.length){
+        let res = await addToCar({...defaulParams,jsonStr:JSON.stringify(selArr)})
+        if(res.code==0){
+          Toast({
+            message: "加入购物车成功", //弹窗内容
+            position: "middle", //弹窗位置
+            duration: 1000 //弹窗时间毫秒,如果值为-1，则不会消失
+          });
+          this.resetList();
+        }
       }
     },
     resetList(){//加入完购物车以后清空之前选择的数据
