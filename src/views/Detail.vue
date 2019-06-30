@@ -54,6 +54,11 @@
             <span v-if="shopDetail.hdlx=='打折'" class="dis">
               {{shopDetail.cxj|formatDis(shopDetail.ptsj)}}折
             </span>
+            <div class="pro_mark">
+              <div class="markIcon" v-if="shopDetail.mzbj">买赠</div>
+              <div class="limitIcon" v-if="shopDetail.hdlx=='秒杀'">{{(!shopDetail.xgl||shopDetail.xgl==0)?'不限购':'限购'+shopDetail.xgl+'件'}}</div>
+              <div class="stock" v-if="shopDetail.hdlx=='秒杀'">仅剩{{shopDetail.dqkc}}件</div>
+            </div>
             <div class="detail_content_price" v-if="contentShow">
               <ul>
                 <li class="oPrice">原价：¥ {{shopDetail.ptsj}}</li>
@@ -572,6 +577,42 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.pro_mark{
+  display: flex;
+  align-items: center;
+  margin-top: 12px;
+  .markIcon{
+    height: 30px;
+    font-size:18px;
+    color:rgba(255,3,4,1);
+    line-height:30px;
+    box-sizing: border-box;
+    border: 2px solid #FF0304;
+    padding: 0 10px;
+    margin-right: 8px;
+    border-radius:4px
+  }
+  .limitIcon{
+    height:30px;
+    background:rgba(255,3,4,1);
+    border-radius:4px;
+    line-height: 30px;
+    font-size:18px;
+    color:rgba(255,255,255,1);
+    margin-right: 8px;
+    padding: 0 10px;
+  }
+  .stock{
+    height: 30px;
+    font-size:18px;
+    color:rgba(255,3,4,1);
+    line-height:30px;
+    box-sizing: border-box;
+    border: 2px solid #FF0304;
+    padding: 0 10px;
+    border-radius:4px
+  }
+}
 .mint-toast.is-placemiddle{
   z-index: 10000!important;
 }
@@ -592,8 +633,10 @@ a {
   background: #FF0304;
   font-size: 30px;
   line-height: 100px;
-  position: relative;
+  position: fixed;
   color: #fff;
+  top: 0;
+  left: 0;
 }
 .detail_back {
   position: absolute;
@@ -611,6 +654,7 @@ a {
   background: #fff;
   margin-bottom: 6px;
   padding: 37px 47px;
+  margin-top:100px;
 }
 .detsil_loop_center {
   width: 660px;

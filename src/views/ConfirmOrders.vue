@@ -224,7 +224,7 @@ export default {
                                 hdbm:pterm.hdbm,
                                 jghdlx:'无',
                                 productId:pterm.zpbm,
-                                cartNum:pterm.userGiftNum,
+                                cartNum:pterm.zssl,
                                 pzdj:pterm.zpjj,
                                 pzyj:pterm.zpjj,
                                 mobile:this.user.mobile
@@ -237,7 +237,7 @@ export default {
                                 hdbm:pterm.hdbm,
                                 jghdlx:'无',
                                 productId:pterm.zpbm,
-                                cartNum:pterm.userGiftNum,
+                                cartNum:pterm.zssl,
                                 pzdj:pterm.zpjj,
                                 pzyj:pterm.zpjj,
                                 mobile:this.user.mobile

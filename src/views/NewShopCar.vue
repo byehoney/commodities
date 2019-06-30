@@ -213,25 +213,26 @@
           <span class="title">选择赠品</span>
         </div>
         <div class="shopgift_list" v-for="(item,index) in giftList" :key="index">
-          <div class="shopgift_list_content">
+          <div class="gift_des">{{item[0].hdms}}</div>
+          <div class="shopgift_list_content" v-for="(gTerm,gIndex) in item" :key="gIndex">
             <div
               class="list_shopcar_circle"
-              :class="item.checked?'checked':''"
-              @click="checkgift(index)"
+              :class="gTerm.checked?'checked':''"
+              @click="checkgift(index,gIndex)"
             ></div>
             <div class="shopgift_list_pic">
-              <img alt="" :src="item.url"/>
+              <img alt="" :src="gTerm.url"/>
             </div>
             <div class="shopgift_list_text">
               <div class="shopgift_text_top">
-                <h3>{{item.zpmc}}</h3>
-                <p>{{item.cj}}</p>
-                <p>规格：{{item.guige}}</p>
+                <h3>{{gTerm.zpmc}}</h3>
+                <p>{{gTerm.cj}}</p>
+                <p>规格：{{gTerm.guige}}</p>
               </div>
               <div class="shopgift_text_bottom">
                 <ul>
-                  <li>￥{{item.zpjj}}</li>
-                  <li>{{item.zssl}} 件</li>
+                  <li>￥{{gTerm.zpjj}}</li>
+                  <li>{{gTerm.zssl>0?gTerm.zssl+'件':'无库存'}}</li>
                 </ul>
               </div>
             </div>
@@ -818,11 +819,14 @@ export default {
       this.popupVisible = false;
       let selGift = [];
       this.giftList.forEach((item)=>{
-        if(item.checked){
-          selGift.push(item);
-        }
+        item.forEach(pterm=>{
+          if(pterm.checked){
+            selGift.push(pterm);
+          }
+        })
       })
       this.$set(this.mzList[this.curGiftIndex][0],'selGifts',selGift);
+      console.log(this.mzList)
       setTimeout(()=>{
         window.scrollTo(0,this.scrollTop);
       },100)
@@ -839,7 +843,9 @@ export default {
       let res = await getGiftList({...defaulParams,productId:id,count:userBuyNum,money:userBuyMoney});
       if(res.code ==0){
         res.data.list.forEach(item => {
-          item.checked = false;
+          item.forEach((pterm)=>{
+            pterm.checked = false;
+          })
         });
         this.giftList = res.data.list;
         // if(type=='数量满足'){
@@ -857,22 +863,59 @@ export default {
     },
     clear(){
       this.giftList.forEach((item)=>{
-        item.checked = false;
+        item.forEach(pterm=>{
+          pterm.checked = false;
+        })
       })
       this.countGiftNum();
     },
     countGiftNum(){
       let num = 0;
       this.giftList.forEach((item,index)=>{
-        if(item.checked){
-          num ++;
-        }
+        item.forEach((pterm)=>{
+          if(pterm.checked){
+            num ++;
+          }
+        })
       })
       this.giftNum = num;
     },
-    checkgift(index) {
-      this.$set(this.giftList[index],'checked',!this.giftList[index].checked);
-      this.countGiftNum();
+    checkgift(index,gIndex) {
+      if(this.giftList[index][gIndex].zssl>0){
+        let hdbm = this.giftList[index][gIndex].hdbm;
+        let selNum = 0;
+        this.giftList.forEach((item,index)=>{
+          item.forEach((gterm,gIndex)=>{
+            if(gterm.hdbm!=hdbm){
+              this.$set(this.giftList[index][gIndex],'checked',false)
+            }else{
+              if(gterm.checked){
+                selNum++;
+              }
+            }
+          })
+        })
+        if(selNum<this.giftList[index][gIndex].zpkxpgs){
+          this.$set(this.giftList[index][gIndex],'checked',!this.giftList[index][gIndex].checked);
+        }else{
+          if(this.giftList[index][gIndex].checked){
+            this.$set(this.giftList[index][gIndex],'checked',false);
+          }else{
+            Toast({
+              message: "该活动只能选择"+this.giftList[index][gIndex].zpkxpgs+'种赠品', //弹窗内容
+              position: "middle", //弹窗位置
+              duration: 1000 //弹窗时间毫秒,如果值为-1，则不会消失
+            });
+          }
+        }
+        this.countGiftNum();
+      }else{
+        Toast({
+            message: "该品暂无库存", //弹窗内容
+            position: "middle", //弹窗位置
+            duration: 1000 //弹窗时间毫秒,如果值为-1，则不会消失
+        });
+      }
     },
     async saveCartNum(id,type,num){
       let defaulParams = {
@@ -1463,8 +1506,9 @@ export default {
 }
 .gift_wrap {
   background: #fff;
-  height: 95vh;
+  height: 85vh;
   overflow-y: scroll;
+  margin-top: 93px;
   .nav{
         width: 100%;
         height: 88px;
@@ -1527,13 +1571,20 @@ export default {
   .shopgift_list {
     min-height: 221px;
     font-size: 18px;
-    padding-left: 45px;
     background: #fff;
     margin-bottom: 10px;
     border-bottom: 2px solid #ebebeb;
-    margin-top: 93px;
     &:last-child{
       border: none;
+    }
+    .gift_des{
+      // width: 100%;
+      min-height: 60px;
+      line-height: 60px;
+      background:rgba(255,230,188,1);
+      padding-left: 38px;
+      font-size:20px;
+      color:rgba(139,87,42,1);
     }
     .shopgift_list_content {
       display: flex;
@@ -1541,6 +1592,7 @@ export default {
       padding-bottom: 26px;
       padding-top: 40px;
       padding-right: 40px;
+      padding-left: 45px;
     }
     .shopgift_list_pic {
       width: 220px;
