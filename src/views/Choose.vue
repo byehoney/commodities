@@ -64,8 +64,8 @@
                                     <div class="giftIcon" v-if="item.mzbj">买赠</div>
                                     <div class="discount" v-if="item.hdlx=='打折'">{{item.cxj|formatDis(item.ptsj)}}折</div>
                                     <div class="starIcon" v-if="item.hdlx=='星选'">星选</div>
-                                    <div class="limitIcon" v-if="item.hdlx=='秒杀'">限购{{item.ys}}件</div>
-                                    <div class="stock" v-if="item.hdlx=='秒杀'">仅剩{{item.ys}}件</div>
+                                    <div class="limitIcon" v-if="item.hdlx=='秒杀'">{{item.xlg?'限购'+item.xlg+'件':'不限购'}}</div>
+                                    <div class="stock" v-if="item.hdlx=='秒杀'">仅剩{{item.stock}}件</div>
                                 </div>
                                 <div class="price">
                                     <span class="nPrice">￥{{item.cxj}}</span>
@@ -100,7 +100,7 @@
                                 <div class="giftIcon" v-if="item.mzbj">买赠</div>
                                 <div class="discount" v-if="item.hdlx=='打折'">{{item.cxj|formatDis(item.ptsj)}}折</div>
                                 <div class="starIcon" v-if="item.hdlx=='星选'">星选</div>
-                                <div class="limitIcon" v-if="item.hdlx=='秒杀'">限购{{item.ys}}件</div>
+                                <div class="limitIcon" v-if="item.hdlx=='秒杀'">{{item.xlg?'限购'+item.xlg+'件':'不限购'}}</div>
                                 <div class="stock" v-if="item.hdlx=='秒杀'">仅剩{{item.ys}}件</div>
                             </div>
                             <div class="Info">
@@ -588,7 +588,7 @@ export default {
                     }
                 }
                 .discount{
-                    width: 60px;
+                    width: 68px;
                     height: 30px;
                     line-height: 30px;
                     color: #FF0304;
@@ -627,7 +627,7 @@ export default {
                             }
                         }
                         .discount{
-                            width: 60px;
+                            width: 68px;
                             height: 30px;
                             line-height: 30px;
                             color:  #FF0304;
