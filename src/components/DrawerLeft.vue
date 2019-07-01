@@ -1,6 +1,7 @@
 <template>
   <vue-drawer-layout
     ref="drawer"
+    :z-index="10000000"
     @mask-click="handleMaskClick"
     :content-drawable="true">
     <div class="drawer" slot="drawer">
@@ -22,20 +23,30 @@ export default {
             
         }
     },
+    porps:['isShowLeft'],
     components:{
         // TabBarBottom
     },
+    mounted() {
+
+    },
     methods:{
         handleMaskClick(){
-            console.log(this)
-            this.$refs.drawer.toggle(false)
+          this.$refs.drawer.toggle(false)
+        },
+        showDrawerLeft(){
+          this.$refs.drawer.toggle(true)
         }
     }
 
 }
 </script>
 <style scoped lang="scss">
-    .drawer {
-        font-size: 50px;
+    .drawer-layout{
+      // z-index: 100000;
+    }
+    .drawer{
+      height: 100vh;
+      background-color: #fff;
     }
 </style>

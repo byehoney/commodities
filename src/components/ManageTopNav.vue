@@ -1,6 +1,6 @@
 <template>
     <div class="nav">
-        <router-link class="leftIcon" :to="{name:'login',query:{redirect:$route.path}}">登录</router-link>
+        <span class="leftIcon" @click="goLogin">登录</span>
         <span class="title">{{title}}</span>
     </div>
 </template>
@@ -11,10 +11,14 @@ export default {
             title:''
         }
     },
+    props:['trigerLeft'],
     mounted() {
       this.title = this.$router.currentRoute.meta.title
     },
     methods:{
+        goLogin(){
+            this.$emit('trigerLeft',true)
+        },
         goBack(){
             this.$router.go(-1);
         }

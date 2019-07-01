@@ -1,6 +1,7 @@
 <template>
     <div class="mangeContainer">
-        <ManageTopNav></ManageTopNav>
+        <ManageTopNav @trigerLeft="trigerDrawerLeft"></ManageTopNav>
+        <DrawerLeft ref="leftDrwaer"></DrawerLeft>
         <div class="main">
             <div class="top">
                 <div :class="['date long',dateActive?'active':'']" @click="selDate">
@@ -59,6 +60,7 @@
 import { Toast } from "mint-ui";
 import {mapGetters} from 'vuex'
 import ManageTabBarBotttom from '@/components/ManageTabBarBottom'
+import DrawerLeft from '@/components/DrawerLeft'
 import ManageTopNav from '@/components/ManageTopNav'
 export default {
     data(){
@@ -89,9 +91,13 @@ export default {
     },
     components:{
         ManageTabBarBotttom,
-        ManageTopNav
+        ManageTopNav,
+        DrawerLeft
     },
     methods: {
+        trigerDrawerLeft(){
+            this.$refs.leftDrwaer.showDrawerLeft()
+        },
         selDate(){
             this.dateActive = true;
             this.showDateList = true;
@@ -184,7 +190,8 @@ export default {
                         line-height:26px;
                         letter-spacing:2px;
                         text-indent: 60px;
-                        // padding-left: 60px;
+                        margin-bottom: 10px;
+                        // pad-ding-left: 60px;
                     }
                 }
                 .infoTop{
