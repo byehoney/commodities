@@ -20,7 +20,7 @@
             ></div>
             <span>{{head.syname}}</span>
           </div>
-          <div class="list_shopcar_desc">每日采集额:{{head.cjl}}</div>
+          <div class="list_shopcar_desc">每日采集额:{{head.cje}}</div>
         </div>
         <div class="list_shopcar_content fix" v-for="(list,index) in list" :key="index">
           <div class="contentTop">
@@ -34,7 +34,7 @@
                 <p class="ms_time">{{S}}</p>
               </div>
               <div class="com_add_bottom">
-                <div class="list_shopcar_pic">
+                <div class="list_shopcar_pic" @click="goDetail(list.productcode)">
                   <img :src="list.imgurl?list.imgurl:require('../images/default_logo.jpg')">
                 </div>
                 <div class="list_shopcar_com fix">
@@ -93,7 +93,7 @@
               :class="mzlist[0].allChecked?'checked':''"
               @click="blockChoose(index)"
             ></div>
-            <span>{{mzlist[0].buyName}}</span>
+            <span class="actName">{{mzlist[0].buyName}}</span>
           </div>
         </div>
         <div class="list_shopcar_content fix" v-for="(pmlist,jIndex) in mzlist" :key="jIndex">
@@ -101,7 +101,7 @@
             <div class="list_shopcar_circle" :class="pmlist.checked?'checked':''" @click="chooseSingle(index,'mz',jIndex)"></div>
             <div class="com_add">
               <div class="com_add_bottom">
-                <div class="list_shopcar_pic">
+                <div class="list_shopcar_pic" @click="goDetail(pmlist.productcode)">
                   <img :src="pmlist.imgurl?pmlist.imgurl:require('../images/default_logo.jpg')">
                 </div>
                 <div class="list_shopcar_com fix">
@@ -146,7 +146,7 @@
           </div>
           <div class="shop_gift" v-if="mzList[index][0].canSelGift&&jIndex==mzList[index].length-1">
             <div class="shop_gift_bottom">
-              <span @click="chooseGift(index,mzList[index][0].productcode)">{{mzList[index][0].selGifts==''?'选择赠品':'已选择'}}</span>
+              <span @click="chooseGift(index,mzList[index][0].productcode,mzList[index][0].numberormny,mzList[index][0].userBuyNum,mzList[index][0].userBuyMoney)">{{mzList[index][0].selGifts==''?'选择赠品':'已选择'}}</span>
             </div>
           </div>
         </div>
@@ -208,26 +208,31 @@
       v-model="popupVisible"
       position="bottom">
       <div class="gift_wrap">
+        <div class="nav">
+          <img @click="closePop" src="../images/leftArrow.png" class="leftIcon" alt="">
+          <span class="title">选择赠品</span>
+        </div>
         <div class="shopgift_list" v-for="(item,index) in giftList" :key="index">
-          <div class="shopgift_list_content">
+          <div class="gift_des">{{item[0].hdms}}</div>
+          <div class="shopgift_list_content" v-for="(gTerm,gIndex) in item" :key="gIndex">
             <div
               class="list_shopcar_circle"
-              :class="item.checked?'checked':''"
-              @click="checkgift(index)"
+              :class="gTerm.checked?'checked':''"
+              @click="checkgift(index,gIndex)"
             ></div>
             <div class="shopgift_list_pic">
-              <img alt="" :src="item.url"/>
+              <img alt="" :src="gTerm.url"/>
             </div>
             <div class="shopgift_list_text">
               <div class="shopgift_text_top">
-                <h3>{{item.zpmc}}</h3>
-                <p>{{item.cj}}</p>
-                <p>规格：{{item.guige}}</p>
+                <h3>{{gTerm.zpmc}}</h3>
+                <p>{{gTerm.cj}}</p>
+                <p>规格：{{gTerm.guige}}</p>
               </div>
               <div class="shopgift_text_bottom">
                 <ul>
-                  <li>￥{{item.zpjj}}</li>
-                  <li>{{item.zssl}} 件</li>
+                  <li>￥{{gTerm.zpjj}}</li>
+                  <li>{{gTerm.zssl>0?gTerm.zssl+'件':'无库存'}}</li>
                 </ul>
               </div>
             </div>
@@ -353,7 +358,7 @@ export default {
         return;
       }
       this.canClick = false;
-      if(this.sumMoney<this.head.cjl||parseFloat(this.sumMoney)==0){
+      if(this.sumMoney<this.head.cje||parseFloat(this.sumMoney)==0){
         this.showErr = true;
         this.errText = '无效的采集额';
         this.canClick = true;
@@ -417,34 +422,42 @@ export default {
           if(item.quantity<item.packnumber){
             // this.showErr = true;
             // this.errText="无效的采集量";
-            this.$set(this.list[index],'errTip','无效的采集量');
+            this.$set(this.list[index],'errTip','无效的采集量 采集量'+item.packnumber);
+            this.$set(this.list[index],'showTip',true)
+            result++; 
+          }else if(item.quantity%item.minpack!=0){
+            // this.showErr = true;
+            // this.errText="无效的采集量";
+            this.$set(this.list[index],'errTip','无效的采集量 采集量应为'+item.minpack+'的整数倍');
             this.$set(this.list[index],'showTip',true)
             result++; 
           }else if(item.quantity>item.stock&&item.promotionflag=='无'){
             // this.showErr = true;
             // this.errText="库存不足";
-            this.$set(this.list[index],'errTip','库存不足');
+            this.$set(this.list[index],'errTip','库存不足 库存'+item.stock);
             this.$set(this.list[index],'showTip',true)
             result++; 
           }else if((parseInt(item.quantity)>item.promotionremainquantity)&&item.promotionflag=='套餐'){
             // this.showErr = true;
             // this.errText="库存不足";
-            this.$set(this.list[index],'errTip','库存不足');
+            this.$set(this.list[index],'errTip','库存不足 库存'+item.promotionremainquantity);
             this.$set(this.list[index],'showTip',true)
             result++; 
           }else if(item.maxpackquantity!='NA'&&item.quantity>item.maxpackquantity){
             // this.showErr = true;
             // this.errText = '超过今日限购量';
-            this.$set(this.list[index],'errTip','超过今日限购量');
+            this.$set(this.list[index],'errTip','超过今日限购量 今日限购量'+item.maxpackquantity);
             this.$set(this.list[index],'showTip',true)
             result++; 
-          }else if(item.quantity>item.promotionnum&&item.schemetype=='秒杀'){
-            // this.showErr = true;
-            // this.errText = '超过秒杀单店限购量';
-            this.$set(this.list[index],'errTip','超过秒杀单店限购量');
-            this.$set(this.list[index],'showTip',true)
-            result++; 
-          }else{
+          }
+          // else if(item.quantity>item.promotionnum&&item.schemetype=='秒杀'){
+          //   // this.showErr = true;
+          //   // this.errText = '超过秒杀单店限购量';
+          //   this.$set(this.list[index],'errTip','超过秒杀单店限购量');
+          //   this.$set(this.list[index],'showTip',true)
+          //   result++; 
+          // }
+          else{
             this.showErr = false;
             this.$set(this.list[index],'showTip',false);
             result = 0;
@@ -458,19 +471,25 @@ export default {
             if(item.quantity<item.packnumber){
               // this.showErr = true;
               // this.errText = '无效的采集量';
-              this.$set(this.mzList[jIndex][index],'errTip','无效的采集量');
+              this.$set(this.mzList[jIndex][index],'errTip','无效的采集量 采集量'+item.packnumber);
+              this.$set(this.mzList[jIndex][index],'showTip',true)
+              result++; 
+            }else if(item.quantity%item.minpack!=0){
+              // this.showErr = true;
+              // this.errText = '无效的采集量';
+              this.$set(this.mzList[jIndex][index],'errTip','无效的采集量 采集量应为'+item.minpack+'的整数倍');
               this.$set(this.mzList[jIndex][index],'showTip',true)
               result++; 
             }else if(item.quantity>item.stock){
               // this.showErr = true;
               // this.errText = '库存不足';
-              this.$set(this.mzList[jIndex][index],'errTip','库存不足');
+              this.$set(this.mzList[jIndex][index],'errTip','库存不足 库存'+item.stock);
               this.$set(this.mzList[jIndex][index],'showTip',true)
               result++; 
             }else if(item.maxpackquantity!='NA'&&item.quantity>item.maxpackquantity){
               // this.showErr = true;
               // this.errText = '超过今日限购量';
-              this.$set(this.mzList[jIndex][index],'errTip','超过今日限购量');
+              this.$set(this.mzList[jIndex][index],'errTip','超过今日限购量 今日限购量'+item.maxpackquantity);
               this.$set(this.mzList[jIndex][index],'showTip',true)
               result++; 
             }else{
@@ -607,10 +626,17 @@ export default {
     blockChoose(curIndex){//买赠块级选择  可全选该块商品
       this.sumMoney = 0;
       this.sumNum =0;
-      this.mzList[curIndex].forEach((pterm,jIndex)=>{
-        this.$set(this.mzList[curIndex][jIndex],'allChecked',!this.mzList[curIndex][jIndex].allChecked);
-        this.$set(this.mzList[curIndex][jIndex],'checked',!this.mzList[curIndex][jIndex].checked);
-      })
+      if(this.mzList[curIndex][0].allChecked){
+        this.mzList[curIndex].forEach((pterm,jIndex)=>{
+          this.$set(this.mzList[curIndex][jIndex],'allChecked',false);
+          this.$set(this.mzList[curIndex][jIndex],'checked',false);
+        })
+      }else{
+        this.mzList[curIndex].forEach((pterm,jIndex)=>{
+          this.$set(this.mzList[curIndex][jIndex],'allChecked',true);
+          this.$set(this.mzList[curIndex][jIndex],'checked',true);
+        })
+      }
       
       this.countMoney();
     },
@@ -683,18 +709,21 @@ export default {
           if(pterm.checked){
             totalNum+=parseInt(pterm.quantity);
             totalMoney+=parseInt(pterm.quantity)*(parseInt(pterm.price*1000))/1000;
-            if(pterm.numberormny == '数量满足'&&pterm.satisfyNumber<=totalNum){
-              this.$set(this.mzList[index][0],'canSelGift',true);
-            }else if(pterm.numberormny == '金额满足'&&pterm.satisfyNumber<=totalMoney){
-              this.$set(this.mzList[index][0],'canSelGift',true);
-            }else{
-              this.$set(this.mzList[index][0],'canSelGift',false);
-              this.$set(this.mzList[index][0],'selGifts',[]);
-            }
+          }
+          if(pterm.numberormny == '数量满足'&&pterm.satisfyNumber<=totalNum){
+            this.$set(this.mzList[index][0],'canSelGift',true);
+          }else if(pterm.numberormny == '金额满足'&&pterm.satisfyNumber<=totalMoney){
+            this.$set(this.mzList[index][0],'canSelGift',true);
           }else{
             this.$set(this.mzList[index][0],'canSelGift',false);
             this.$set(this.mzList[index][0],'selGifts',[]);
           }
+          this.$set(this.mzList[index][0],'userBuyNum',totalNum);
+          this.$set(this.mzList[index][0],'userBuyMoney',totalMoney);
+          // else{
+          //   this.$set(this.mzList[index][0],'canSelGift',false);
+          //   this.$set(this.mzList[index][0],'selGifts',[]);
+          // }
         })
       })
     },
@@ -702,11 +731,16 @@ export default {
       this.result = !this.result;
     },
     count() {
+      console.log(this.list)
+      let msIndex = this.list.findIndex((item,index,arr)=>(item.schemetype=='秒杀'));
+      console.log(msIndex)
+      if(msIndex==-1){
+        return;
+      }
       this.timer = setInterval(() => {
         let nowH = new Date().getHours();
         let nowM = new Date().getMinutes();
-        let nowS = new Date().getSeconds();
-        let msIndex = this.list.findIndex((item,index,arr)=>(item.schemetype=='秒杀'));
+        let nowS = new Date().getSeconds();  
         let endTime = this.list[msIndex].promotionendtime.split(':');
         let leftsecond =  (parseInt(endTime[0]) * 60 * 60 + parseInt(endTime[1])*60 + parseInt(endTime[2])) - (nowH * 60 * 60 + nowM * 60 + nowS);
         // console.log(leftsecond)
@@ -744,7 +778,7 @@ export default {
       if(res.code==0){
         res.data.list.forEach((item,index)=>{
           item.checked = false;
-          item.showAct = false;
+          item.showAct = true;
           item.showTip = false;
           item.errTip = '';
         })
@@ -752,11 +786,13 @@ export default {
           item.forEach((pterm,jIndex)=>{
             pterm.checked = false;
             pterm.allChecked = false;
-            pterm.showAct = false;
+            pterm.showAct = true;
             pterm.canSelGift = false;
             pterm.showTip = false;
             pterm.errTip = '';
             pterm.selGifts=[];
+            pterm.userBuyNum = 0;
+            pterm.userBuyMoney = 0;
           })
         })
         this.head = res.data.head;
@@ -767,7 +803,8 @@ export default {
         }
       }
     },
-    chooseGift(index,id){
+    chooseGift(index,id,type,userBuyNum,userBuyMoney){
+      console.log(userBuyNum,userBuyMoney)
       if(document.documentElement&&document.documentElement.scrollTop){
         this.scrollTop=document.documentElement.scrollTop;
       }else if(document.body){
@@ -776,22 +813,25 @@ export default {
       this.popupVisible = true;
       this.curGiftIndex = index;
       let selGifts = this.mzList[index][0].selGifts;
-      this.getGiftData(index,id,selGifts);
+      this.getGiftData(index,id,selGifts,type,userBuyNum,userBuyMoney);
     },
     confirmGift(){
       this.popupVisible = false;
       let selGift = [];
       this.giftList.forEach((item)=>{
-        if(item.checked){
-          selGift.push(item);
-        }
+        item.forEach(pterm=>{
+          if(pterm.checked){
+            selGift.push(pterm);
+          }
+        })
       })
       this.$set(this.mzList[this.curGiftIndex][0],'selGifts',selGift);
+      console.log(this.mzList)
       setTimeout(()=>{
         window.scrollTo(0,this.scrollTop);
       },100)
     },
-    async getGiftData(index,id,selGifts){
+    async getGiftData(index,id,selGifts,type,userBuyNum,userBuyMoney){
       console.log(selGifts)
       let defaulParams = {
         token:this.token,
@@ -800,38 +840,82 @@ export default {
         companyId:this.companyId,
         userRole:this.userRole,
       }; 
-      let res = await getGiftList({...defaulParams,productId:id});
-      res.data.list.forEach(item => {
-        item.checked =false;
-      });
+      let res = await getGiftList({...defaulParams,productId:id,count:userBuyNum,money:userBuyMoney});
       if(res.code ==0){
-        this.giftList = res.data.list;
-        if(selGifts&&selGifts.length){
-          selGifts.forEach((item,index)=>{
-            let gIndex = this.giftList.findIndex((pterm)=>pterm.zpbm==item.zpbm);
-            this.$set(this.giftList[gIndex],'checked',true)
+        res.data.list.forEach(item => {
+          item.forEach((pterm)=>{
+            pterm.checked = false;
           })
-        }
+        });
+        this.giftList = res.data.list;
+        // if(type=='数量满足'){
+        //   this.$set(this.giftList[0],'userGiftNum',parseInt(parseInt(userBuyNum)/parseInt(this.giftList[0].mzsl)));
+        // }else if(type=='金额满足'){
+        //   this.$set(this.giftList[0],'userGiftNum',parseInt(parseFloat(userBuyMoney)/parseFloat(this.giftList[0].mzsl)));
+        // }
+        // if(selGifts&&selGifts.length){
+        //   selGifts.forEach((item,index)=>{
+        //     let gIndex = this.giftList.findIndex((pterm)=>pterm.zpbm==item.zpbm);
+        //     this.$set(this.giftList[gIndex],'checked',true)
+        //   })
+        // }
       }
     },
     clear(){
       this.giftList.forEach((item)=>{
-        item.checked = false;
+        item.forEach(pterm=>{
+          pterm.checked = false;
+        })
       })
       this.countGiftNum();
     },
     countGiftNum(){
       let num = 0;
       this.giftList.forEach((item,index)=>{
-        if(item.checked){
-          num ++;
-        }
+        item.forEach((pterm)=>{
+          if(pterm.checked){
+            num ++;
+          }
+        })
       })
       this.giftNum = num;
     },
-    checkgift(index) {
-      this.$set(this.giftList[index],'checked',!this.giftList[index].checked);
-      this.countGiftNum();
+    checkgift(index,gIndex) {
+      if(this.giftList[index][gIndex].zssl>0){
+        let hdbm = this.giftList[index][gIndex].hdbm;
+        let selNum = 0;
+        this.giftList.forEach((item,index)=>{
+          item.forEach((gterm,gIndex)=>{
+            if(gterm.hdbm!=hdbm){
+              this.$set(this.giftList[index][gIndex],'checked',false)
+            }else{
+              if(gterm.checked){
+                selNum++;
+              }
+            }
+          })
+        })
+        if(selNum<this.giftList[index][gIndex].zpkxpgs){
+          this.$set(this.giftList[index][gIndex],'checked',!this.giftList[index][gIndex].checked);
+        }else{
+          if(this.giftList[index][gIndex].checked){
+            this.$set(this.giftList[index][gIndex],'checked',false);
+          }else{
+            Toast({
+              message: "该活动只能选择"+this.giftList[index][gIndex].zpkxpgs+'种赠品', //弹窗内容
+              position: "middle", //弹窗位置
+              duration: 1000 //弹窗时间毫秒,如果值为-1，则不会消失
+            });
+          }
+        }
+        this.countGiftNum();
+      }else{
+        Toast({
+            message: "该品暂无库存", //弹窗内容
+            position: "middle", //弹窗位置
+            duration: 1000 //弹窗时间毫秒,如果值为-1，则不会消失
+        });
+      }
     },
     async saveCartNum(id,type,num){
       let defaulParams = {
@@ -842,12 +926,46 @@ export default {
         userRole:this.userRole,
       }; 
       let res = await recordCartNum({...defaulParams,productId:id,type:type,num:num})
+    },
+    closePop(){
+      this.popupVisible = false;
+      setTimeout(()=>{
+        window.scrollTo(0,this.scrollTop);
+      },100)
+    },
+    goDetail(id){
+      // this.$router.push({name:'detail',query:{id:id}})
     }
   },
+  // activated() {/**  */
+  //   if (!this.$route.meta.canKeep) {
+  //     this.checkedAll = false;//是否全选
+  //     this.sumMoney = 0;//总金额
+  //     this.sumNum = 0;//总选择数
+  //     this.total = 0;//购物车总商品数量
+  //     this.list = [];
+  //     this.mzsl = [];
+  //     this.head = {};
+  //     this.getData();
+  //   }
+  // },
+  // beforeRouteEnter (to, from, next) {/**  */
+  //   console.log(from)
+  //   if(from.name == 'detail'){
+  //     to.meta.canKeep = true;
+  //     // to.meta.keepAlive = true;
+  //     next()   
+  //   }else{
+  //     to.meta.canKeep = false;
+  //     // to.meta.keepAlive = false;
+  //     next();
+  //   }
+  // },
   mounted() {
     this.getData();
   },
   destroyed(){
+    clearInterval(this.timer);
     let defaulParams = {
       token:this.token,
       userId:this.userId,
@@ -855,20 +973,33 @@ export default {
       companyId:this.companyId,
       userRole:this.userRole,
     };
-    let  jsonStr = {zcData:{},tcData:{},mzData:{}};
-    if(!this.list.length&&!this.mzList.length){
-      return;
-    }
+    // let  jsonStr = {zcData:{},tcData:{},mzData:{}};
+    // if(!this.list.length&&!this.mzList.length){
+    //   return;
+    // }
+    // this.list.forEach((item)=>{
+    //   if(item.promotionflag=='套餐'){
+    //     jsonStr.tcData[item.promotioncode]=item.quantity;
+    //   }else{
+    //     jsonStr.zcData[item.productcode]=item.quantity;
+    //   }
+    // })
+    // this.mzList.forEach((item)=>{
+    //   item.forEach((pterm)=>{
+    //     jsonStr.mzData[pterm.productcode]=pterm.quantity;
+    //   })
+    // })
+    let jsonStr = {ptData:[],hdData:[]};
     this.list.forEach((item)=>{
       if(item.promotionflag=='套餐'){
-        jsonStr.tcData[item.promotioncode]=item.quantity;
+        jsonStr.hdData.push({id:'',code:item.promotioncode,num:item.quantity});
       }else{
-        jsonStr.zcData[item.productcode]=item.quantity;
+        jsonStr.ptData.push({id:item.productcode,num:item.quantity,code:''})
       }
     })
     this.mzList.forEach((item)=>{
       item.forEach((pterm)=>{
-        jsonStr.mzData[pterm.productcode]=pterm.quantity;
+        jsonStr.hdData.push({id:pterm.productcode,num:pterm.quantity,code:pterm.buyCode});
       })
     })
     recordCartNum({...defaulParams,jsonStr:JSON.stringify(jsonStr)})
@@ -1000,6 +1131,13 @@ export default {
 }
 .list_shopcar_name {
   float: left;
+  .actName{
+    display: inline-block;
+    width: 6rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 }
 .list_shopcar_name span:nth-of-type(2) {
   display: inline-block;
@@ -1368,6 +1506,32 @@ export default {
 }
 .gift_wrap {
   background: #fff;
+  height: 85vh;
+  overflow-y: scroll;
+  margin-top: 93px;
+  .nav{
+        width: 100%;
+        height: 88px;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #fff;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+        .leftIcon{
+            width: 17px;
+            height: 30px;
+            position: absolute;
+            top: 29px;
+            left: 30px;
+        }
+        .title{
+            font-size: 30px;
+        }
+    }
   .shopgift_list .shopgift_list_content:last-child{
     border: none;
   }
@@ -1407,12 +1571,20 @@ export default {
   .shopgift_list {
     min-height: 221px;
     font-size: 18px;
-    padding-left: 45px;
     background: #fff;
     margin-bottom: 10px;
     border-bottom: 2px solid #ebebeb;
     &:last-child{
       border: none;
+    }
+    .gift_des{
+      // width: 100%;
+      min-height: 60px;
+      line-height: 60px;
+      background:rgba(255,230,188,1);
+      padding-left: 38px;
+      font-size:20px;
+      color:rgba(139,87,42,1);
     }
     .shopgift_list_content {
       display: flex;
@@ -1420,6 +1592,7 @@ export default {
       padding-bottom: 26px;
       padding-top: 40px;
       padding-right: 40px;
+      padding-left: 45px;
     }
     .shopgift_list_pic {
       width: 220px;

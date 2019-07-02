@@ -222,6 +222,9 @@ export default {
                         flex-direction: column;
                         justify-content: space-between;
                         .bName{
+                            .name{
+                                flex: 1;
+                            }
                             font-size:26px;
                             color:rgba(51,51,51,1);
                             line-height:35px;

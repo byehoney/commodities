@@ -6,6 +6,7 @@
         <div class="class_header_left">
           <span></span>
           <span>更多分类</span>
+          <router-link to="/" class="backHome">返回</router-link>
         </div>
         <!-- <div class="class_header_right">
             <span></span>
@@ -131,6 +132,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.backHome{
+  float: right;
+  margin-right: 38px;
+  color: #ff0304;
+}
 .class {
   background: #e5e5e5;
   /* padding-top: 13px; */

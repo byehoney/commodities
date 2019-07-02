@@ -18,7 +18,7 @@
                     <div class="shopItem">
                         <template v-for="(item,index) in cjjk">
                             <div class="imgBox"  :key="index" v-if="index<3">
-                                <img :src="item.url" alt="">
+                                <img :src="item.url?item.url:require('../images/default_logo.jpg')" alt="">
                             </div>
                         </template>
                     </div>
@@ -34,7 +34,7 @@
                     <div class="shopItem">
                         <template v-for="(item,index) in dfh">
                             <div class="imgBox"  :key="index" v-if="index<3">
-                                <img :src="item.url" alt="">
+                                <img :src="item.url?item.url:require('../images/default_logo.jpg')" alt="">
                             </div>
                         </template>
                     </div>
@@ -50,7 +50,7 @@
                     <div class="shopItem">
                         <template v-for="(item,index) in dsh">
                             <div class="imgBox"  :key="index" v-if="index<3">
-                                <img :src="item.url" alt="">
+                                <img :src="item.url?item.url:require('../images/default_logo.jpg')" alt="">
                             </div>
                         </template>
                     </div>
@@ -66,7 +66,7 @@
                     <div class="shopItem">
                         <template v-for="(item,index) in th">
                             <div class="imgBox"  :key="index" v-if="index<3">
-                                <img :src="item.url" alt="">
+                                <img :src="item.url?item.url:require('../images/default_logo.jpg')" alt="">
                             </div>
                         </template>
                     </div>
@@ -82,7 +82,7 @@
                     <div class="shopItem">
                         <template v-for="(item,index) in ypj">
                             <div class="imgBox"  :key="index" v-if="index<3">
-                                <img :src="item.url" alt="">
+                                <img :src="item.url?item.url:require('../images/default_logo.jpg')" alt="">
                             </div>
                         </template>
                     </div>
@@ -98,7 +98,7 @@
                     <div class="shopItem">
                         <template v-for="(item,index) in ysh">
                             <div class="imgBox"  :key="index" v-if="index<3">
-                                <img :src="item.url" alt="">
+                                <img :src="item.url?item.url:require('../images/default_logo.jpg')" alt="">
                             </div>
                         </template>
                     </div>

@@ -61,8 +61,11 @@
                             <div class="bot_left">
                                 <!-- <div class="discount" v-if="curType==0||curType==1">{{item.cxj|formatDis(item.ptsj)}}折</div> -->
                                 <div class="star_dis">
+                                    <div class="giftIcon" v-if="item.mzbj">买赠</div>
                                     <div class="discount" v-if="item.hdlx=='打折'">{{item.cxj|formatDis(item.ptsj)}}折</div>
                                     <div class="starIcon" v-if="item.hdlx=='星选'">星选</div>
+                                    <div class="limitIcon" v-if="item.hdlx=='秒杀'">{{item.xlg?'限购'+item.xlg+'件':'不限购'}}</div>
+                                    <div class="stock" v-if="item.hdlx=='秒杀'">仅剩{{item.stock}}件</div>
                                 </div>
                                 <div class="price">
                                     <span class="nPrice">￥{{item.cxj}}</span>
@@ -71,7 +74,7 @@
                             </div>
                             <div class="bot_right" @click="buyPro($event,item)">
                                 <img class="car" src="../images/choose_car.png" alt="">
-                                <div class="saled">已销：{{item.ys}}件</div>
+                                <div class="saled">已销：{{item.ys?item.ys:0}}件</div>
                             </div>
                         </div>
                     </div>
@@ -94,8 +97,11 @@
                                 <div class="status">{{item.yszb}}</div>
                             </div>
                             <div class="star_dis">
+                                <div class="giftIcon" v-if="item.mzbj">买赠</div>
                                 <div class="discount" v-if="item.hdlx=='打折'">{{item.cxj|formatDis(item.ptsj)}}折</div>
                                 <div class="starIcon" v-if="item.hdlx=='星选'">星选</div>
+                                <div class="limitIcon" v-if="item.hdlx=='秒杀'">{{item.xlg?'限购'+item.xlg+'件':'不限购'}}</div>
+                                <div class="stock" v-if="item.hdlx=='秒杀'">仅剩{{item.ys}}件</div>
                             </div>
                             <div class="Info">
                                 <div class="infoLeft">
@@ -107,7 +113,7 @@
                                 </div>
                                 <div class="infoRight">
                                     <p class="right_top">马上抢</p>
-                                    <div class="saled">已销：{{item.ys}}件</div>
+                                    <div class="saled">已销：{{item.ys?item.ys:0}}件</div>
                                 </div>
                             </div>
                         </div>
@@ -224,7 +230,11 @@ export default {
                 vm.$nextTick(function(){
                     let position = sessionStorage.getItem('top') //返回页面取出来
                     console.log("beforeRouteEnter moments update: ", position);
-                    document.getElementsByClassName('scrollBox')[0].scroll(0, position)
+                    // document.getElementsByClassName('scrollBox')[0].scroll(0, position)
+                    document.getElementsByClassName('scrollBox')[0].scrollTo({ 
+                        top: position, 
+                        behavior: "instant" 
+                    });
                 })
             })   
         }else{
@@ -274,6 +284,7 @@ export default {
                 sort:this.sort,
             }
             let res = await getChooseList(data);
+            this.moreLoading = false;
             if(!res.data.list.length){
                 this.hasMore = false;
                 this.moreLoading = false;
@@ -293,7 +304,7 @@ export default {
                 return;
             }
             this.list = [...this.list,...res.data.list];
-            this.moreLoading = false;
+          
             console.log(this.loading)
         },
         loadMore() {
@@ -314,20 +325,37 @@ export default {
                 corpCode: this.corpCode,
                 companyId: this.companyId,
                 userRole: this.userRole,
-                productId: this.$route.query.id
             };
-            let jsonStr = JSON.stringify(
-                [{
-                mzhdlx:'无',
-                pzlx:false,
-                jghdlx:item.hdlx,
-                productId:item.spbm,
-                cartNum:1,
-                pzdj:item.cxj,
-                pzyj:item.ptsj,
-                mobile:this.user.mobile
-                }]
-            )
+            let jsonStr = "";
+            if((item.mzbj&&item.mzbj.indexOf('买赠')>-1)||(item.mzbj&&(item.mzbj.indexOf('满额赠')>-1))){//买赠 满额赠
+                jsonStr = JSON.stringify(
+                    [{
+                        mzhdlx:'买赠',
+                        pzlx:false,
+                        ghsbm:'',
+                        hdbm:item.mzhdbm,//活动编码
+                        jghdlx:item.hdlx,
+                        productId:item.spbm,
+                        cartNum:item.zxxsbz,
+                        pzdj:item.cxj,
+                        pzyj:item.ptsj,
+                        mobile:this.user.mobile
+                    }]
+                )
+            }else{
+                jsonStr = JSON.stringify(
+                    [{
+                    mzhdlx:'无',
+                    pzlx:false,
+                    jghdlx:item.hdlx,
+                    productId:item.spbm,
+                    cartNum:item.zxxsbz,
+                    pzdj:item.cxj,
+                    pzyj:item.ptsj,
+                    mobile:this.user.mobile
+                    }]
+                )
+            }
             let res = await addToCar({...defaulParams,jsonStr:jsonStr});
             if(res.code == 0){
                 Toast({
@@ -453,8 +481,8 @@ export default {
                 position: relative;
                 .ms_icon{
                     position: absolute;
-                    width: 28px;
-                    height: 30px;
+                    width: 45px;
+                    height: 47px;
                     top: 0;
                     right: 5px;
                 }
@@ -503,9 +531,48 @@ export default {
                 }
                 .star_dis{
                     display: flex;
+                    width: 350px;
+                    flex-wrap: wrap;
                     margin-top: 7px;
                     height: 30px;
-                    margin-bottom: 40px;
+                    .giftIcon{
+                        width: 60px;
+                        height: 30px;
+                        line-height: 26px;
+                        color: #FF0304;
+                        font-size: 18px;
+                        border: 2px solid  #FF0304;
+                        text-align: center;
+                        border-radius: .05rem;
+                        margin-right: 10px;
+                        margin-bottom: 10px;
+                        box-sizing: border-box
+                    }
+                    .limitIcon{
+                        height: 30px;
+                        font-size:18px;
+                        color:rgba(255,255,255,1);
+                        line-height:30px;
+                        background:rgba(255,3,4,1);
+                        border-radius:4px;
+                        text-align: center;
+                        padding: 0 8px;
+                        margin-right: 6px;
+                        margin-bottom: 10px;
+                        box-sizing: border-box
+                    }
+                    .stock{
+                        height: 30px;
+                        font-size:18px;
+                        color:rgba(255,3,4,1);
+                        line-height:26px;
+                        border-radius:4px;
+                        border:2px solid rgba(255,3,4,1);
+                        text-align: center;
+                        padding: 0 8px;
+                        margin-bottom: 10px;
+                        box-sizing: border-box
+                    }
                     .starIcon{
                         width: 60px;
                         height: 30px;
@@ -516,10 +583,12 @@ export default {
                         color: #FF0304;
                         border-radius: .05rem;
                         border: 2px solid #F8E71C;
+                        margin-bottom: 10px;
+                        box-sizing: border-box
                     }
                 }
                 .discount{
-                    width: 60px;
+                    width: 68px;
                     height: 30px;
                     line-height: 30px;
                     color: #FF0304;
@@ -528,6 +597,7 @@ export default {
                     text-align: center;
                     border-radius: .05rem;
                     margin-right: 10px;
+                    box-sizing: border-box
                 }
                 .item_bot{
                     display: flex;
@@ -540,6 +610,8 @@ export default {
                         justify-content: space-between;
                         .star_dis{
                             display: flex;
+                            width: 350px;
+                            flex-wrap: wrap;
                             .starIcon{
                                 width: 60px;
                                 height: 30px;
@@ -551,10 +623,11 @@ export default {
                                 border-radius: .05rem;
                                 margin-right: 10px;
                                 border: 2px solid #F8E71C;
+                                box-sizing: border-box
                             }
                         }
                         .discount{
-                            width: 60px;
+                            width: 68px;
                             height: 30px;
                             line-height: 30px;
                             color:  #FF0304;
@@ -562,12 +635,14 @@ export default {
                             border: 2px solid  #FF0304;
                             text-align: center;
                             border-radius: .05rem;
+                            box-sizing: border-box
                             // padding: 5px;
-                            margin-bottom: 40px;
+                            // margin-bottom: 40px;
                         }
                         .price{
                             display: flex;
                             align-items: flex-end;
+                            margin-top: 40px;
                             .nPrice{
                                 font-size:32px;
                                 font-family:'MicrosoftYaHei-Bold';
@@ -786,6 +861,7 @@ export default {
                         display: flex;
                         align-items: flex-end;
                         margin-bottom: 20px;
+                        margin-top: 40px;
                         .nPrice{
                             font-size:32px;
                             font-family:'MicrosoftYaHei-Bold';

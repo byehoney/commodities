@@ -204,7 +204,10 @@ export default {
                 // 通过 `vm` 访问组件实例
                 vm.$nextTick(function(){
                     let position = sessionStorage.getItem('oTop') //返回页面取出来
-                    document.getElementsByClassName('content')[0].scroll(0, position)
+                    document.getElementsByClassName('content')[0].scrollTo({ 
+                        top: position, 
+                        behavior: "instant" 
+                    });
                 })
             })   
         }else{

@@ -6,15 +6,18 @@
     <!-- 轮播图 -->
     <div class="loop_pic">
       <!-- <div> -->
-      <mt-swipe :auto="4000" :show-indicators="false">
-        <mt-swipe-item class="item">
+      <mt-swipe :auto="4000" :show-indicators="true">
+        <!-- <mt-swipe-item class="item">
           <img src="../images/banner_01.jpg" alt="">
+        </mt-swipe-item> -->
+        <mt-swipe-item class="item">
+          <img src="../images/banner_02.png" alt="">
         </mt-swipe-item>
         <mt-swipe-item class="item">
-          <img src="../images/banner_01.jpg" alt="">
+          <img src="../images/banner_02.png" alt="">
         </mt-swipe-item>
         <mt-swipe-item class="item">
-          <img src="../images/banner_01.jpg" alt="">
+          <img src="../images/banner_02.png" alt="">
         </mt-swipe-item>
       </mt-swipe>
       <!-- </div> -->
@@ -294,6 +297,19 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.mint-swipe .mint-swipe-indicator{
+  background-color: #fff;
+}
+.classify_content ul{
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+.mint-swipe{
+  position: relative;
+  z-index: 10;
+  height: 354px;
+}
 .home_video_list_content .myVideo{
   width: 100%;
   height: 500px;
@@ -301,10 +317,11 @@ export default {
 .homeContainer {
   padding-bottom: 120px;
   opacity: 1;
+  background-color: #fff;
 }
 .loop_pic {
   width: 750px;
-  height: 613px;
+  height: 703px;
   // margin-bottom: 15px;
   /* background: #ccc; */
   position: relative;
@@ -323,9 +340,10 @@ export default {
     width: 228px;
     height: 259px;
     position: relative;
-    border: 2px solid #ebebeb;
+    border: 2px solid #FF0304;
+    border-radius:6px;
     .tip_bg{
-      width: 226px;
+      width: 228px;
       height: 61px;
       background: url('../images/star_goods.png') no-repeat 0 0;
       background-size: 100% 100%;
@@ -345,7 +363,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #eee;
+  background-color: #fff;
   a{
     display: block;
     width: 347px;
@@ -363,13 +381,13 @@ export default {
   height: 613px;
 }
 .item:nth-of-type(1) {
-  background: #FF0304;
+  // background: #FF0304;
 }
 .item:nth-of-type(2) {
-  background: #ccc;
+  // background: #ccc;
 }
 .item:nth-of-type(3) {
-  background: #FF0304;
+  // background: #FF0304;
 }
 .loop_pic {
   margin-top: 80px;
@@ -378,14 +396,14 @@ export default {
   width: 100%;
 }
 .classify {
-  width: 658px;
+  width: 100%;
   min-height: 344px;
-  background: #f8f8f8;
-  margin-bottom: 15px;
+  background: #fff;
+  // margin-bottom: 15px;
   position: absolute;
-  left: 45px;
-  bottom: 14px;
-  border-radius: 10px;
+  left: 0;
+  bottom: 0;
+  // border-radius: 10px;
 }
 .classify_header,
 .recommond_header,
@@ -396,10 +414,11 @@ export default {
   color: #333;
   // margin-bottom: 32px;
   padding-left: 40px;
-  border-bottom: 1px solid #ebebeb;
+  border-bottom: 2px solid rgba(255, 37, 62, 0.1);
 }
 .classify_header{
   margin-bottom: 32px;
+  border-bottom: none;
 }
 .classify_header span:nth-of-type(1),
 .recommond_header span:nth-of-type(1),
@@ -410,6 +429,7 @@ export default {
   height: 25px;
   margin-right: 8px;
 }
+
 .classify_header_left {
   width: 134px;
   float: left;
@@ -430,13 +450,15 @@ export default {
   font-size: 26px;
   float: left;
   text-align: center;
-  margin-left: 40px;
+  // margin-left: 40px;
 }
 .classify_content ul li:last-child {
   margin-right: 0;
 }
 .classify_content ul li img {
   width: 100%;
+  height: 100%;
+  object-fit: scale-down;
   margin-bottom: 33px;
 }
 .classify_content ul li span {

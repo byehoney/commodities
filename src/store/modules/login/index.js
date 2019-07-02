@@ -64,7 +64,12 @@ export default {
                     duration: 2000
                 });
                 setTimeout(() => {
-                    const redirect = data.$route.query.redirect || '/';
+                    let redirect = '/';
+                    if(res.data.userRole =='06'||res.data.userRole =='07'){
+                        redirect = '/';
+                    }else{
+                        redirect = '/manageHome'
+                    }
                     data.$router.replace({
                         path: redirect
                     })

@@ -489,7 +489,8 @@ const router = new Router({
                 import(/* webpackChunkName: "bestGoods" */ './views/BestGoods.vue'),
             meta: {
                 auth: true,
-                keepAlive: false,
+                keepAlive: true,
+                canKeep: false,
                 title: '精品买赠'
             }
         },
@@ -501,6 +502,7 @@ const router = new Router({
             meta: {
                 auth: true,
                 keepAlive: false,
+                canKeep: false,
                 title: '购物车'
             }
         },
@@ -546,6 +548,17 @@ const router = new Router({
                 auth: true,
                 keepAlive: false,
                 title: '业绩查询'
+            }
+        },
+        {
+            path: '/kpiCheckShop',
+            name: 'kpiCheckShop',
+            component: () =>
+                import(/* webpackChunkName: "kpiCheckShop" */ './views/KPIcheckShop.vue'),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title: '门店详情'
             }
         },
         {
@@ -693,7 +706,7 @@ router.beforeEach((to, from, next) => {
             next({
                 path: '/login',
                 query: {
-                    redirect: to.fullPath
+                    redirect: '/'
                 }
             })
         }

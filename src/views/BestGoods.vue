@@ -15,7 +15,7 @@
           </div>
           <div class="bottom" v-for="(pterm,jIndex) in item" :key="pterm.productcode">
             <img class="sel_icon" @click="checkedPo(index,jIndex,pterm.productcode)" :src="pterm.checked?require('../images/car_checkcircle.png'):require('../images/car_circle.png')" alt>
-            <div class="box">
+            <div class="box" @click="goDetail($event,pterm.productcode)">
               <div class="left">
                 <img :src="pterm.dptplj?pterm.dptplj:require('../images/default_logo.jpg')" alt>
               </div>
@@ -27,9 +27,9 @@
                 <div class="fun">
                   <p class="nPrice">￥{{pterm.dj}}</p>
                   <div class="counter">
-                    <p class="reduce" @click="reduce(index,jIndex)">-</p>
-                    <p class="num" @click="popInput(index,jIndex)">{{pterm.num}}</p>
-                    <p class="add" @click="add(index,jIndex)">+</p>
+                    <p class="reduce" @click="reduce($event,index,jIndex)">-</p>
+                    <p class="num" @click="popInput($event,index,jIndex)">{{pterm.num}}</p>
+                    <p class="add" @click="add($event,index,jIndex)">+</p>
                   </div>
                 </div>
               </div>
@@ -109,11 +109,44 @@ export default {
   mounted() {
     this.getData();
   },
+  activated() {/**  */
+    if (!this.$route.meta.canKeep) {
+      this.list = [];
+      this.money = 0;
+      this.getData();
+    }
+  },
+  beforeRouteLeave(to, from, next){
+    let position = document.getElementsByClassName('scrollBox')[0].scrollTop
+    sessionStorage.setItem('bTop',position);
+    next()
+  },
+  beforeRouteEnter (to, from, next) {/**  */
+    if(from.name == 'detail'){
+      to.meta.canKeep = true;
+      next(vm => {
+        // 通过 `vm` 访问组件实例
+        vm.$nextTick(function(){
+            let position = sessionStorage.getItem('bTop') //返回页面取出来
+            console.log("beforeRouteEnter moments update: ", position);
+            // document.getElementsByClassName('scrollBox')[0].scroll(0, position)
+            document.getElementsByClassName('scrollBox')[0].scrollTo({ 
+                top: position, 
+                behavior: "instant" 
+            });
+        })
+      })   
+    }else{
+      to.meta.canKeep = false;
+      next();
+    }
+  },
   methods: {
     goShopCar(){
       this.$router.push({name:'newShopCar'})
     },
-    reduce(index,jIndex){
+    reduce(e,index,jIndex){
+      e.stopPropagation();
       if(this.list[index][jIndex].num<=1){
         this.list[index][jIndex].num=1
       }else{
@@ -121,7 +154,8 @@ export default {
       }
       this.countMoney();
     },
-    add(index,jIndex){
+    add(e,index,jIndex){
+      e.stopPropagation();
       this.list[index][jIndex].num++;
       this.countMoney();
     },
@@ -136,7 +170,8 @@ export default {
     popAdd(){
       this.num = this.num+1;
     },
-    popInput(index,jIndex){
+    popInput(e,index,jIndex){
+      e.stopPropagation();
       this.showInput = true;
       this.num = this.list[index][jIndex].num;
       this.cIndex = index;
@@ -149,6 +184,10 @@ export default {
       this.showInput = false;
       this.$set(this.list[this.cIndex][this.cJindex],'num',this.num);
       this.countMoney();
+    },
+    goDetail(e,id){
+      e.stopPropagation();
+      this.$router.push({name:'detail',query:{id:id}})
     },
     async handlerClick(){
       let defaulParams = {
@@ -177,14 +216,16 @@ export default {
           }
         })
       })
-      let res = await addToCar({...defaulParams,jsonStr:JSON.stringify(selArr)})
-      if(res.code==0){
-        Toast({
-          message: "加入购物车成功", //弹窗内容
-          position: "middle", //弹窗位置
-          duration: 1000 //弹窗时间毫秒,如果值为-1，则不会消失
-        });
-        this.resetList();
+      if(selArr.length){
+        let res = await addToCar({...defaulParams,jsonStr:JSON.stringify(selArr)})
+        if(res.code==0){
+          Toast({
+            message: "加入购物车成功", //弹窗内容
+            position: "middle", //弹窗位置
+            duration: 1000 //弹窗时间毫秒,如果值为-1，则不会消失
+          });
+          this.resetList();
+        }
       }
     },
     resetList(){//加入完购物车以后清空之前选择的数据

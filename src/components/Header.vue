@@ -14,7 +14,9 @@
       <span>
         <img src="../images/smallsousuo.png">
       </span>
-      <input type="text" v-model="searchStr" @keyup="search" placeholder="请输入烟花名称">
+      <form @submit.prevent class="form">
+        <input type="text" v-model="searchStr" @keyup="search" @keypress="searchGoods" placeholder="请输入烟花名称">
+      </form>
     </div>
     <div class="selIcon_box" v-if="showlogo" @click="goMore">
       <img class="selIcon" src="../images/sel_ld_icon.png" alt>
@@ -114,6 +116,12 @@ export default {
     goShop() {
       this.$router.push("/public");
     },
+    searchGoods(event){
+      if (event.keyCode == 13) {
+        event.preventDefault(); //禁止默认事件（默认是换行）
+        this.SearchVal();
+      }
+    },
     // 查询input中输入的值
     SearchVal() {
       if (this.searchStr.trim()) {
@@ -148,11 +156,11 @@ export default {
       }
     },
     cancelSearch() {
-      this.$router.push(this.$route.query.backPath)
+      this.$router.push(this.$route.query.backPath?this.$route.query.backPath:'/')
     },
     showcode() {
       if(!this.token||!this.userId){
-        this.$router.push({path: '/login',query: {redirect: this.$route.fullPath}})
+        this.$router.push({path: '/login',query: {redirect: '/'}})
         return;
       }
       if (this.rightWinShow) {
@@ -268,6 +276,24 @@ export default {
   margin: 0 0 0 21px;
   background: #fff;
 }
+.form{
+  width: 80%;
+  height: 58px;
+  display: inline-block;
+  .header_input input {
+    width: 100%;
+    height: 58px;
+    outline: none;
+    border: none;
+    background: none;
+    padding-left: 15px;
+    border-radius: 29px;
+  }
+}
+input[type="search"]{-webkit-appearance:none;} 
+
+input::-webkit-search-cancel-button {display: none;}
+
 .header_input input {
   width: 80%;
   height: 58px;
