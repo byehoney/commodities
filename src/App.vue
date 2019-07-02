@@ -35,4 +35,7 @@ html{
 .mint-toast.is-placemiddle{
   z-index: 10000!important;
 }
+.drawer-layout .drawer-wrap .drawer{
+    background:linear-gradient(180deg,rgba(0,122,255,1) 0%,rgba(24,152,247,1) 100%)!important;
+}
 </style>

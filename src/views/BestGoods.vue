@@ -116,10 +116,26 @@ export default {
       this.getData();
     }
   },
+  beforeRouteLeave(to, from, next){
+    let position = document.getElementsByClassName('scrollBox')[0].scrollTop
+    sessionStorage.setItem('bTop',position);
+    next()
+  },
   beforeRouteEnter (to, from, next) {/**  */
     if(from.name == 'detail'){
       to.meta.canKeep = true;
-      next()   
+      next(vm => {
+        // 通过 `vm` 访问组件实例
+        vm.$nextTick(function(){
+            let position = sessionStorage.getItem('bTop') //返回页面取出来
+            console.log("beforeRouteEnter moments update: ", position);
+            // document.getElementsByClassName('scrollBox')[0].scroll(0, position)
+            document.getElementsByClassName('scrollBox')[0].scrollTo({ 
+                top: position, 
+                behavior: "instant" 
+            });
+        })
+      })   
     }else{
       to.meta.canKeep = false;
       next();
