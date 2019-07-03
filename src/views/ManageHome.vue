@@ -180,7 +180,7 @@
                 </div>
             </div>
         </div>
-        <ManageTabBarBotttom></ManageTabBarBotttom>
+        <ManageTabBarBotttom curTab="manageHome"></ManageTabBarBotttom>
     </div>
 </template>
 <script>

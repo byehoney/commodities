@@ -649,10 +649,21 @@ const router = new Router({
             }
         },
         {
-            path: '/manageCustomerRank',//销售走向图
+            path: '/manageCustomerRank',//销售客户排名
             name: 'manageCustomerRank',
             component: () =>
                 import(/* webpackChunkName: "manageCustomerRank" */ './views/ManageCustomerRank.vue'),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title: 'xx店铺3'
+            }
+        },
+        {
+            path: '/manageProRank',//销售客户排名
+            name: 'manageProRank',
+            component: () =>
+                import(/* webpackChunkName: "manageProRank" */ './views/ManageProRank.vue'),
             meta: {
                 auth: true,
                 keepAlive: false,

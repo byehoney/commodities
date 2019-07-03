@@ -264,6 +264,14 @@ function secKill(params) {//获取首页限时秒杀
     return post('/index/spike/list.do',params)
 }
 
+
+// 后台管理接口
+function getZxtList(params) {//获取销售走势图
+    return post('/manage/get/zxtlist.do',params)
+}
+function getProRankList(params) {//获取商品销售排名
+    return post('/manage/get/spxsfx.do',params)
+}
 export {
     checkExist,
     getYzCode,
@@ -333,6 +341,7 @@ export {
     getIndexInfo,
     getHeatList,
     getSpecialList,
-    secKill
-
+    secKill,
+    getZxtList,//管理页面走势图
+    getProRankList,//管理页面 商品销售排名
 }

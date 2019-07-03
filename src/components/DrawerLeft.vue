@@ -1,38 +1,30 @@
 <template>
-  <vue-drawer-layout
-    ref="drawer"
-    :z-index="10000000"
-    @mask-click="handleMaskClick"
-    :content-drawable="true">
-    <div class="drawer" slot="drawer">
-      <div class="atv_box">
-          <input @change="fileChange($event)" type="file" id="upload_file" class="upload_file"  accept="image/*"/>
-          <img :src="imgStr?imgStr:require('../images/manage_atv.png')" class="atv" alt="">
+    <transition name="left-slide">
+      <div class="drawer" v-show="showDrawLeft">
+        <div class="atv_box">
+            <input @change="fileChange($event)" type="file" id="upload_file" class="upload_file"  accept="image/*"/>
+            <img :src="imgStr?imgStr:require('../images/manage_atv.png')" class="atv" alt="">
+        </div>
+        <div class="name">{{user.userName}}</div>
+        <div class="roleName">（商业公司）</div>
+        <div class="tel">{{user.mobile}}</div>
+        <div class="relation">烟花店铺客户</div>
+        <div class="orderArea">
+          <img src="../images/sh_m_icon.png" class="icon" alt="">
+          <span>审核</span>
+        </div>
+        <div class="orderArea">
+          <img src="../images/order_m_icon.png" class="icon" alt="">
+          <span>订单</span>
+        </div>
+        <div class="kpiArea">
+          <img src="../images/kpi_m_icon.png" class="icon" alt="">
+          <span>业绩查询</span>
+        </div>
       </div>
-      <div class="name">{{user.userName}}</div>
-      <div class="roleName">（商业公司）</div>
-      <div class="tel">{{user.mobile}}</div>
-      <div class="relation">烟花店铺客户</div>
-      <div class="orderArea">
-        <img src="../images/sh_m_icon.png" class="icon" alt="">
-        <span>审核</span>
-      </div>
-      <div class="orderArea">
-        <img src="../images/order_m_icon.png" class="icon" alt="">
-        <span>订单</span>
-      </div>
-      <div class="kpiArea">
-        <img src="../images/kpi_m_icon.png" class="icon" alt="">
-        <span>业绩查询</span>
-      </div>
-    </div>
-    <div class="content" slot="content">
-      
-    </div>
-  </vue-drawer-layout>
+    </transition>
 </template>
 <script>
-// import TabBarBottom from '@/components/TabBarBottom'
 import {uploadImage,getUploadToken,updateUserInfo} from '@/api/index'
 import { mapState ,mapActions,mapGetters, mapMutations} from 'vuex';
 export default {
@@ -98,6 +90,7 @@ export default {
             })
         },
         fileChange(e) {
+            e.stopPropagation();
             if (!e.target.files[0].size) return;
             this.file= e.target.files[0]
             this.file_key = e.target.files[0].name
@@ -105,19 +98,57 @@ export default {
             this.upload();
         },
         handleMaskClick(){
-          this.$refs.drawer.toggle(false);
+          // this.$refs.drawer.toggle(false);
           this.changeDrawLeft(false);
         },
         showDrawerLeft(){
           this.changeDrawLeft(true);
-          this.$refs.drawer.toggle(true)
+          // this.$refs.drawer.toggle(true)
         }
     }
 
 }
 </script>
 <style scoped lang="scss">
+    .left-slide-enter,
+    .left-slide-leave-active {
+      transform: translateX(-100vw);
+      opacity: 1;
+    }
+
+    .left-slide-leave-active,
+    .left-slide-enter-active {
+      transition: all 0.5s 0s cubic-bezier(0.33, 0.25, 0.33, 1);
+      opacity: 1;
+    }
+    .slide-left-enter,
+    .slide-left-leave-active {
+      transform: translateX(0);
+      opacity: 0;
+    }
+
+    .slide-left-leave-active,
+    .slide-left-enter-active {
+      transition: all 0.5s 0s cubic-bezier(0.33, 0.25, 0.33, 1);
+      opacity: 0;
+    }
+    .mask{
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0,0,0,.6);
+      z-index:99999;
+    }
     .drawer{
+      width: 593px;
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 100000;
+      background:linear-gradient(180deg,rgba(0,122,255,1) 0%,rgba(24,152,247,1) 100%)!important;
       .name{
         font-size:30px;
         color:rgba(255,255,255,1);
