@@ -9,6 +9,22 @@
           <input @change="fileChange($event)" type="file" id="upload_file" class="upload_file"  accept="image/*"/>
           <img :src="imgStr?imgStr:require('../images/manage_atv.png')" class="atv" alt="">
       </div>
+      <div class="name">{{user.userName}}</div>
+      <div class="roleName">（商业公司）</div>
+      <div class="tel">{{user.mobile}}</div>
+      <div class="relation">烟花店铺客户</div>
+      <div class="orderArea">
+        <img src="../images/sh_m_icon.png" class="icon" alt="">
+        <span>审核</span>
+      </div>
+      <div class="orderArea">
+        <img src="../images/order_m_icon.png" class="icon" alt="">
+        <span>订单</span>
+      </div>
+      <div class="kpiArea">
+        <img src="../images/kpi_m_icon.png" class="icon" alt="">
+        <span>业绩查询</span>
+      </div>
     </div>
     <div class="content" slot="content">
       
@@ -18,7 +34,7 @@
 <script>
 // import TabBarBottom from '@/components/TabBarBottom'
 import {uploadImage,getUploadToken,updateUserInfo} from '@/api/index'
-import { mapState ,mapActions,mapGetters} from 'vuex';
+import { mapState ,mapActions,mapGetters, mapMutations} from 'vuex';
 export default {
     data(){
         return{
@@ -31,7 +47,12 @@ export default {
         }
     },
     computed:{
-        ...mapState('login',['user','token']),
+        // ...mapState('login',['user','token']),
+        ...mapState({
+          user:state=>state.login.user,
+          token:state=>state.login.token,
+          showDrawLeft:state=>state.mange.showDrawLeft
+        }),
         ...mapGetters('login',['token','userId','corpCode','companyId','userRole'])
     },
     porps:['isShowLeft'],
@@ -43,6 +64,7 @@ export default {
       this.getToken();
     },
     methods:{
+        ...mapMutations('mange',['changeDrawLeft']),
         ...mapActions('login',['setAtv']),
         async getToken(){
             let res = await getUploadToken({suffix:'1'});
@@ -83,9 +105,11 @@ export default {
             this.upload();
         },
         handleMaskClick(){
-          this.$refs.drawer.toggle(false)
+          this.$refs.drawer.toggle(false);
+          this.changeDrawLeft(false);
         },
         showDrawerLeft(){
+          this.changeDrawLeft(true);
           this.$refs.drawer.toggle(true)
         }
     }
@@ -93,6 +117,63 @@ export default {
 }
 </script>
 <style scoped lang="scss">
+    .drawer{
+      .name{
+        font-size:30px;
+        color:rgba(255,255,255,1);
+        line-height:40px;
+        letter-spacing:2px;
+        text-align: center;
+      }
+      .roleName{
+        font-size:30px;
+        color:rgba(255,255,255,1);
+        line-height:40px;
+        letter-spacing:2px;
+        margin-top: 7px;
+        text-align: center;
+      }
+      .tel{
+        font-size:30px;
+        color:rgba(255,255,255,1);
+        line-height:40px;
+        letter-spacing:2px;
+        margin-top: 53px;
+        text-align: center;
+      }
+      .relation{
+        font-size:30px;
+        color:rgba(255,255,255,1);
+        line-height:40px;
+        letter-spacing:2px;
+        margin-top: 10px;
+        text-align: center;
+      }
+      .orderArea,.kpiArea{
+        width: 384px;
+        border-bottom: 2px solid #fff;
+        display: flex;
+        align-items: center;
+        padding-bottom: 5px;
+        .icon{
+          width: 31px;
+          height: 30px;
+        }
+        span{
+          font-size:30px;
+          color:rgba(255,255,255,0.6);
+          line-height:40px;
+          letter-spacing:2px;
+          margin-left: 11px;
+        }
+      }
+      .orderArea{
+        margin:150px auto 66px;
+      }
+      .kpiArea{
+        margin: 0 auto;
+      }
+    }
     .drawer-layout{
       // z-index: 100000;
     }

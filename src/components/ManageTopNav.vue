@@ -1,6 +1,6 @@
 <template>
     <div class="nav">
-        <span class="leftIcon" @click="goLogin">登录</span>
+        <span class="leftIcon" @click="goLogin">我的</span>
         <span class="title">{{title}}</span>
     </div>
 </template>

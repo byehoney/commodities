@@ -1,6 +1,7 @@
 <template>
-    <div class="mangeContainer">
-        <ManageTopNav></ManageTopNav>
+    <div :class="['mangeContainer',showDrawLeft?'pop':'']">
+        <ManageTopNav @trigerLeft="trigerDrawerLeft"></ManageTopNav>
+        <DrawerLeft ref="leftDrwaer"></DrawerLeft>
         <div class="main">
             <mt-swipe class="manage_swiper" :auto="0" :show-indicators="false">
                 <mt-swipe-item class="item">
@@ -23,7 +24,8 @@
                 </mt-swipe-item>
             </mt-swipe>
         </div>
-        <div class="infos">
+        <!-- 厂家管理员和业务员 -->
+        <div class="infos" style="display:none">
             <div class="infoItem">
                 <div class="left">
                     <img class="icon" src="../images/shopcar.png" alt="">
@@ -73,32 +75,215 @@
                 </div>
                 <div class="right">30</div>
             </div>
+            <div class="infoItem">
+                <div class="left">
+                    <img class="icon" src="../images/shopcar.png" alt="">
+                    <div class="text">业务（已覆盖/未覆盖）</div>
+                </div>
+                <div class="right">167/2980</div>
+            </div>
+        </div>
+        <!-- 商业管理员和业务员 -->
+        <div class="infos">
+            <div class="infoItem">
+                <div class="left">
+                    <img class="icon" src="../images/shopcar.png" alt="">
+                    <div class="text">app今日打开次数</div>
+                </div>
+                <div class="right">77/77</div>
+            </div>
+            <div class="infoItem">
+                <div class="left">
+                    <img class="icon" src="../images/shopcar.png" alt="">
+                    <div class="text">未处理总额</div>
+                </div>
+                <div class="right">0</div>
+            </div>
+            <div class="infoItem">
+                <div class="left">
+                    <img class="icon" src="../images/shopcar.png" alt="">
+                    <div class="text">未处理采购门店数</div>
+                </div>
+                <div class="right">99999/6780</div>
+            </div>
+            <div class="infoItem">
+                <div class="left">
+                    <img class="icon" src="../images/shopcar.png" alt="">
+                    <div class="text">今日订单数/未处理（总数）</div>
+                </div>
+                <div class="right">30</div>
+            </div>
+            <div class="infoItem">
+                <div class="left">
+                    <img class="icon" src="../images/shopcar.png" alt="">
+                    <div class="text">今日退款单</div>
+                </div>
+                <div class="right">30</div>
+            </div>
+            <div class="infoItem">
+                <div class="left">
+                    <img class="icon" src="../images/shopcar.png" alt="">
+                    <div class="text">在售商品/有库存</div>
+                </div>
+                <div class="right">30</div>
+            </div>
+            <div class="infoItem">
+                <div class="left">
+                    <img class="icon" src="../images/shopcar.png" alt="">
+                    <div class="text">无库存商品数量</div>
+                </div>
+                <div class="right">30</div>
+            </div>
+            <div class="infoItem">
+                <div class="left">
+                    <img class="icon" src="../images/shopcar.png" alt="">
+                    <div class="text">今日新增客户</div>
+                </div>
+                <div class="right">30</div>
+            </div>
+            <div class="infoItem">
+                <div class="left">
+                    <img class="icon" src="../images/shopcar.png" alt="">
+                    <div class="text">库存不足7日商品</div>
+                </div>
+                <div class="right">30</div>
+            </div>
+            <div class="infoItem">
+                <div class="left">
+                    <img class="icon" src="../images/shopcar.png" alt="">
+                    <div class="text">缺货商品</div>
+                </div>
+                <div class="right">30</div>
+            </div>
+            <div class="infoItem">
+                <div class="left">
+                    <img class="icon" src="../images/shopcar.png" alt="">
+                    <div class="text">30天未动销（商品/门店）</div>
+                </div>
+                <div class="right">1897/1334</div>
+            </div>
+            
+        </div>
+        <div class="hotsale scrollBox">
+            <div class="title">今日热销商品</div>
+            <div class="hotList">
+                <div class="hotItem">
+                    <img src="../images/shopcar.png" alt="">
+                    <div class="hotInfo">
+                        <p class="sName">烟花商品名称</p>
+                        <p class="fName">河北保定星星烟花制造厂</p>
+                        <p class="price">￥6.50</p>
+                        <p class="money">金额：38156.73</p>
+                        <p class="buyShopNum">采购店数：229</p>
+                        <p class="sales">销量：6600</p>
+                    </div>
+                </div>
+            </div>
         </div>
         <ManageTabBarBotttom></ManageTabBarBotttom>
     </div>
 </template>
 <script>
 import ManageTabBarBotttom from '@/components/ManageTabBarBottom'
+import DrawerLeft from '@/components/DrawerLeft'
 import ManageTopNav from '@/components/ManageTopNav'
+import { mapState } from 'vuex'
 export default {
     data(){
         return{
-
+            
         }
+    },
+    computed: {
+        ...mapState('mange',['showDrawLeft'])
     },
     components:{
         ManageTabBarBotttom,
-        ManageTopNav
-    }
+        ManageTopNav,
+        DrawerLeft
+    },
+    methods: {
+        trigerDrawerLeft(){
+            this.showLeft = true;
+            this.$refs.leftDrwaer.showDrawerLeft()
+        },
+    },
 }
 </script>
 <style lang="scss" scoped>
     .mangeContainer{
         background-color: #ebebeb;
         // min-height: 100vh;
-        padding-top: 100px;
+        &.pop{
+            height: 100vh;
+            overflow: hidden;
+        }
+        .hotsale {
+            padding-top: 36px;
+            background-color: #fff;
+            .title{
+                width:188px;
+                height:40px;
+                font-size:30px;
+                color:rgba(0,145,255,1);
+                line-height:40px;
+                letter-spacing:1px;
+                margin: 0 auto 20px;
+                padding-bottom: 12px;
+                border-bottom: 6px solid #0091FF;
+
+            }
+            .hotList{
+                padding-bottom: 1rem;
+                .hotItem{
+                    margin-left: 46px;
+                    border-bottom: 2px solid #ebebeb;
+                    padding: 36px 36px 34px 0;
+                    display: flex;
+                    align-items: center;
+                    img{
+                        width: 200px;
+                        height: 210px;
+                        object-fit: scale-down;
+                        flex-shrink: 0;
+                    }
+                    .hotInfo{
+                        flex-shrink: 0;
+                        margin-left: 26px;
+                        .sName{
+                            font-size:26px;
+                            color:rgba(51,51,51,1);
+                            line-height:35px;
+                            letter-spacing:2px;
+                            margin-bottom: 8px;
+                        }
+                        .fName{
+                            font-size:20px;
+                            color:rgba(153,153,153,1);
+                            line-height:26px;
+                            letter-spacing:2px;
+                            margin-bottom: 4px;
+                        }
+                        .price{
+                            font-size:32px;
+                            font-weight:bold;
+                            color:rgba(255,25,0,1);
+                            line-height:42px;
+                            margin-bottom: 5px;
+                        }
+                        .money,.buyShopNum,.sales{
+                            font-size:20px;
+                            color:rgba(153,153,153,1);
+                            line-height:26px;
+                            letter-spacing:2px;
+                            margin-bottom: 5px;
+                        }
+                    }
+                }
+            }
+        }
         .main{
-            padding: 21px 37px;
+            padding: 121px 37px 31px;
             background-color: #fff;
         }
         .manage_swiper{
