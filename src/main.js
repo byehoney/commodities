@@ -21,7 +21,7 @@ import "@/style/reset.scss"
 Vue.use(AwesomePicker);
 Vue.use(DrawerLayout)
 // Vue.use(VueVideoPlayer)
-import {Header, Tabbar,Toast,Field, TabItem ,Picker,Cell,Popup,Button,InfiniteScroll,Swipe, SwipeItem} from 'mint-ui';
+import {Header, Tabbar,Toast,Field, TabItem ,Picker,Cell,Popup,Button,InfiniteScroll,Swipe, SwipeItem,DatetimePicker} from 'mint-ui';
 Vue.use(InfiniteScroll);
 Vue.component(Field.name, Field);
 Vue.component(VeLine.name, VeLine)
@@ -35,6 +35,7 @@ Vue.component(Swipe.name, Swipe);
 Vue.component(SwipeItem.name, SwipeItem);
 Vue.component(Popup.name, Popup);
 Vue.component(Header.name, Header);
+Vue.component(DatetimePicker.name, DatetimePicker)
 Vue.use(wechat);
 Vue.prototype.$md5 = md5;
 // 注入全局过滤器
