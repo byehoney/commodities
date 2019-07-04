@@ -20,7 +20,7 @@
         </div>
         <div
         class="scrollBox"
-        style="max-height: 100vh; overflow-y: auto;"
+        
         v-infinite-scroll="loadMore"
         infinite-scroll-disabled="loading"
         infinite-scroll-distance="10">
@@ -218,7 +218,7 @@ export default {
         // this.getData();
     },
     beforeRouteLeave(to, from, next){
-        let position = document.getElementsByClassName('scrollBox')[0].scrollTop
+        let position = window.scrollTop
         sessionStorage.setItem('top',position);
         next()
     },
@@ -231,7 +231,7 @@ export default {
                     let position = sessionStorage.getItem('top') //返回页面取出来
                     console.log("beforeRouteEnter moments update: ", position);
                     // document.getElementsByClassName('scrollBox')[0].scroll(0, position)
-                    document.getElementsByClassName('scrollBox')[0].scrollTo({ 
+                    window.scrollTo({ 
                         top: position, 
                         behavior: "instant" 
                     });

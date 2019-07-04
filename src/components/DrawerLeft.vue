@@ -6,7 +6,7 @@
             <img :src="imgStr?imgStr:require('../images/manage_atv.png')" class="atv" alt="">
         </div>
         <div class="name">{{user.userName}}</div>
-        <div class="roleName">（商业公司）</div>
+        <div class="roleName">（{{user.userRoleName}}）</div>
         <div class="tel">{{user.mobile}}</div>
         <div class="relation">烟花店铺客户</div>
         <div class="orderArea" v-if="user.userRole=='04'||user.userRole=='08'">
@@ -56,7 +56,7 @@ export default {
       this.getToken();
     },
     methods:{
-        ...mapMutations('mange',['changeDrawLeft']),
+        ...mapMutations(['mange/changeDrawLeft','login/LOGOUT']),
         ...mapActions('login',['setAtv']),
         goCheckAPI(){
           this.$router.push({name:'kpiCheck'})

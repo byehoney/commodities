@@ -26,6 +26,7 @@
     </div>
 </template>
 <script>
+import { Toast } from "mint-ui";
 import HighCharts from 'highcharts'
 import ManageTabBarBotttom from '@/components/ManageTabBarBottom'
 import ManageTopNav from '@/components/ManageTopNav'

@@ -272,6 +272,23 @@ function getZxtList(params) {//获取销售走势图
 function getProRankList(params) {//获取商品销售排名
     return post('/manage/get/spxsfx.do',params)
 }
+function getCoustomerCityList(params){//获取客户销售排名  城市列表筛选条件
+    return post('/city/get/list.do',params)
+}
+function getCoustomerRankList(params){//获取客户销售排名
+    return post('/manage/get/mdxspx.do',params)
+}
+function reqMemberKPI(params){//获取业务员业绩
+    return post('/manage/get/yccxsy.do',params)
+}
+function reqManageShop(params){//获取业务员负责门店
+    return post('/manage/get/ywyzrmd.do',params)
+}
+function reqManageShopDetail(params){//获取业务员负责门店经营详情
+    return post('/manage/get/ywymdxq.do',params)
+}
+
+
 export {
     checkExist,
     getYzCode,
@@ -344,4 +361,9 @@ export {
     secKill,
     getZxtList,//管理页面走势图
     getProRankList,//管理页面 商品销售排名
+    getCoustomerCityList,//管理页面客户销售排名
+    getCoustomerRankList,//管理页面城市筛选条件列表
+    reqMemberKPI,//管理页面获取业务员业绩
+    reqManageShop,//管理页面获取业务员负责门店
+    reqManageShopDetail,//管理页面获取业务员负责门店详情
 }

@@ -185,6 +185,7 @@
     </div>
 </template>
 <script>
+import { Toast } from "mint-ui";
 import ManageTabBarBotttom from '@/components/ManageTabBarBottom'
 import DrawerLeft from '@/components/DrawerLeft'
 import ManageTopNav from '@/components/ManageTopNav'

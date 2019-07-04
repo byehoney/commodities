@@ -1,36 +1,40 @@
 <template>
-    <div class="mangeContainer">
+    <div class="mangeContainer" style="opacity:1">
         <div class="manageHeader">
             <img @click="goBack" src="../images/arrow_left_white.png" class="leftIcon" alt="">
             <div class="inputArea">
-                <input type="text" placeholder="请输入搜索内容" class="input">
+                <form @submit.prevent class="form">
+                    <input v-model="searchStr" @keypress="searchShop" type="text" placeholder="请输入搜索内容" class="input">
+                </form>
             </div>
-            <span>搜索</span>
+            <span @click="doSearch">搜索</span>
         </div>
         <div class="manageList" 
-            style="max-height: 100vh; overflow-y: auto;"
             v-infinite-scroll="loadMore"
             infinite-scroll-disabled="loading"
             infinite-scroll-distance="10"
         >
-            <div class="listItem">
-                <img class="shopIcon" src="../images/car_dianpu.png" alt="">
+            <div class="listItem" v-for="(item,index) in list" :key="index" @click="goDetail(item.companyid)">
+                <img class="shopIcon" src="../images/dianpu_m.png" alt="">
                 <div class="listInfo">
-                    <div class="sName">门店名称：星星烟花-旗舰店</div>
-                    <div class="lName">联系人：张建</div>
-                    <div class="rAdd">注册地址：河北省保定市西口村甲2组35号</div>
-                    <div class="order">总订单数：<span class="num">20</span></div>
+                    <div class="sName">门店名称：{{item.companyname}}</div>
+                    <div class="lName">联系人：{{item.username}}</div>
+                    <div class="rAdd">注册地址：{{item.address}}</div>
+                    <div class="order">总订单数：<span class="num">{{item.zdds}}</span></div>
+                    <div class="order">总订单额：<span class="num">¥{{item.zdde}}</span></div>
                 </div>
             </div>
         </div>
     </div>
 </template>
 <script>
-import ManageTabBarBotttom from '@/components/ManageTabBarBottom';
-import CityPicker from "@/components/CityPicker";
+import { Toast } from "mint-ui";
+import { mapGetters } from 'vuex'
+import { reqManageShop } from '@/api/index'
 export default {
     data(){
         return{
+            searchStr:'',
             loading:false,
             list:[],
             moreLoading:false,
@@ -40,11 +44,107 @@ export default {
             hasMore:true,
         }
     },
+    computed: {
+        ...mapGetters('login',['token','userId','corpCode','companyId','userRole'])
+    },
     components:{
        
     },
+    activated() {
+        this.loading = false;
+        if (!this.$route.meta.canKeep) {
+            this.pageNum = 1;
+            this.list = [];
+            this.getData();
+        }
+    },
+    beforeRouteLeave(to, from, next){
+        let position = window.scrollTop
+        sessionStorage.setItem('mStop',position);
+        next()
+    },
+    beforeRouteEnter (to, from, next) {
+        if(from.name == 'kpiCheckShop'){
+            to.meta.canKeep = true;
+            next(vm => {
+                // 通过 `vm` 访问组件实例
+                vm.$nextTick(function(){
+                    let position = sessionStorage.getItem('mStop') //返回页面取出来
+                    window.scrollTo({ 
+                        top: position, 
+                        behavior: "instant" 
+                    });
+                })
+            })   
+        }else{
+            to.meta.canKeep = false;
+            next();
+        }
+    },
     methods: {
-        
+        goDetail(id){
+            this.$router.push({name:'kpiCheckShop',query:{id:id,memberId:this.$route.query.id}})
+        },
+        goBack(){
+            this.$router.go(-1);
+        },
+        doSearch(){
+            this.pageNum = 1;
+            this.list = [];
+            this.getData();
+        },
+        searchShop(event){
+            if (event.keyCode == 13) {
+                event.preventDefault(); //禁止默认事件（默认是换行）
+                this.pageNum = 1;
+                this.list = [];
+                this.getData();
+            }
+        },
+        async getData(){
+            let defaulParams = {
+                token:this.token,
+                userId:this.userId,
+                corpCode:this.corpCode,
+                companyId:this.companyId,
+                userRole:this.userRole,
+                pageSize:this.pageSize,
+                pageNum:this.pageNum
+            };      
+            let res = await reqManageShop({...defaulParams,ywUserId:this.$route.query.id,khItem:this.searchStr});
+            this.moreLoading = false;
+            if(res.code == 0){
+                if(!res.data.list.length){
+                    this.hasMore = false;
+                    this.moreLoading = false;
+                    if(this.pageNum!=1){
+                        Toast({
+                            message: "已经到底了~",
+                            position: "middle",
+                            duration: 2000
+                        });
+                    }else{
+                        Toast({
+                            message: "暂无数据",
+                            position: "middle",
+                            duration: 2000
+                        });
+                    }
+                    return;
+                }else{
+                    this.hasMore = true;
+                    this.moreLoading = false;
+                }
+                this.list = [...this.list,...res.data.list];
+            }
+        },
+        loadMore(){
+            if(this.moreLoading||!this.hasMore){
+                return;
+            }
+            this.pageNum = this.pageNum+1;
+            this.getData();
+        }
     },
 }
 </script>

@@ -380,15 +380,15 @@ export default {
   width: 100%;
   height: 613px;
 }
-.item:nth-of-type(1) {
-  // background: #FF0304;
-}
-.item:nth-of-type(2) {
-  // background: #ccc;
-}
-.item:nth-of-type(3) {
-  // background: #FF0304;
-}
+// .item:nth-of-type(1) {
+//   // background: #FF0304;
+// }
+// .item:nth-of-type(2) {
+//   // background: #ccc;
+// }
+// .item:nth-of-type(3) {
+//   // background: #FF0304;
+// }
 .loop_pic {
   margin-top: 80px;
 }
@@ -522,10 +522,10 @@ export default {
   min-height: 46px;
   line-height: 46px;
 }
-.special_content_left.actives {
-  // background: #fadfc5;
-  // border: 11px solid #fadfc5;
-}
+// .special_content_left.actives {
+//   // background: #fadfc5;
+//   // border: 11px solid #fadfc5;
+// }
 .special_content_left img {
   width: 100%;
   height: 100%;

@@ -1,5 +1,5 @@
 <template>
-    <div class="mangeContainer">
+    <div class="mangeContainer" style="opacity:1">
         <mt-header :title="title" class="manageHeader">
             <router-link to="/" slot="left">
                 <mt-button icon="back"></mt-button>
@@ -10,13 +10,13 @@
             <div class="checkItem">
                 <div class="left">姓名：</div>
                 <div class="right">
-                    <input type="text" class="input" placeholder="请输入姓名">
+                    <input type="text" class="input" v-model="name" placeholder="请输入姓名">
                 </div>
             </div>
             <div class="checkItem">
                 <div class="left">手机号：</div>
                 <div class="right">
-                    <input type="text" class="input" placeholder="请输入手机号">
+                    <input type="text" class="input" v-model="mobile" placeholder="请输入手机号">
                 </div>
             </div>
             <div class="checkItem" @click="handlerArea">
@@ -26,57 +26,63 @@
                     <img src="../images/arrow_right.png" class="right_icon" alt="">
                 </div>
             </div>
-            <div class="checkBtn">查询</div>
+            <div class="checkBtn" @click="doSearch">查询</div>
         </div>
         <div class="list">
-            <div class="listItem">
+            <div class="listItem" v-for="(item,index) in list" :key="index" @click="goKPIList(item.userid)">
                 <img src="../images/manage_atv.png" class="atv" alt="">
                 <div class="infos">
-                    <div class="name">姓名：张建</div>
-                    <div class="customer">今日客户数：<span class="num">0</span></div>
+                    <div class="name">姓名：{{item.username}}</div>
+                    <div class="customer">今日客户数：<span class="num">{{item.jrkhs}}</span></div>
                 </div>
                 <div class="infos">
-                    <div class="tel">电话：13811166660</div>
-                    <div class="customer">总客户数：<span class="num">0</span></div>
-                </div>
-                <img src="../images/arrow_right.png" class="right_icon" alt="">
-            </div>
-            <div class="listItem">
-                <img src="../images/manage_atv.png" class="atv" alt=""/>
-                <div class="infos">
-                    <div class="name">姓名：张建</div>
-                    <div class="customer">今日客户数：<span class="num">0</span></div>
-                </div>
-                <div class="infos">
-                    <div class="tel">电话：13811166660</div>
-                    <div class="customer">总客户数：<span class="num">0</span></div>
+                    <div class="tel">电话：{{item.mobile}}</div>
+                    <div class="customer">总客户数：<span class="num">{{item.zkhs}}</span></div>
                 </div>
                 <img src="../images/arrow_right.png" class="right_icon" alt="">
             </div>
         </div>
-        <ManageTabBarBotttom></ManageTabBarBotttom>
+        <!-- <ManageTabBarBotttom></ManageTabBarBotttom> -->
         <CityPicker :areaVisible="areaVisible" :setArea="handleSetArea" :cancel="handleCancel"></CityPicker>
     </div>
 </template>
 <script>
-import ManageTabBarBotttom from '@/components/ManageTabBarBottom';
+import { Toast } from "mint-ui";
+import { mapGetters } from 'vuex'
+// import ManageTabBarBotttom from '@/components/ManageTabBarBottom';
 import CityPicker from "@/components/CityPicker";
+import { reqMemberKPI } from '@/api/index'
 export default {
     data(){
         return{
             title:'业绩查询',
+            name:'',
+            mobile:'',
             areaVisible:false,
             sel_value:'请选择地区',
             pCode:'',
             cCode:'',
             aCode:'',
+            list:[],
         }
     },
+    computed: {
+        ...mapGetters('login',['token','userId','corpCode','companyId','userRole'])
+    },
     components:{
-        ManageTabBarBotttom,
+        // ManageTabBarBotttom,
         CityPicker,
     },
+    mounted() {
+        this.getData();
+    },
     methods: {
+        goKPIList(id){
+            this.$router.push({name:'kpiCheckList',query:{id:id}})
+        },
+        doSearch(){
+            this.getData();
+        },
         handlerArea(){
             this.areaVisible = !this.areaVisible;
         },
@@ -90,6 +96,19 @@ export default {
         handleCancel(){
             this.areaVisible = false;
         },
+        async getData(){
+            let defaulParams = {
+                token:this.token,
+                userId:this.userId,
+                corpCode:this.corpCode,
+                companyId:this.companyId,
+                userRole:this.userRole,
+            };      
+            let res = await reqMemberKPI({...defaulParams,ywMobile:this.mobile.trim(),ywName:this.name.trim(),regionCode:this.aCode});
+            if(res.code == 0){
+                this.list = res.data.list;
+            }
+        }
     },
 }
 </script>

@@ -1,5 +1,5 @@
 <template>
-    <div class="mangeContainer" style="opacity:0">
+    <div class="mangeContainer" style="opacity:1">
         <ManageTopNav @trigerLeft="trigerDrawerLeft"></ManageTopNav>
         <DrawerLeft ref="leftDrwaer"></DrawerLeft>
         <div class="main">
@@ -16,38 +16,37 @@
                         <p :class="['typeItem',curTypeIndex==index?'active':'']" @click="selCurType($event,index)" v-for="(item,index) in typeList" :key="index">{{item.text}}</p>
                     </div>
                 </div>
-                <div :class="['area',areaActive?'active':'']" @click="selArea">
-                    {{areaList[curAreaIndex]}}
+                <div :class="['area',areaActive?'active':'']" @click="selArea" v-if="areaList.length">
+                    {{areaList[curAreaIndex].regionName}}
                     <div class="typeList" v-if="showAreaList">
-                        <p :class="['typeItem',curAreaIndex==index?'active':'']" @click="selCurArea($event,index)" v-for="(item,index) in areaList" :key="index">{{item}}</p>
+                        <p :class="['typeItem',curAreaIndex==index?'active':'']" @click="selCurArea($event,index)" v-for="(item,index) in areaList" :key="index">{{item.regionName}}</p>
                     </div>
                 </div>
                 <div class="total">合计数：1200</div>
             </div>
             <ul
                 class="content"
-                style="max-height: 100vh; overflow-y: auto;"
                 v-infinite-scroll="loadMore"
                 infinite-scroll-disabled="loading"
                 infinite-scroll-distance="10"
             >
-                <div class="contentItem">
+                <div class="contentItem" v-for="(item,index) in list" :key="index">
                     <div class="infoTop">
                         <img class="icon" src="../images/dianpu_m.png" alt="">
-                        <p class="fName">河北保定星星烟花制造厂</p>
+                        <p class="fName">{{item.companyname}}</p>
                     </div>
                     <div class="infoBottom">
                         <div class="info">
-                            店铺编码：0001009
+                            店铺编码：{{item.companyid}}
                         </div>
                         <div class="info">
-                            订单数量：80
+                            订单数量：{{item.dds}}
                         </div>
                         <div class="info">
-                            采购总额：￥6600
+                            采购总额：￥{{item.cgze}}
                         </div>
                         <div class="info">
-                            采购品种：650
+                            采购品种：{{item.cgpz}}
                         </div>
                     </div>
                 </div>
@@ -63,6 +62,7 @@ import {mapGetters,mapMutations,mapState} from 'vuex'
 import ManageTabBarBotttom from '@/components/ManageTabBarBottom'
 import DrawerLeft from '@/components/DrawerLeft'
 import ManageTopNav from '@/components/ManageTopNav'
+import { getCoustomerCityList,getCoustomerRankList } from '@/api/index'
 export default {
     data(){
         return{
@@ -74,8 +74,8 @@ export default {
             showAreaList:false,
             dateList:[{text:'近七天',days:7},{text:'近三十天',days:30},{text:'近三个月',days:90},{text:'近六个月',days:180}],
             typeList:[{text:'销量',sort:0},{text:'订单量',sort:1}],
-            areaList:['全国','北京','重庆'],
-            curDateIndex:0,
+            areaList:[{regionCode: "", regionName: "全国"}],
+            curDateIndex:1,
             curTypeIndex:0,
             curAreaIndex:0,
             list:[],
@@ -99,6 +99,17 @@ export default {
         ManageTabBarBotttom,
         ManageTopNav,
         DrawerLeft
+    },
+    async mounted() {
+        let defaulParams = {
+            token:this.token,
+            userId:this.userId,
+            corpCode:this.corpCode,
+            companyId:this.companyId,
+            userRole:this.userRole,
+        };        
+        let cities = await getCoustomerCityList({...defaulParams});
+        this.areaList = cities.data.list;
     },
     methods: {
         ...mapMutations('mange',['changeDrawLeft']),
@@ -134,26 +145,39 @@ export default {
         },
         selCurDate(e,index){
             e.stopPropagation();
+            if(this.moreLoading){
+                return;
+            }
             this.curDateIndex = index;
             this.showDateList = false;
             this.list = [];
             this.pageNum = 1;
+            this.getData();
         },
         selCurType(e,index){
             e.stopPropagation();
+            if(this.moreLoading){
+                return;
+            }
             this.curTypeIndex = index;
             this.showTypeList = false;
             this.list = [];
             this.pageNum = 1;
+            this.getData();
         },
         selCurArea(e,index){
             e.stopPropagation();
+            if(this.moreLoading){
+                return;
+            }
             this.curAreaIndex = index;
             this.showAreaList = false;
             this.list = [];
             this.pageNum = 1;
+            this.getData();
         },
-        getData(){
+        async getData(){
+            this.moreLoading = true;
             let defaulParams = {
                 token:this.token,
                 userId:this.userId,
@@ -163,6 +187,37 @@ export default {
                 pageSize:this.pageSize,
                 pageNum:this.pageNum
             };
+            let res = await getCoustomerRankList({
+                ...defaulParams,
+                days:this.dateList[this.curDateIndex].days,
+                sort:this.typeList[this.curTypeIndex].sort,
+                regionCode:this.areaList[this.curAreaIndex].regionCode
+            })
+            this.moreLoading = false;
+            if(res.code == 0){
+                if(!res.data.list.length){
+                    this.hasMore = false;
+                    this.moreLoading = false;
+                    if(this.pageNum!=1){
+                        Toast({
+                            message: "已经到底了~",
+                            position: "middle",
+                            duration: 2000
+                        });
+                    }else{
+                        Toast({
+                            message: "暂无数据",
+                            position: "middle",
+                            duration: 2000
+                        });
+                    }
+                    return;
+                }else{
+                    this.hasMore = true;
+                    this.moreLoading = false;
+                }
+                this.list = [...this.list,...res.data.list];
+            }
         },
         loadMore(){
             if(this.moreLoading||!this.hasMore){
@@ -208,7 +263,8 @@ export default {
                         color:rgba(153,153,153,1);
                         line-height:26px;
                         letter-spacing:2px;
-                        text-indent: 60px;
+                        // text-indent: 60px;
+                        text-align: center;
                         margin-bottom: 10px;
                         // pad-ding-left: 60px;
                     }
@@ -226,7 +282,7 @@ export default {
                         color:rgba(51,51,51,1);
                         line-height:35px;
                         letter-spacing:2px;
-                        width: 400px;
+                        width: 500px;
                         overflow: hidden;
                         text-overflow: ellipsis;
                         white-space: nowrap;

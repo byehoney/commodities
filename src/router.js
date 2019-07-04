@@ -546,7 +546,8 @@ const router = new Router({
                 import(/* webpackChunkName: "kpiCheckList" */ './views/KPIcheckList.vue'),
             meta: {
                 auth: true,
-                keepAlive: false,
+                keepAlive: true,
+                canKeep: false,
                 title: '业绩查询'
             }
         },

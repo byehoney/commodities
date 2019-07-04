@@ -1,5 +1,5 @@
 <template>
-    <div class="mangeContainer">
+    <div class="mangeContainer" style="opacity:0.1">
         <mt-header title="门店详情" class="manageHeader">
             <router-link to="" slot="left">
                 <mt-button icon="back" @click.native="$router.back(-1)"></mt-button>
@@ -12,36 +12,36 @@
         <div class="content" v-show="actIndex==0">
             <div class="title">基本信息</div>
             <div class="allInfos">
-                <div class="infos">门店名称：<span>河北省保定市西昌路文明村25号6栋</span></div>
-                <div class="infos">联系人：<span>张建</span></div>
-                <div class="infos">联系电话：<span>13811166660</span></div>
-                <div class="infos">注册地址：<span>河北省保定市西昌路</span></div>
+                <div class="infos">门店名称：<span>{{companyName}}</span></div>
+                <div class="infos">联系人：<span>{{userName}}</span></div>
+                <div class="infos">联系电话：<span>{{mobile}}</span></div>
+                <div class="infos">注册地址：<span>{{address}}</span></div>
             </div>
             <div class="title">销售数据</div>
             <div class="datas">
                 <div class="dataInfo bleft">
                     <p class="name">今日订单数</p>
-                    <p class="des top">0</p>
+                    <p class="des top">{{jrdss}}</p>
                 </div>
                 <div class="dataInfo bleft">
                     <p class="name">今日订单额</p>
-                    <p class="des top">0.00万元</p>
+                    <p class="des top">{{jrdde}}万元</p>
                 </div>
                 <div class="dataInfo">
                     <p class="name">今日品规数</p>
-                    <p class="des top">0</p>
+                    <p class="des top">{{jrpgs}}</p>
                 </div>
                 <div class="dataInfo noBorder bleft">
                     <p class="name">总订单数</p>
-                    <p class="des bottom">0</p>
+                    <p class="des bottom">{{zdds}}</p>
                 </div>
                 <div class="dataInfo noBorder bleft">
                     <p class="name">总订单额</p>
-                    <p class="des bottom">0</p>
+                    <p class="des bottom">{{zdde}}</p>
                 </div>
                 <div class="dataInfo noBorder">
                     <p class="name">总品规数</p>
-                    <p class="des bottom">0</p>
+                    <p class="des bottom">{{zpss}}</p>
                 </div>
             </div>
         </div>
@@ -49,32 +49,50 @@
             <div class="searchContent">
                 <div class="searchArea">
                     <div class="sName">商品信息：</div>
-                    <input type="text" placeholder="请输入商品编码，通用名称" class="input">
+                    <input type="text" v-model="searchStr" placeholder="请输入商品编码，通用名称" class="input">
                 </div>
-                <div class="searchBtn">查询</div>
+                <div class="searchBtn" @click="doSearch">查询</div>
             </div>
             <div class="divide"></div>
-            <div class="shoList">
-                <div class="listItem">
-                    <p>通用名称：<span>星星闪烁冷焰火</span></p>
-                    <p>厂&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;商：<span>星星闪烁冷焰火</span></p>
-                    <p>商品编码：<span>星星闪烁冷焰火</span></p>
-                    <p>规&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;格：<span>星星闪烁冷焰火</span></p>
+            <div class="shoList"
+                v-infinite-scroll="loadMore"
+                infinite-scroll-disabled="loading"
+                infinite-scroll-distance="10"
+            >
+                <div class="listItem" v-for="(item,index) in list" :key="index">
+                    <p>通用名称：<span>{{item.tyname}}</span></p>
+                    <p>厂&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;商：<span>{{item.cj}}</span></p>
+                    <p>商品编码：<span>{{item.productid}}</span></p>
+                    <p>规&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;格：<span>{{item.guig}}</span></p>
                     <div class="sales">
-                        <p>销售额&nbsp;&nbsp;&nbsp;&nbsp;：<span>￥1020.00</span></p>
-                        <p>销量：<span>200件</span></p>
+                        <p>销售额&nbsp;&nbsp;&nbsp;&nbsp;：<span>￥{{item.xsje}}</span></p>
+                        <p>销量：<span>{{item.xsl}}件</span></p>
                     </div>
                 </div>
             </div>
         </div>
-        <ManageTabBarBotttom></ManageTabBarBotttom>
+        <!-- <ManageTabBarBotttom></ManageTabBarBotttom> -->
     </div>
 </template>
 <script>
-import ManageTabBarBotttom from '@/components/ManageTabBarBottom';
+import { Toast } from "mint-ui";
+import { mapGetters } from 'vuex'
+// import ManageTabBarBotttom from '@/components/ManageTabBarBottom';
+import { reqManageShopDetail } from '@/api/index'
 export default {
     data(){
         return{
+            companyName:'',
+            userName:'',
+            mobile:'',
+            address:'',
+            jrdss:0,
+            jrdde:0,
+            jrpgs:0,
+            zdds:0,
+            zdde:0,
+            zpss:0,
+            searchStr:'',
             actIndex:0,
             loading:false,
             list:[],
@@ -85,12 +103,78 @@ export default {
             hasMore:true,
         }
     },
+    computed: {
+         ...mapGetters('login',['token','userId','corpCode','companyId','userRole'])
+    },
     components:{
-       ManageTabBarBotttom,
+    //    ManageTabBarBotttom,
+    },
+    mounted() {
+        this.getData();
     },
     methods: {
+        doSearch(){
+            this.pageNum = 1;
+            this.list = [];
+            this.getData();
+        },
         changeType(index){
             this.actIndex = index;
+            this.getData();
+        },
+        async getData(){
+            let defaulParams = {
+                token:this.token,
+                userId:this.userId,
+                corpCode:this.corpCode,
+                companyId:this.companyId,
+                userRole:this.userRole,
+                pageSize:this.pageSize,
+                pageNum:this.pageNum
+            };      
+            let res = await reqManageShopDetail({
+                ...defaulParams,
+                ywCompanyId:this.$route.query.id,
+                ywUserId:this.$route.query.memberId,
+                fullText:this.searchStr,
+                type:this.actIndex
+            })
+            if(this.actIndex == 0){//基本信息
+
+            }else{//品规信息
+                this.moreLoading = false;
+                if(res.code == 0){
+                    if(!res.data.list.length){
+                        this.hasMore = false;
+                        this.moreLoading = false;
+                        if(this.pageNum!=1){
+                            Toast({
+                                message: "已经到底了~",
+                                position: "middle",
+                                duration: 2000
+                            });
+                        }else{
+                            Toast({
+                                message: "暂无数据",
+                                position: "middle",
+                                duration: 2000
+                            });
+                        }
+                        return;
+                    }else{
+                        this.hasMore = true;
+                        this.moreLoading = false;
+                    }
+                    this.list = [...this.list,...res.data.list];
+                }
+            }
+        },
+        loadMore(){
+            if(this.moreLoading||!this.hasMore){
+                return;
+            }
+            this.pageNum = this.pageNum+1;
+            this.getData();
         }
     },
 }
