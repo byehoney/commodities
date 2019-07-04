@@ -12,8 +12,8 @@
             <img slot="icon" :src="selected==='manageProRank'?tabs[2][1]:tabs[2][0]">
             商品
         </mt-tab-item>
-        <mt-tab-item id="my">
-            <img slot="icon" :src="selected==='my'?tabs[3][1]:tabs[3][0]">
+        <mt-tab-item id="manageCustomerRank">
+            <img slot="icon" :src="selected==='manageCustomerRank'?tabs[3][1]:tabs[3][0]">
             店铺
         </mt-tab-item>
     </mt-tabbar>
@@ -55,8 +55,8 @@ export default {
                 case 'manageProRank':
                     this.$router.push('/manageProRank');
                 break;
-                case 'my':
-                    this.$router.push('/my');
+                case 'manageCustomerRank':
+                    this.$router.push('/manageCustomerRank');
                 break;
                 default:
                     this.$router.push('/manageHome');

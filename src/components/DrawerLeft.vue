@@ -9,7 +9,7 @@
         <div class="roleName">（商业公司）</div>
         <div class="tel">{{user.mobile}}</div>
         <div class="relation">烟花店铺客户</div>
-        <div class="orderArea">
+        <div class="orderArea" v-if="user.userRole=='04'||user.userRole=='08'">
           <img src="../images/sh_m_icon.png" class="icon" alt="">
           <span>审核</span>
         </div>
@@ -17,7 +17,7 @@
           <img src="../images/order_m_icon.png" class="icon" alt="">
           <span>订单</span>
         </div>
-        <div class="kpiArea">
+        <div class="kpiArea" v-if="user.userRole=='02'||user.userRole=='03'||user.userRole=='05'" @click="goCheckAPI">
           <img src="../images/kpi_m_icon.png" class="icon" alt="">
           <span>业绩查询</span>
         </div>
@@ -58,6 +58,9 @@ export default {
     methods:{
         ...mapMutations('mange',['changeDrawLeft']),
         ...mapActions('login',['setAtv']),
+        goCheckAPI(){
+          this.$router.push({name:'kpiCheck'})
+        },
         async getToken(){
             let res = await getUploadToken({suffix:'1'});
             this.tokenUp = res.data.token;
@@ -205,9 +208,7 @@ export default {
         margin: 0 auto;
       }
     }
-    .drawer-layout{
-      // z-index: 100000;
-    }
+   
     .drawer{
       height: 100vh;
       background-color: #fff;

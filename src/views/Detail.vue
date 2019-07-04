@@ -6,7 +6,15 @@
     </div>
     <div class="detail_loop">
       <div class="detsil_loop_center">
-        <img :src="shopDetail.yt?shopDetail.yt:require('../images/default_logo.jpg')">
+        <mt-swipe :auto="4000" :show-indicators="true">
+          <mt-swipe-item class="item">
+            <img :src="shopDetail.yt?shopDetail.yt:require('../images/default_logo.jpg')">
+          </mt-swipe-item>
+          <mt-swipe-item class="item">
+            <img :src="shopDetail.yt?shopDetail.yt:require('../images/default_logo.jpg')">
+          </mt-swipe-item>
+        </mt-swipe>
+        <!-- <img :src="shopDetail.yt?shopDetail.yt:require('../images/default_logo.jpg')"> -->
       </div>
     </div>
 
@@ -649,15 +657,15 @@ a {
   text-align: center;
 }
 .detail_loop {
-  width: 656px;
+  width: 100%;
   min-height: 466px;
   background: #fff;
   margin-bottom: 6px;
-  padding: 37px 47px;
+  padding: 37px 0;
   margin-top:100px;
 }
 .detsil_loop_center {
-  width: 660px;
+  width:100%;
   height: 460px;
   margin: 0 auto;
   background: #f6f6f6;
@@ -782,7 +790,7 @@ a {
   height: 30px;
   margin-right: 10px;
   &.dis{
-    width: 60px;
+    width: 64px;
     height: 28px;
     line-height: 30px;
     text-align: center;

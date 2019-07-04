@@ -11,9 +11,9 @@
                         <div class="left">采购店数：68</div>
                         <div class="right">销售数量：8800</div>
                     </div>
-                    <img class="arrow" src="../images/m_arrow_right.png" alt="">
+                    <img class="arrow" src="../images/m_arrow_right.png" alt="" v-show="user.userRole=='04'||user.userRole=='05'">
                 </mt-swipe-item>
-                <mt-swipe-item class="item total">
+                <mt-swipe-item class="item total" v-if="user.userRole=='04'||user.userRole=='05'">
                     <div class="top">￥66880.00</div>
                     <div class="center">总销售额</div>
                     <div class="bottom">
@@ -25,7 +25,7 @@
             </mt-swipe>
         </div>
         <!-- 厂家管理员和业务员 -->
-        <div class="infos" style="display:none">
+        <div class="infos" v-if="user.userRole=='02'||user.userRole=='03'||user.userRole=='08'">
             <div class="infoItem">
                 <div class="left">
                     <img class="icon" src="../images/shopcar.png" alt="">
@@ -84,7 +84,7 @@
             </div>
         </div>
         <!-- 商业管理员和业务员 -->
-        <div class="infos">
+        <div class="infos" v-if="user.userRole=='04'||user.userRole=='05'">
             <div class="infoItem">
                 <div class="left">
                     <img class="icon" src="../images/shopcar.png" alt="">
@@ -164,7 +164,7 @@
             </div>
             
         </div>
-        <div class="hotsale scrollBox">
+        <div class="hotsale scrollBox" v-if="user.userRole=='04'||user.userRole=='05'">
             <div class="title">今日热销商品</div>
             <div class="hotList">
                 <div class="hotItem">
@@ -181,13 +181,14 @@
             </div>
         </div>
         <ManageTabBarBotttom curTab="manageHome"></ManageTabBarBotttom>
+        <div class="mask" v-show="showDrawLeft" @click="handleMaskClick"></div>
     </div>
 </template>
 <script>
 import ManageTabBarBotttom from '@/components/ManageTabBarBottom'
 import DrawerLeft from '@/components/DrawerLeft'
 import ManageTopNav from '@/components/ManageTopNav'
-import { mapState } from 'vuex'
+import {mapGetters,mapMutations,mapState} from 'vuex'
 export default {
     data(){
         return{
@@ -195,7 +196,12 @@ export default {
         }
     },
     computed: {
-        ...mapState('mange',['showDrawLeft'])
+        ...mapState({
+          user:state=>state.login.user,
+          token:state=>state.login.token,
+          showDrawLeft:state=>state.mange.showDrawLeft
+        }),
+        ...mapGetters('login',['token','userId','corpCode','companyId','userRole'])
     },
     components:{
         ManageTabBarBotttom,
@@ -203,14 +209,26 @@ export default {
         DrawerLeft
     },
     methods: {
+        ...mapMutations('mange',['changeDrawLeft']),
         trigerDrawerLeft(){
-            this.showLeft = true;
-            this.$refs.leftDrwaer.showDrawerLeft()
+            this.changeDrawLeft(true);
+        },
+        handleMaskClick(){
+            this.changeDrawLeft(false)
         },
     },
 }
 </script>
 <style lang="scss" scoped>
+    .mask{
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0,0,0,.6);
+      z-index:99999;
+    }
     .mangeContainer{
         background-color: #ebebeb;
         // min-height: 100vh;

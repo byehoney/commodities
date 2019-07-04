@@ -1,19 +1,19 @@
 <template>
-    <div class="mangeContainer">
+    <div class="mangeContainer" style="opacity:0">
         <ManageTopNav @trigerLeft="trigerDrawerLeft"></ManageTopNav>
         <DrawerLeft ref="leftDrwaer"></DrawerLeft>
         <div class="main">
             <div class="top">
                 <div :class="['date long',dateActive?'active':'']" @click="selDate">
-                    {{dateList[curDateIndex]}}
+                    {{dateList[curDateIndex].text}}
                     <div class="dataList" v-if="showDateList">
-                        <p :class="['dataItem',curDateIndex==index?'active':'']" @click="selCurDate($event,index)" v-for="(item,index) in dateList" :key="index">{{item}}</p>
+                        <p :class="['dataItem',curDateIndex==index?'active':'']" @click="selCurDate($event,index)" v-for="(item,index) in dateList" :key="index">{{item.text}}</p>
                     </div>
                 </div>
                 <div :class="['type',typeActive?'active':'']" @click="selType">
-                    {{typeList[curTypeIndex]}}
+                    {{typeList[curTypeIndex].text}}
                     <div class="typeList" v-if="showTypeList">
-                        <p :class="['typeItem',curTypeIndex==index?'active':'']" @click="selCurType($event,index)" v-for="(item,index) in typeList" :key="index">{{item}}</p>
+                        <p :class="['typeItem',curTypeIndex==index?'active':'']" @click="selCurType($event,index)" v-for="(item,index) in typeList" :key="index">{{item.text}}</p>
                     </div>
                 </div>
                 <div :class="['area',areaActive?'active':'']" @click="selArea">
@@ -53,12 +53,13 @@
                 </div>
             </ul>
         </div>
-        <ManageTabBarBotttom></ManageTabBarBotttom>
+        <ManageTabBarBotttom curTab="manageCustomerRank"></ManageTabBarBotttom>
+        <div class="mask" v-show="showDrawLeft" @click="handleMaskClick"></div>
     </div>
 </template>
 <script>
 import { Toast } from "mint-ui";
-import {mapGetters} from 'vuex'
+import {mapGetters,mapMutations,mapState} from 'vuex'
 import ManageTabBarBotttom from '@/components/ManageTabBarBottom'
 import DrawerLeft from '@/components/DrawerLeft'
 import ManageTopNav from '@/components/ManageTopNav'
@@ -71,8 +72,8 @@ export default {
             showDateList:false,
             showTypeList:false,
             showAreaList:false,
-            dateList:['近七天','近三十天','近三个月','近六个月'],
-            typeList:['订单量'],
+            dateList:[{text:'近七天',days:7},{text:'近三十天',days:30},{text:'近三个月',days:90},{text:'近六个月',days:180}],
+            typeList:[{text:'销量',sort:0},{text:'订单量',sort:1}],
             areaList:['全国','北京','重庆'],
             curDateIndex:0,
             curTypeIndex:0,
@@ -87,6 +88,11 @@ export default {
         }
     },
     computed:{
+         ...mapState({
+          user:state=>state.login.user,
+          token:state=>state.login.token,
+          showDrawLeft:state=>state.mange.showDrawLeft
+        }),
         ...mapGetters('login',['token','userId','corpCode','companyId','userRole'])
     },
     components:{
@@ -95,8 +101,12 @@ export default {
         DrawerLeft
     },
     methods: {
+        ...mapMutations('mange',['changeDrawLeft']),
         trigerDrawerLeft(){
-            this.$refs.leftDrwaer.showDrawerLeft()
+            this.changeDrawLeft(true);
+        },
+        handleMaskClick(){
+            this.changeDrawLeft(false)
         },
         selDate(){
             this.dateActive = true;
@@ -165,6 +175,15 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+    .mask{
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0,0,0,.6);
+      z-index:99999;
+    }
     .mangeContainer{
         width: 100%;
         padding-top: 100px;

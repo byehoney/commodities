@@ -5,15 +5,15 @@
         <div class="main">
             <div class="top">
                 <div :class="['date long',dateActive?'active':'']" @click="selDate">
-                    {{dateList[curDateIndex]}}
+                    {{dateList[curDateIndex].text}}
                     <div class="dataList" v-if="showDateList">
-                        <p :class="['dataItem',curDateIndex==index?'active':'']" @click="selCurDate($event,index)" v-for="(item,index) in dateList" :key="index">{{item}}</p>
+                        <p :class="['dataItem',curDateIndex==index?'active':'']" @click="selCurDate($event,index)" v-for="(item,index) in dateList" :key="index">{{item.text}}</p>
                     </div>
                 </div>
                 <div :class="['type',typeActive?'active':'']" @click="selType">
-                    {{typeList[curTypeIndex]}}
+                    {{typeList[curTypeIndex].text}}
                     <div class="typeList" v-if="showTypeList">
-                        <p :class="['typeItem',curTypeIndex==index?'active':'']" @click="selCurType($event,index)" v-for="(item,index) in typeList" :key="index">{{item}}</p>
+                        <p :class="['typeItem',curTypeIndex==index?'active':'']" @click="selCurType($event,index)" v-for="(item,index) in typeList" :key="index">{{item.text}}</p>
                     </div>
                 </div>
                 <!-- <div :class="['area',areaActive?'active':'']" @click="selArea">
@@ -62,8 +62,8 @@ export default {
             showDateList:false,
             showTypeList:false,
             showAreaList:false,
-            dateList:['近七天','近三十天','近三个月','近六个月'],
-            typeList:['销量','订单量'],
+            dateList:[{text:'近七天',days:7},{text:'近三十天',days:30},{text:'近三个月',days:90},{text:'近六个月',days:180}],
+            typeList:[{text:'销量',sort:0},{text:'订单量',sort:1}],
             areaList:['全国','北京','重庆'],
             curDateIndex:1,
             curTypeIndex:0,
@@ -132,6 +132,7 @@ export default {
             this.showDateList = false;
             this.list = [];
             this.pageNum = 1;
+            this.getData();
         },
         selCurType(e,index){
             e.stopPropagation();
@@ -139,6 +140,7 @@ export default {
             this.showTypeList = false;
             this.list = [];
             this.pageNum = 1;
+            this.getData();
         },
         selCurArea(e,index){
             e.stopPropagation();
@@ -157,7 +159,7 @@ export default {
                 pageSize:this.pageSize,
                 pageNum:this.pageNum
             };
-            let res = await getProRankList({...defaulParams,days:30,sort:0});
+            let res = await getProRankList({...defaulParams,days:this.dateList[this.curDateIndex].days,sort:this.typeList[this.curTypeIndex].sort});
             if(res.code == 0){
                 if(!res.data.list.length){
                     this.hasMore = false;
