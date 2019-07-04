@@ -563,6 +563,39 @@ const router = new Router({
             }
         },
         {
+            path: '/manageWaitPass',
+            name: 'manageWaitPass',
+            component: () =>
+                import(/* webpackChunkName: "manageWaitPass" */ './views/ManageWaitPass.vue'),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title: '待审核'
+            }
+        },
+        {
+            path: '/manageIntelPass',
+            name: 'manageIntelPass',
+            component: () =>
+                import(/* webpackChunkName: "manageIntelPass" */ './views/ManageIntelPass.vue'),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title: '人员资质审核'
+            }
+        },
+        {
+            path: '/manageBusCover',
+            name: 'manageBusCover',
+            component: () =>
+                import(/* webpackChunkName: "manageBusCover" */ './views/ManageBusCover.vue'),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title: '业务'
+            }
+        },
+        {
             path: '/manageadduser',//销售走向图
             name: 'manageAddUser',
             component: () =>

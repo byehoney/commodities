@@ -1,5 +1,5 @@
 <template>
-    <div class="mangeContainer" style="opacity:0.1">
+    <div class="mangeContainer" style="opacity:1">
         <mt-header title="门店详情" class="manageHeader">
             <router-link to="" slot="left">
                 <mt-button icon="back" @click.native="$router.back(-1)"></mt-button>

@@ -41,4 +41,19 @@ html{
 .highcharts-credits{
     display: none;
 }
+// .mint-header.manageHeader{
+//     background-color: #fff;
+//     position: fixed;
+//     top: 0;
+//     left: 0;
+//     width: 100%;
+//     .mintui{
+//         color: #333;
+//     }
+//     .mint-header-title{
+//         font-size:30px;
+//         color:rgba(51,51,51,1);
+//         line-height:40px;
+//     }
+// }
 </style>
