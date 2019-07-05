@@ -1,46 +1,38 @@
 <template>
-  <div>
-    <ManageHeader :title="title"></ManageHeader>
+  <div style="opacity:1">
+    <ManageHeader :title="title" class="fixed"></ManageHeader>
     <div class="manageStock">
       <div class="manageStock_search">
         <span>
           <img src="../images/smallsousuo.png">
         </span>
         <span>
-          <input type="text" placeholder="商品名称">
+          <form @submit.prevent class="form">
+            <input v-model="searchStr" @keypress="searchGoods" type="text" placeholder="商品名称">
+          </form>
         </span>
         <span>搜索</span>
       </div>
       <div class="manageStock_tips">库存不足30天销量</div>
-      <div class="manageStock_list">
-        <div class="manageStock_list_pic">
-          <img src>
-        </div>
-        <div class="manageStock_list_content">
-          <div>
-            <h3>烟花商品名称</h3>
-            <p>河北保定星星烟花制造厂</p>
-            <p>规格：35g*1支</p>
+      <div class="manageStock_content"
+        v-infinite-scroll="loadMore"
+        infinite-scroll-disabled="loading"
+        infinite-scroll-distance="10"
+      >
+        <div class="manageStock_list" v-for="(item,index) in list" :key="index">
+          <div class="manageStock_list_pic">
+            <img :src="item.yurl?item.yurl:require('../images/default_logo.jpg')">
           </div>
-          <div class="manageStock_list_price">
-            <p>库存：700件</p>
-            <p>￥6.50</p>
-          </div>
-        </div>
-      </div>
-        <div class="manageStock_list">
-        <div class="manageStock_list_pic">
-          <img src>
-        </div>
-        <div class="manageStock_list_content">
-          <div>
-            <h3>烟花商品名称</h3>
-            <p>河北保定星星烟花制造厂</p>
-            <p>规格：35g*1支</p>
-          </div>
-          <div class="manageStock_list_price">
-            <p>库存：700件</p>
-            <p>￥6.50</p>
+          <div class="manageStock_list_content">
+            <div>
+              <h3>{{item.tyname}}</h3>
+              <p>{{item.cj}}</p>
+              <p>规格：{{item.hlgg}}</p>
+            </div>
+            <div class="manageStock_list_price">
+              <p>库存：{{item.stock}}件</p>
+              <p>￥{{item.ptsj}}</p>
+            </div>
           </div>
         </div>
       </div>
@@ -49,23 +41,108 @@
 </template>
 
 <script>
+import { Toast } from "mint-ui";
+import { mapGetters } from 'vuex'
 import ManageHeader from "../components/ManageHeader";
+import { reqNotFullStock } from '@/api/index'
 export default {
   data() {
     return {
-      title: "缺货商品"
+      title: "缺货商品",
+      searchStr:'',
+      loading:false,
+      list:[],
+      moreLoading:false,
+      pageSize:10,
+      pageNum:1,
+      noData:false,//是否有数据
+      hasMore:true,
     };
   },
-  components: { ManageHeader }
+  components: { ManageHeader },
+  computed: {
+    ...mapGetters('login',['token','userId','corpCode','companyId','userRole'])
+  },
+  mounted() {
+    this.getData();
+  },
+  methods: {
+    doSearch(){
+      this.pageNum = 1;
+      this.list = [];
+      this.getData();
+    },
+    searchGoods(event){
+      if (event.keyCode == 13) {
+        event.preventDefault(); //禁止默认事件（默认是换行）
+        this.pageNum = 1;
+        this.list = [];
+        this.getData();
+      }
+    },
+    async getData(){
+        let defaulParams = {
+            token:this.token,
+            userId:this.userId,
+            corpCode:this.corpCode,
+            companyId:this.companyId,
+            userRole:this.userRole,
+            pageSize:this.pageSize,
+            pageNum:this.pageNum
+        };      
+        let res = await reqNotFullStock({
+          ...defaulParams,
+          fullText:this.searchStr
+        })
+        this.moreLoading = false;
+        if(res.code == 0){
+            if(!res.data.list.length){
+                this.hasMore = false;
+                this.moreLoading = false;
+                if(this.pageNum!=1){
+                    Toast({
+                        message: "已经到底了~",
+                        position: "middle",
+                        duration: 2000
+                    });
+                }else{
+                    Toast({
+                        message: "暂无数据",
+                        position: "middle",
+                        duration: 2000
+                    });
+                }
+                return;
+            }else{
+                this.hasMore = true;
+                this.moreLoading = false;
+            }
+            this.list = [...this.list,...res.data.list];
+        }
+    },
+    loadMore(){
+        if(this.moreLoading||!this.hasMore){
+            return;
+        }
+        this.pageNum = this.pageNum+1;
+        this.getData();
+    }
+  },
 };
 </script>
 
 <style scoped lang="scss">
+.fixed{
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+}
 .manageStock {
   background: #fff;
-  margin-top: 10px;
   padding-left: 39px;
-  padding-top: 20px;
+  margin-top: 100px;
+  padding-top: 15px;
   .manageStock_search {
     width: 674px;
     height: 43px;
@@ -112,8 +189,12 @@ export default {
     .manageStock_list_pic {
       width: 200px;
       height: 210px;
-      background:#ccc;
       margin-right:26px;
+      img{
+        width: 100%;
+        height: 100%;
+        object-fit: scale-down;
+      }
     }
     .manageStock_list_content {
       h3 {

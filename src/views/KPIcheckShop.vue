@@ -25,7 +25,7 @@
                 </div>
                 <div class="dataInfo bleft">
                     <p class="name">今日订单额</p>
-                    <p class="des top">{{jrdde}}万元</p>
+                    <p class="des top">{{jrdde}}元</p>
                 </div>
                 <div class="dataInfo">
                     <p class="name">今日品规数</p>
@@ -37,7 +37,7 @@
                 </div>
                 <div class="dataInfo noBorder bleft">
                     <p class="name">总订单额</p>
-                    <p class="des bottom">{{zdde}}</p>
+                    <p class="des bottom">{{zdde}}元</p>
                 </div>
                 <div class="dataInfo noBorder">
                     <p class="name">总品规数</p>
@@ -140,7 +140,16 @@ export default {
                 type:this.actIndex
             })
             if(this.actIndex == 0){//基本信息
-
+                this.companyName = res.data.companyname;
+                this.userName = res.data.username;
+                this.mobile = res.data.mobile;
+                this.address = res.data.address;
+                this.jrdss = res.data.jrdss;
+                this.jrdde = res.data.jrdde;
+                this.jrpgs = res.data.jrpgs;
+                this.zdds = res.data.zdds;
+                this.zdde = res.data.zdde;
+                this.zpss = res.data.zpss;
             }else{//品规信息
                 this.moreLoading = false;
                 if(res.code == 0){
@@ -173,6 +182,9 @@ export default {
             if(this.moreLoading||!this.hasMore){
                 return;
             }
+            if(this.actIndex==0){
+                return;
+            }
             this.pageNum = this.pageNum+1;
             this.getData();
         }
@@ -182,6 +194,12 @@ export default {
 <style lang="scss" scoped>
     .mangeContainer{
         background-color: #fff;
+        .manageHeader{
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+        }
         .shoList{
             .listItem{
                 margin-left: 39px;
@@ -320,6 +338,7 @@ export default {
             line-height: 94px;
             text-align: center;
             margin-top: 12px;
+            margin-top: 98px;
             .tab{
                 font-size:24px;
                 color:rgba(255,255,255,1);

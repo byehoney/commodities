@@ -618,10 +618,21 @@ const router = new Router({
             }
         },
         {
-            path: '/manageshortstock',//库存不足7日商品
+            path: '/manageshortstock',//缺货商品
             name: 'manageshortstock',
             component: () =>
                 import(/* webpackChunkName: "manageCustomerRank" */ './views/ManageShortStock.vue'),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title: 'xx店铺3'
+            }
+        },
+        {
+            path: '/manageNoStock',//无库存商品
+            name: 'manageNoStock',
+            component: () =>
+                import(/* webpackChunkName: "manageNoStock" */ './views/ManageNoStock.vue'),
             meta: {
                 auth: true,
                 keepAlive: false,

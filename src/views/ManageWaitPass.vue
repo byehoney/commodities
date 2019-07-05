@@ -1,5 +1,5 @@
 <template>
-    <div class="mangeContainer" style="opacity:1">
+    <div class="mangeContainer" style="opacity:0.1">
         <TopNav></TopNav>
         <div class="divide"></div>
         <div class="waiteList"

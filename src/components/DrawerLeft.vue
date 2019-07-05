@@ -9,11 +9,11 @@
         <div class="roleName">（{{user.userRoleName}}）</div>
         <div class="tel">{{user.mobile}}</div>
         <div class="relation">烟花店铺客户</div>
-        <div class="orderArea" v-if="user.userRole=='04'||user.userRole=='08'">
+        <div class="orderArea" v-if="user.userRole=='04'||user.userRole=='08'" @click="goPassList">
           <img src="../images/sh_m_icon.png" class="icon" alt="">
           <span>审核</span>
         </div>
-        <div class="orderArea">
+        <div class="kpiArea">
           <img src="../images/order_m_icon.png" class="icon" alt="">
           <span>订单</span>
         </div>
@@ -21,6 +21,7 @@
           <img src="../images/kpi_m_icon.png" class="icon" alt="">
           <span>业绩查询</span>
         </div>
+        <div class="btn" @click="loginOut">退出登录</div>
       </div>
     </transition>
 </template>
@@ -58,7 +59,18 @@ export default {
     methods:{
         ...mapMutations(['mange/changeDrawLeft','login/LOGOUT']),
         ...mapActions('login',['setAtv']),
+        loginOut(){
+          this['login/LOGOUT']({
+            $router:this.$router,
+          })
+          this['mange/changeDrawLeft'](false);
+        },
+        goPassList(){
+          this['mange/changeDrawLeft'](false);
+          this.$router.push({name:'manageWaitPass'})
+        },
         goCheckAPI(){
+          this['mange/changeDrawLeft'](false);
           this.$router.push({name:'kpiCheck'})
         },
         async getToken(){
@@ -101,12 +113,10 @@ export default {
             this.upload();
         },
         handleMaskClick(){
-          // this.$refs.drawer.toggle(false);
-          this.changeDrawLeft(false);
+          this['mange/changeDrawLeft'](false);
         },
         showDrawerLeft(){
-          this.changeDrawLeft(true);
-          // this.$refs.drawer.toggle(true)
+          this['mange/changeDrawLeft'](true);
         }
     }
 
@@ -152,6 +162,17 @@ export default {
       left: 0;
       z-index: 100000;
       background:linear-gradient(180deg,rgba(0,122,255,1) 0%,rgba(24,152,247,1) 100%)!important;
+      .btn{
+        width:384px;
+        height:90px;
+        background:linear-gradient(180deg,rgba(250,217,97,1) 0%,rgba(247,107,28,1) 100%);
+        border-radius:50px;
+        font-size:28px;
+        color:rgba(255,255,255,1);
+        text-align: center;
+        line-height: 90px;
+        margin: 57px auto 0;
+      }
       .name{
         font-size:30px;
         color:rgba(255,255,255,1);
@@ -227,7 +248,7 @@ export default {
       align-items: center;
       position: relative;
       overflow: hidden;
-      margin: 144px auto 20px;
+      margin: 100px auto 20px;
       .upload_file{
           position: absolute;
           width:126px;

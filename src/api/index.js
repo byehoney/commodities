@@ -266,6 +266,9 @@ function secKill(params) {//获取首页限时秒杀
 
 
 // 后台管理接口
+function reqManageIndex(params) {//获取管理页面首页数据
+    return post('/manage/index/list.do',params)
+}
 function getZxtList(params) {//获取销售走势图
     return post('/manage/get/zxtlist.do',params)
 }
@@ -287,8 +290,18 @@ function reqManageShop(params){//获取业务员负责门店
 function reqManageShopDetail(params){//获取业务员负责门店经营详情
     return post('/manage/get/ywymdxq.do',params)
 }
-
-
+function reqManageBusiness(params){//获取业务覆盖情况
+    return post('/manage/get/ywxx.do',params)
+}
+function reqSevenDaysStock(params){//获取库存不足七日商品
+    return post('/manage/get/kc7rsp.do',params)
+}
+function reqNoStock(params){//获取无库存商品
+    return post('/manage/get/wkcsp.do',params)
+}
+function reqNotFullStock(params){//获取缺货商品
+    return post('/manage/get/qhsp.do',params)
+}
 export {
     checkExist,
     getYzCode,
@@ -359,6 +372,7 @@ export {
     getHeatList,
     getSpecialList,
     secKill,
+    reqManageIndex,//管理页面首页
     getZxtList,//管理页面走势图
     getProRankList,//管理页面 商品销售排名
     getCoustomerCityList,//管理页面客户销售排名
@@ -366,4 +380,8 @@ export {
     reqMemberKPI,//管理页面获取业务员业绩
     reqManageShop,//管理页面获取业务员负责门店
     reqManageShopDetail,//管理页面获取业务员负责门店详情
+    reqManageBusiness,//管理页面获取业务覆盖情况
+    reqSevenDaysStock,//管理页面获取库存不足七日商品
+    reqNoStock,//管理页面获取无库存商品
+    reqNotFullStock,//管理页面获取缺货商品
 }

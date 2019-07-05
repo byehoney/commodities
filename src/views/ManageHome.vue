@@ -1,24 +1,24 @@
 <template>
-    <div :class="['mangeContainer',showDrawLeft?'pop':'']">
+    <div :class="['mangeContainer',showDrawLeft?'pop':'']" style="opacity:0.1">
         <ManageTopNav @trigerLeft="trigerDrawerLeft"></ManageTopNav>
         <DrawerLeft ref="leftDrwaer"></DrawerLeft>
-        <div class="main">
+        <div class="main" v-if="bData">
             <mt-swipe class="manage_swiper" :auto="0" :show-indicators="false">
                 <mt-swipe-item class="item">
-                    <div class="top">￥66880.00</div>
+                    <div class="top">￥{{bData.jrxse}}</div>
                     <div class="center">今日销售额</div>
                     <div class="bottom">
-                        <div class="left">采购店数：68</div>
-                        <div class="right">销售数量：8800</div>
+                        <div class="left">采购店数：{{bData.cgmds}}</div>
+                        <div class="right">销售数量：{{bData.jrxl}}</div>
                     </div>
                     <img class="arrow" src="../images/m_arrow_right.png" alt="" v-show="user.userRole=='04'||user.userRole=='05'">
                 </mt-swipe-item>
                 <mt-swipe-item class="item total" v-if="user.userRole=='04'||user.userRole=='05'">
-                    <div class="top">￥66880.00</div>
+                    <div class="top">￥{{bData.zsxe}}</div>
                     <div class="center">总销售额</div>
                     <div class="bottom">
-                        <div class="left">总订单数：88900</div>
-                        <div class="right">总客户数：3500</div>
+                        <div class="left">总订单数：{{bData.zdds}}</div>
+                        <div class="right">总客户数：{{bData.zkhs}}</div>
                     </div>
                     <img class="arrow arrow_left" src="../images/m_arrow_left.png" alt="">
                 </mt-swipe-item>
@@ -31,151 +31,151 @@
                     <img class="icon" src="../images/shopcar.png" alt="">
                     <div class="text">今日订单数/未处理</div>
                 </div>
-                <div class="right">77/77</div>
+                <div class="right">{{bData.dds}}/{{bData.wclzs}}</div>
             </div>
             <div class="infoItem">
                 <div class="left">
                     <img class="icon" src="../images/shopcar.png" alt="">
                     <div class="text">今日退款单</div>
                 </div>
-                <div class="right">0</div>
-            </div>
-            <div class="infoItem">
-                <div class="left">
-                    <img class="icon" src="../images/shopcar.png" alt="">
-                    <div class="text">在售商品</div>
-                </div>
-                <div class="right">99999/6780</div>
-            </div>
-            <div class="infoItem">
-                <div class="left">
-                    <img class="icon" src="../images/shopcar.png" alt="">
-                    <div class="text">今日新增客户</div>
-                </div>
-                <div class="right">30</div>
-            </div>
-            <div class="infoItem">
-                <div class="left">
-                    <img class="icon" src="../images/shopcar.png" alt="">
-                    <div class="text">库存不足7日商品</div>
-                </div>
-                <div class="right">30</div>
-            </div>
-            <div class="infoItem">
-                <div class="left">
-                    <img class="icon" src="../images/shopcar.png" alt="">
-                    <div class="text">缺货商品</div>
-                </div>
-                <div class="right">30</div>
-            </div>
-            <div class="infoItem">
-                <div class="left">
-                    <img class="icon" src="../images/shopcar.png" alt="">
-                    <div class="text">30天未动销（商品/门店）</div>
-                </div>
-                <div class="right">30</div>
-            </div>
-            <div class="infoItem">
-                <div class="left">
-                    <img class="icon" src="../images/shopcar.png" alt="">
-                    <div class="text">业务（已覆盖/未覆盖）</div>
-                </div>
-                <div class="right">167/2980</div>
-            </div>
-        </div>
-        <!-- 商业管理员和业务员 -->
-        <div class="infos" v-if="user.userRole=='04'||user.userRole=='05'">
-            <div class="infoItem">
-                <div class="left">
-                    <img class="icon" src="../images/shopcar.png" alt="">
-                    <div class="text">app今日打开次数</div>
-                </div>
-                <div class="right">77/77</div>
-            </div>
-            <div class="infoItem">
-                <div class="left">
-                    <img class="icon" src="../images/shopcar.png" alt="">
-                    <div class="text">未处理总额</div>
-                </div>
-                <div class="right">0</div>
-            </div>
-            <div class="infoItem">
-                <div class="left">
-                    <img class="icon" src="../images/shopcar.png" alt="">
-                    <div class="text">未处理采购门店数</div>
-                </div>
-                <div class="right">99999/6780</div>
-            </div>
-            <div class="infoItem">
-                <div class="left">
-                    <img class="icon" src="../images/shopcar.png" alt="">
-                    <div class="text">今日订单数/未处理（总数）</div>
-                </div>
-                <div class="right">30</div>
-            </div>
-            <div class="infoItem">
-                <div class="left">
-                    <img class="icon" src="../images/shopcar.png" alt="">
-                    <div class="text">今日退款单</div>
-                </div>
-                <div class="right">30</div>
+                <div class="right">{{bData.thds}}</div>
             </div>
             <div class="infoItem">
                 <div class="left">
                     <img class="icon" src="../images/shopcar.png" alt="">
                     <div class="text">在售商品/有库存</div>
                 </div>
-                <div class="right">30</div>
+                <div class="right">{{bData.zypgs}}/{{bData.ykcpgs}}</div>
             </div>
-            <div class="infoItem">
+            <router-link to="/manageNoStock" tag="div"  class="infoItem">
                 <div class="left">
                     <img class="icon" src="../images/shopcar.png" alt="">
                     <div class="text">无库存商品数量</div>
                 </div>
-                <div class="right">30</div>
-            </div>
+                <div class="right">{{bData.wkcpgs}}</div>
+            </router-link>
             <div class="infoItem">
                 <div class="left">
                     <img class="icon" src="../images/shopcar.png" alt="">
                     <div class="text">今日新增客户</div>
                 </div>
-                <div class="right">30</div>
+                <div class="right">{{bData.brxkes}}</div>
             </div>
-            <div class="infoItem">
-                <div class="left">
-                    <img class="icon" src="../images/shopcar.png" alt="">
-                    <div class="text">库存不足7日商品</div>
-                </div>
-                <div class="right">30</div>
-            </div>
-            <div class="infoItem">
+            <router-link to="/manageshortstock" tag="div" class="infoItem">
                 <div class="left">
                     <img class="icon" src="../images/shopcar.png" alt="">
                     <div class="text">缺货商品</div>
                 </div>
-                <div class="right">30</div>
-            </div>
+                <div class="right">{{bData.brqhpz}}</div>
+            </router-link>
             <div class="infoItem">
                 <div class="left">
                     <img class="icon" src="../images/shopcar.png" alt="">
                     <div class="text">30天未动销（商品/门店）</div>
                 </div>
-                <div class="right">1897/1334</div>
+                <div class="right">{{bData.sstwdspzs}}/{{bData.sstwdxkhs}}</div>
+            </div>
+            <router-link :to="{name:'manageBusCover',query:{cover:bData.yfgkhs,unCover:bData.wfgkhs}}" tag="div" class="infoItem">
+                <div class="left">
+                    <img class="icon" src="../images/shopcar.png" alt="">
+                    <div class="text">业务（已覆盖/未覆盖）</div>
+                </div>
+                <div class="right">{{bData.yfgkhs}}/{{bData.wfgkhs}}</div>
+            </router-link>
+        </div>
+        <!-- 商业管理员和业务员 -->
+        <div class="infos" v-if="(user.userRole=='04'||user.userRole=='05')&&bData">
+            <div class="infoItem">
+                <div class="left">
+                    <img class="icon" src="../images/shopcar.png" alt="">
+                    <div class="text">app今日打开次数</div>
+                </div>
+                <div class="right">{{bData.jrdkcs}}</div>
+            </div>
+            <div class="infoItem">
+                <div class="left">
+                    <img class="icon" src="../images/shopcar.png" alt="">
+                    <div class="text">未处理总额</div>
+                </div>
+                <div class="right">{{bData.wclze}}</div>
+            </div>
+            <div class="infoItem">
+                <div class="left">
+                    <img class="icon" src="../images/shopcar.png" alt="">
+                    <div class="text">未处理采购门店数</div>
+                </div>
+                <div class="right">{{bData.wclcgmds}}/{{bData.cgmds}}</div>
+            </div>
+            <div class="infoItem">
+                <div class="left">
+                    <img class="icon" src="../images/shopcar.png" alt="">
+                    <div class="text">今日订单数/未处理（总数）</div>
+                </div>
+                <div class="right">{{bData.dds}}/{{bData.wclzs}}</div>
+            </div>
+            <div class="infoItem">
+                <div class="left">
+                    <img class="icon" src="../images/shopcar.png" alt="">
+                    <div class="text">今日退款单</div>
+                </div>
+                <div class="right">{{bData.thds}}</div>
+            </div>
+            <div class="infoItem">
+                <div class="left">
+                    <img class="icon" src="../images/shopcar.png" alt="">
+                    <div class="text">在售商品/有库存</div>
+                </div>
+                <div class="right">{{bData.zypgs}}/{{bData.ykcpgs}}</div>
+            </div>
+            <router-link to="/manageNoStock" tag="div"  class="infoItem">
+                <div class="left">
+                    <img class="icon" src="../images/shopcar.png" alt="">
+                    <div class="text">无库存商品数量</div>
+                </div>
+                <div class="right">{{bData.wkcpgs}}</div>
+            </router-link>
+            <div class="infoItem">
+                <div class="left">
+                    <img class="icon" src="../images/shopcar.png" alt="">
+                    <div class="text">今日新增客户</div>
+                </div>
+                <div class="right">{{bData.brxkes}}</div>
+            </div>
+            <router-link to="/managestock" tag="div" class="infoItem">
+                <div class="left">
+                    <img class="icon" src="../images/shopcar.png" alt="">
+                    <div class="text">库存不足7日商品</div>
+                </div>
+                <div class="right">{{bData.ccxy7tel}}</div>
+            </router-link>
+            <router-link to="/manageshortstock" tag="div" class="infoItem">
+                <div class="left">
+                    <img class="icon" src="../images/shopcar.png" alt="">
+                    <div class="text">缺货商品</div>
+                </div>
+                <div class="right">{{bData.brqhpz}}</div>
+            </router-link>
+            <div class="infoItem">
+                <div class="left">
+                    <img class="icon" src="../images/shopcar.png" alt="">
+                    <div class="text">30天未动销（商品/门店）</div>
+                </div>
+                <div class="right">{{bData.sstwdspzs}}/{{bData.sstwdxkhs}}</div>
             </div>
             
         </div>
-        <div class="hotsale scrollBox" v-if="user.userRole=='04'||user.userRole=='05'">
+        <div class="hotsale scrollBox" v-if="(user.userRole=='04'||user.userRole=='05')&&bData&&bData.list.length">
             <div class="title">今日热销商品</div>
             <div class="hotList">
-                <div class="hotItem">
-                    <img src="../images/shopcar.png" alt="">
+                <div class="hotItem" v-for="(item,index) in bData.list" :key="index">
+                    <img :src="item.image?item.image:require('../images/default_logo.jpg')" alt="">
                     <div class="hotInfo">
-                        <p class="sName">烟花商品名称</p>
-                        <p class="fName">河北保定星星烟花制造厂</p>
-                        <p class="price">￥6.50</p>
-                        <p class="money">金额：38156.73</p>
-                        <p class="buyShopNum">采购店数：229</p>
-                        <p class="sales">销量：6600</p>
+                        <p class="sName">{{item.formalname}}</p>
+                        <p class="fName">{{item.factoryname}}</p>
+                        <p class="price">￥{{item.price}}</p>
+                        <p class="money">金额：{{item.totalsaleamount}}</p>
+                        <p class="buyShopNum">采购店数：{{item.shopcount}}</p>
+                        <p class="sales">销量：{{item.totalsalecount}}</p>
                     </div>
                 </div>
             </div>
@@ -190,10 +190,11 @@ import ManageTabBarBotttom from '@/components/ManageTabBarBottom'
 import DrawerLeft from '@/components/DrawerLeft'
 import ManageTopNav from '@/components/ManageTopNav'
 import {mapGetters,mapMutations,mapState} from 'vuex'
+import { reqManageIndex } from '@/api/index'
 export default {
     data(){
         return{
-            
+            bData:null,
         }
     },
     computed: {
@@ -209,6 +210,9 @@ export default {
         ManageTopNav,
         DrawerLeft
     },
+    mounted() {
+        this.getData();
+    },
     methods: {
         ...mapMutations('mange',['changeDrawLeft']),
         trigerDrawerLeft(){
@@ -217,6 +221,19 @@ export default {
         handleMaskClick(){
             this.changeDrawLeft(false)
         },
+        async getData(){
+            let defaulParams = {
+                token:this.token,
+                userId:this.userId,
+                corpCode:this.corpCode,
+                companyId:this.companyId,
+                userRole:this.userRole,
+            };
+            let res = await reqManageIndex(defaulParams);
+            if(res.code == 0){
+                this.bData = res.data;
+            }
+        }
     },
 }
 </script>

@@ -58,6 +58,9 @@ export default {
             this.getData();
         }
     },
+    deactivated(){
+        this.loading = true;
+    },
     beforeRouteLeave(to, from, next){
         let position = window.scrollTop
         sessionStorage.setItem('mStop',position);

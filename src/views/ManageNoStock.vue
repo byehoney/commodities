@@ -1,5 +1,5 @@
 <template>
-  <div style="opacity:1">
+  <div style="opacity:0.1">
     <ManageHeader :title="title" class="fixed"></ManageHeader>
     <div class="manageStock">
       <div class="manageStock_search">
@@ -11,17 +11,16 @@
             <input v-model="searchStr" @keypress="searchGoods" type="text" placeholder="商品名称">
           </form>
         </span>
-        <span @click="doSearch">搜索</span>
+        <span>搜索</span>
       </div>
-      <div class="manageStock_tips">库存不足7天销量</div>
       <div class="manageStock_content"
         v-infinite-scroll="loadMore"
         infinite-scroll-disabled="loading"
         infinite-scroll-distance="10"
       >
         <div class="manageStock_list" v-for="(item,index) in list" :key="index">
-          <div class="manageStock_list_pic"> 
-            <img :src="item.yurl?item.yurl:require('../images/default_logo.jpg')">
+          <div class="manageStock_list_pic">
+            <img :src="item.url?item.url:require('../images/default_logo.jpg')">
           </div>
           <div class="manageStock_list_content">
             <div>
@@ -30,7 +29,7 @@
               <p>规格：{{item.hlgg}}</p>
             </div>
             <div class="manageStock_list_price">
-              <p>库存：{{item.stock}}件</p>
+              <!-- <p>库存：{{item.stock}}件</p> -->
               <p>￥{{item.ptsj}}</p>
             </div>
           </div>
@@ -44,11 +43,11 @@
 import { Toast } from "mint-ui";
 import { mapGetters } from 'vuex'
 import ManageHeader from "../components/ManageHeader";
-import { reqSevenDaysStock } from '@/api/index';
+import { reqNoStock } from '@/api/index'
 export default {
   data() {
     return {
-      title: "库存不足7日商品",
+      title: "缺货商品",
       searchStr:'',
       loading:false,
       list:[],
@@ -90,7 +89,7 @@ export default {
             pageSize:this.pageSize,
             pageNum:this.pageNum
         };      
-        let res = await reqSevenDaysStock({
+        let res = await reqNoStock({
           ...defaulParams,
           fullText:this.searchStr
         })
