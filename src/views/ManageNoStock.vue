@@ -47,7 +47,7 @@ import { reqNoStock } from '@/api/index'
 export default {
   data() {
     return {
-      title: "缺货商品",
+      title: "无库存商品",
       searchStr:'',
       loading:false,
       list:[],
