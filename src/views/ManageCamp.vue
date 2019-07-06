@@ -19,38 +19,44 @@
     <div>
       <div class="subNav">
         <ul>
-          <li class="active">销量</li>
-          <li>
+          <li class="active" @click="checkType(1)">销量</li>
+          <li @click="checkType(2)">
             <span>价格</span>
             <span>
               <img src="../images/mchoose.png">
             </span>
           </li>
-          <li>主推</li>
+          <li @click="checkType(3)">主推</li>
         </ul>
       </div>
     </div>
     <!-- 导航结束 -->
-    <div class="camp_list" v-for="(item,index) in list" :key="index">
-      <div class="camp_list_content">
-        <div class="camp_list_left">
-          <img src>
-        </div>
-        <div class="camp_list_right">
-          <div class="camp_list_right_top">
-            <h3>{{item.title}}</h3>
-            <p>{{item.address}}</p>
-            <p>{{item.sum}}</p>
+    <div
+      v-infinite-scroll="loadMore"
+      infinite-scroll-disabled="loading"
+      infinite-scroll-distance="10"
+    >
+      <div class="camp_list" v-for="(item,index) in list" :key="index">
+        <div class="camp_list_content">
+          <div class="camp_list_left">
+            <img :src="item.slt">
           </div>
-          <div class="camp_list_right_bottom">
-            <div class="camp_list_right_bottom_left">
-              <ul>
-                <li>{{item.num}}</li>
-                <li>{{item.price}}</li>
-              </ul>
+          <div class="camp_list_right">
+            <div class="camp_list_right_top">
+              <h3>{{item.tyname}}</h3>
+              <p>{{item.cj}}</p>
+              <p>{{item.hlgg}}</p>
             </div>
-            <div class="camp_list_right_bottom_right">
-              <p>{{item.sale}}</p>
+            <div class="camp_list_right_bottom">
+              <div class="camp_list_right_bottom_left">
+                <ul>
+                  <li>仅剩{{item.dqkc}}件</li>
+                  <li>¥{{item.ptsj}}</li>
+                </ul>
+              </div>
+              <div class="camp_list_right_bottom_right">
+                <p>已销:{{item.yssl}}件</p>
+              </div>
             </div>
           </div>
         </div>
@@ -60,38 +66,33 @@
 </template>
 
 <script>
+import { getManageMerchandise } from "@/api/index";
+import { mapGetters } from "vuex";
+import { Toast } from "mint-ui";
 export default {
   data() {
     return {
       searchStr: "",
       listCheck: true,
-      list: [
-        {
-          title: "烟花商品名称",
-          address: "河北保定星星烟花制造厂",
-          sum: "规格：35g*1支",
-          num: "仅剩999件",
-          price: "¥6.50",
-          sale: "已销：700件"
-        },
-        {
-          title: "烟花商品名称",
-          address: "河北保定星星烟花制造厂",
-          sum: "规格：35g*1支",
-          num: "仅剩999件",
-          price: "¥6.50",
-          sale: "已销：700件"
-        },
-        {
-          title: "烟花商品名称",
-          address: "河北保定星星烟花制造厂",
-          sum: "规格：35g*1支",
-          num: "仅剩999件",
-          price: "¥6.50",
-          sale: "已销：700件"
-        }
-      ]
+      loading: false,
+      list: [],
+      moreLoading: false,
+      pageSize: 3,
+      pageNum: 1,
+      noData: false, //是否有数据
+      hasMore: true,
+      type: 1,
+      sort: 0
     };
+  },
+  computed: {
+    ...mapGetters("login", [
+      "token",
+      "userId",
+      "corpCode",
+      "companyId",
+      "userRole"
+    ])
   },
   methods: {
     goBack() {
@@ -102,15 +103,67 @@ export default {
         event.preventDefault(); //禁止默认事件（默认是换行）
         this.pageNum = 1;
         this.list = [];
-        this.getData();
+        this.getCamp();
       }
     },
     doSearch() {
       this.pageNum = 1;
       this.list = [];
-      this.getData();
+      this.getCamp();
     },
-    checkList() {}
+    async getCamp(index) {
+      let defaulParams = {
+        token: this.token,
+        userId: this.userId,
+        corpCode: this.corpCode,
+        companyId: this.companyId,
+        userRole: this.userRole
+      };
+      let res = await getManageMerchandise({
+        ...defaulParams,
+        type: index,
+        fullText: this.searchStr
+      });
+      console.log(res);
+      if (res.code == 0) {
+        if (!res.data.list.length) {
+          this.hasMore = false;
+          this.moreLoading = false;
+          if (this.pageNum != 1) {
+            Toast({
+              message: "已经到底了~",
+              position: "middle",
+              duration: 2000
+            });
+          } else {
+            Toast({
+              message: "暂无数据",
+              position: "middle",
+              duration: 2000
+            });
+          }
+          return;
+        } else {
+          this.hasMore = true;
+          this.moreLoading = false;
+          console.log(1);
+        }
+        this.list = [...this.list, ...res.data.list];
+      }
+    },
+    loadMore(index) {
+      if (this.moreLoading || !this.hasMore) {
+        return;
+      }
+      this.pageNum = this.pageNum + 1;
+      this.getCamp(index);
+    },
+    checkType(index) {
+      this.loadMore(index);
+    }
+  },
+  mounted() {
+    this.getCamp();
   }
 };
 </script>
@@ -238,7 +291,7 @@ export default {
         ul li {
           font-size: 18px;
           line-height: 40px;
-          width: 117px;
+          min-width: 117px;
           height: 24px;
           color: #ff220a;
           border: 1px solid #ff220a;

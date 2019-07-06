@@ -266,6 +266,12 @@ function secKill(params) {//获取首页限时秒杀
 
 
 // 后台管理接口
+function getManageMerchandise(params){ //获取在营商品
+    return post('/manage/get/zysp.do',params)
+}
+function getManageOrderStatus(params){//获取订单的状态
+    return post('/manage/get/jrdds.do',params)
+}
 function reqManageIndex(params) {//获取管理页面首页数据
     return post('/manage/index/list.do',params)
 }
@@ -385,6 +391,8 @@ export {
     getHeatList,
     getSpecialList,
     secKill,
+    getManageMerchandise,//在营商品
+    getManageOrderStatus,//管理页面的订单状态
     reqManageIndex,//管理页面首页
     getZxtList,//管理页面走势图
     getProRankList,//管理页面 商品销售排名

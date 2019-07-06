@@ -640,6 +640,17 @@ const router = new Router({
             }
         },
         {
+            path: '/manageorderstatus',//缺货商品
+            name: 'manageorderstatus',
+            component: () =>
+                import(/* webpackChunkName: "manageCustomerRank" */ './views/ManageOrderStatus.vue'),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title: '今日订单'
+            }
+        },
+        {
             path: '/manageNoStock',//无库存商品
             name: 'manageNoStock',
             component: () =>
