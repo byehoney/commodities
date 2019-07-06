@@ -26,7 +26,7 @@
               <img src="../images/dianpu_m.png">
             </div>
             <div class="manageChoose_name">
-              <p>门店名称：{{item.name}}</p>
+              <p>门店名称：{{item.companyname}}</p>
               <p>注册地址：{{item.address}}</p>
             </div>
           </li>
@@ -41,7 +41,7 @@
 import { Toast } from "mint-ui";
 import { mapGetters } from 'vuex'
 import ManageHeader from "../components/ManageHeader";
-import { reqSevenDaysStock } from '@/api/index';//待修改
+import { reqNoCareShop } from '@/api/index';//待修改
 export default {
   data() {
     return {
@@ -87,7 +87,7 @@ export default {
             pageSize:this.pageSize,
             pageNum:this.pageNum
         };      
-        let res = await reqSevenDaysStock({
+        let res = await reqNoCareShop({
           ...defaulParams,
           fullText:this.searchStr
         })

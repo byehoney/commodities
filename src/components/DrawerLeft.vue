@@ -6,9 +6,9 @@
             <img :src="imgStr?imgStr:require('../images/manage_atv.png')" class="atv" alt="">
         </div>
         <div class="name">{{user.userName}}</div>
-        <div class="roleName">（{{user.userRoleName}}）</div>
+        <div class="roleName">（{{user.roleName}}）</div>
         <div class="tel">{{user.mobile}}</div>
-        <div class="relation">烟花店铺客户</div>
+        <div class="relation">{{user.orgName}}</div>
         <div class="orderArea" v-if="user.userRole=='04'||user.userRole=='08'" @click="goPassList">
           <img src="../images/sh_m_icon.png" class="icon" alt="">
           <span>审核</span>
@@ -165,10 +165,10 @@ export default {
       .btn{
         width:384px;
         height:90px;
-        background:linear-gradient(180deg,rgba(250,217,97,1) 0%,rgba(247,107,28,1) 100%);
+        background:#fff;
         border-radius:50px;
         font-size:28px;
-        color:rgba(255,255,255,1);
+        color:#666666;
         text-align: center;
         line-height: 90px;
         margin: 57px auto 0;

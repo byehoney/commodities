@@ -106,13 +106,13 @@
                 </div>
                 <div class="right">{{bData.wclcgmds}}/{{bData.cgmds}}</div>
             </router-link>
-            <div class="infoItem">
+            <router-link to="/manageorder" tag="div" class="infoItem">
                 <div class="left">
                     <img class="icon" src="../images/shopcar.png" alt="">
                     <div class="text">今日订单数/未处理（总数）</div>
                 </div>
                 <div class="right">{{bData.dds}}/{{bData.wclzs}}</div>
-            </div>
+            </router-link>
             <div class="infoItem">
                 <div class="left">
                     <img class="icon" src="../images/shopcar.png" alt="">
@@ -120,13 +120,13 @@
                 </div>
                 <div class="right">{{bData.thds}}</div>
             </div>
-            <div class="infoItem">
+            <router-link to="/managecamp" tag="div" class="infoItem">
                 <div class="left">
                     <img class="icon" src="../images/shopcar.png" alt="">
                     <div class="text">在售商品/有库存</div>
                 </div>
                 <div class="right">{{bData.zypgs}}/{{bData.ykcpgs}}</div>
-            </div>
+            </router-link>
             <router-link to="/manageNoStock" tag="div"  class="infoItem">
                 <div class="left">
                     <img class="icon" src="../images/shopcar.png" alt="">
@@ -155,7 +155,7 @@
                 </div>
                 <div class="right">{{bData.brqhpz}}</div>
             </router-link>
-            <router-link to="/manageuncelled" tag="div" class="infoItem">
+            <router-link :to="{name:'manageuncelled',query:{gNum:bData.sstwdspzs,sNum:bData.sstwdxkhs}}" tag="div" class="infoItem">
                 <div class="left">
                     <img class="icon" src="../images/shopcar.png" alt="">
                     <div class="text">30天未动销（商品/门店）</div>
