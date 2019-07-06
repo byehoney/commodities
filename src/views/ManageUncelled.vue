@@ -1,42 +1,74 @@
 <template>
   <div>
-    <ManageHeader :title="title"></ManageHeader>
+    <ManageHeader :title="title" class="fixed"></ManageHeader>
     <div class="manageStock">
       <div class="manageStock_search">
         <span>
           <img src="../images/smallsousuo.png">
         </span>
         <span>
-          <input type="text" placeholder="商品名称">
+          <form @submit.prevent class="form">
+            <input v-model="searchStr" @keypress="searchGoods" type="text" placeholder="请输入搜索内容">
+          </form>
         </span>
-        <span>搜索</span>
+        <span @click="doSearch">搜索</span>
       </div>
-      <div class="manageStock_tips fix">
-        <ul>
-          <li>天数:30</li>
-          <li>
-            门店
-            <span></span>
-          </li>
-          <li>
-            地区
-            <span></span>
-          </li>
-          <li>合计数：1335</li>
-        </ul>
+      <div class="top">
+        <div class="left">
+          <div class='date long'>
+            天数：30天
+          </div>
+          <div :class="['type',typeActive?'active':'']" @click="selType">
+              {{typeList[curTypeIndex].text}}
+              <div class="typeList" v-if="showTypeList">
+                  <p :class="['typeItem',curTypeIndex==index?'active':'']" @click="selCurType($event,index)" v-for="(item,index) in typeList" :key="index">{{item.text}}</p>
+              </div>
+          </div>
+          <div :class="['area',areaActive?'active':'']" @click="selArea" v-if="areaList.length&&curTypeIndex==1">
+              {{areaList[curAreaIndex].regionName}}
+              <div class="typeList" v-if="showAreaList">
+                  <p :class="['typeItem',curAreaIndex==index?'active':'']" @click="selCurArea($event,index)" v-for="(item,index) in areaList" :key="index">{{item.regionName}}</p>
+              </div>
+          </div>
+        </div>
+        <div class="total" v-if="curTypeIndex==1">合计数：1200</div>
       </div>
       <!-- 门店列表 -->
       <div class="manageChooseList">
-        <ul>
-          <li v-for="item in chooseList">
-            <div class="manageChoose_pic">
-              <img src="../images/dianpu_m.png">
-            </div>
-            <div class="manageChoose_name">
-              <p>门店名称：{{item.name}}</p>
-              <p>注册地址：{{item.address}}</p>
-            </div>
-          </li>
+        <ul
+          v-infinite-scroll="loadMore"
+          infinite-scroll-disabled="loading"
+          infinite-scroll-distance="10"
+        >
+          <template v-if="curTypeIndex==1">
+            <li v-for="(item,index) in list" class="shop_list" :key="index">
+              <div class="manageChoose_pic">
+                <img src="../images/dianpu_m.png">
+              </div>
+              <div class="manageChoose_name">
+                <p>门店名称：{{item.name}}</p>
+                <p>注册地址：{{item.address}}</p>
+              </div>
+            </li>
+          </template>
+          <template v-if="curTypeIndex==0">
+            <li v-for="(item,index) in list" class="manageStock_list" :key="index">
+              <div class="manageStock_list_pic"> 
+                <img :src="item.yurl?item.yurl:require('../images/default_logo.jpg')">
+              </div>
+              <div class="manageStock_list_content">
+                <div>
+                  <h3>{{item.tyname}}</h3>
+                  <p>{{item.cj}}</p>
+                  <p>规格：{{item.hlgg}}</p>
+                </div>
+                <div class="manageStock_list_price">
+                  <p>库存：{{item.stock}}件</p>
+                  <p>￥{{item.ptsj}}</p>
+                </div>
+              </div>
+            </li>
+          </template>
         </ul>
       </div>
     </div>
@@ -44,41 +76,293 @@
 </template>
 
 <script>
+import { Toast } from "mint-ui";
+import { mapGetters } from 'vuex'
 import ManageHeader from "../components/ManageHeader";
+import { reqSevenDaysStock } from '@/api/index';
 export default {
   data() {
     return {
       title: "未动销查询",
-      chooseList: [
-        {
-          name: "星星烟花-旗舰店",
-          address: "河北省保定市西口村甲2组35号"
-        },
-        {
-          name: "星星烟花-旗舰店",
-          address: "河北省保定市西口村甲2组35号"
-        },
-        {
-          name: "星星烟花-旗舰店",
-          address: "注册地址：河北省保定市西口村甲2组35号"
-        },
-        {
-          name: "星星烟花-旗舰店",
-          address: "河北省保定市西口村甲2组35号"
-        }
-      ]
+      typeActive:false,
+      areaActive:false,
+      showTypeList:false,
+      showAreaList:false,
+      typeList:[{text:'商品',sort:0},{text:'门店',sort:1}],
+      areaList:[{regionCode: "", regionName: "全国"}],
+      curTypeIndex:0,
+      curAreaIndex:0,
+      list:[],
+      loading:false,
+      moreLoading:false,
+      hasMore:true,
+      pageSize:10,
+      pageNum:1,
+      noData:false//是否有数据
     };
   },
-  components: { ManageHeader }
+  components: { ManageHeader },
+  computed: {
+    ...mapGetters('login',['token','userId','corpCode','companyId','userRole'])
+  },
+  mounted() {
+    this.getData();
+  },
+  methods:{
+    doSearch(){
+      this.pageNum = 1;
+      this.list = [];
+      this.getData();
+    },
+    searchGoods(event){
+      if (event.keyCode == 13) {
+        event.preventDefault(); //禁止默认事件（默认是换行）
+        this.pageNum = 1;
+        this.list = [];
+        this.getData();
+      }
+    },
+    async getData(){
+        let defaulParams = {
+            token:this.token,
+            userId:this.userId,
+            corpCode:this.corpCode,
+            companyId:this.companyId,
+            userRole:this.userRole,
+            pageSize:this.pageSize,
+            pageNum:this.pageNum
+        };      
+        let res = await reqSevenDaysStock({
+          ...defaulParams,
+          fullText:this.searchStr
+        })
+        this.moreLoading = false;
+        if(res.code == 0){
+            if(!res.data.list.length){
+                this.hasMore = false;
+                this.moreLoading = false;
+                if(this.pageNum!=1){
+                    Toast({
+                        message: "已经到底了~",
+                        position: "middle",
+                        duration: 2000
+                    });
+                }else{
+                    Toast({
+                        message: "暂无数据",
+                        position: "middle",
+                        duration: 2000
+                    });
+                }
+                return;
+            }else{
+                this.hasMore = true;
+                this.moreLoading = false;
+            }
+            this.list = [...this.list,...res.data.list];
+        }
+    },
+    loadMore(){
+        if(this.moreLoading||!this.hasMore){
+            return;
+        }
+        this.pageNum = this.pageNum+1;
+        this.getData();
+    },
+    selType(){
+        this.typeActive = true;
+        this.dateActive = false;
+        this.showTypeList = true;
+        this.showDateList = false;
+        this.showAreaList = false;
+        this.areaActive = false;
+    },
+    selArea(){
+        this.typeActive = false;
+        this.dateActive = false;
+        this.showTypeList = false;
+        this.showDateList = false;
+        this.showAreaList = true;
+        this.areaActive = true;
+    },
+    selCurType(e,index){
+        e.stopPropagation();
+        if(this.moreLoading){
+            return;
+        }
+        this.curTypeIndex = index;
+        this.showTypeList = false;
+        this.list = [];
+        this.pageNum = 1;
+        this.getData();
+    },
+    selCurArea(e,index){
+        e.stopPropagation();
+        if(this.moreLoading){
+            return;
+        }
+        this.curAreaIndex = index;
+        this.showAreaList = false;
+        this.list = [];
+        this.pageNum = 1;
+        this.getData();
+    },
+  }
 };
 </script>
 
 <style scoped lang="scss">
+.fixed{
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+}
 .manageStock {
   background: #fff;
-  margin-top: 10px;
+  margin-top: 100px;
   padding-left: 39px;
   padding-top: 20px;
+  .manageStock_list {
+    display: flex;
+    padding-bottom:34px;
+    border-bottom:1px solid #dcdcdc;
+    margin-bottom:34px;
+    .manageStock_list_pic {
+      width: 200px;
+      height: 210px;
+      margin-right:26px;
+      img{
+        width: 100%;
+        height: 100%;
+        object-fit: scale-down;
+      }
+    }
+    .manageStock_list_content {
+      h3 {
+        color: #333;
+        font-size: 26px;
+        line-height: 40px;
+      }
+      p {
+        font-size: 18px;
+        color: #666;
+        line-height: 40px;
+      }
+    }
+    .manageStock_list_price {
+      margin-top:20px;
+      p {
+        font-size: 18px;
+        color: #666;
+      }
+      p:nth-of-type(2){
+        font-size: 32px;
+      }
+    }
+  }
+  .top{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 31px 37px 31px 0 ;
+    height: 30px;
+    // border-bottom: 2px solid #ebebeb;
+    .left{
+      display: flex;
+      align-items: center;
+    }
+    .total{
+        font-size:22px;
+        color:#F5A623;
+        line-height:29px;
+        letter-spacing:2px;
+        // margin-left: 65px;
+    }
+    .date{
+      font-size:20px;
+      color:rgba(245,166,35,1);
+      line-height:26px;
+      letter-spacing:2px;
+    }
+    .type,.area{
+        position: relative;
+        width: 115px;
+        font-size:22px;
+        color:#F5A623;;
+        letter-spacing:2px;
+        padding-left: 26px;
+        &.long{
+            width: 150px;
+        }
+        &.active{
+            color: #F5A623;
+            &::after{
+                  border-color:#F5A623 transparent transparent transparent;
+            }
+        }
+        .dataList,.typeList{
+            position: absolute;
+            left: 0;
+            top: 0.6rem;
+            border: 2px solid #ebebeb;
+            background-color: #fff;
+        }
+        &::after{
+            content: '';
+            display: inline-block;
+            width: 0; 
+            height: 0;
+            border-width: 13px;
+            border-style: solid;
+            border-color:#F5A623 transparent transparent transparent;
+            position: absolute;
+            top: 0;
+            right: 0;
+            top: 5px;
+            right: 0;
+        }
+    }
+    .dataList{
+        .dataItem{
+            padding-left: 26px;
+            width: 189px;
+            height: 75px;
+            font-size:22px;
+            font-family:MicrosoftYaHei;
+            color:#666;
+            letter-spacing:2px;
+            line-height: 75px;
+            border-bottom: 2px solid #ebebeb;
+            &.active{
+                background-color: #007AFF;
+                color:#fff;   
+            }
+            &:last-child{
+                border: none;
+            }
+        }
+    }
+    .typeList{
+        .typeItem{
+            padding-left: 26px;
+            width: 189px;
+            height: 75px;
+            line-height: 75px;
+            font-size:22px;
+            color:rgba(102,102,102,1);
+            letter-spacing:2px;
+            border-bottom: 2px solid #ebebeb;
+            &:last-child{
+                border: none;
+            }
+            &.active{
+                background-color: #F5A623;
+                color:#fff;   
+            }
+        }
+    }
+}
   .manageStock_search {
     width: 674px;
     height: 43px;
@@ -141,9 +425,12 @@ export default {
 
   ul li {
     display: flex;
-    height: 100px;
+    // height: 100px;
     margin-bottom: 20px;
     border-bottom: 1px solid #dcdcdc;
+    &.shop_list{
+      padding-bottom:26px; 
+    }
     .manageChoose_pic {
       width: 40px;
       height: 36px;

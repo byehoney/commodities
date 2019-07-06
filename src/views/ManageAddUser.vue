@@ -1,38 +1,43 @@
 <template>
   <div>
-    <ManageHeader :title="title"></ManageHeader>
+    <ManageHeader :title="title" class="fixed"></ManageHeader>
     <div class="manageChoose">
       <ul>
-        <li>
+        <li @click="show('S')">
           <span>开始时间:</span>
-          <span @click="show">
-            {{value}}
-            <awesome-picker
-              ref="picker"
-              :textTitle="picker.textTitle"
-              :type="picker.type"
-              :anchor="picker.anchor"
-              @confirm="handlePickerConfirm"
-            ></awesome-picker>
+          <span v-if="start">
+            {{start}}
+          </span>
+          <span v-else>
+            请选择开始时间
           </span>
         </li>
-        <li>
+        <li @click="show('E')">
           <span>结束时间:</span>
-          <span>2019-04-28</span>
+          <span v-if="end">
+            {{end}}
+          </span>
+          <span v-else>
+            请选择结束时间
+          </span>
         </li>
         <li>
           <span>门店名称:</span>
           <span>
-            <input type="text" placeholder="请输入门店名称">
+            <input v-model="searchStr" type="text" placeholder="请输入门店名称">
           </span>
         </li>
       </ul>
-      <div class="choosebtn">查询</div>
+      <div class="choosebtn" @click="doSearch">查询</div>
     </div>
     <!-- 门店列表 -->
     <div class="manageChooseList">
-      <ul>
-        <li v-for="(item,index) in chooseList" :key="index">
+      <ul 
+        v-infinite-scroll="loadMore"
+        infinite-scroll-disabled="loading"
+        infinite-scroll-distance="10"
+      >
+        <li v-for="(item,index) in list" :key="index">
           <div class="manageChoose_pic">
             <img src="../images/dianpu_m.png">
           </div>
@@ -43,76 +48,147 @@
         </li>
       </ul>
     </div>
+    <awesome-picker
+      ref="picker"
+      :textTitle="picker.textTitle"
+      :type="picker.type"
+      :anchor="picker.anchor"
+      :colorConfirm="picker.colorConfirm"
+      @cancel="handlePickerCancel"
+      @confirm="handlePickerConfirm"
+    ></awesome-picker>
   </div>
 </template>
 
 <script>
+import { Toast } from "mint-ui";
+import { mapGetters } from 'vuex'
 import ManageHeader from "../components/ManageHeader";
+import { reqSevenDaysStock } from '@/api/index';//待修改
 export default {
   data() {
     return {
-      title: "今日订单",
-      value: "2019-04-28",
+      title: "今日新增客户",
+      start: "",
+      end:'',
+      curDate:'',
       Y: "",
       M: "",
       D: "",
       picker: {
         anchor: [],
-        textTitle: "日期选择器(内置)",
-        type: "date"
+        textTitle: "选择日期",
+        type: "date",
+        colorConfirm:"#007AFF"
       },
-      chooseList: [
-        {
-          name: "星星烟花-旗舰店",
-          address: "河北省保定市西口村甲2组35号"
-        },
-        {
-          name: "星星烟花-旗舰店",
-          address: "河北省保定市西口村甲2组35号"
-        },
-        {
-          name: "星星烟花-旗舰店",
-          address: "注册地址：河北省保定市西口村甲2组35号"
-        },
-        {
-          name: "星星烟花-旗舰店",
-          address: "河北省保定市西口村甲2组35号"
-        }
-      ]
+      searchStr:'',
+      loading:false,
+      list:[],
+      moreLoading:false,
+      pageSize:10,
+      pageNum:1,
+      noData:false,//是否有数据
+      hasMore:true,
     };
   },
   components: { ManageHeader },
+  computed: {
+    ...mapGetters('login',['token','userId','corpCode','companyId','userRole'])
+  },
+  mounted() {
+    this.getData();
+  },
   methods: {
-    show() {
+    show(type) {
+      this.curDate = type;
       this.$refs.picker.show();
     },
-    showPicker() {
-      this.$refs.picker.show();
+    handlePickerCancel(){
+
     },
     handlePickerConfirm(v) {
-      console.log(v);
-      this.Y = v[0].value;
-      this.M = v[1].value;
-      this.D = v[2].value;
+      console.log(v)
+      this.Y = parseInt(v[0].value)>10?parseInt(v[0].value):'0'+parseInt(v[0].value);
+      this.M = parseInt(v[1].value)>10?parseInt(v[1].value):'0'+parseInt(v[1].value);
+      this.D = parseInt(v[2].value)>10?parseInt(v[2].value):'0'+parseInt(v[2].value);
       this.picker.anchor = v;
-      this.$refs.picker.display=false
-    console.log(this.$refs.picker)
-      this.value = this.Y +  this.M + this.D;
-
-    
+      this.$refs.picker.display=false;
+      if(this.curDate == 'S'){
+        this.start = this.Y + '-' +this.M + '-'+ this.D;    
+      }else{
+        this.end = this.Y + '-' +this.M + '-'+ this.D; 
+      }
+    },
+    doSearch(){
+      this.pageNum = 1;
+      this.list = [];
+      this.getData();
+    },
+    async getData(){
+        let defaulParams = {
+            token:this.token,
+            userId:this.userId,
+            corpCode:this.corpCode,
+            companyId:this.companyId,
+            userRole:this.userRole,
+            pageSize:this.pageSize,
+            pageNum:this.pageNum
+        };      
+        let res = await reqSevenDaysStock({
+          ...defaulParams,
+          fullText:this.searchStr
+        })
+        this.moreLoading = false;
+        if(res.code == 0){
+            if(!res.data.list.length){
+                this.hasMore = false;
+                this.moreLoading = false;
+                if(this.pageNum!=1){
+                    Toast({
+                        message: "已经到底了~",
+                        position: "middle",
+                        duration: 2000
+                    });
+                }else{
+                    Toast({
+                        message: "暂无数据",
+                        position: "middle",
+                        duration: 2000
+                    });
+                }
+                return;
+            }else{
+                this.hasMore = true;
+                this.moreLoading = false;
+            }
+            this.list = [...this.list,...res.data.list];
+        }
+    },
+    loadMore(){
+        if(this.moreLoading||!this.hasMore){
+            return;
+        }
+        this.pageNum = this.pageNum+1;
+        this.getData();
     }
   }
 };
 </script>
 
 <style scoped lang="scss">
+.fixed{
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+}
 .manageChoose {
   width: 711px;
   min-height: 462px;
   font-size: 28px;
   padding-left: 39px;
   background: #fff;
-  margin-top: 10px;
+  margin-top: 100px;
   ul li {
     display: flex;
     width: 100%;

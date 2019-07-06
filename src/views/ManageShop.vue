@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ManageHeader :title="title"></ManageHeader>
+    <ManageHeader :title="title" class="fixed"></ManageHeader>
     <div class="manageStock">
       <div class="manageStockName">门店名称:</div>
       <div class="manageStock_search">
@@ -8,14 +8,20 @@
           <img src="../images/smallsousuo.png">
         </span>
         <span>
-          <input type="text" placeholder="商品名称">
+          <form @submit.prevent class="form">
+            <input v-model="searchStr" @keypress="searchGoods" type="text" placeholder="门店名称">
+          </form>
         </span>
       </div>
-       <div class="choosebtn">查询</div>
+       <div class="choosebtn" @click="doSearch">查询</div>
       <!-- 门店列表 -->
       <div class="manageChooseList">
-        <ul>
-          <li v-for="item in chooseList">
+        <ul 
+          v-infinite-scroll="loadMore"
+          infinite-scroll-disabled="loading"
+          infinite-scroll-distance="10"
+        >
+          <li v-for="(item,index) in list" :key="index">
             <div class="manageChoose_pic">
               <img src="../images/dianpu_m.png">
             </div>
@@ -32,41 +38,109 @@
 </template>
 
 <script>
+import { Toast } from "mint-ui";
+import { mapGetters } from 'vuex'
 import ManageHeader from "../components/ManageHeader";
+import { reqSevenDaysStock } from '@/api/index';//待修改
 export default {
   data() {
     return {
       title: "未处理采购门店",
-      chooseList: [
-        {
-          name: "星星烟花-旗舰店",
-          address: "河北省保定市西口村甲2组35号"
-        },
-        {
-          name: "星星烟花-旗舰店",
-          address: "河北省保定市西口村甲2组35号"
-        },
-        {
-          name: "星星烟花-旗舰店",
-          address: "注册地址：河北省保定市西口村甲2组35号"
-        },
-        {
-          name: "星星烟花-旗舰店",
-          address: "河北省保定市西口村甲2组35号"
-        }
-      ]
+      searchStr:'',
+      loading:false,
+      list:[],
+      moreLoading:false,
+      pageSize:10,
+      pageNum:1,
+      noData:false,//是否有数据
+      hasMore:true,
     };
   },
-  components: { ManageHeader }
+  components: { ManageHeader },
+  computed: {
+    ...mapGetters('login',['token','userId','corpCode','companyId','userRole'])
+  },
+  mounted() {
+    this.getData();
+  },
+  methods: {
+    doSearch(){
+      this.pageNum = 1;
+      this.list = [];
+      this.getData();
+    },
+    searchGoods(event){
+      if (event.keyCode == 13) {
+        event.preventDefault(); //禁止默认事件（默认是换行）
+        this.pageNum = 1;
+        this.list = [];
+        this.getData();
+      }
+    },
+    async getData(){
+        let defaulParams = {
+            token:this.token,
+            userId:this.userId,
+            corpCode:this.corpCode,
+            companyId:this.companyId,
+            userRole:this.userRole,
+            pageSize:this.pageSize,
+            pageNum:this.pageNum
+        };      
+        let res = await reqSevenDaysStock({
+          ...defaulParams,
+          fullText:this.searchStr
+        })
+        this.moreLoading = false;
+        if(res.code == 0){
+            if(!res.data.list.length){
+                this.hasMore = false;
+                this.moreLoading = false;
+                if(this.pageNum!=1){
+                    Toast({
+                        message: "已经到底了~",
+                        position: "middle",
+                        duration: 2000
+                    });
+                }else{
+                    Toast({
+                        message: "暂无数据",
+                        position: "middle",
+                        duration: 2000
+                    });
+                }
+                return;
+            }else{
+                this.hasMore = true;
+                this.moreLoading = false;
+            }
+            this.list = [...this.list,...res.data.list];
+        }
+    },
+    loadMore(){
+        if(this.moreLoading||!this.hasMore){
+            return;
+        }
+        this.pageNum = this.pageNum+1;
+        this.getData();
+    }
+  },
 };
 </script>
 
 <style scoped lang="scss">
+.fixed{
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+}
 .manageStock {
   background: #fff;
-  margin-top: 10px;
+  margin-top: 100px;
   padding-left: 39px;
   padding-top: 20px;
+
   .manageStockName{
       font-size: 22px;
       float: left;

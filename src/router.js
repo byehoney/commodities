@@ -596,7 +596,7 @@ const router = new Router({
             }
         },
         {
-            path: '/manageadduser',//销售走向图
+            path: '/manageAdduser',//今日新增用户
             name: 'manageAddUser',
             component: () =>
                 import(/* webpackChunkName: "manageCustomerRank" */ './views/ManageAddUser.vue'),
@@ -647,7 +647,7 @@ const router = new Router({
             meta: {
                 auth: true,
                 keepAlive: false,
-                title: 'xx店铺3'
+                title: '未动销查询'
             }
         },
         {
@@ -670,6 +670,17 @@ const router = new Router({
                 auth: true,
                 keepAlive: false,
                 title: 'xx店铺3'
+            }
+        },
+        {
+            path: '/manageOrderDetail',//今日订单详情
+            name: 'manageOrderDetail',
+            component: () =>
+                import(/* webpackChunkName: "manageCustomerRank" */ './views/ManageOrderDetail.vue'),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title: '订单详情'
             }
         },
         {

@@ -1,5 +1,5 @@
 <template>
-  <div style="opacity:0.1">
+  <div style="opacity:1">
     <ManageHeader :title="title" class="fixed"></ManageHeader>
     <div class="manageStock">
       <div class="manageStock_search">

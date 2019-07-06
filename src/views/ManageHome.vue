@@ -1,5 +1,5 @@
 <template>
-    <div :class="['mangeContainer',showDrawLeft?'pop':'']" style="opacity:0.1">
+    <div :class="['mangeContainer',showDrawLeft?'pop':'']" style="opacity:1">
         <ManageTopNav @trigerLeft="trigerDrawerLeft"></ManageTopNav>
         <DrawerLeft ref="leftDrwaer"></DrawerLeft>
         <div class="main" v-if="bData">
@@ -54,13 +54,13 @@
                 </div>
                 <div class="right">{{bData.wkcpgs}}</div>
             </router-link>
-            <div class="infoItem">
+            <router-link to="/manageAdduser" tag="div" class="infoItem">
                 <div class="left">
                     <img class="icon" src="../images/shopcar.png" alt="">
                     <div class="text">今日新增客户</div>
                 </div>
                 <div class="right">{{bData.brxkes}}</div>
-            </div>
+            </router-link>
             <router-link to="/manageshortstock" tag="div" class="infoItem">
                 <div class="left">
                     <img class="icon" src="../images/shopcar.png" alt="">
@@ -99,13 +99,13 @@
                 </div>
                 <div class="right">{{bData.wclze}}</div>
             </div>
-            <div class="infoItem">
+            <router-link to="/manageshop" tag="div" class="infoItem">
                 <div class="left">
                     <img class="icon" src="../images/shopcar.png" alt="">
                     <div class="text">未处理采购门店数</div>
                 </div>
                 <div class="right">{{bData.wclcgmds}}/{{bData.cgmds}}</div>
-            </div>
+            </router-link>
             <div class="infoItem">
                 <div class="left">
                     <img class="icon" src="../images/shopcar.png" alt="">
@@ -134,13 +134,13 @@
                 </div>
                 <div class="right">{{bData.wkcpgs}}</div>
             </router-link>
-            <div class="infoItem">
+            <router-link to="/manageAdduser" tag="div" class="infoItem">
                 <div class="left">
                     <img class="icon" src="../images/shopcar.png" alt="">
                     <div class="text">今日新增客户</div>
                 </div>
                 <div class="right">{{bData.brxkes}}</div>
-            </div>
+            </router-link>
             <router-link to="/managestock" tag="div" class="infoItem">
                 <div class="left">
                     <img class="icon" src="../images/shopcar.png" alt="">
@@ -155,13 +155,13 @@
                 </div>
                 <div class="right">{{bData.brqhpz}}</div>
             </router-link>
-            <div class="infoItem">
+            <router-link to="/manageuncelled" tag="div" class="infoItem">
                 <div class="left">
                     <img class="icon" src="../images/shopcar.png" alt="">
                     <div class="text">30天未动销（商品/门店）</div>
                 </div>
                 <div class="right">{{bData.sstwdspzs}}/{{bData.sstwdxkhs}}</div>
-            </div>
+            </router-link>
             
         </div>
         <div class="hotsale scrollBox" v-if="(user.userRole=='04'||user.userRole=='05')&&bData&&bData.list.length">
