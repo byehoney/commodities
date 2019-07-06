@@ -130,7 +130,7 @@ export default {
   components: { ManageHeader, ManageBottom },
   methods: {
     picker(){
-        
+
     }
   }
 };
@@ -241,11 +241,12 @@ export default {
       color: #999999;
       padding: 0px 27px;
       .order_list_middle_left {
-        width: 115px;
+        width: 150px;
         color: #666;
       }
       .order_list_middle_center {
-        width: 363px;
+        width: 500px;
+        font-size: 22px;
       }
       .order_list_middle_right {
         width: 68px;

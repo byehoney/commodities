@@ -629,6 +629,17 @@ const router = new Router({
             }
         },
         {
+            path: '/managecamp',//缺货商品
+            name: 'managecamp',
+            component: () =>
+                import(/* webpackChunkName: "manageCustomerRank" */ './views/ManageCamp.vue'),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title: '在营商品'
+            }
+        },
+        {
             path: '/manageNoStock',//无库存商品
             name: 'manageNoStock',
             component: () =>
