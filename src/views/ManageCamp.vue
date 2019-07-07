@@ -19,14 +19,15 @@
     <div>
       <div class="subNav">
         <ul>
-          <li class="active" @click="checkType(1)">销量</li>
-          <li @click="checkType(2)">
+          <li :class="listCheck==1?'active':''" @click="checkType(1)">销量</li>
+          <li @click="checkType(2)" :class="listCheck==2?'active':''">
             <span>价格</span>
             <span>
-              <img src="../images/mchoose.png">
+              <p class="top active" :class="sort==0?'topactive':''"></p>
+              <p class="down" :class="sort==1?'downactive':''"></p>
             </span>
           </li>
-          <li @click="checkType(3)">主推</li>
+          <li @click="checkType(3)" :class="listCheck==3?'active':''">主推</li>
         </ul>
       </div>
     </div>
@@ -73,16 +74,16 @@ export default {
   data() {
     return {
       searchStr: "",
-      listCheck: true,
+      listCheck: 1,
       loading: false,
       list: [],
       moreLoading: false,
-      pageSize: 3,
+      pageSize: 10,
       pageNum: 1,
       noData: false, //是否有数据
       hasMore: true,
       type: 1,
-      sort: 0
+      sort: 1
     };
   },
   computed: {
@@ -117,14 +118,16 @@ export default {
         userId: this.userId,
         corpCode: this.corpCode,
         companyId: this.companyId,
-        userRole: this.userRole
+        userRole: this.userRole,
+        pageSize: this.pageSize,
+        pageNum: this.pageNum
       };
       let res = await getManageMerchandise({
         ...defaulParams,
         type: index,
+        sort:1,
         fullText: this.searchStr
       });
-      console.log(res);
       if (res.code == 0) {
         if (!res.data.list.length) {
           this.hasMore = false;
@@ -146,7 +149,6 @@ export default {
         } else {
           this.hasMore = true;
           this.moreLoading = false;
-          console.log(1);
         }
         this.list = [...this.list, ...res.data.list];
       }
@@ -159,6 +161,9 @@ export default {
       this.getCamp(index);
     },
     checkType(index) {
+      this.listCheck = index;
+      if (index == 2) {
+      }
       this.loadMore(index);
     }
   },
@@ -235,6 +240,27 @@ export default {
     li {
       span {
         display: inline-block;
+        p.top {
+          width: 0;
+          height: 0;
+          border-style: solid;
+          border-width: 0 10px 13px 10px;
+          border-color: transparent transparent #cccccc transparent;
+          margin-bottom:3px;
+        }
+        p.down {
+          width: 0;
+          height: 0;
+          border-style: solid;
+          border-width: 13px 10px 0 10px;
+          border-color: #ccc transparent transparent transparent;
+        }
+        p.topactive{
+          border-color: transparent transparent #f5a623 transparent;
+        }
+        p.downactive{
+          border-color: #f5a623 transparent transparent transparent;
+        }
       }
       span:nth-of-type(2) {
         width: 18px;
@@ -261,6 +287,7 @@ export default {
   .camp_list_left {
     width: 200px;
     height: 210px;
+    overflow: hidden;
     background: #dcdcdc;
     img {
       width: 100%;
