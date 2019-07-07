@@ -4,53 +4,54 @@
     <div class="userInfo">
         <img src="../images/manage_local_icon.png" alt="">
         <div class="info">
-            <p class="detail">河北省保定市西王村星星烟花旗舰店</p>
-            <p class="detail">张建 13811199990</p>
-            <p class="detail">大西街3栋42-6</p>
+            <p class="detail">{{companyName}}</p>
+            <p class="detail">{{userNmae}} {{mobile}}</p>
+            <p class="detail">{{address}}</p>
         </div>
     </div>
     <div class="goodsInfo">
-        <div class="goodsItem">
-            <img src="../images/default_logo.jpg" alt="">
+        <div class="goodsItem" v-for="(item,index) in list" :key="index">
+            <img :src="item.url?item.url:require('../images/default_logo.jpg')" alt="">
             <div class="infos">
-                <p class="name">烟花商品名称</p>
-                <p class="fName">河北保定星星烟花制造厂</p>
-                <p class="scale">规格：35g*1支 数量：20</p>
+                <p class="name">{{item.name}}</p>
+                <p class="fName">{{item.cj}}</p>
+                <p class="scale">规格：{{item.hlgg}} 数量：{{item.cgl}}</p>
                 <p class="tags">
-                    <span class="tag">8.8折</span>
+                    <span class="tag" v-if="item.cgjg<item.yj">{{item.cgjg|formatDis(item.yj)}}折</span>
+                    <span  v-else>&nbsp;</span>
                 </p>
                 <p class="price">
-                    <span class="nPrice">￥6.50</span>
-                    <span class="oPrice">8.80</span>
+                    <span class="nPrice">￥{{item.cgjg}}</span>
+                    <span class="oPrice">{{item.yj}}</span>
                 </p>
             </div>
         </div>
     </div>
     <div class="orderInfo">
         <div class="orderTop">
-            <p class="info">订单编号：987539759348</p>
-            <p class="info">下单时间：2019-04-25 14：19：00</p>
-            <p class="info">订单备注：</p>
-            <p class="info price">￥120</p>
+            <p class="info">订单编号：{{orderId}}</p>
+            <p class="info">下单时间：{{time}}</p>
+            <p class="info">订单备注：{{note}}</p>
+            <p class="info price">￥{{sfk}}</p>
         </div>
         <div class="orderBot">
             <p class="info">
                 <span>总件数：</span>
-                <span>99</span>
+                <span>{{count}}</span>
             </p>
             <p class="info">
                 <span>商品总额：</span>
-                <span>￥999</span>
+                <span>￥{{money}}</span>
             </p>
             <p class="info">
                 <span>立减：</span>
-                <span class="red">-￥20</span>
+                <span class="red">-￥{{ljmoney}}</span>
             </p>
             <p class="info">
                 <span>实付款：</span>
-                <span class="red">￥120</span>
+                <span class="red">￥{{sfk}}</span>
             </p>
-            <div class="btn">待出库</div>
+            <!-- <div class="btn">待出库</div> -->
         </div>
     </div>
   </div>
@@ -60,18 +61,66 @@
 import { Toast } from "mint-ui";
 import { mapGetters } from 'vuex'
 import ManageHeader from "../components/ManageHeader";
+import { reqManageOrderDetail } from '@/api/index';
 export default {
   data() {
     return {
       title: "订单详情",
+      companyName:'',
+      userNmae:'',
+      mobile:'',
+      address:'',
+      list:[],
+      orderId:'',
+      time:'',
+      note:'',
+      money:0,
+      sfk:0,
+      ljmoney:0,
+      count:0
     };
+  },
+  filters:{
+    formatDis(nPrice,oPrice){
+        return Math.floor((parseFloat(nPrice)/parseFloat(oPrice))*100)/10
+    },
+    formatPro(data){
+        return data.split('%')[0]*200/100
+    }
   },
   components: { ManageHeader },
   computed: {
     ...mapGetters('login',['token','userId','corpCode','companyId','userRole'])
   },
-  mounted() {
-    
+  async mounted() {
+    let defaulParams = {
+        token:this.token,
+        userId:this.userId,
+        corpCode:this.corpCode,
+        companyId:this.companyId,
+        userRole:this.userRole,
+    };
+    let res = await reqManageOrderDetail({
+        ...defaulParams,
+        startTime:this.$route.query.startTime,
+        endTime:this.$route.query.endTime,
+        orderData:this.$route.query.orderData,
+        orderId:this.$route.query.id,
+        pageNum:1,
+        pageSize:100
+    })
+    this.list = res.data.list;
+    this.companyName = res.data.list[0].companyname;
+    this.userNmae = res.data.list[0].userid;
+    this.mobile = res.data.list[0].mobile;
+    this.address = res.data.list[0].address;
+    this.orderId = res.data.list[0].orderid;
+    this.time = res.data.list[0].time;
+    this.note = res.data.list[0].ddbz;
+    this.money = res.data.money;
+    this.sfk = res.data.sfk;
+    this.ljmoney = res.data.ljmoney;
+    this.count = res.data.count;
   },
   methods:{
   

@@ -1,6 +1,7 @@
 import axios from 'axios'
 import qs from 'qs'
 import store from 'store/index'
+import router from '../router'
 import { Indicator, Toast } from 'mint-ui'
 axios.defaults.timeout = 100000 // 请求超时时间
 axios.defaults.baseURL = process.env.VUE_APP_BASE_API
@@ -92,6 +93,11 @@ function post (url, params) {
         axios
             .post(url, qs.stringify(params))
             .then(res => {
+                if(res.data.code==100){
+                    store.commit('login/LOGOUT',{
+                        $router:router,
+                    })
+                }
                 resolve(res.data)
             })
             .catch(err => {

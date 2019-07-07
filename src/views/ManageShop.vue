@@ -210,7 +210,7 @@ export default {
 
   ul li {
     display: flex;
-    height: 100px;
+    // height: 100px;
     margin-bottom: 20px;
     border-bottom: 1px solid #dcdcdc;
     .manageChoose_pic {

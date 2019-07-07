@@ -224,7 +224,7 @@ export default {
                 }
                 .atv{
                     width:118px;
-                    // height:118px;
+                    height:118px;
                     border-radius: 50%;
                     object-fit: scale-down;
                 }

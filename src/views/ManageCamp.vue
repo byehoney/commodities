@@ -16,14 +16,14 @@
       <span @click="doSearch">搜索</span>
     </div>
     <!-- 搜索框结束 -->
-    <div>
+    <div class="tabs">
       <div class="subNav">
         <ul>
           <li :class="listCheck==1?'active':''" @click="checkType(1)">销量</li>
           <li @click="checkType(2)" :class="listCheck==2?'active':''">
             <span>价格</span>
             <span>
-              <p class="top active" :class="sort==0?'topactive':''"></p>
+              <p class="top" :class="sort==0?'topactive':''"></p>
               <p class="down" :class="sort==1?'downactive':''"></p>
             </span>
           </li>
@@ -33,6 +33,7 @@
     </div>
     <!-- 导航结束 -->
     <div
+      class="dataList"
       v-infinite-scroll="loadMore"
       infinite-scroll-disabled="loading"
       infinite-scroll-distance="10"
@@ -40,7 +41,7 @@
       <div class="camp_list" v-for="(item,index) in list" :key="index">
         <div class="camp_list_content">
           <div class="camp_list_left">
-            <img :src="item.slt">
+            <img :src="item.url?item.url:require('../images/default_logo.jpg')">
           </div>
           <div class="camp_list_right">
             <div class="camp_list_right_top">
@@ -51,12 +52,13 @@
             <div class="camp_list_right_bottom">
               <div class="camp_list_right_bottom_left">
                 <ul>
-                  <li>仅剩{{item.dqkc}}件</li>
+                  <li v-if="item.dqkc>0">仅剩{{item.dqkc}}件</li>
+                  <li v-if="!item.dqkc||item.dpkc==0">无库存</li>
                   <li>¥{{item.ptsj}}</li>
                 </ul>
               </div>
               <div class="camp_list_right_bottom_right">
-                <p>已销:{{item.yssl}}件</p>
+                <p>已销:{{item.yssl?item.yssl:0}}件</p>
               </div>
             </div>
           </div>
@@ -83,7 +85,7 @@ export default {
       noData: false, //是否有数据
       hasMore: true,
       type: 1,
-      sort: 1
+      sort:-1,
     };
   },
   computed: {
@@ -112,7 +114,7 @@ export default {
       this.list = [];
       this.getCamp();
     },
-    async getCamp(index) {
+    async getCamp() {
       let defaulParams = {
         token: this.token,
         userId: this.userId,
@@ -122,12 +124,21 @@ export default {
         pageSize: this.pageSize,
         pageNum: this.pageNum
       };
-      let res = await getManageMerchandise({
-        ...defaulParams,
-        type: index,
-        sort:1,
-        fullText: this.searchStr
-      });
+      let res = null;
+      if(this.type==2){
+        res = await getManageMerchandise({
+          ...defaulParams,
+          type: this.type,
+          sort:this.sort,
+          fullText: this.searchStr
+        });
+      }else{
+         res = await getManageMerchandise({
+          ...defaulParams,
+          type: this.type,
+          fullText: this.searchStr
+        });
+      }
       if (res.code == 0) {
         if (!res.data.list.length) {
           this.hasMore = false;
@@ -153,18 +164,31 @@ export default {
         this.list = [...this.list, ...res.data.list];
       }
     },
-    loadMore(index) {
+    loadMore() {
       if (this.moreLoading || !this.hasMore) {
         return;
       }
       this.pageNum = this.pageNum + 1;
-      this.getCamp(index);
+      this.getCamp();
     },
     checkType(index) {
       this.listCheck = index;
+      this.type = index;
       if (index == 2) {
+        if(this.sort==-1){
+          this.sort = 0;
+        }else if(this.sort==0){
+          this.sort = 1;
+        }else{
+          this.sort = 0;
+        }
+      }else{
+        this.sort = -1;
       }
-      this.loadMore(index);
+      this.loading = false;
+      this.list=[];
+      this.pageNum = 1;
+      this.getCamp(index);
     }
   },
   mounted() {
@@ -225,10 +249,17 @@ export default {
     letter-spacing: 2px;
   }
 }
+.tabs{
+  position: fixed;
+  top: 93px;
+  left: 0;
+  width: 100%;
+  background-color: #fff;
+}
 .subNav {
   // display: flex;
   font-size: 28px;
-  margin-top: 93px;
+  // margin-top: 93px;
   height: 91px;
   line-height: 91px;
   padding: 0 46px;
@@ -276,6 +307,9 @@ export default {
     }
   }
 }
+.dataList{
+  margin-top: 185px;
+}
 .camp_list {
   min-height: 200px;
   padding: 27px 0px 27px 42px;
@@ -288,9 +322,11 @@ export default {
     width: 200px;
     height: 210px;
     overflow: hidden;
-    background: #dcdcdc;
+    // background: #dcdcdc;
     img {
       width: 100%;
+      height: 100%;
+      object-fit: scale-down;
     }
   }
   .camp_list_right {

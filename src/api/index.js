@@ -323,6 +323,21 @@ function reqManageNewAdd(params){//获取今日新增客户
 function reqManageFirstOrder(params){//获取今日订单 待处理订单
     return post('/manage/get/dcldd.do',params)
 }
+
+function reqManageWaitePass(params){//获取待审核
+    return post('/manage/get/dshxx.do',params)
+}
+
+function reqManageWaitePassDetail(params){//获取待审核详情
+    return post('/manage/get/dshxxdetail.do',params)
+}
+
+function reqManagePassWaite(params){//通过审核
+    return post('/manage/update/userstatus.do',params)
+}
+function reqManageOrderDetail(params){//获取管理页面订单详情
+    return post('/manage/get/orderdetail.do',params)
+}
 export {
     checkExist,
     getYzCode,
@@ -412,4 +427,8 @@ export {
     reqWdxShop,//管理页面未动销门店
     reqManageNewAdd,//管理页面获取今日新增客户
     reqManageFirstOrder,//管理页面获取今日订单 待处理订单
+    reqManageWaitePass,//管理页面获取待审核
+    reqManageWaitePassDetail,//管理页面获取待审核详情
+    reqManagePassWaite,//管理页面通过审核
+    reqManageOrderDetail,//管理页面获取订单详情
 }

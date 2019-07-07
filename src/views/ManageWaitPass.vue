@@ -1,18 +1,14 @@
 <template>
-    <div class="mangeContainer" style="opacity:0.1">
+    <div class="mangeContainer" style="opacity:1">
         <TopNav></TopNav>
         <div class="divide"></div>
-        <div class="waiteList"
-                v-infinite-scroll="loadMore"
-                infinite-scroll-disabled="loading"
-                infinite-scroll-distance="10"
-            >
-            <div class="waitItem">
+        <div class="waiteList">
+            <div class="waitItem" v-for="(item,index) in list" :key="index" @click="goDetail(item.userId)">
                 <img src="../images/manage_atv.png" class="atv" alt="">
                 <div class="infos">
                     <div class="top">
-                        <div class="name">姓名：<span>张建</span></div>
-                        <div class="tel">电话：<span>13811166660</span></div>
+                        <div class="name">姓名：<span>{{item.userName}}</span></div>
+                        <div class="tel">电话：<span>{{item.userPhone}}</span></div>
                     </div>
                     <div class="bottom">店名：<span>锦绣大地烟花店</span></div>
                 </div>
@@ -25,7 +21,7 @@ import { Toast } from "mint-ui";
 import { mapGetters } from 'vuex'
 import TopNav from '@/components/TopNav'
 // import ManageTabBarBotttom from '@/components/ManageTabBarBottom';
-import { reqManageShopDetail } from '@/api/index'
+import { reqManageWaitePass } from '@/api/index'
 export default {
     data(){
         return{
@@ -49,6 +45,9 @@ export default {
         this.getData();
     },
     methods: {
+        goDetail(id){
+            this.$router.push({name:'manageIntelPass',query:{id:id}})
+        },
         async getData(){
             let defaulParams = {
                 token:this.token,
@@ -59,49 +58,10 @@ export default {
                 pageSize:this.pageSize,
                 pageNum:this.pageNum
             };      
-            let res = await reqManageShopDetail({
-                ...defaulParams,
-                ywCompanyId:this.$route.query.id,
-                ywUserId:this.$route.query.memberId,
-                fullText:this.searchStr,
-                type:this.actIndex
+            let res = await reqManageWaitePass({
+                ...defaulParams
             })
-            if(this.actIndex == 0){//基本信息
-
-            }else{//品规信息
-                this.moreLoading = false;
-                if(res.code == 0){
-                    if(!res.data.list.length){
-                        this.hasMore = false;
-                        this.moreLoading = false;
-                        if(this.pageNum!=1){
-                            Toast({
-                                message: "已经到底了~",
-                                position: "middle",
-                                duration: 2000
-                            });
-                        }else{
-                            Toast({
-                                message: "暂无数据",
-                                position: "middle",
-                                duration: 2000
-                            });
-                        }
-                        return;
-                    }else{
-                        this.hasMore = true;
-                        this.moreLoading = false;
-                    }
-                    this.list = [...this.list,...res.data.list];
-                }
-            }
-        },
-        loadMore(){
-            if(this.moreLoading||!this.hasMore){
-                return;
-            }
-            this.pageNum = this.pageNum+1;
-            this.getData();
+            this.list = res.data.list;
         }
     },
 }

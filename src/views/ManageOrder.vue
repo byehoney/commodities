@@ -25,13 +25,13 @@
         <li class="left">
           <span>订单号:</span>
           <span>
-            <input type="text" placeholder="请输入订单号">
+            <input v-model="orderId" type="text" placeholder="请输入订单号">
           </span>
         </li>
         <li class="left">
           <span>门店:</span>
           <span>
-            <input type="text" placeholder="请输入门店">
+            <input v-model="companyName" type="text" placeholder="请输入门店">
           </span>
         </li>
         <li class="left" @click="handlerArea">
@@ -49,32 +49,36 @@
       <div class="choosebtn" @click="doSearch">查询</div>
     </div>
     <!-- 订单 -->
-    <div class="manage_order">
+    <div class="manage_order"
+      v-infinite-scroll="loadMore"
+      infinite-scroll-disabled="loading"
+      infinite-scroll-distance="10"
+    >
       <div class="order_num fix">
         <ul>
-          <li>今日首单数：8单</li>
-          <li>合计订单数：8单</li>
+          <li>今日首单数：{{sds}}单</li>
+          <li>合计订单数：{{ordernum}}单</li>
         </ul>
       </div>
-      <div class="order_list">
+      <div class="order_list" v-for="(item,index) in list" :key="index" @click="geDetail(item.orderid)">
         <div class="order_list_top">
           <div class="order_list_top_left">
             <span>
               <img src="../images/manage_menu.png">
             </span>
-            <span>订单YFGHKIJOJOIJGJHVHCJ</span>
+            <span>订单{{item.orderid}}</span>
           </div>
           <div class="order_list_top_right">
-            <img src="../images/manage_status.png">
+            {{item.orderstatus}}
           </div>
         </div>
         <div class="order_list_middle">
           <div class="order_list_middle_left">店铺名称：</div>
           <div class="order_list_middle_center">
-            <p>河北省保定市西昌路文明村25号6栋</p>
-            <p>河北省保定市西昌路文明村25号6栋</p>
+            <p>{{item.companyname}}</p>
+            <!-- <p>{{item.address}}</p> -->
           </div>
-          <div class="order_list_middle_right">
+          <div class="order_list_middle_right" v-if="item.sdbj=='首单'">
             <img src="../images/manage_soudan.png">
           </div>
         </div>
@@ -82,14 +86,14 @@
           <ul>
             <li>
               联系人：
-              <span>张建</span>
+              <span>{{item.username}}</span>
             </li>
             <li>
               <p>
                 联系电话：
-                <span>13811166660</span>
+                <span>{{item.mobile}}</span>
               </p>
-              <p>￥6600.00</p>
+              <p>￥{{item.money}}</p>
             </li>
           </ul>
         </div>
@@ -97,11 +101,11 @@
           <ul>
             <li>
               总件数：
-              <span>999</span>
+              <span>{{item.count}}</span>
             </li>
             <li>
               下单时间:
-              <span>2019-04-28 13：25：30</span>
+              <span>{{item.time}}</span>
             </li>
           </ul>
         </div>
@@ -137,8 +141,8 @@ export default {
       pCode:'',
       cCode:'',
       aCode:'',
-      start: "",
-      end:'',
+      start:this.getNowFormatDate() ,
+      end:this.getNowFormatDate(),
       curDate:'',
       Y: "",
       M: "",
@@ -150,7 +154,17 @@ export default {
         colorConfirm:"#007AFF"
       },
       checked: false,
+      orderId:'',
+      companyName:'',
+      loading:false,
       list:[],
+      moreLoading:false,
+      pageSize:10,
+      pageNum:1,
+      noData:false,//是否有数据
+      hasMore:true,
+      sds:0,
+      ordernum:0
     };
   },
   components: { ManageHeader, ManageBottom,CityPicker },
@@ -158,12 +172,41 @@ export default {
     ...mapGetters('login',['token','userId','corpCode','companyId','userRole'])
   },
   mounted(){
-    this.getData();
+    // this.getData();
   },
   methods: {
+    geDetail(id){
+      this.$router.push({
+        name:'manageOrderDetail',
+        query:{
+          id:id,
+          startTime:this.start,
+          endTime:this.end,
+          orderData:this.checked,
+          pageSize:this.pageSize,
+          pageNum:this.pageNum
+        }
+      })
+    },
+    getNowFormatDate() {
+      var date = new Date();
+      var seperator1 = "-";
+      var year = date.getFullYear();
+      var month = date.getMonth() + 1;
+      var strDate = date.getDate();
+      if (month >= 1 && month <= 9) {
+          month = "0" + month;
+      }
+      if (strDate >= 0 && strDate <= 9) {
+          strDate = "0" + strDate;
+      }
+      var currentdate = year + seperator1 + month + seperator1 + strDate;
+      return currentdate;
+    },
     doSearch(){
+      this.pageNum=1;
       this.list = [];
-      this.getData();
+      this.loadMore();
     },
     async getData(){
       let defaulParams = {
@@ -172,6 +215,8 @@ export default {
           corpCode:this.corpCode,
           companyId:this.companyId,
           userRole:this.userRole,
+          pageSize:this.pageSize,
+          pageNum:this.pageNum
       };
       let res = await reqManageFirstOrder({
         ...defaulParams,
@@ -179,8 +224,42 @@ export default {
         endTime:this.end,
         orderData:this.checked,
         regionCode:this.aCode,
-        orderId:''
+        companyName:this.companyName,
+        orderId:this.orderId
       })
+      if(res.code == 0){
+          if(!res.data.list.length){
+              this.hasMore = false;
+              this.moreLoading = false;
+              if(this.pageNum!=1){
+                  Toast({
+                      message: "已经到底了~",
+                      position: "middle",
+                      duration: 2000
+                  });
+              }else{
+                  Toast({
+                      message: "暂无数据",
+                      position: "middle",
+                      duration: 2000
+                  });
+              }
+              return;
+          }else{
+              this.hasMore = true;
+              this.moreLoading = false;
+          }
+          this.list = [...this.list,...res.data.list];
+          this.sds = this.list[0].sds;
+          this.ordernum = this.list[0].ordernum;
+      }
+    },
+    loadMore(){
+        if(this.moreLoading||!this.hasMore){
+            return;
+        }
+        this.getData();
+        this.pageNum = this.pageNum+1;
     },
     showFirst(){
       this.checked = !this.checked;
@@ -297,9 +376,14 @@ export default {
     background: #fff;
     padding-top: 21px;
     font-size: 22px;
+    margin-bottom: 26px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
     .order_list_top {
       display: flex;
       justify-content: space-between;
+      align-items: center;
       margin-bottom: 21px;
       padding: 0px 27px;
       .order_list_top_left {
@@ -322,7 +406,12 @@ export default {
       }
       .order_list_top_right {
         width: 100px;
-        height: 44px;
+        height: 30px;
+        text-align: center;
+        line-height: 30px;
+        border: 2px solid #ff0304;
+        color: #ff0304;
+        border-radius: 4px;
         img {
           width: 100%;
         }
@@ -374,8 +463,12 @@ export default {
     .order_list_bottoms {
       // display: flex;
       padding: 0px 27px;
+      ul{
+        display: flex;
+        justify-content: space-between;
+      }
       ul li {
-        float: left;
+        // float: left;
         line-height: 65px;
         span {
           color: #999;

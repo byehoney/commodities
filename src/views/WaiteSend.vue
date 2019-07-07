@@ -164,6 +164,9 @@ export default {
                             margin-bottom: 10px;
                             display: flex;
                             justify-content: space-between;
+                            .num{
+                                flex-shrink: 0;
+                            }
                         }
                         .fName{
                             font-size:18px;

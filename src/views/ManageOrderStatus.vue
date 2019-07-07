@@ -7,7 +7,7 @@
         <li>退款</li>
       </ul>
     </div>
-    <div class="manageList">
+    <div class="manageList" v-if="list.length">
       <router-link to="/manageorder" tag="div" class="manageListContent">
         <div class="manageList_left">
           <span>
@@ -15,14 +15,14 @@
           </span>
           <span>
             <p>待处理</p>
-            <p>总额：9900.50元</p>
+            <p>总额：{{list[0].dclze}}元</p>
           </span>
         </div>
         <div class="manageList_center">
-          <p>采购店数：21</p>
+          <p>采购店数：{{list[0].dclmds}}</p>
         </div>
         <div class="manageList_right">
-          <span>22</span>
+          <span>{{list[0].dcldds}}</span>
           <span>
             <img src="../images/arrow_right.png">
           </span>
@@ -33,16 +33,16 @@
           <span>
             <img src="../images/verify.png">
           </span>
-          <span>
+          <span class="single">
             <p>审核资质</p>
-            <p>总额：9900.50元</p>
+            <!-- <p>总额：9900.50元</p> -->
           </span>
         </div>
         <div class="manageList_center">
-          <p>采购店数：21</p>
+          <!-- <p>采购店数：21</p> -->
         </div>
         <div class="manageList_right">
-          <span>22</span>
+          <span>{{list[0]. zzshkhs}}</span>
           <span>
             <img src="../images/arrow_right.png">
           </span>
@@ -53,16 +53,16 @@
           <span>
             <img src="../images/sorting.png">
           </span>
-          <span>
+          <span  class="single">
             <p>分拣中</p>
-            <p>总额：9900.50元</p>
+            <!-- <p>总额：9900.50元</p> -->
           </span>
         </div>
         <div class="manageList_center">
-          <p>采购店数：21</p>
+          <!-- <p>采购店数：21</p> -->
         </div>
         <div class="manageList_right">
-          <span>22</span>
+          <span>{{list[0].flzdds}}</span>
           <span>
             <img src="../images/arrow_right.png">
           </span>
@@ -73,16 +73,16 @@
           <span>
             <img src="../images/distribe.png">
           </span>
-          <span>
+          <span  class="single">
             <p>待配送</p>
-            <p>总额：9900.50元</p>
+            <!-- <p>总额：9900.50元</p> -->
           </span>
         </div>
         <div class="manageList_center">
-          <p>采购店数：21</p>
+          <!-- <p>采购店数：21</p> -->
         </div>
         <div class="manageList_right">
-          <span>22</span>
+          <span>{{list[0].dpsdds}}</span>
           <span>
             <img src="../images/arrow_right.png">
           </span>
@@ -93,16 +93,16 @@
           <span>
             <img src="../images/distribing.png">
           </span>
-          <span>
+          <span  class="single">
             <p>配送中</p>
-            <p>总额：9900.50元</p>
+            <!-- <p>总额：{{list[0]. pszdds}}元</p> -->
           </span>
         </div>
         <div class="manageList_center">
-          <p>采购店数：21</p>
+          <!-- <p>采购店数：21</p> -->
         </div>
         <div class="manageList_right">
-          <span>22</span>
+          <span>{{list[0]. pszdds}}</span>
           <span>
             <img src="../images/arrow_right.png">
           </span>
@@ -115,14 +115,14 @@
           </span>
           <span>
             <p>配送完成</p>
-            <p>总额：9900.50元</p>
+            <p>总额：{{list[0].pswcze}}元</p>
           </span>
         </div>
         <div class="manageList_center">
-          <p>采购店数：21</p>
+          <p>采购店数：{{list[0]. pswcmds}}</p>
         </div>
         <div class="manageList_right">
-          <span>22</span>
+          <span>{{list[0].pswcdds}}</span>
           <span>
             <img src="../images/arrow_right.png">
           </span>
@@ -136,13 +136,18 @@
 import { getManageOrderStatus } from "@/api/index";
 import { mapGetters } from "vuex";
 export default {
+  data(){
+    return{
+      list:[]
+    }
+  },
   computed: {
     ...mapGetters("login", [
       "token",
       "userId",
       "corpCode",
       "companyId",
-      "userRole"
+      "userRole",
     ])
   },
   methods: {
@@ -155,7 +160,7 @@ export default {
         userRole: this.userRole
       };
       let res = await getManageOrderStatus(defaulParams);
-      console.log(res)
+      this.list = res.data.list;
     }
   },
   mounted() {
@@ -226,6 +231,9 @@ export default {
     border-bottom: 1px solid #dcdcdc;
     .manageList_left {
       display: inline-flex;
+      .single{
+        padding-top: 15px;
+      }
       span {
         p {
           line-height: 30px;

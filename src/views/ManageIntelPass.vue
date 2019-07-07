@@ -10,24 +10,24 @@
         <div class="infos">
             <div class="title">人员信息</div>
             <div class="infoItem">
-                姓名：老王
+                姓名：{{userData.userName}}
             </div>
             <div class="infoItem">
-                手机：15900000000
+                手机：{{userData.userPhone}}
             </div>
             <div class="infoItem">
-                店名：锦绣大地烟花店
+                店名：{{userData.cvName}}
             </div>
             <div class="infoItem">
-                类型：注册待审核
+                类型：{{userData.type}}
             </div>
             <div class="card">
-                <img src="" alt="">
+                <img :src="userData.idCardUrl" alt="">
             </div>
             <div class="card">
-                <img src="" alt="">
+                <img :src="userData.idCardbackUrl" alt="">
             </div>
-            <div class="btn">通过</div>
+            <div class="btn" @click="passIt">通过</div>
         </div>
     </div>
 </template>
@@ -35,12 +35,20 @@
 import { Toast } from "mint-ui";
 import { mapGetters } from 'vuex'
 import TopNav from '@/components/TopNav'
+import { reqManageWaitePassDetail,reqManagePassWaite} from '@/api/index'
 // import ManageTabBarBotttom from '@/components/ManageTabBarBottom';
 
 export default {
     data(){
         return{
-           
+           userData:{
+                userName:'',
+                userPhone:'',
+                cvName:"",
+                type:'',
+                idCardUrl:'',
+                idCardbackUrl:'',
+           }
         }
     },
     computed: {
@@ -50,12 +58,45 @@ export default {
         TopNav,
     //    ManageTabBarBotttom,
     },
-    mounted() {
-        
+    async mounted() {
+        let defaulParams = {
+            token:this.token,
+            userId:this.userId,
+            corpCode:this.corpCode,
+            companyId:this.companyId,
+            userRole:this.userRole,
+        };      
+        let res = await reqManageWaitePassDetail({
+            ...defaulParams,
+            shmobile:this.$route.query.id
+        })
+        this.userData = res.data;
     },
     methods: {
-        
-    
+        async passIt(){
+            let defaulParams = {
+                token:this.token,
+                userId:this.userId,
+                corpCode:this.corpCode,
+                companyId:this.companyId,
+                userRole:this.userRole,
+            };   
+            let res = await reqManagePassWaite({
+                ...defaulParams,
+                shmobile:this.userData.userPhone,
+                shcompanyId:this.userData.clientCode
+            })
+            if(res.code==0){
+                Toast({
+                    message: "操作成功",
+                    position: "middle",
+                    duration: 2000
+                });
+                setTimeout(()=>{
+                    this.$router.go(-1);
+                },2100)
+            }
+        }
     },
 }
 </script>

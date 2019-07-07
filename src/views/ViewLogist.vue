@@ -14,7 +14,7 @@
                 :waypoints="['呼和浩特', '陕西兵马俑']"></bm-driving>
        </baidu-map> -->
        <div class="map" id="map"></div>
-       <div class="infoBox" style="display:none">
+       <div class="infoBox" style="display:n-one">
            <div class="infoItem">
                <div class="title">订单信息</div>
                <div class="content">
@@ -104,7 +104,8 @@ export default {
             };
             let res = await getViewLogist(defaulParams);
             if(res.code == 0){
-                this.orderId = res
+                this.orderId = res.data.list[0].orderid;
+                this.time = res.data.list[0].orderid;
             }
             this.initMap();
         },
