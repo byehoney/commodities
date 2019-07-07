@@ -24,10 +24,10 @@ export default {
         return{
             selected:this.curTab,
             tabs:[
-                [require('../images/home_sel.png'),require('../images/home_grey.png')],
-                [require('../images/choose_sel.png'),require('../images/choose_grey.png')],
-                [require('../images/shopcar_sel.png'),require('../images/shopcar_grey.png')],
-                [require('../images/my_sel.png'),require('../images/my_grey.png')]
+                [require('../images/manage/manage_b_05.png'),require('../images/manage/manage_b_01.png')],
+                [require('../images/manage/manage_b_06.png'),require('../images/manage/manage_b_02.png')],
+                [require('../images/manage/manage_b_07.png'),require('../images/manage/manage_b_03.png')],
+                [require('../images/manage/manage_b_08.png'),require('../images/manage/manage_b_04.png')]
             ],
         }
     },

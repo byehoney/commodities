@@ -28,56 +28,56 @@
         <div class="infos" v-if="user.userRole=='02'||user.userRole=='03'||user.userRole=='08'">
             <div class="infoItem">
                 <div class="left">
-                    <img class="icon" src="../images/shopcar.png" alt="">
+                    <img class="icon" src="../images/manage/manage_04.png" alt="">
                     <div class="text">今日订单数/未处理</div>
                 </div>
                 <div class="right">{{bData.dds}}/{{bData.wclzs}}</div>
             </div>
             <div class="infoItem">
                 <div class="left">
-                    <img class="icon" src="../images/shopcar.png" alt="">
+                    <img class="icon" src="../images/manage/manage_05.png" alt="">
                     <div class="text">今日退款单</div>
                 </div>
                 <div class="right">{{bData.thds}}</div>
             </div>
             <div class="infoItem">
                 <div class="left">
-                    <img class="icon" src="../images/shopcar.png" alt="">
+                    <img class="icon" src="../images/manage/manage_06.png" alt="">
                     <div class="text">在售商品/有库存</div>
                 </div>
                 <div class="right">{{bData.zypgs}}/{{bData.ykcpgs}}</div>
             </div>
             <router-link to="/manageNoStock" tag="div"  class="infoItem">
                 <div class="left">
-                    <img class="icon" src="../images/shopcar.png" alt="">
+                    <img class="icon" src="../images/manage/manage_07.png" alt="">
                     <div class="text">无库存商品数量</div>
                 </div>
                 <div class="right">{{bData.wkcpgs}}</div>
             </router-link>
             <router-link to="/manageAdduser" tag="div" class="infoItem">
                 <div class="left">
-                    <img class="icon" src="../images/shopcar.png" alt="">
+                    <img class="icon" src="../images/manage/manage_08.png" alt="">
                     <div class="text">今日新增客户</div>
                 </div>
                 <div class="right">{{bData.brxkes}}</div>
             </router-link>
             <router-link to="/manageshortstock" tag="div" class="infoItem">
                 <div class="left">
-                    <img class="icon" src="../images/shopcar.png" alt="">
+                    <img class="icon" src="../images/manage/manage_10.png" alt="">
                     <div class="text">缺货商品</div>
                 </div>
                 <div class="right">{{bData.brqhpz}}</div>
             </router-link>
             <div class="infoItem">
                 <div class="left">
-                    <img class="icon" src="../images/shopcar.png" alt="">
+                    <img class="icon" src="../images/manage/manage_11.png" alt="">
                     <div class="text">30天未动销（商品/门店）</div>
                 </div>
                 <div class="right">{{bData.sstwdspzs}}/{{bData.sstwdxkhs}}</div>
             </div>
             <router-link :to="{name:'manageBusCover',query:{cover:bData.yfgkhs,unCover:bData.wfgkhs}}" tag="div" class="infoItem">
                 <div class="left">
-                    <img class="icon" src="../images/shopcar.png" alt="">
+                    <img class="icon" src="../images/manage/manage_06.png" alt="">
                     <div class="text">业务（已覆盖/未覆盖）</div>
                 </div>
                 <div class="right">{{bData.yfgkhs}}/{{bData.wfgkhs}}</div>
@@ -87,77 +87,77 @@
         <div class="infos" v-if="(user.userRole=='04'||user.userRole=='05')&&bData">
             <div class="infoItem">
                 <div class="left">
-                    <img class="icon" src="../images/shopcar.png" alt="">
+                    <img class="icon" src="../images/manage/manage_01.png" alt="">
                     <div class="text">app今日打开次数</div>
                 </div>
                 <div class="right">{{bData.jrdkcs}}</div>
             </div>
             <div class="infoItem">
                 <div class="left">
-                    <img class="icon" src="../images/shopcar.png" alt="">
+                    <img class="icon" src="../images/manage/manage_02.png" alt="">
                     <div class="text">未处理总额</div>
                 </div>
                 <div class="right">{{bData.wclze}}</div>
             </div>
             <router-link to="/manageshop" tag="div" class="infoItem">
                 <div class="left">
-                    <img class="icon" src="../images/shopcar.png" alt="">
+                    <img class="icon" src="../images/manage/manage_03.png" alt="">
                     <div class="text">未处理采购门店数</div>
                 </div>
                 <div class="right">{{bData.wclcgmds}}/{{bData.cgmds}}</div>
             </router-link>
-            <router-link to="/manageorder" tag="div" class="infoItem">
+            <router-link to="/manageorderstatus" tag="div" class="infoItem">
                 <div class="left">
-                    <img class="icon" src="../images/shopcar.png" alt="">
+                    <img class="icon" src="../images/manage/manage_04.png" alt="">
                     <div class="text">今日订单数/未处理（总数）</div>
                 </div>
                 <div class="right">{{bData.dds}}/{{bData.wclzs}}</div>
             </router-link>
             <div class="infoItem">
                 <div class="left">
-                    <img class="icon" src="../images/shopcar.png" alt="">
+                    <img class="icon" src="../images/manage/manage_05.png" alt="">
                     <div class="text">今日退款单</div>
                 </div>
                 <div class="right">{{bData.thds}}</div>
             </div>
             <router-link to="/managecamp" tag="div" class="infoItem">
                 <div class="left">
-                    <img class="icon" src="../images/shopcar.png" alt="">
+                    <img class="icon" src="../images/manage/manage_06.png" alt="">
                     <div class="text">在售商品/有库存</div>
                 </div>
                 <div class="right">{{bData.zypgs}}/{{bData.ykcpgs}}</div>
             </router-link>
             <router-link to="/manageNoStock" tag="div"  class="infoItem">
                 <div class="left">
-                    <img class="icon" src="../images/shopcar.png" alt="">
+                    <img class="icon" src="../images/manage/manage_07.png" alt="">
                     <div class="text">无库存商品数量</div>
                 </div>
                 <div class="right">{{bData.wkcpgs}}</div>
             </router-link>
             <router-link to="/manageAdduser" tag="div" class="infoItem">
                 <div class="left">
-                    <img class="icon" src="../images/shopcar.png" alt="">
+                    <img class="icon" src="../images/manage/manage_08.png" alt="">
                     <div class="text">今日新增客户</div>
                 </div>
                 <div class="right">{{bData.brxkes}}</div>
             </router-link>
             <router-link to="/managestock" tag="div" class="infoItem">
                 <div class="left">
-                    <img class="icon" src="../images/shopcar.png" alt="">
+                    <img class="icon" src="../images/manage/manage_09.png" alt="">
                     <div class="text">库存不足7日商品</div>
                 </div>
                 <div class="right">{{bData.ccxy7tel}}</div>
             </router-link>
             <router-link to="/manageshortstock" tag="div" class="infoItem">
                 <div class="left">
-                    <img class="icon" src="../images/shopcar.png" alt="">
+                    <img class="icon" src="../images/manage/manage_10.png" alt="">
                     <div class="text">缺货商品</div>
                 </div>
                 <div class="right">{{bData.brqhpz}}</div>
             </router-link>
             <router-link :to="{name:'manageuncelled',query:{gNum:bData.sstwdspzs,sNum:bData.sstwdxkhs}}" tag="div" class="infoItem">
                 <div class="left">
-                    <img class="icon" src="../images/shopcar.png" alt="">
+                    <img class="icon" src="../images/manage/manage_11.png" alt="">
                     <div class="text">30天未动销（商品/门店）</div>
                 </div>
                 <div class="right">{{bData.sstwdspzs}}/{{bData.sstwdxkhs}}</div>
@@ -396,6 +396,7 @@ export default {
                 }
                 .left{
                     display: flex;
+                    align-items: center;
                     .icon{
                         width: 36px;
                         height: 36px;

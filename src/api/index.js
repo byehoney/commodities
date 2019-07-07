@@ -320,7 +320,9 @@ function reqWdxShop(params){//获取未动销门店
 function reqManageNewAdd(params){//获取今日新增客户
     return post('/manage/get/jrxzkh.do',params)
 }
-
+function reqManageFirstOrder(params){//获取今日订单 待处理订单
+    return post('/manage/get/dcldd.do',params)
+}
 export {
     checkExist,
     getYzCode,
@@ -409,4 +411,5 @@ export {
     reqNoCareGoods,//管理页面未动销商品
     reqWdxShop,//管理页面未动销门店
     reqManageNewAdd,//管理页面获取今日新增客户
+    reqManageFirstOrder,//管理页面获取今日订单 待处理订单
 }

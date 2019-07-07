@@ -40,12 +40,13 @@
             {{sel_value}}
           </span>
         </li>
-        <li>
+        <li @click="showFirst">
           <span>只显示今日首单:</span>
-          <span class="check"></span>
+          <img src="../images/manage_unCheck.png" v-if="!checked" class="check" />
+          <img src="../images/manage_checked.png" v-if="checked" class="check" />
         </li>
       </ul>
-      <div class="choosebtn">查询</div>
+      <div class="choosebtn" @click="doSearch">查询</div>
     </div>
     <!-- 订单 -->
     <div class="manage_order">
@@ -100,7 +101,7 @@
             </li>
             <li>
               下单时间:
-              <span>2019-04-28 13：25：30></span>
+              <span>2019-04-28 13：25：30</span>
             </li>
           </ul>
         </div>
@@ -126,6 +127,7 @@ import { mapGetters } from 'vuex'
 import ManageHeader from "../components/ManageHeader";
 import ManageBottom from "../components/ManageTabBarBottom";
 import CityPicker from "@/components/CityPicker";
+import { reqManageFirstOrder } from '@/api/index'
 export default {
   data() {
     return {
@@ -147,14 +149,42 @@ export default {
         type: "date",
         colorConfirm:"#007AFF"
       },
-      selectedValue: ""
+      checked: false,
+      list:[],
     };
   },
   components: { ManageHeader, ManageBottom,CityPicker },
   computed: {
     ...mapGetters('login',['token','userId','corpCode','companyId','userRole'])
   },
+  mounted(){
+    this.getData();
+  },
   methods: {
+    doSearch(){
+      this.list = [];
+      this.getData();
+    },
+    async getData(){
+      let defaulParams = {
+          token:this.token,
+          userId:this.userId,
+          corpCode:this.corpCode,
+          companyId:this.companyId,
+          userRole:this.userRole,
+      };
+      let res = await reqManageFirstOrder({
+        ...defaulParams,
+        startTime:this.start,
+        endTime:this.end,
+        orderData:this.checked,
+        regionCode:this.aCode,
+        orderId:''
+      })
+    },
+    showFirst(){
+      this.checked = !this.checked;
+    },
     handlerArea(){
         this.areaVisible = !this.areaVisible;
     },
@@ -224,11 +254,12 @@ export default {
         line-height: 90px;
       }
     }
-    span.check {
+    .check {
       width: 39px;
       height: 39px;
       border: 1px solid #dcdcdc;
       margin-top: 20px;
+      margin-right: 44px;
     }
   }
   ul li.left {

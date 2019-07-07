@@ -1,13 +1,14 @@
 <template>
   <div class="managestatus">
     <div class="manageHeader">
+      <img class="backIcon" src="../images/arrow_left_white.png" @click="$router.go(-1)" alt="">
       <ul>
         <li class="active">订单</li>
         <li>退款</li>
       </ul>
     </div>
     <div class="manageList">
-      <div class="manageListContent">
+      <router-link to="/manageorder" tag="div" class="manageListContent">
         <div class="manageList_left">
           <span>
             <img src="../images/pending.png">
@@ -26,14 +27,14 @@
             <img src="../images/arrow_right.png">
           </span>
         </div>
-      </div>
+      </router-link>
       <div class="manageListContent">
         <div class="manageList_left">
           <span>
             <img src="../images/verify.png">
           </span>
           <span>
-            <p>待处理</p>
+            <p>审核资质</p>
             <p>总额：9900.50元</p>
           </span>
         </div>
@@ -53,7 +54,7 @@
             <img src="../images/sorting.png">
           </span>
           <span>
-            <p>待处理</p>
+            <p>分拣中</p>
             <p>总额：9900.50元</p>
           </span>
         </div>
@@ -73,7 +74,7 @@
             <img src="../images/distribe.png">
           </span>
           <span>
-            <p>待处理</p>
+            <p>待配送</p>
             <p>总额：9900.50元</p>
           </span>
         </div>
@@ -93,7 +94,7 @@
             <img src="../images/distribing.png">
           </span>
           <span>
-            <p>待处理</p>
+            <p>配送中</p>
             <p>总额：9900.50元</p>
           </span>
         </div>
@@ -113,7 +114,7 @@
             <img src="../images/distribed.png">
           </span>
           <span>
-            <p>待处理</p>
+            <p>配送完成</p>
             <p>总额：9900.50元</p>
           </span>
         </div>
@@ -166,6 +167,13 @@ export default {
 <style scoped lang="scss">
 .managestatus {
   background: #fff;
+}
+.backIcon{
+  width: 17px;
+  height: 30px;
+  position: absolute;
+  top: 32px;
+  left: 38px;
 }
 .manageHeader {
   position: fixed;
