@@ -1,32 +1,26 @@
 <template>
   <!-- 今日订单 -->
   <div class="order_wrap">
-    <ManageHeader :title="title"></ManageHeader>
+    <ManageHeader :title="title" class="fixed"></ManageHeader>
     <div class="manageChoose">
       <ul>
-        <li @click="show">
+        <li @click="show('S')">
           <span>开始时间:</span>
-          <span>
-            {{selectedValue}}
-            <awesome-picker
-              ref="picker"
-              :data="picker.data"
-              :anchor="picker.anchor"
-              :textTitle="picker.textTitle"
-              :textConfirm="picker.textConfirm"
-              :textCancel="picker.textCancel"
-              :colorTitle="picker.colorTitle"
-              :colorConfirm="picker.colorConfirm"
-              :colorCancel="picker.colorCancel"
-              :swipeTime="picker.swipeTime"
-              @cancel="handlePickerCancel"
-              @confirm="handlePickerConfirm"
-            ></awesome-picker>
+          <span v-if="start" id="start">
+            {{start}}
+          </span>
+          <span v-else>
+            请选择开始时间
           </span>
         </li>
-        <li>
+        <li @click="show('E')">
           <span>结束时间:</span>
-          <span>2019-04-28</span>
+          <span v-if="end" id="end">
+            {{end}}
+          </span>
+          <span v-else>
+            请选择结束时间
+          </span>
         </li>
         <li class="left">
           <span>订单号:</span>
@@ -40,10 +34,10 @@
             <input type="text" placeholder="请输入门店">
           </span>
         </li>
-        <li class="left">
+        <li class="left" @click="handlerArea">
           <span>选择地区:</span>
           <span>
-            <input type="text" placeholder="请选择地区">
+            {{sel_value}}
           </span>
         </li>
         <li>
@@ -58,7 +52,7 @@
       <div class="order_num fix">
         <ul>
           <li>今日首单数：8单</li>
-          <li>合集订单数：8单</li>
+          <li>合计订单数：8单</li>
         </ul>
       </div>
       <div class="order_list">
@@ -112,26 +106,88 @@
         </div>
       </div>
     </div>
-    <ManageBottom></ManageBottom>
+    <!-- <ManageBottom></ManageBottom> -->
+    <awesome-picker
+      ref="picker"
+      :textTitle="picker.textTitle"
+      :type="picker.type"
+      :anchor="picker.anchor"
+      :colorConfirm="picker.colorConfirm"
+      @cancel="handlePickerCancel"
+      @confirm="handlePickerConfirm"
+    ></awesome-picker>
+    <CityPicker :areaVisible="areaVisible" :setArea="handleSetArea" :cancel="handleCancel"></CityPicker>
   </div>
 </template>
 
 <script>
+import { Toast } from "mint-ui";
+import { mapGetters } from 'vuex'
 import ManageHeader from "../components/ManageHeader";
 import ManageBottom from "../components/ManageTabBarBottom";
+import CityPicker from "@/components/CityPicker";
 export default {
   data() {
     return {
       title: "今日订单",
-      value: "2019-04-28",
+      areaVisible:false,
+      sel_value:'请选择地区',
+      pCode:'',
+      cCode:'',
+      aCode:'',
+      start: "",
+      end:'',
+      curDate:'',
+      Y: "",
+      M: "",
+      D: "",
+      picker: {
+        anchor: [],
+        textTitle: "选择日期",
+        type: "date",
+        colorConfirm:"#007AFF"
+      },
       selectedValue: ""
     };
   },
-  components: { ManageHeader, ManageBottom },
+  components: { ManageHeader, ManageBottom,CityPicker },
+  computed: {
+    ...mapGetters('login',['token','userId','corpCode','companyId','userRole'])
+  },
   methods: {
-    picker(){
+    handlerArea(){
+        this.areaVisible = !this.areaVisible;
+    },
+    handleSetArea(value,pCode,cCode,aCode){
+        this.sel_value = value;
+        this.pCode = pCode;
+        this.cCode = cCode;
+        this.aCode = aCode;
+        this.areaVisible = false;
+    },
+    handleCancel(){
+        this.areaVisible = false;
+    },
+    show(type) {
+      this.curDate = type;
+      this.$refs.picker.show();
+    },
+    handlePickerCancel(){
 
-    }
+    },
+    handlePickerConfirm(v) {
+      console.log(v)
+      this.Y = parseInt(v[0].value)>10?parseInt(v[0].value):'0'+parseInt(v[0].value);
+      this.M = parseInt(v[1].value)>10?parseInt(v[1].value):'0'+parseInt(v[1].value);
+      this.D = parseInt(v[2].value)>10?parseInt(v[2].value):'0'+parseInt(v[2].value);
+      this.picker.anchor = v;
+      this.$refs.picker.display=false;
+      if(this.curDate == 'S'){
+        this.start = this.Y + '-' +this.M + '-'+ this.D;    
+      }else{
+        this.end = this.Y + '-' +this.M + '-'+ this.D; 
+      }
+    },
   }
 };
 </script>
@@ -140,13 +196,19 @@ export default {
 .order_wrap {
   padding-bottom: 138px;
 }
+.fixed{
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+}
 .manageChoose {
   width: 711px;
   min-height: 762px;
   font-size: 28px;
   padding-left: 39px;
   background: #fff;
-  margin-top: 10px;
+  margin-top: 100px;
   ul li {
     display: flex;
     width: 100%;

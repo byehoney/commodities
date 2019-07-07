@@ -308,6 +308,19 @@ function reqNoStock(params){//获取无库存商品
 function reqNotFullStock(params){//获取缺货商品
     return post('/manage/get/qhsp.do',params)
 }
+function reqNoCareShop(params){//获取未处理门店
+    return post('/manage/get/wcsmd.do',params)
+}
+function reqNoCareGoods(params){//获取未动销商品
+    return post('/manage/get/wdssp.do',params)
+}
+function reqWdxShop(params){//获取未动销门店
+    return post('/manage/get/wdskh.do',params)
+}
+function reqManageNewAdd(params){//获取今日新增客户
+    return post('/manage/get/jrxzkh.do',params)
+}
+
 export {
     checkExist,
     getYzCode,
@@ -392,4 +405,8 @@ export {
     reqSevenDaysStock,//管理页面获取库存不足七日商品
     reqNoStock,//管理页面获取无库存商品
     reqNotFullStock,//管理页面获取缺货商品
+    reqNoCareShop,//管理页面获取未处理门店
+    reqNoCareGoods,//管理页面未动销商品
+    reqWdxShop,//管理页面未动销门店
+    reqManageNewAdd,//管理页面获取今日新增客户
 }

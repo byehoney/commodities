@@ -5,7 +5,7 @@
       <ul>
         <li @click="show('S')">
           <span>开始时间:</span>
-          <span v-if="start">
+          <span v-if="start" id="start">
             {{start}}
           </span>
           <span v-else>
@@ -14,7 +14,7 @@
         </li>
         <li @click="show('E')">
           <span>结束时间:</span>
-          <span v-if="end">
+          <span v-if="end" id="end">
             {{end}}
           </span>
           <span v-else>
@@ -42,7 +42,7 @@
             <img src="../images/dianpu_m.png">
           </div>
           <div class="manageChoose_name">
-            <p>门店名称：{{item.name}}</p>
+            <p>门店名称：{{item.companyname}}</p>
             <p>注册地址：{{item.address}}</p>
           </div>
         </li>
@@ -64,7 +64,7 @@
 import { Toast } from "mint-ui";
 import { mapGetters } from 'vuex'
 import ManageHeader from "../components/ManageHeader";
-import { reqSevenDaysStock } from '@/api/index';//待修改
+import { reqManageNewAdd } from '@/api/index';
 export default {
   data() {
     return {
@@ -96,7 +96,7 @@ export default {
     ...mapGetters('login',['token','userId','corpCode','companyId','userRole'])
   },
   mounted() {
-    this.getData();
+    // this.getData();
   },
   methods: {
     show(type) {
@@ -120,6 +120,32 @@ export default {
       }
     },
     doSearch(){
+      if(this.start&&!this.end){
+        Toast({
+            message: "请选择结束时间",
+            position: "middle",
+            duration: 2000
+        });
+        return;
+      }else if(!this.start&&this.end){
+        Toast({
+            message: "请选择开始时间",
+            position: "middle",
+            duration: 2000
+        });
+        return;
+      }else if(this.start&&this.end){
+        let start = document.getElementById('start').innerText;
+        let end = document.getElementById('end').innerText;
+        if(new Date(this.end).getTime()<new Date(this.start).getTime()){
+          Toast({
+              message: "开始时间大于结束时间",
+              position: "middle",
+              duration: 2000
+          });
+          return;
+        }
+      }
       this.pageNum = 1;
       this.list = [];
       this.getData();
@@ -134,9 +160,11 @@ export default {
             pageSize:this.pageSize,
             pageNum:this.pageNum
         };      
-        let res = await reqSevenDaysStock({
+        let res = await reqManageNewAdd({
           ...defaulParams,
-          fullText:this.searchStr
+          fullText:this.searchStr,
+          startTime:this.start,
+          endTime:this.end
         })
         this.moreLoading = false;
         if(res.code == 0){
@@ -168,8 +196,8 @@ export default {
         if(this.moreLoading||!this.hasMore){
             return;
         }
-        this.pageNum = this.pageNum+1;
         this.getData();
+        this.pageNum = this.pageNum+1;
     }
   }
 };

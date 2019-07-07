@@ -31,7 +31,7 @@
               </div>
           </div>
         </div>
-        <div class="total" v-if="curTypeIndex==1">合计数：1200</div>
+        <div class="total" v-if="curTypeIndex==1&&list.length" >合计数：{{list[0].wdskhs}}</div>
       </div>
       <!-- 门店列表 -->
       <div class="manageChooseList">
@@ -46,7 +46,7 @@
                 <img src="../images/dianpu_m.png">
               </div>
               <div class="manageChoose_name">
-                <p>门店名称：{{item.name}}</p>
+                <p>门店名称：{{item.username}}</p>
                 <p>注册地址：{{item.address}}</p>
               </div>
             </li>
@@ -79,7 +79,7 @@
 import { Toast } from "mint-ui";
 import { mapGetters } from 'vuex'
 import ManageHeader from "../components/ManageHeader";
-import { reqSevenDaysStock } from '@/api/index';
+import { reqNoCareGoods,reqWdxShop,getCoustomerCityList } from '@/api/index';
 export default {
   data() {
     return {
@@ -92,6 +92,7 @@ export default {
       areaList:[{regionCode: "", regionName: "全国"}],
       curTypeIndex:0,
       curAreaIndex:0,
+      searchStr:'',
       list:[],
       loading:false,
       moreLoading:false,
@@ -105,7 +106,16 @@ export default {
   computed: {
     ...mapGetters('login',['token','userId','corpCode','companyId','userRole'])
   },
-  mounted() {
+  async mounted() {
+    let defaulParams = {
+      token:this.token,
+      userId:this.userId,
+      corpCode:this.corpCode,
+      companyId:this.companyId,
+      userRole:this.userRole,
+    };        
+    let cities = await getCoustomerCityList({...defaulParams});
+    this.areaList = cities.data.list;
     this.getData();
   },
   methods:{
@@ -131,11 +141,20 @@ export default {
             userRole:this.userRole,
             pageSize:this.pageSize,
             pageNum:this.pageNum
-        };      
-        let res = await reqSevenDaysStock({
-          ...defaulParams,
-          fullText:this.searchStr
-        })
+        }; 
+        let res = '';
+        if(this.curTypeIndex==0){
+          res = await reqNoCareGoods({
+            ...defaulParams,
+            fullText:this.searchStr
+          })
+        }else{
+           res = await reqWdxShop({
+            ...defaulParams,
+            fullText:this.searchStr,
+            regionCode:this.areaList[this.curAreaIndex].regionCode
+          })
+        }     
         this.moreLoading = false;
         if(res.code == 0){
             if(!res.data.list.length){
@@ -160,14 +179,16 @@ export default {
                 this.moreLoading = false;
             }
             this.list = [...this.list,...res.data.list];
+
         }
     },
     loadMore(){
         if(this.moreLoading||!this.hasMore){
             return;
         }
-        this.pageNum = this.pageNum+1;
+       
         this.getData();
+        this.pageNum = this.pageNum+1;
     },
     selType(){
         this.typeActive = true;

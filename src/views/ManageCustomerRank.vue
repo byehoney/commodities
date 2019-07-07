@@ -110,6 +110,7 @@ export default {
         };        
         let cities = await getCoustomerCityList({...defaulParams});
         this.areaList = cities.data.list;
+        this.getData();
     },
     methods: {
         ...mapMutations('mange',['changeDrawLeft']),
@@ -174,7 +175,7 @@ export default {
             this.showAreaList = false;
             this.list = [];
             this.pageNum = 1;
-            this.getData();
+            // this.getData();
         },
         async getData(){
             this.moreLoading = true;
@@ -220,11 +221,11 @@ export default {
             }
         },
         loadMore(){
-            if(this.moreLoading||!this.hasMore){
+            if(this.moreLoading||(!this.hasMore&&this.pageNum==1)){
                 return;
             }
-            this.pageNum = this.pageNum+1;
             this.getData();
+            this.pageNum = this.pageNum+1;
         }
     },
 }
