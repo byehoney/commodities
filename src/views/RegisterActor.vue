@@ -32,6 +32,7 @@
         <mt-popup
             v-model="popupVisible"
             position="bottom"
+            class="regPop"
         >
             <mt-picker value-key="userName" :slots="slots" @change="onValuesChange" showToolbar v-if="showPicker1">
                 <div class="barContent">
@@ -366,6 +367,9 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+    .regPop{
+        width: 100vw;
+    }
     .reg_container{
         width: 100vw;
         height: 100vh;

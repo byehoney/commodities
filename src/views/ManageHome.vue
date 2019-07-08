@@ -85,13 +85,13 @@
         </div>
         <!-- 商业管理员和业务员 -->
         <div class="infos" v-if="(user.userRole=='04'||user.userRole=='05')&&bData">
-            <div class="infoItem">
+            <!-- <div class="infoItem">
                 <div class="left">
                     <img class="icon" src="../images/manage/manage_01.png" alt="">
                     <div class="text">app今日打开次数</div>
                 </div>
                 <div class="right">{{bData.jrdkcs}}</div>
-            </div>
+            </div> -->
             <div class="infoItem">
                 <div class="left">
                     <img class="icon" src="../images/manage/manage_02.png" alt="">
