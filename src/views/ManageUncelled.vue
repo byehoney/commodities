@@ -24,11 +24,8 @@
                   <p :class="['typeItem',curTypeIndex==index?'active':'']" @click="selCurType($event,index)" v-for="(item,index) in typeList" :key="index">{{item.text}}</p>
               </div>
           </div>
-          <div :class="['area',areaActive?'active':'']" @click="selArea" v-if="areaList.length&&curTypeIndex==1">
-              {{areaList[curAreaIndex].regionName}}
-              <div class="typeList" v-if="showAreaList">
-                  <p :class="['typeItem',curAreaIndex==index?'active':'']" @click="selCurArea($event,index)" v-for="(item,index) in areaList" :key="index">{{item.regionName}}</p>
-              </div>
+          <div :class="['area',areaActive?'active':'']" @click="selArea" v-if="curTypeIndex==1">
+              {{sel_value.substr(0,3).replace(',','')}}
           </div>
         </div>
         <div class="total" v-if="curTypeIndex==1&&list.length" >合计数：{{list[0].wdskhs}}</div>
@@ -72,6 +69,7 @@
         </ul>
       </div>
     </div>
+    <CityPicker :areaVisible="areaVisible" :setArea="handleSetArea" :cancel="handleCancel" global="manage"></CityPicker>
   </div>
 </template>
 
@@ -80,6 +78,7 @@ import { Toast } from "mint-ui";
 import { mapGetters } from 'vuex'
 import ManageHeader from "../components/ManageHeader";
 import { reqNoCareGoods,reqWdxShop,getCoustomerCityList } from '@/api/index';
+import CityPicker from "@/components/CityPicker";
 export default {
   data() {
     return {
@@ -99,10 +98,15 @@ export default {
       hasMore:true,
       pageSize:10,
       pageNum:1,
-      noData:false//是否有数据
+      noData:false,//是否有数据
+      areaVisible:false,
+      sel_value:'全国',
+      pCode:'',
+      cCode:'',
+      aCode:'',
     };
   },
-  components: { ManageHeader },
+  components: { ManageHeader,CityPicker },
   computed: {
     ...mapGetters('login',['token','userId','corpCode','companyId','userRole'])
   },
@@ -114,11 +118,27 @@ export default {
       companyId:this.companyId,
       userRole:this.userRole,
     };        
-    let cities = await getCoustomerCityList({...defaulParams});
-    this.areaList = cities.data.list;
+    // let cities = await getCoustomerCityList({...defaulParams});
+    // this.areaList = cities.data.list;
     this.getData();
   },
   methods:{
+    handlerArea(){
+        this.areaVisible = !this.areaVisible;
+    },
+    handleSetArea(value,pCode,cCode,aCode){
+        this.sel_value = value;
+        this.pCode = pCode;
+        this.cCode = cCode;
+        this.aCode = aCode;
+        this.areaVisible = false;
+        this.list = [];
+        this.pageNum = 1;
+        this.getData();
+    },
+    handleCancel(){
+        this.areaVisible = false;
+    },
     doSearch(){
       this.pageNum = 1;
       this.list = [];
@@ -152,7 +172,7 @@ export default {
            res = await reqWdxShop({
             ...defaulParams,
             fullText:this.searchStr,
-            regionCode:this.areaList[this.curAreaIndex].regionCode
+            regionCode:this.aCode
           })
         }     
         this.moreLoading = false;
@@ -205,6 +225,7 @@ export default {
         this.showDateList = false;
         this.showAreaList = true;
         this.areaActive = true;
+        this.areaVisible = true;
     },
     selCurType(e,index){
         e.stopPropagation();

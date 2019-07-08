@@ -206,6 +206,9 @@ export default {
     videoPlayer
   },
   async mounted() {
+    if(this.userRole!='06'&&this.userRole!='07'){
+      this.$router.replace('/manageHome')
+    }
     let defaulParams = {
         token:this.token,
         userId:this.userId,

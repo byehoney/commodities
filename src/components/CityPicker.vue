@@ -97,10 +97,14 @@ export default {
       Slot: "选择省市区"
     }
   },
-  props:['areaVisible','setArea','cancel'],
+  props:['areaVisible','setArea','cancel','global'],
   async mounted() {
     let res = await getCityList();
-    this.data = res.data.list;
+    if(this.global=='manage'){
+      this.data = [{regionCode:'',regionName:'全国',children:[{regionCode:'',regionName:'全国',children:[{regionCode:'',regionName:'全国'}]}]}].concat(res.data.list);
+    }else{
+      this.data = res.data.list;
+    }
     this.province = this.data.map(res => {
         return res.regionName;
     });

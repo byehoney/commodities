@@ -2,7 +2,7 @@
     <div :class="['mangeContainer',showDrawLeft?'pop':'']" style="opacity:1">
         <ManageTopNav @trigerLeft="trigerDrawerLeft"></ManageTopNav>
         <DrawerLeft ref="leftDrwaer"></DrawerLeft>
-        <div class="main" v-if="bData">
+        <div class="main">
             <mt-swipe class="manage_swiper" :auto="0" :show-indicators="false">
                 <mt-swipe-item class="item">
                     <div class="top">￥{{bData.jrxse}}</div>
@@ -194,7 +194,31 @@ import { reqManageIndex } from '@/api/index'
 export default {
     data(){
         return{
-            bData:null,
+            bData:{
+                brqhpz: 0,
+                brxkes: 0,
+                ccxy7tel: 0,
+                cgmds: 0,
+                dds: 0,
+                jrdkcs: 0,
+                jrxl: 0,
+                jrxse: 0,
+                list: [],
+                sstwdspzs: 0,
+                sstwdxkhs: 0,
+                thds: 0,
+                wclcgmds: 0,
+                wclze: 0,
+                wclzs: 0,
+                wfgkhs: 0,
+                wkcpgs: 0,
+                yfgkhs: 0,
+                ykcpgs: 0,
+                zdds: 0,
+                zkhs: 0,
+                zsxe: 0,
+                zypgs: 0,
+            },
         }
     },
     computed: {

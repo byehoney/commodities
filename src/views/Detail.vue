@@ -7,18 +7,26 @@
     <div class="detail_loop">
       <div class="detsil_loop_center">
         <mt-swipe :auto="0" :show-indicators="true">
-          <mt-swipe-item class="item">
+          <!-- <mt-swipe-item class="item">
             <video
               class="myVideo"
               playsinline="true"
-              x-webkit-airplay="true" 
               x5-playsinline="true"
+              x-webkit-airplay="allow"
               webkit-playsinline="true" 
               x5-video-player-type="h5"
               :poster="shopDetail.yt"
-              controls
+              controls=""
             >
-              <source src="http://qxindian.fireworks-online.cn/15%E6%B3%A2%E9%87%91%E4%B8%9D%E6%9F%B3%E5%90%90%E7%8F%A0-.mp4" type="video/mp4">
+              <source src="http://qxindian.fireworks-online.cn/15%E6%B3%A2%E9%87%91%E4%B8%9D%E6%9F%B3%E5%90%90%E7%8F%A0-.mp4">
+            </video>
+          </mt-swipe-item> -->
+          <mt-swipe-item class="item">
+            <video
+              class="myVideo"
+              controls=""
+            >
+              <source src="http://qxindian.fireworks-online.cn/15%E6%B3%A2%E9%87%91%E4%B8%9D%E6%9F%B3%E5%90%90%E7%8F%A0-.mp4">
             </video>
           </mt-swipe-item>
           <mt-swipe-item class="item">

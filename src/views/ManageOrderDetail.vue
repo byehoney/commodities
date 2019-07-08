@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="opacity:1">
     <ManageHeader :title="title" class="fixed"></ManageHeader>
     <div class="userInfo">
         <img src="../images/manage_local_icon.png" alt="">
@@ -27,29 +27,29 @@
             </div>
         </div>
     </div>
-    <div class="orderInfo">
+    <div class="orderInfo" v-if="list.length">
         <div class="orderTop">
             <p class="info">订单编号：{{orderId}}</p>
             <p class="info">下单时间：{{time}}</p>
             <p class="info">订单备注：{{note}}</p>
-            <p class="info price">￥{{sfk}}</p>
+            <p class="info price">￥{{list[0].sfk}}</p>
         </div>
         <div class="orderBot">
             <p class="info">
                 <span>总件数：</span>
-                <span>{{count}}</span>
+                <span>{{list[0].count}}</span>
             </p>
             <p class="info">
                 <span>商品总额：</span>
-                <span>￥{{money}}</span>
+                <span>￥{{list[0].money}}</span>
             </p>
             <p class="info">
                 <span>立减：</span>
-                <span class="red">-￥{{ljmoney}}</span>
+                <span class="red">￥{{list[0].ljmoney}}</span>
             </p>
             <p class="info">
                 <span>实付款：</span>
-                <span class="red">￥{{sfk}}</span>
+                <span class="red">￥{{list[0].sfk}}</span>
             </p>
             <!-- <div class="btn">待出库</div> -->
         </div>

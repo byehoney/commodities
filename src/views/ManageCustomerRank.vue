@@ -16,13 +16,14 @@
                         <p :class="['typeItem',curTypeIndex==index?'active':'']" @click="selCurType($event,index)" v-for="(item,index) in typeList" :key="index">{{item.text}}</p>
                     </div>
                 </div>
-                <div :class="['area',areaActive?'active':'']" @click="selArea" v-if="areaList.length">
-                    {{areaList[curAreaIndex].regionName}}
-                    <div class="typeList" v-if="showAreaList">
+                <div :class="['area',areaActive?'active':'']" @click="selArea">
+                    {{sel_value.substr(0,3).replace(',','')}}
+                    <!-- <div class="typeList" v-if="showAreaList">
                         <p :class="['typeItem',curAreaIndex==index?'active':'']" @click="selCurArea($event,index)" v-for="(item,index) in areaList" :key="index">{{item.regionName}}</p>
-                    </div>
+                    </div> -->
                 </div>
-                <div class="total">合计数：1200</div>
+                <div class="total" v-if="list.length">合计数：{{list[0].hjkhs}}</div>
+                <div class="total" v-else>合计数：0</div>
             </div>
             <ul
                 class="content"
@@ -54,6 +55,7 @@
         </div>
         <ManageTabBarBotttom curTab="manageCustomerRank"></ManageTabBarBotttom>
         <div class="mask" v-show="showDrawLeft" @click="handleMaskClick"></div>
+        <CityPicker :areaVisible="areaVisible" :setArea="handleSetArea" :cancel="handleCancel" global="manage"></CityPicker>
     </div>
 </template>
 <script>
@@ -62,6 +64,7 @@ import {mapGetters,mapMutations,mapState} from 'vuex'
 import ManageTabBarBotttom from '@/components/ManageTabBarBottom'
 import DrawerLeft from '@/components/DrawerLeft'
 import ManageTopNav from '@/components/ManageTopNav'
+import CityPicker from "@/components/CityPicker";
 import { getCoustomerCityList,getCoustomerRankList } from '@/api/index'
 export default {
     data(){
@@ -84,7 +87,12 @@ export default {
             hasMore:true,
             pageSize:10,
             pageNum:1,
-            noData:false//是否有数据
+            noData:false,//是否有数据
+            areaVisible:false,
+            sel_value:'全国',
+            pCode:'',
+            cCode:'',
+            aCode:'',
         }
     },
     computed:{
@@ -98,7 +106,8 @@ export default {
     components:{
         ManageTabBarBotttom,
         ManageTopNav,
-        DrawerLeft
+        DrawerLeft,
+        CityPicker,
     },
     async mounted() {
         let defaulParams = {
@@ -108,12 +117,28 @@ export default {
             companyId:this.companyId,
             userRole:this.userRole,
         };        
-        let cities = await getCoustomerCityList({...defaulParams});
-        this.areaList = cities.data.list;
+        // let cities = await getCoustomerCityList({...defaulParams});
+        // this.areaList = cities.data.list;
         this.getData();
     },
     methods: {
         ...mapMutations('mange',['changeDrawLeft']),
+        handlerArea(){
+            this.areaVisible = !this.areaVisible;
+        },
+        handleSetArea(value,pCode,cCode,aCode){
+            this.sel_value = value;
+            this.pCode = pCode;
+            this.cCode = cCode;
+            this.aCode = aCode;
+            this.areaVisible = false;
+            this.list = [];
+            this.pageNum = 1;
+            this.getData();
+        },
+        handleCancel(){
+            this.areaVisible = false;
+        },
         trigerDrawerLeft(){
             this.changeDrawLeft(true);
         },
@@ -143,6 +168,7 @@ export default {
             this.showDateList = false;
             this.showAreaList = true;
             this.areaActive = true;
+            this.areaVisible = true;
         },
         selCurDate(e,index){
             e.stopPropagation();
@@ -175,7 +201,7 @@ export default {
             this.showAreaList = false;
             this.list = [];
             this.pageNum = 1;
-            // this.getData();
+            this.getData();
         },
         async getData(){
             this.moreLoading = true;
@@ -192,7 +218,7 @@ export default {
                 ...defaulParams,
                 days:this.dateList[this.curDateIndex].days,
                 sort:this.typeList[this.curTypeIndex].sort,
-                regionCode:this.areaList[this.curAreaIndex].regionCode
+                regionCode:this.aCode
             })
             this.moreLoading = false;
             if(res.code == 0){
