@@ -1,6 +1,6 @@
 <template>
     <div class="logistContainer">
-       <!-- <TopNav></TopNav> -->
+       <TopNav></TopNav>
        <!-- <baidu-map class="map" id="map" :center="center" :zoom="zoom" @ready="handler" ak="CbvGZwjbrnWurzE8xAKUoaeFjZIcSClx">
             <bm-geolocation  :autoLocation="true" @locationSuccess="getLocation"></bm-geolocation>
             <bm-driving
@@ -50,7 +50,7 @@
                </div>
            </div>
        </div>
-       <div class="nextBtn" style="display:none">
+       <div class="nextBtn" style="display:n-one">
            <img src="../images/kefu_icon.png"  alt="">
            <span>联系客服</span>
        </div>
@@ -232,7 +232,7 @@ export default {
 <style lang="scss" scoped>
     .logistContainer{
         width: 100vw;
-        min-height: 100vh;
+        // min-height: 100vh;
         background: rgba(235, 235, 235, 1);
         .nav{
             border-bottom: 2px solid #ebebeb;
@@ -240,6 +240,7 @@ export default {
         .map{
             width: 100%;
             height: 500px;
+            margin-top: 88px;
             a[title="到百度地图查看此区域"]{
                 display: none !important;
             }

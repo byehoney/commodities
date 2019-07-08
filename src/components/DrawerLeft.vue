@@ -13,7 +13,7 @@
           <img src="../images/sh_m_icon.png" class="icon" alt="">
           <span>审核</span>
         </div>
-        <div class="kpiArea">
+        <div :class="[user.userRole=='04'||user.userRole=='08'?'kpiArea':'orderArea']">
           <img src="../images/order_m_icon.png" class="icon" alt="">
           <span>订单</span>
         </div>
