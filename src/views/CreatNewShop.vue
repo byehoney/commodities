@@ -100,17 +100,19 @@ export default {
         handleCancel(){
             this.popupVisible = false;
         },
-        async checkCode(){
-            let res = await checkTcode({code:this.code.trim()});
+        checkCode(){
+            let res = checkTcode({code:this.code.trim()});
+            console.log(res)
             let pass = false;
             if(res.code==0){
                 pass = true;
             }else{
                 pass = false;
             }
+            alert(pass)
             return pass;
         },
-        goNext(){
+        async goNext(){
             let reg = /^1[345678]\d{9}$/; 
             if(!this.shop){
                 Toast({
@@ -140,14 +142,21 @@ export default {
                     duration: 2000
                 });
                 return;
-            }else if(!this.checkCode()){
-                Toast({
-                    message: "请输入正确的推荐码",
-                    position: "middle",
-                    duration: 2000
-                });
-                return;
-            }else{
+            }
+            // else if(!this.checkCode()){
+            //     console.log(this.checkCode())
+            //     Toast({
+            //         message: "请输入正确的推荐码",
+            //         position: "middle",
+            //         duration: 2000
+            //     });
+            //     return;
+            // }
+            else{
+                let res = await checkTcode({code:this.code.trim()});
+                if(res.code!=0){
+                    return;
+                }
                 let data = {
                     addStr:this.sel_value,
                     pCode:this.pCode,

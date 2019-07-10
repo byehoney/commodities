@@ -99,7 +99,7 @@ export default {
                 }   
             ],
             file:'',
-            token:'',
+            uptoken:'',
             file_key:'',
             key:'',
             domain:'http://yanhuawang.rydltech.com/',
@@ -137,7 +137,7 @@ export default {
         ...mapMutations('register',['saveIntel','restIntel']),
         async getToken(){
             let res = await getUploadToken({suffix:'1'});
-            this.token = res.data.token;
+            this.uptoken = res.data.token;
             this.key = res.data.imgUrl;
             console.log(res);
         },
@@ -194,7 +194,7 @@ export default {
         },
         upload(e,index,code){
             var data = new FormData();//重点在这里 如果使用 var data = {}; data.inputfile=... 这样的方式不能正常上传
-            data.append('token', this.token);
+            data.append('token', this.uptoken);
             data.append('file',this.file)
             data.append('key',this.key+this.file_key)
             uploadImage(data,(res)=>{

@@ -8,7 +8,7 @@
       <div class="detsil_loop_center">
         <mt-swipe :auto="0" :show-indicators="true">
           <mt-swipe-item class="item"  v-for="(stem,index) in shopDetail.spList" :key="index">
-            <video
+            <!-- <video
               class="myVideo"
               playsinline="true"
               x5-playsinline="true"
@@ -21,25 +21,14 @@
               controls=""
             >
               <source :src="stem">
-            </video>
+            </video> -->
+            <video-player v-if="shopDetail.spList.length"  class="video-player vjs-custom-skin"
+                ref="videoPlayer"
+                :playsinline="true"
+                :options="playerOptions[index]"
+            ></video-player>
           </mt-swipe-item>
-          <mt-swipe-item class="item">
-            <video
-              class="myVideo"
-              playsinline="true"
-              x5-playsinline="true"
-              x-webkit-airplay="allow"
-              webkit-playsinline="true" 
-              x5-video-player-type="h5"
-              x5-video-player-fullscreen="true"
-              x5-video-orientation="landscape"
-              :poster="shopDetail.yt"
-              controls=""
-            >
-              <source src="http://qxindian.fireworks-online.cn/15%E6%B3%A2%E9%87%91%E4%B8%9D%E6%9F%B3%E5%90%90%E7%8F%A0-.mp4">
-            </video>
-          </mt-swipe-item>
-          <mt-swipe-item class="item" v-for="(item,index) in shopDetail.tpList" :key="index">
+          <mt-swipe-item class="item" v-for="(item) in shopDetail.tpList" :key="item">
             <img :src="item?item:require('../images/default_logo.jpg')">
           </mt-swipe-item>
         </mt-swipe>
@@ -321,6 +310,8 @@
 </template>
 
 <script>
+import { videoPlayer } from 'vue-video-player'
+import 'video.js/dist/video-js.css'
 import { Toast } from "mint-ui";
 import { getChooseDetail,addToCar ,getCartNum,buyCheckNum,nowBuy} from "@/api/index";
 import { mapState, mapGetters } from "vuex";
@@ -340,7 +331,11 @@ export default {
       S:'00',
       type:'',//add  添加购物车   buy  购买
       buyNum:0,
+      playerOptions : []
     };
+  },
+  components: {
+    videoPlayer
   },
   filters:{
       formatDis(nPrice,oPrice){
@@ -590,7 +585,32 @@ export default {
       };
       let result = await getChooseDetail(defaulParams);
       this.shopDetail = result.data;
-      console.log(this.shopDetail.hdlx);
+      let options = [];
+      result.data.spList.forEach(item => {
+        options.push({
+          playbackRates: [0.7, 1.0, 1.5, 2.0], //播放速度
+          autoplay: false, //如果true,浏览器准备好时开始回放。
+          muted: false, // 默认情况下将会消除任何音频。
+          loop: false, // 导致视频一结束就重新开始。
+          preload: 'auto', // 建议浏览器在<video>加载元素后是否应该开始下载视频数据。auto浏览器选择最佳行为,立即开始加载视频（如果浏览器支持）
+          language: 'zh-CN',
+          aspectRatio: '4:3', // 将播放器置于流畅模式，并在计算播放器的动态大小时使用该值。值应该代表一个比例 - 用冒号分隔的两个数字（例如"16:9"或"4:3"）
+          fluid: true, // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
+          sources: [{
+            src: item,  // 路径
+          }],
+          poster: result.data.yt, //你的封面地址
+          // width: document.documentElement.clientWidth,
+          notSupportedMessage: '此视频暂无法播放，请稍后再试', //允许覆盖Video.js无法播放媒体源时显示的默认信息。
+          controlBar: {
+            // timeDivider: true,
+            // durationDisplay: true,
+            // remainingTimeDisplay: false,
+            fullscreenToggle: true  //全屏按钮
+          }
+        })
+      });
+      this.playerOptions = options;
       if (this.shopDetail.hdlx == "秒杀") {
         this.contentShow = false;
         this.count();

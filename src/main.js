@@ -9,9 +9,9 @@ import DrawerLayout from 'vue-drawer-layout'
 import AwesomePicker from 'vue-awesome-picker';
 import md5 from 'js-md5';
 // import BaiduMap from 'vue-baidu-map'
-import VueVideoPlayer from 'vue-video-player'
-import 'video.js/dist/video-js.css'
-import 'vue-video-player/src/custom-theme.css'
+// import VueVideoPlayer from 'vue-video-player'
+// import 'video.js/dist/video-js.css'
+// import 'vue-video-player/src/custom-theme.css'
 import "normalize.css"
 import "@/style/reset.scss"
 // Vue.use(BaiduMap, {

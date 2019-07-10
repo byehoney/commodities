@@ -1,5 +1,5 @@
 <template>
-    <div id="app">
+    <div id="app" style="opacity:1">
         <keep-alive>
             <router-view v-if="$route.meta.keepAlive"></router-view>
         </keep-alive>
@@ -41,6 +41,27 @@ html{
 .highcharts-credits{
     display: none;
 }
+
+.video-js .vjs-big-play-button{
+    width: 100px!important;
+  height: 100px!important;
+  border-radius: 50%!important;
+  top: 180px!important;
+  left: 50%!important;
+  margin-left: -50px!important;
+}
+.detail_loop .video-js .vjs-volume-panel,.detail_loop .vjs-playback-rate,.detail_loop .video-js .vjs-time-control{
+    display: none!important;
+}
+.vjs-big-play-button .vjs-icon-placeholder:before{
+    position: relative!important;
+    top: 5px!important;
+}
+.detail_loop .vjs-play-control,.detail_loop .vjs-fullscreen-control{
+    position: relative!important;
+    top: 15px;
+}
+// }
 // .mint-header.manageHeader{
 //     background-color: #fff;
 //     position: fixed;

@@ -96,7 +96,7 @@ export default {
         },
         async registerJoin(data){
             let res = await joinRegister(data);
-            alert(JSON.stringify(res))
+            // alert(JSON.stringify(res))
             if(res.code==0){
                 this.showTip = true;
             }
