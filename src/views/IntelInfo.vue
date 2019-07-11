@@ -235,6 +235,7 @@ export default {
             let res = await addRelativeCreate(data);
             if(res.code==0){
                 this.showTip = true;
+                this.$router.push({name:'my'})
             }
         },
         goEnd(){

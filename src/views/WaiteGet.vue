@@ -25,18 +25,26 @@
                     </div>
                     <div class="bottom">
                         <div class="nPrice">￥{{item.cgjg}}</div>
-                        <div class="logBtn" @click="checkViewLogist($event,item.productid)">查看物流</div>
+                        <div class="btnGroup">
+                            <div class="logBtn" @click="checkViewLogist($event,item.productid)">查看物流</div>
+                            <div class="returnBtn" @click="returnGoods($event,item.productid)">退货</div>
+                        </div>
                         <!-- <div class="oPrice">8.80</div> -->
                     </div>
                 </div>
             </li>
         </ul>
         <div class="fixBottom">
-            <div class="nextBtn left" @click="returnGoods">
+            <!-- <div class="nextBtn left" >
                 退货
-            </div>
+            </div> -->
             <div class="nextBtn right" @click="confirmReciveGoods">
                 收货
+            </div>
+            <div class="selBtn" @click="toggleAll">
+                <img class="sel" v-if="allCheck" src="../images/car_checkcircle.png" alt="">
+                <img class="sel" v-else src="../images/car_circle.png" alt="">
+                <span>全选</span>
             </div>
         </div>
     </div>
@@ -49,6 +57,7 @@ import { getOrderStatuList ,reciveGOods} from '@/api/index'
 export default {
     data(){
         return{
+            allCheck:false,
             loading:false,
             list:[],
             moreLoading:false,
@@ -67,7 +76,13 @@ export default {
     },
     methods:{
         async confirmReciveGoods(){
-            if(!this.selIds.length){
+            let selList = this.list.filter(item=>item.isActive==true);
+            let selIds = [];
+            selList.forEach(item => {
+                selIds.push(item.productid);
+            });
+            console.log(selIds)
+            if(!selIds.length){
                 Toast({
                     message: "请选择收货商品",
                     position: "middle",
@@ -84,46 +99,66 @@ export default {
             };
             let res = await reciveGOods({
                 ...defaulParams,
-                productId:this.selIds[0],
+                productId:selIds.join(','),
                 orderId:this.$route.query.id
             })
             if(res.code==0){
-                let index = this.list.findIndex(item=>item.productid==this.selIds[0]);
-                this.list.splice(index,1);
-                this.selIds = [];
                 Toast({
                     message: "操作成功",
                     position: "middle",
                     duration: 2000
                 });
+                this.pageNum = 1;
+                this.list = [];
+                this.hasMore = true;
+                this.allCheck = false;
+                this.getData();
             }
         },
-        returnGoods(){
-            if(!this.selIds.length){
-                Toast({
-                    message: "请选择退货商品",
-                    position: "middle",
-                    duration: 2000
-                });
-                return;
-            }
-            this.$router.push({name:'applyReturn',query:{id:this.selIds[0],orderId:this.$route.query.id}})
+        returnGoods(e,id){
+            e.stopPropagation();
+            // if(!this.selIds.length){
+            //     Toast({
+            //         message: "请选择退货商品",
+            //         position: "middle",
+            //         duration: 2000
+            //     });
+            //     return;
+            // }
+            this.$router.push({name:'applyReturn',query:{id:id,orderId:this.$route.query.id}})
         },
         selGoods(index){
-            this.list.forEach((item,index)=>{
-                this.$set(this.list[index], 'isActive', false);
-            })
+            // this.list.forEach((item,index)=>{
+            //     this.$set(this.list[index], 'isActive', false);
+            // })
             this.$set(this.list[index], 'isActive', !this.list[index].isActive);
             let selList = this.list.filter(item=>item.isActive==true);
-            this.selIds = [];
-            selList.forEach(item => {
-                this.selIds.push(item.productid);
-            });
-            console.log(this.selIds)
+            if(selList.length == this.list.length){
+                this.allCheck = true;
+            }else{
+                this.allCheck = false;
+            }
+            // this.selIds = [];
+            // selList.forEach(item => {
+            //     this.selIds.push(item.productid);
+            // });
+            // console.log(this.selIds)
         },
         checkViewLogist(e,id){
             e.stopPropagation();
             this.$router.push({name:'viewLogist',query:{id:id}})
+        },
+        toggleAll(){
+            this.allCheck = !this.allCheck;
+            if(this.allCheck){
+                this.list.forEach((item,index)=>{
+                    this.$set(this.list[index], 'isActive', true);
+                })
+            }else{
+                this.list.forEach((item,index)=>{
+                    this.$set(this.list[index], 'isActive', false);
+                })
+            }
         },
         async getData(){
             let defaulParams = {
@@ -208,6 +243,7 @@ export default {
                     img{
                         width: 100%;
                         height: 100%;
+                        object-fit: scale-down;
                     }
                 }
                 .right{
@@ -257,8 +293,9 @@ export default {
                     }
                     .bottom{
                         display: flex;
-                        align-items: flex-end;
+                        align-items: center;
                         justify-content: space-between;
+                        margin-top: 35px;
                         .nPrice{
                             font-size:32px;
                             font-weight:bold;
@@ -273,6 +310,10 @@ export default {
                             margin-left: 30px;
                             text-decoration: line-through;
                         }
+                        .btnGroup{
+                            display: flex;
+                            justify-content: flex-end;
+                        }
                         .logBtn{
                             width:145px;
                             height:50px;
@@ -284,6 +325,18 @@ export default {
                             font-size:22px;
                             color:rgba(74,144,226,1);
                             letter-spacing:2px;
+                        }
+                        .returnBtn{
+                            width:110px;
+                            height:50px;
+                            background:rgba(255,255,255,1);
+                            border-radius:35px;
+                            border:2px solid rgba(245,164,26,1);
+                            text-align: center;
+                            line-height: 50px;
+                            font-size:22px;
+                            color:rgba(245,164,26,1);
+                            margin-left: 10px;
                         }
                     }
                 }
@@ -313,8 +366,26 @@ export default {
               background-color: #666;
           }
           &.right{
-              background-color: #FF0304
+              background-color: #FF0304;
+              border-radius:80px 0  0 80px;
           }
+        }
+        .selBtn{
+            background-color: #fff;
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            img{
+                width: 40px;
+                height: 40px;
+            }
+            span{
+                font-size:26px;
+                color:rgba(102,102,102,1);
+                line-height:35px;
+                margin-left: 10px;
+            }
         }
     }
 </style>

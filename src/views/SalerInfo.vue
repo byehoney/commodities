@@ -99,12 +99,14 @@ export default {
             // alert(JSON.stringify(res))
             if(res.code==0){
                 this.showTip = true;
+                this.$router.replace({name:'login'})
             }
         },
         async registerCreat(data){
             let res = await creatRegister(data);
             if(res.code==0){
                 this.showTip = true;
+                this.$router.replace({name:'login'})
             }
         },
         goNext(){

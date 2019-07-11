@@ -450,7 +450,7 @@ export default {
       }else{
         if(this.money<this.shopDetail.cje){
           Toast({
-            message: '无效的采集额', 
+            message: '无效的采集额 采集额'+this.shopDetail.cje, 
             position: "middle", 
             duration: 2000
           });

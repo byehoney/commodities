@@ -342,6 +342,9 @@ export default {
       
       let res = await delFromCar({...defaulParams,jsonStr:jsonStr});
       if(res.code==0){
+        this.sumMoney = 0;//总金额
+        this.sumNum = 0;//总选择数
+        this.total = 0;//购物车总商品数量
         this.getData();
         Toast({
             message: "删除成功", //弹窗内容
@@ -734,14 +737,16 @@ export default {
       console.log(this.list)
       let msIndex = this.list.findIndex((item,index,arr)=>(item.schemetype=='秒杀'));
       console.log(msIndex)
+      console.log(this.list[msIndex]['promotionendtime'])
       if(msIndex==-1){
         return;
       }
+      let endTime = this.list[msIndex]['promotionendtime'].split(':');
       this.timer = setInterval(() => {
         let nowH = new Date().getHours();
         let nowM = new Date().getMinutes();
         let nowS = new Date().getSeconds();  
-        let endTime = this.list[msIndex].promotionendtime.split(':');
+        
         let leftsecond =  (parseInt(endTime[0]) * 60 * 60 + parseInt(endTime[1])*60 + parseInt(endTime[2])) - (nowH * 60 * 60 + nowM * 60 + nowS);
         // console.log(leftsecond)
         // leftsecond--;
@@ -1189,13 +1194,14 @@ export default {
 .list_shopcar_pic {
   width: 220px;
   height: 176px;
-  background: #ccc;
+  // background: #ccc;
   float: left;
   margin-right: 28px;
 }
 .list_shopcar_pic img {
   width: 100%;
   height: 100%;
+  object-fit: scale-down;
 }
 .list_shopcar_com {
   float: left;
