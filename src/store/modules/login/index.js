@@ -6,7 +6,7 @@ export default {
     state: {
         token: localStorage.getItem('token') || '',
         user: JSON.parse(localStorage.getItem('userData')) || {},
-        orderInfo:{},//购物车信息
+        orderInfo:{list:[],mzList:[]},//购物车信息
         mzInfo:[],//确认订单的满赠赠品
     },
     mutations: {

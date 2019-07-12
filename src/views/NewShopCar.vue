@@ -509,7 +509,6 @@ export default {
       // setTimeout(()=>{
       //   let top = document.getElementsByClassName('errTip')[0].offsetTop;
       //   this.top = top;
-      // console.log(top)
       // },1000)
       return result;
     },
@@ -737,10 +736,7 @@ export default {
       this.result = !this.result;
     },
     count() {
-      console.log(this.list)
       let msIndex = this.list.findIndex((item,index,arr)=>(item.schemetype=='秒杀'));
-      console.log(msIndex)
-      console.log(this.list[msIndex]['promotionendtime'])
       if(msIndex==-1){
         return;
       }
@@ -751,8 +747,6 @@ export default {
         let nowS = new Date().getSeconds();  
         
         let leftsecond =  (parseInt(endTime[0]) * 60 * 60 + parseInt(endTime[1])*60 + parseInt(endTime[2])) - (nowH * 60 * 60 + nowM * 60 + nowS);
-        // console.log(leftsecond)
-        // leftsecond--;
         if (leftsecond >= 0) {
           this.H =
             parseInt((leftsecond / 3600) % 24) < 10
@@ -775,6 +769,7 @@ export default {
       }, 1000);
     },
     async getData(){
+      console.log(this.orderInfo)
       let defaulParams = {
         token: this.token,
         userId: this.userId,
@@ -789,9 +784,15 @@ export default {
           item.showAct = true;
           item.showTip = false;
           item.errTip = '';
+          this.orderInfo.list.forEach((pterm,pIndex)=>{
+            if(pterm.productcode==item.productcode){
+              item.checked = pterm.checked;
+            }
+          })
         })
+        
         res.data.mzList.forEach((item,index)=>{
-          item.forEach((pterm,jIndex)=>{
+          item.forEach((pterm,pIndex)=>{
             pterm.checked = false;
             pterm.allChecked = false;
             pterm.showAct = true;
@@ -800,7 +801,22 @@ export default {
             pterm.errTip = '';
             pterm.selGifts=[];
             pterm.userBuyNum = 0;
-            pterm.userBuyMoney = 0;
+            pterm.userBuyMoney = 0; 
+            this.orderInfo.mzList.forEach((jTtem,jIndex)=>{
+              jTtem.forEach((hterm,hIndex)=>{
+                if(hterm.productcode == pterm.productcode){
+                  pterm.checked = hterm.checked;
+                  pterm.allChecked = hterm.allChecked;
+                  pterm.showAct = hterm.showAct;
+                  pterm.canSelGift = hterm.canSelGift;
+                  pterm.showTip = hterm.showTip;
+                  pterm.errTip = hterm.errTip;
+                  pterm.selGifts=hterm.selGifts;
+                  pterm.userBuyNum = hterm.userBuyNum;
+                  pterm.userBuyMoney = hterm.userBuyMoney; 
+                }
+              })
+            })
           })
         })
         this.head = res.data.head;
@@ -809,10 +825,10 @@ export default {
         if(this.list.length){
           this.count();
         }
+        this.countMoney();
       }
     },
     chooseGift(index,id,type,userBuyNum,userBuyMoney){
-      console.log(userBuyNum,userBuyMoney)
       if(document.documentElement&&document.documentElement.scrollTop){
         this.scrollTop=document.documentElement.scrollTop;
       }else if(document.body){
@@ -834,13 +850,11 @@ export default {
         })
       })
       this.$set(this.mzList[this.curGiftIndex][0],'selGifts',selGift);
-      console.log(this.mzList)
       setTimeout(()=>{
         window.scrollTo(0,this.scrollTop);
       },100)
     },
     async getGiftData(index,id,selGifts,type,userBuyNum,userBuyMoney){
-      console.log(selGifts)
       let defaulParams = {
         token:this.token,
         userId:this.userId,
@@ -856,7 +870,6 @@ export default {
           })
         });
         this.giftList = res.data.list;
-        console.log(selGifts)
         if(selGifts&&selGifts.length){
           this.giftList.forEach((item,index)=>{
             item.forEach((pterm,pIndex)=>{
@@ -974,7 +987,6 @@ export default {
   //   }
   // },
   // beforeRouteEnter (to, from, next) {/**  */
-  //   console.log(from)
   //   if(from.name == 'detail'){
   //     to.meta.canKeep = true;
   //     // to.meta.keepAlive = true;
@@ -986,7 +998,6 @@ export default {
   //   }
   // },
   mounted() {
-    console.log(this.orderInfo)
     this.getData();
   },
   destroyed(){
@@ -1027,7 +1038,8 @@ export default {
         jsonStr.hdData.push({id:pterm.productcode,num:pterm.quantity,code:pterm.buyCode});
       })
     })
-    recordCartNum({...defaulParams,jsonStr:JSON.stringify(jsonStr)})
+    recordCartNum({...defaulParams,jsonStr:JSON.stringify(jsonStr)});
+    this.saveOrderInfo({list:this.list,mzList:this.mzList});
   },  
 };
 </script>
