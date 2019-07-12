@@ -38,10 +38,12 @@
   </div>
 </template>
 <script>
+import { Toast } from "mint-ui";
 import TopNav from "@/components/TopNav";
 import UploadImages from "@/components/UploadImages";
 import { backGOods } from "@/api/index";
 import {mapGetters} from 'vuex'
+import { setTimeout } from 'timers';
 export default {
   data() {
     return {
@@ -90,6 +92,9 @@ export default {
             position: "middle",
             duration: 2000
         });
+        setTimeout(()=>{
+          this.$router.go(-1)
+        },2100)
       }
     }
   }

@@ -63,7 +63,8 @@
               <p class="errTip" v-if="list.showTip">{{list.errTip}}</p>
             </div>
           </div>
-          <div class="shop_gift" v-if="list.giveflag!='无'">
+          <!-- 普通商品买赠活动 -->
+          <!-- <div class="shop_gift" v-if="list.giveflag!='无'">
             <div class="shop_gift_top">
               <div class="shop_gift_left">
                 <h3>商品活动</h3>
@@ -81,7 +82,8 @@
             <div class="shop_gift_bottom">
               <router-link to="/choosegift">选择赠品</router-link>
             </div>
-          </div>
+          </div> -->
+          <!-- 普通商品买赠活动结束 -->
         </div>
       </div>
       <!-- 满赠 -->
@@ -221,7 +223,7 @@
               @click="checkgift(index,gIndex)"
             ></div>
             <div class="shopgift_list_pic">
-              <img alt="" :src="gTerm.url"/>
+              <img alt="" :src="gTerm.url?gTerm.url:require('../images/default_logo.jpg')"/>
             </div>
             <div class="shopgift_list_text">
               <div class="shopgift_text_top">
@@ -304,6 +306,7 @@ export default {
     };
   },
   computed: {
+    ...mapState('login',['orderInfo','user']),
     ...mapGetters('login',['token','userId','corpCode','companyId','userRole']),
   },
   methods: {
@@ -853,6 +856,22 @@ export default {
           })
         });
         this.giftList = res.data.list;
+        console.log(selGifts)
+        if(selGifts&&selGifts.length){
+          this.giftList.forEach((item,index)=>{
+            item.forEach((pterm,pIndex)=>{
+              selGifts.forEach((sterm,sIndex)=>{
+                if(sterm.zpbm==pterm.zpbm){
+                  this.$set(this.giftList[index][pIndex],'checked',true)
+                }
+              })
+            })
+          })
+          // selGifts.forEach((item,index)=>{
+          //   let gIndex = this.giftList.findIndex((pterm)=>pterm.zpbm==item.zpbm);
+          //   this.$set(this.giftList[gIndex],'checked',true)
+          // })
+        }
         // if(type=='数量满足'){
         //   this.$set(this.giftList[0],'userGiftNum',parseInt(parseInt(userBuyNum)/parseInt(this.giftList[0].mzsl)));
         // }else if(type=='金额满足'){
@@ -967,6 +986,7 @@ export default {
   //   }
   // },
   mounted() {
+    console.log(this.orderInfo)
     this.getData();
   },
   destroyed(){

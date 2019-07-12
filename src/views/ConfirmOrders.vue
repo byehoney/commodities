@@ -31,7 +31,7 @@
         <div class="selItem" v-if="giftList.length">
           <div class="selLeft">赠品选择</div>
           <div class="selRight" @click="chooseGift">
-            <span class="text">{{giftNum>0?'已选择':'请选择'}}</span>
+            <span class="text">{{selMzGift.length>0?'已选择':'请选择'}}</span>
             <img src="../images/arrow_right.png" class="rightIcon" alt>
           </div>
         </div>
@@ -174,7 +174,7 @@ export default {
     };
   },
   computed: {
-    ...mapState('login',['orderInfo','user']),
+    ...mapState('login',['orderInfo','user','mzInfo']),
     ...mapGetters("login", [
       "token",
       "userId",
@@ -185,16 +185,17 @@ export default {
   },
   mounted() {
     console.log(this.orderInfo)
+    this.selMzGift = this.mzInfo;
     // this.getAddr();
     this.getOrderInfo();
     this.getTicketInfo();
     this.getGiftData();
   },
   destroyed(){
-    this.restOrderInfo();
+    // this.restOrderInfo();
   },
   methods: {
-    ...mapMutations('login',['restOrderInfo']),
+    ...mapMutations('login',['restOrderInfo','saveMzInfo']),
     goProList(){
       this.$router.push({name:'productsList'})
     },
@@ -277,6 +278,8 @@ export default {
             position: "middle", //弹窗位置
             duration: 2000 //弹窗时间毫秒,如果值为-1，则不会消失
           });
+
+          this.restOrderInfo();//重置选择的赠品
           setTimeout(()=>{
             if(this.$route.query.type==0){
               this.$router.go(-1);
@@ -387,6 +390,7 @@ export default {
                 this.selMzGift = selMzGift;
             }
         })
+        this.saveMzInfo(this.selMzGift);
     },
     async getGiftData() {
       let defaulParams = {
@@ -398,8 +402,18 @@ export default {
       };
       let res = await getFullList({ ...defaulParams,money:this.$route.query.money});
       if (res.code == 0) {
-        res.data.list.forEach(item => {
-          item.checked = false;
+        res.data.list.forEach((item,index)=> {
+          if(this.selMzGift.length){
+            this.selMzGift.forEach((pterm,pIndex)=>{
+              if(pterm.zpcode==item.zpcode){
+                item.checked = true;
+              }else{
+                item.checked = false;
+              }
+            })
+          }else{
+            item.checked = false;
+          }
         });
         this.giftList = res.data.list;
       }

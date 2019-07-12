@@ -77,7 +77,7 @@
             <span v-if="shopDetail.sfzt&&shopDetail.sfzt!='false'">
               <img src="../images/detail_xing.png">
             </span>
-            <span v-if="shopDetail.hdlx=='打折'" class="dis">
+            <span v-if="shopDetail.hdlx=='打折'&&shopDetail.cxj!=0&&shopDetail.ptsj!=0" class="dis">
               {{shopDetail.cxj|formatDis(shopDetail.ptsj)}}折
             </span>
             <div class="pro_mark">
@@ -711,7 +711,7 @@ a {
 }
 .detail_loop {
   width: 100%;
-  min-height: 466px;
+  min-height: 630px;
   background: #fff;
   margin-bottom: 6px;
   padding: 37px 0;
@@ -719,7 +719,7 @@ a {
 }
 .detsil_loop_center {
   width:100%;
-  height: 460px;
+  height: 630px;
   margin: 0 auto;
   background: #f6f6f6;
   img {

@@ -6,7 +6,8 @@ export default {
     state: {
         token: localStorage.getItem('token') || '',
         user: JSON.parse(localStorage.getItem('userData')) || {},
-        orderInfo:{},
+        orderInfo:{},//购物车信息
+        mzInfo:[],//确认订单的满赠赠品
     },
     mutations: {
         [type.LOGIN](state, data) {
@@ -46,8 +47,12 @@ export default {
         saveOrderInfo(state,data){
             state.orderInfo = data
         },
+        saveMzInfo(state,data){
+            state.mzInfo = data;
+        },
         restOrderInfo(state){
             state.orderInfo={};
+            state.mzInfo=[];
         }
     },
     actions: {

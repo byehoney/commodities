@@ -17,7 +17,7 @@
                 <p class="fName">{{item.cj}}</p>
                 <p class="scale">规格：{{item.hlgg}} 数量：{{item.cgl}}</p>
                 <p class="tags">
-                    <span class="tag" v-if="item.cgjg<item.yj">{{item.cgjg|formatDis(item.yj)}}折</span>
+                    <span class="tag" v-if="item.cgjg<item.yj&&item.cgjg!=0&&item.yj!=0">{{item.cgjg|formatDis(item.yj)}}折</span>
                     <span  v-else>&nbsp;</span>
                 </p>
                 <p class="price">

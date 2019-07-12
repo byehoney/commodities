@@ -62,7 +62,7 @@
                                 <!-- <div class="discount" v-if="curType==0||curType==1">{{item.cxj|formatDis(item.ptsj)}}折</div> -->
                                 <div class="star_dis">
                                     <div class="giftIcon" v-if="item.mzbj">买赠</div>
-                                    <div class="discount" v-if="item.hdlx=='打折'">{{item.cxj|formatDis(item.ptsj)}}折</div>
+                                    <div class="discount" v-if="item.hdlx=='打折'&&item.cxj!=0&&item.ptxj!=0">{{item.cxj|formatDis(item.ptsj)}}折</div>
                                     <div class="starIcon" v-if="item.hdlx=='星选'">星选</div>
                                     <div class="limitIcon" v-if="item.hdlx=='秒杀'">{{item.xlg?'限购'+item.xlg+'件':'不限购'}}</div>
                                     <div class="stock" v-if="item.hdlx=='秒杀'">仅剩{{item.stock}}件</div>
@@ -98,7 +98,7 @@
                             </div>
                             <div class="star_dis">
                                 <div class="giftIcon" v-if="item.mzbj">买赠</div>
-                                <div class="discount" v-if="item.hdlx=='打折'">{{item.cxj|formatDis(item.ptsj)}}折</div>
+                                <div class="discount" v-if="item.hdlx=='打折'&&item.cxj!=0&&item.ptsj!=0">{{item.cxj|formatDis(item.ptsj)}}折</div>
                                 <div class="starIcon" v-if="item.hdlx=='星选'">星选</div>
                                 <div class="limitIcon" v-if="item.hdlx=='秒杀'">{{item.xlg?'限购'+item.xlg+'件':'不限购'}}</div>
                                 <div class="stock" v-if="item.hdlx=='秒杀'">仅剩{{item.ys}}件</div>
