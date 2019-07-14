@@ -9,7 +9,7 @@
         >
             <li class="listItem" v-for="(item,index) in list" :key="index">
                 <div class="top">
-                    <img :src="item.url" class="left" alt="">
+                    <img :src="item.url?item.url:require('../images/default_logo.jpg')" class="left" alt="">
                     <div class="mid">
                         <div class="name">{{item.productname}}</div>
                         <div class="evaLeval">
@@ -27,6 +27,7 @@
     </div>
 </template>
 <script>
+import { Toast } from "mint-ui";
 import TopNav from '@/components/TopNav'
 import { getEvaList } from '@/api/index'
 import {mapGetters} from 'vuex'

@@ -105,6 +105,11 @@ export default {
       }; 
       let res = await getMoreKindsMain(defaulParams);
       this.list = res.data.list;
+      if(this.list[0].kindCode=='Factory'){
+         this.isFact = true;
+      }else{
+        this.isFact = false;
+      }
       if(!this.$route.query.code){
         this.getBranch(this.list[0].kindCode);
       }

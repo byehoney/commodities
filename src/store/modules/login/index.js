@@ -51,7 +51,7 @@ export default {
             state.mzInfo = data;
         },
         restOrderInfo(state){
-            state.orderInfo={};
+            state.orderInfo={list:[],mzList:[]};
             state.mzInfo=[];
         }
     },

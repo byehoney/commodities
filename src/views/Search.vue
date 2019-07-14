@@ -40,6 +40,7 @@
   </div>
 </template>
 <script>
+import { Toast } from "mint-ui";
 import LocalHeader from "../components/Header";
 import { mapGetters } from "vuex";
 import { getHotSearchList } from '@/api/index';

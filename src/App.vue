@@ -41,12 +41,15 @@ html{
 .highcharts-credits{
     display: none;
 }
-
+.video-js .vjs-control-bar{
+    bottom: 20px!important;
+    height: 80px!important;
+}
 .video-js .vjs-big-play-button{
     width: 100px!important;
   height: 100px!important;
   border-radius: 50%!important;
-  top: 180px!important;
+  top: 250px!important;
   left: 50%!important;
   margin-left: -50px!important;
 }
@@ -55,11 +58,28 @@ html{
 }
 .vjs-big-play-button .vjs-icon-placeholder:before{
     position: relative!important;
-    top: 5px!important;
+    // top: 5px!important;
 }
 .detail_loop .vjs-play-control,.detail_loop .vjs-fullscreen-control{
     position: relative!important;
-    top: 15px;
+    // top: 15px;
+}
+
+.vjs-icon-replay:before, .video-js .vjs-play-control.vjs-ended .vjs-icon-placeholder:before{
+    font-size: 32px!important;
+    line-height: 80px;
+}
+.vjs-icon-fullscreen-enter:before, .video-js .vjs-fullscreen-control .vjs-icon-placeholder:before{
+    font-size: 32px!important;
+    line-height: 80px;
+}
+.vjs-icon-pause:before, .video-js .vjs-play-control.vjs-playing .vjs-icon-placeholder:before{
+    font-size: 32px!important;
+    line-height: 80px;
+}
+.vjs-icon-play:before, .video-js .vjs-big-play-button .vjs-icon-placeholder:before, .video-js .vjs-play-control .vjs-icon-placeholder:before{
+    font-size: 32px!important;
+    line-height: 80px;
 }
 // }
 // .mint-header.manageHeader{
