@@ -10,7 +10,7 @@
                         <div class="name">姓名：<span>{{item.userName}}</span></div>
                         <div class="tel">电话：<span>{{item.userPhone}}</span></div>
                     </div>
-                    <div class="bottom">店名：<span>锦绣大地烟花店</span></div>
+                    <div class="bottom">店名：<span>{{item.cvName}}</span></div>
                 </div>
             </div>
         </div>

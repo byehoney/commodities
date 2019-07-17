@@ -77,6 +77,7 @@ export default {
         width: 100%;
         background-color: #fff;
         margin-bottom: 100px;
+        margin-top: 93px;
         .scopeList{
             margin-left: 39px;
             .scopeItem{

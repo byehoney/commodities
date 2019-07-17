@@ -68,8 +68,9 @@
                                     <div class="stock" v-if="item.hdlx=='秒杀'">仅剩{{item.stock}}件</div>
                                 </div>
                                 <div class="price">
-                                    <span class="nPrice">￥{{item.cxj}}</span>
-                                    <span class="oPrice">{{item.ptsj}}</span>
+                                    <span class="nPrice" v-if="item.hdlx&&item.hdlx!='无'">￥{{item.cxj}}</span>
+                                    <span class="oPrice" v-if="item.hdlx&&item.hdlx!='无'">{{item.ptsj}}</span>
+                                    <span class="sPrice" v-if="!item.hdlx||item.hdlx=='无'">{{item.ptsj}}</span>
                                 </div>
                             </div>
                             <div class="bot_right" @click="buyPro($event,item)">
@@ -106,8 +107,9 @@
                             <div class="Info">
                                 <div class="infoLeft">
                                     <div class="price">
-                                        <span class="nPrice">￥{{item.cxj}}</span>
-                                        <span class="oPrice">{{item.ptsj}}</span>
+                                        <span class="nPrice" v-if="item.hdlx&&item.hdlx!='无'">￥{{item.cxj}}</span>
+                                        <span class="oPrice" v-if="item.hdlx&&item.hdlx!='无'">{{item.ptsj}}</span>
+                                        <span class="sPrice" v-if="!item.hdlx||item.hdlx=='无'">{{item.ptsj}}</span>
                                     </div>
 
                                 </div>
@@ -659,6 +661,13 @@ export default {
                                 letter-spacing:1px;
                                 text-decoration: line-through;
                             }
+                            .sPrice{
+                                font-size:18px;
+                                font-family:'MicrosoftYaHeiLight';
+                                color: #FF0304;
+                                line-height:33px;
+                                letter-spacing:1px;
+                            }
                         }
                     }
                     .bot_right{
@@ -877,6 +886,13 @@ export default {
                             line-height:33px;
                             letter-spacing:1px;
                             text-decoration: line-through;
+                        }
+                        .sPrice{
+                            font-size:18px;
+                            font-family:'MicrosoftYaHeiLight';
+                            color: #FF0304;
+                            line-height:33px;
+                            letter-spacing:1px;
                         }
                     }
                 }

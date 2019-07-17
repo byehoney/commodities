@@ -93,7 +93,7 @@
             <div v-if="!contentShow">
               <div class="detail_content_price">
                 <ul>
-                  <li class="saleNum">销量：<span class="num">{{shopDetail.jxsl}}件</span></li>
+                  <li class="saleNum">销量：<span class="num">{{shopDetail.jxsl?item.jxsl:0}}件</span></li>
                 </ul>
               </div>
               <div class="detail_content_price">
@@ -132,7 +132,7 @@
             <li>{{shopDetail.hdlx}}</li>
           </ul>
         </div>
-        <div class="storesave_list bd fix">
+        <div class="storesave_list bd fix" v-if="shopDetail.hdname">
           <ul>
             <li>活动</li>
             <li>{{shopDetail.hdname}}</li>
@@ -149,7 +149,7 @@
             </li>
             <li>
               <span>销量：</span>
-              <span>{{shopDetail.ljsl}} 件</span>
+              <span>{{shopDetail.ljsl?shopDetail.ljsl:0}} 件</span>
             </li>
           </ul>
         </div>
@@ -160,7 +160,7 @@
               <span>优惠</span>
               <span>{{shopDetail.hdlx}}</span>
             </li>
-            <li>
+            <li v-if="shopDetail.hdname">
               <span>活动</span>
               <span>{{shopDetail.hdname}}</span>
             </li>
@@ -215,16 +215,16 @@
               <p>商品名称：{{shopDetail.spmc}}</p>
               <p>通用名：{{shopDetail.tymc}}</p>
               <p>生产厂家：{{shopDetail.cj}}</p>
-              <p>规格：{{shopDetail.hlgg}}</p>
+              <p v-if="shopDetail.hlgg">规格：{{shopDetail.hlgg}}</p>
               <p>销售单位：{{shopDetail.dw}}</p>
               <p>库存：{{shopDetail.dqkc}}</p>
               <p>限购量：{{shopDetail.xgl}}</p>
             </li>
             <li>
-              <p>[规格]： {{shopDetail.bzgg}}</p>
-              <p>[批准文号]： {{shopDetail.pzwh}}</p>
-              <p v-if="shopDetail.gjwm!=''">[国家本位码]： {{shopDetail.gjwm}}</p>
-              <p>[最近效期]： {{shopDetail.kczjxq}}</p>
+              <p v-if="shopDetail.bzgg">[规格]： {{shopDetail.bzgg}}</p>
+              <p v-if="shopDetail.pzwh">[批准文号]： {{shopDetail.pzwh}}</p>
+              <p v-if="shopDetail.gjwm">[国家本位码]： {{shopDetail.gjwm}}</p>
+              <p v-if="shopDetail.kczjxq">[最近效期]： {{shopDetail.kczjxq}}</p>
               <p></p>
             </li>
             <li>

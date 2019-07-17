@@ -56,15 +56,15 @@
       </div>
       <div class="recommond_content" @click="goChoose(2)">
         <div class="recommond_item">
-          <img :src="boutique[0].url?boutique[0].url:''" alt="">
+          <img :src="boutique[0].url?boutique[0].url:require('../images/default_logo.jpg')" alt="">
           <p class="tip_bg"></p>
         </div>
         <div class="recommond_item">
-          <img :src="boutique[1].url?boutique[1].url:''" alt="">
+          <img :src="boutique[1].url?boutique[1].url:require('../images/default_logo.jpg')" alt="">
           <p class="tip_bg"></p>
         </div>
         <div class="recommond_item">
-          <img :src="boutique[2].url?boutique[2].url:''" alt="">
+          <img :src="boutique[2].url?boutique[2].url:require('../images/default_logo.jpg')" alt="">
           <p class="tip_bg"></p>
         </div>
       </div>
@@ -97,7 +97,7 @@
             :key="index"
           >
             <img class="ms_icon" src="../images/ms_icon.png" alt="">
-            <img :src="item.url">
+            <img :src="item.url?item.url:require('../images/default_logo.jpg')">
           </div>
         </div>
       </div>
