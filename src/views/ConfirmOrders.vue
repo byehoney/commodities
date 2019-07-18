@@ -434,6 +434,20 @@ export default {
       this.giftNum = num;
     },
     checkgift(index) {
+      let num = 0;
+      this.giftList.forEach((item)=>{
+        if(item.checked){
+          num++;
+        }
+      })
+      if(num>=this.giftList[index].zprxnum&&!this.giftList[index].checked){
+        Toast({
+          message: "可选赠品数量"+this.giftList[index].zprxnum, //弹窗内容
+          position: "middle", //弹窗位置
+          duration: 2000 //弹窗时间毫秒,如果值为-1，则不会消失
+        });
+        return;
+      }
       this.$set(this.giftList[index], "checked", !this.giftList[index].checked);
       this.countGiftNum();
     },

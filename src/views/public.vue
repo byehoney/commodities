@@ -41,7 +41,7 @@
     <!-- 头部结束 -->
     <div class="public_pic">
       <div class="public_pic_left">
-        <img src alt>
+        <img :src="atv?atv:require('../images/default_logo.jpg')" alt>
       </div>
       <div class="public_pic_right">
         <div class="public_pic_right_title">{{clientname}}</div>
@@ -145,6 +145,7 @@ export default {
       searchStr: "",
       hide: "",
       rightWinShow: false,
+      atv:'',
       clientname: "",
       sjpzs: "",
       fhnum: "",
@@ -204,6 +205,7 @@ export default {
       userRole: this.userRole
     };
     let res = await getPub(defaulParams);
+    this.atv = res.data.url;
     this.clientname = res.data.clientname;
     this.sjpzs = res.data.sjpzs;
     this.fhnum = res.data.fhnum;
@@ -352,6 +354,8 @@ export default {
     background: #fff;
     img {
       width: 100%;
+      height: 100%;
+      object-fit: scale-down;
     }
   }
   .public_pic_right {
