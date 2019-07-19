@@ -69,7 +69,7 @@
         </ul>
       </div>
     </div>
-    <CityPicker :areaVisible="areaVisible" :setArea="handleSetArea" :cancel="handleCancel" global="manage"></CityPicker>
+    <CityPicker :areaVisible="cityVisible" :setArea="handleSetArea" :cancel="handleCancel" global="manage"></CityPicker>
   </div>
 </template>
 
@@ -99,7 +99,7 @@ export default {
       pageSize:10,
       pageNum:1,
       noData:false,//是否有数据
-      areaVisible:false,
+      cityVisible:false,
       sel_value:'全国',
       pCode:'',
       cCode:'',
@@ -123,21 +123,21 @@ export default {
     this.getData();
   },
   methods:{
-    handlerArea(){
-        this.areaVisible = !this.areaVisible;
-    },
+    // handlerArea(){
+    //     this.areaVisible = !this.areaVisible;
+    // },
     handleSetArea(value,pCode,cCode,aCode){
         this.sel_value = value;
         this.pCode = pCode;
         this.cCode = cCode;
         this.aCode = aCode;
-        this.areaVisible = false;
+        this.cityVisible = false;
         this.list = [];
         this.pageNum = 1;
         this.getData();
     },
     handleCancel(){
-        this.areaVisible = false;
+        this.cityVisible = false;
     },
     doSearch(){
       this.pageNum = 1;
@@ -217,6 +217,7 @@ export default {
         this.showDateList = false;
         this.showAreaList = false;
         this.areaActive = false;
+        this.cityVisible = false;
     },
     selArea(){
         this.typeActive = false;
@@ -225,7 +226,7 @@ export default {
         this.showDateList = false;
         this.showAreaList = true;
         this.areaActive = true;
-        this.areaVisible = true;
+        this.cityVisible = !this.cityVisible;
     },
     selCurType(e,index){
         e.stopPropagation();

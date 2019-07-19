@@ -55,7 +55,7 @@
         </div>
         <ManageTabBarBotttom curTab="manageCustomerRank"></ManageTabBarBotttom>
         <div class="mask" v-show="showDrawLeft" @click="handleMaskClick"></div>
-        <CityPicker :areaVisible="areaVisible" :setArea="handleSetArea" :cancel="handleCancel" global="manage"></CityPicker>
+        <CityPicker  :areaVisible="cityVisible" :setArea="handleSetArea" :cancel="handleCancel" global="manage"></CityPicker>
     </div>
 </template>
 <script>
@@ -88,7 +88,7 @@ export default {
             pageSize:10,
             pageNum:1,
             noData:false,//是否有数据
-            areaVisible:false,
+            cityVisible:false,
             sel_value:'全国',
             pCode:'',
             cCode:'',
@@ -123,21 +123,21 @@ export default {
     },
     methods: {
         ...mapMutations('mange',['changeDrawLeft']),
-        handlerArea(){
-            this.areaVisible = !this.areaVisible;
-        },
+        // handlerArea(){
+        //     this.areaVisible = !this.areaVisible;
+        // },
         handleSetArea(value,pCode,cCode,aCode){
             this.sel_value = value;
             this.pCode = pCode;
             this.cCode = cCode;
             this.aCode = aCode;
-            this.areaVisible = false;
+            this.cityVisible = false;
             this.list = [];
             this.pageNum = 1;
             this.getData();
         },
         handleCancel(){
-            this.areaVisible = false;
+            this.cityVisible = false;
         },
         trigerDrawerLeft(){
             this.changeDrawLeft(true);
@@ -152,6 +152,7 @@ export default {
             this.typeActive = false;
             this.showAreaList = false;
             this.areaActive = false;
+            this.cityVisible = false;
         },
         selType(){
             this.typeActive = true;
@@ -160,6 +161,7 @@ export default {
             this.showDateList = false;
             this.showAreaList = false;
             this.areaActive = false;
+            this.cityVisible = false;
         },
         selArea(){
             this.typeActive = false;
@@ -168,7 +170,7 @@ export default {
             this.showDateList = false;
             this.showAreaList = true;
             this.areaActive = true;
-            this.areaVisible = true;
+            this.cityVisible = !this.cityVisible;
         },
         selCurDate(e,index){
             e.stopPropagation();

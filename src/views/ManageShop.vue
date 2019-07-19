@@ -140,7 +140,7 @@ export default {
   margin-top: 100px;
   padding-left: 39px;
   padding-top: 20px;
-
+  padding-bottom: 20px;
   .manageStockName{
       font-size: 22px;
       float: left;

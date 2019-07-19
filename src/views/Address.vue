@@ -115,7 +115,7 @@ export default {
                 font-size: 30px;
             }
             .btn{
-                width:133px;
+                width:163px;
                 height:35px;
                 font-size:24px;
                 color:rgba(153,153,153,1);
