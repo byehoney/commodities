@@ -97,7 +97,7 @@
                     <img class="icon" src="../images/manage/manage_02.png" alt="">
                     <div class="text">未处理总额</div>
                 </div>
-                <div class="right">{{bData.wclze}}</div>
+                <div class="right">{{bData.wclze?bData.wclze:0}}</div>
             </div>
             <router-link to="/manageshop" tag="div" class="infoItem">
                 <div class="left">
