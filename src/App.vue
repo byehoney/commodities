@@ -53,6 +53,9 @@ html{
   left: 50%!important;
   margin-left: -50px!important;
 }
+.home_video_list_content .video-js .vjs-big-play-button{
+    top: 180px!important;
+}
 .detail_loop .video-js .vjs-volume-panel,.detail_loop .vjs-playback-rate,.detail_loop .video-js .vjs-time-control{
     display: none!important;
 }

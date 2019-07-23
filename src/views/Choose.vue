@@ -70,7 +70,7 @@
                                 <div class="price">
                                     <span class="nPrice" v-if="item.hdlx&&item.hdlx!='无'">￥{{item.cxj}}</span>
                                     <span class="oPrice" v-if="item.hdlx&&item.hdlx!='无'">{{item.ptsj}}</span>
-                                    <span class="sPrice" v-if="!item.hdlx||item.hdlx=='无'">{{item.ptsj}}</span>
+                                    <span class="sPrice" v-if="!item.hdlx||item.hdlx=='无'">￥{{item.ptsj}}</span>
                                 </div>
                             </div>
                             <div class="bot_right" @click="buyPro($event,item)">
@@ -102,14 +102,14 @@
                                 <div class="discount" v-if="item.hdlx=='打折'&&item.cxj!=0&&item.ptsj!=0">{{item.cxj|formatDis(item.ptsj)}}折</div>
                                 <div class="starIcon" v-if="item.hdlx=='星选'">星选</div>
                                 <div class="limitIcon" v-if="item.hdlx=='秒杀'">{{item.xlg?'限购'+item.xlg+'件':'不限购'}}</div>
-                                <div class="stock" v-if="item.hdlx=='秒杀'">仅剩{{item.ys}}件</div>
+                                <div class="stock" v-if="item.hdlx=='秒杀'">仅剩{{item.stock}}件</div>
                             </div>
                             <div class="Info">
                                 <div class="infoLeft">
                                     <div class="price">
                                         <span class="nPrice" v-if="item.hdlx&&item.hdlx!='无'">￥{{item.cxj}}</span>
                                         <span class="oPrice" v-if="item.hdlx&&item.hdlx!='无'">{{item.ptsj}}</span>
-                                        <span class="sPrice" v-if="!item.hdlx||item.hdlx=='无'">{{item.ptsj}}</span>
+                                        <span class="sPrice" v-if="!item.hdlx||item.hdlx=='无'">￥{{item.ptsj}}</span>
                                     </div>
 
                                 </div>
@@ -339,7 +339,7 @@ export default {
                         jghdlx:item.hdlx,
                         productId:item.spbm,
                         cartNum:item.zxxsbz,
-                        pzdj:item.cxj,
+                        pzdj:item.hdlx=='无'?item.ptsj:item.cxj,
                         pzyj:item.ptsj,
                         mobile:this.user.mobile
                     }]
@@ -352,7 +352,7 @@ export default {
                     jghdlx:item.hdlx,
                     productId:item.spbm,
                     cartNum:item.zxxsbz,
-                    pzdj:item.cxj,
+                    pzdj:item.hdlx=='无'?item.ptsj:item.cxj,
                     pzyj:item.ptsj,
                     mobile:this.user.mobile
                     }]
@@ -662,11 +662,13 @@ export default {
                                 text-decoration: line-through;
                             }
                             .sPrice{
-                                font-size:18px;
+                                font-size:32px;
                                 font-family:'MicrosoftYaHeiLight';
+                                font-weight:bold;
                                 color: #FF0304;
-                                line-height:33px;
+                                line-height:42px;
                                 letter-spacing:1px;
+                                margin-right: 18px;
                             }
                         }
                     }
@@ -888,11 +890,13 @@ export default {
                             text-decoration: line-through;
                         }
                         .sPrice{
-                            font-size:18px;
+                            font-size:32px;
                             font-family:'MicrosoftYaHeiLight';
+                            font-weight:bold;
                             color: #FF0304;
-                            line-height:33px;
+                            line-height:42px;
                             letter-spacing:1px;
+                            margin-right: 18px;
                         }
                     }
                 }

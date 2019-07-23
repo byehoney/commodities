@@ -426,7 +426,7 @@ export default {
                 border:1px solid rgba(155,155,155,1);
                 color:#333;
                 font-size:30px;
-                color:rgba(235,235,235,1);
+                // color:rgba(235,235,235,1);
                 letter-spacing:3px;
                 margin-bottom: 39px;
             }

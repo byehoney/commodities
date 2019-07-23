@@ -103,21 +103,19 @@
       </div>
     </div>
     <!-- special 结束 -->
-    <div class="home_video" style="display:none">
+    <div class="home_video" style="display:no-ne">
       <div class="home_video_list">
         <div class="home_video_list_header">
           <h3>标题</h3>
         </div>
-        <div class="home_video_list_content">
-          <!-- <video-player
-            class="video-player-box video-player vjs-custom-skin"
-            ref="videoPlayer"
-            :playsinline="true"
-            :options="playerOptions"
-            @play="onPlayerPlay($event)"
-            @pause="onPlayerPause($event)"
-          ></video-player> -->
-          <video
+        <div class="home_video_list_content detail_loop">
+          <video-player   class="video-player vjs-custom-skin"
+                ref="videoPlayer"
+                :playsinline="true"
+                :options="playerOptions"
+            >
+          </video-player>
+          <!-- <video
             class="myVideo"
             playsinline="true"
             x-webkit-airplay="true" 
@@ -128,7 +126,7 @@
             controls
           >
             <source src="http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4" type="video/mp4">
-          </video>
+          </video> -->
         </div>
       </div>
     </div>
@@ -141,7 +139,8 @@
 import DrawerLeft from "@/components/DrawerLeft";
 import TabBarBottom from "@/components/TabBarBottom";
 import LocalHeader from "@/components/Header";
-import { videoPlayer } from "vue-video-player";
+import { videoPlayer } from 'vue-video-player'
+import 'video.js/dist/video-js.css'
 
 //引入video样式
 // import "video.js/dist/video-js.css";

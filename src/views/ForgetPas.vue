@@ -205,7 +205,7 @@ export default {
                         line-height: 92px;
                         font-size:30px;
                         font-family:MicrosoftYaHei;
-                        color:rgba(235,235,235,1);
+                        color:#333;
                         letter-spacing:3px;
                         border: none;
                         outline: none;

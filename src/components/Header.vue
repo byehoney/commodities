@@ -15,7 +15,7 @@
         <img src="../images/smallsousuo.png">
       </span>
       <form @submit.prevent class="form">
-        <input type="text" v-model="searchStr" @keyup="search" @keypress="searchGoods" placeholder="请输入烟花名称">
+        <input  type="text" v-model="searchStr" id="input" autofocus @keyup="search" @keypress="searchGoods" placeholder="请输入烟花名称">
       </form>
     </div>
     <div class="selIcon_box" v-if="showlogo" @click="goMore">

@@ -41,7 +41,7 @@
       <div class="detail_content_onece fix" v-if="!contentShow">
         <div class="detail_content_onece_left">
           <ul>
-            <li>
+            <li v-if="shopDetail.hdlx!='无'">
               <i class="unit">¥</i>
               {{shopDetail.cxj}}
             </li>
@@ -86,7 +86,7 @@
               <div class="stock" v-if="shopDetail.hdlx=='秒杀'">仅剩{{shopDetail.dqkc}}件</div>
             </div>
             <div class="detail_content_price" v-if="contentShow">
-              <ul>
+              <ul v-if="shopDetail.hdlx!='无'">
                 <li class="oPrice">原价：¥ {{shopDetail.ptsj}}</li>
               </ul>
             </div>
@@ -213,14 +213,19 @@
           <ul>
             <li>
               <p>商品名称：{{shopDetail.spmc}}</p>
-              <p>通用名：{{shopDetail.tymc}}</p>
+              <p>通用名称：{{shopDetail.tymc}}</p>
               <p>生产厂家：{{shopDetail.cj}}</p>
-              <p v-if="shopDetail.hlgg">规格：{{shopDetail.hlgg}}</p>
               <p>销售单位：{{shopDetail.dw}}</p>
-              <p>库存：{{shopDetail.dqkc}}</p>
-              <p>限购量：{{shopDetail.xgl}}</p>
+              <p v-if="shopDetail.hlgg">产品规格：{{shopDetail.bzgg}}</p>
+              <p>最小包装：{{shopDetail.xbz}}</p>
+              <p>中包装:{{shopDetail.zbz}}</p>
+              <p>立方:{{shopDetail.zbz}}</p>
+              <p>库存：{{shopDetail.dqkc>0?'有':'无'}}</p>
+              <p v-if="shopDetail.kczjxq">[最近效期]： {{shopDetail.kczjxq}}</p>
+              <p>[限购量]：{{shopDetail.xgl>0?shopDetail.xgl:'不限购'}}</p>
+              <p>[集采量]：{{shopDetail.cjl}}</p>
             </li>
-            <li>
+            <!-- <li>
               <p v-if="shopDetail.bzgg">[规格]： {{shopDetail.bzgg}}</p>
               <p v-if="shopDetail.pzwh">[批准文号]： {{shopDetail.pzwh}}</p>
               <p v-if="shopDetail.gjwm">[国家本位码]： {{shopDetail.gjwm}}</p>
@@ -233,7 +238,7 @@
               <p>中包装:{{shopDetail.zbz}}</p>
               <p></p>
               <p></p>
-            </li>
+            </li> -->
           </ul>
         </div>
       </div>
@@ -408,7 +413,7 @@ export default {
                 jghdlx:this.shopDetail.hdlx,
                 productId:this.shopDetail.priductid,
                 cartNum:this.shopnum,
-                pzdj:this.shopDetail.cxj,
+                pzdj:this.shopDetail.hdlx=='无'?this.shopDetail.ptsj:this.shopDetail.cxj,
                 pzyj:this.shopDetail.ptsj,
                 mobile:this.user.mobile
               }]
@@ -422,7 +427,7 @@ export default {
                 jghdlx:this.shopDetail.hdlx,
                 productId:this.shopDetail.priductid,
                 cartNum:this.shopnum,
-                pzdj:this.shopDetail.cxj,
+                pzdj:this.shopDetail.hdlx=='无'?this.shopDetail.ptsj:this.shopDetail.cxj,
                 pzyj:this.shopDetail.ptsj,
                 mobile:this.user.mobile
               }]
@@ -464,7 +469,7 @@ export default {
             jghdlx:this.shopDetail.hdlx,
             productId:this.shopDetail.priductid,
             cartNum:this.shopnum,
-            pzdj:this.shopDetail.cxj,
+            pzdj:this.shopDetail.hdlx=='无'?this.shopDetail.ptsj:this.shopDetail.cxj,
             pzyj:this.shopDetail.ptsj,
             mobile:this.user.mobile
           }
