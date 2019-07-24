@@ -96,7 +96,11 @@ export default {
     ...mapGetters('login',['token','userId','corpCode','companyId','userRole'])
   },
   mounted() {
-    // this.getData();
+    this.loading = true;
+    this.getData();
+  },
+  destroyed() {
+    this.loading = false;
   },
   methods: {
     show(type) {
@@ -146,6 +150,7 @@ export default {
           return;
         }
       }
+      this.hasMore = true;
       this.pageNum = 1;
       this.list = [];
       this.getData();
@@ -166,6 +171,7 @@ export default {
           startTime:this.start,
           endTime:this.end
         })
+        this.loading = false;
         this.moreLoading = false;
         if(res.code == 0){
             if(!res.data.list.length){
@@ -196,8 +202,8 @@ export default {
         if(this.moreLoading||!this.hasMore){
             return;
         }
-        this.getData();
         this.pageNum = this.pageNum+1;
+        this.getData();
     }
   }
 };

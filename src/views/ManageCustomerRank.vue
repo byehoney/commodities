@@ -119,7 +119,11 @@ export default {
         };        
         // let cities = await getCoustomerCityList({...defaulParams});
         // this.areaList = cities.data.list;
+        this.loading = true;
         this.getData();
+    },
+    destroyed() {
+        this.loading = false;
     },
     methods: {
         ...mapMutations('mange',['changeDrawLeft']),
@@ -132,6 +136,7 @@ export default {
             this.cCode = cCode;
             this.aCode = aCode;
             this.cityVisible = false;
+            this.hasMore = true;
             this.list = [];
             this.pageNum = 1;
             this.getData();
@@ -179,6 +184,7 @@ export default {
             }
             this.curDateIndex = index;
             this.showDateList = false;
+            this.hasMore = true;
             this.list = [];
             this.pageNum = 1;
             this.getData();
@@ -190,6 +196,7 @@ export default {
             }
             this.curTypeIndex = index;
             this.showTypeList = false;
+            this.hasMore = true;
             this.list = [];
             this.pageNum = 1;
             this.getData();
@@ -201,6 +208,7 @@ export default {
             }
             this.curAreaIndex = index;
             this.showAreaList = false;
+            this.hasMore = true;
             this.list = [];
             this.pageNum = 1;
             this.getData();
@@ -223,6 +231,7 @@ export default {
                 regionCode:this.aCode
             })
             this.moreLoading = false;
+            this.loading = false;
             if(res.code == 0){
                 if(!res.data.list.length){
                     this.hasMore = false;
@@ -249,11 +258,11 @@ export default {
             }
         },
         loadMore(){
-            if(this.moreLoading||(!this.hasMore&&this.pageNum==1)){
+            if(this.moreLoading||!this.hasMore){
                 return;
             }
-            this.getData();
             this.pageNum = this.pageNum+1;
+            this.getData();
         }
     },
 }

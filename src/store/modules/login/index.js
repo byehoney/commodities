@@ -107,6 +107,9 @@ export default {
         userRole(state){
             return state.user.userRole
         },
+        mobile(state){
+            return state.user.mobile;
+        },
         user(state) {
             console.log('state', state);
             return state.user

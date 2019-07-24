@@ -38,8 +38,8 @@
                             <p class="size">规格：{{item.guige}}</p>
                             <p class="leave">剩余：{{item.sytckszs}}</p>
                             <p class="price">
-                                <span class="nPrice">￥{{item.tchdj}}</span>
-                                <span class="oPrice">原价：￥{{item.tcyj}}</span>
+                                <span class="nPrice">￥{{item.dptcjg}}</span>
+                                <span class="oPrice">原价：￥{{item.dpyj}}</span>
                             </p>
                         </div>   
                     </div> 

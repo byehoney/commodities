@@ -56,7 +56,9 @@
     <!-- 底部 -->
     <div class="footer_guide fix">
       <div class="footer_guide_left fix" @click="goShopCar">
-        <p class="badge"></p>
+        <p class="badge">
+          <span class="num" v-if="buyNum>0">{{buyNum}}</span>
+        </p>
         <p>¥{{money}}</p>
       </div>
       <div class="footer_guide_right fix">
@@ -86,7 +88,7 @@
 <script>
 import { Toast } from "mint-ui";
 import TopNav from "@/components/TopNav";
-import { getBestGoodsList ,addToCar} from '@/api/index'
+import { getBestGoodsList ,addToCar,getCartNum} from '@/api/index'
 import {mapGetters,mapState} from 'vuex'
 export default {
   data() {
@@ -97,6 +99,7 @@ export default {
       cIndex:0,//当前活动序号
       cJindex:0,//当前活动商品序号
       money:0,//总金额
+      buyNum:0,
     };
   },
   computed:{
@@ -108,6 +111,7 @@ export default {
   },
   mounted() {
     this.getData();
+    this.getShopCarNum();
   },
   activated() {/**  */
     if (!this.$route.meta.canKeep) {
@@ -255,6 +259,19 @@ export default {
     showActDetail(index){
       this.$set(this.list[index][0],'showAct',!this.list[index][0].showAct)
     },
+    async getShopCarNum(){
+      let defaulParams = {
+        token: this.token,
+        userId: this.userId,
+        corpCode: this.corpCode,
+        companyId: this.companyId,
+        userRole: this.userRole,
+      };
+      let res = await getCartNum(defaulParams);
+      if(res.code==0){
+        this.buyNum = res.data.countitem;
+      }
+    },  
     async getData(){
       let defaulParams = {
         token:this.token,
@@ -266,7 +283,7 @@ export default {
       let res = await getBestGoodsList(defaulParams);
       if(res.code==0){
         res.data.list.forEach(item => {
-          item[0].showAct = false;
+          item[0].showAct = true;
           item.forEach(jterm=>{
             jterm.num = 1;
             jterm.checked = false;
@@ -529,7 +546,7 @@ export default {
   margin-left: 49px;
 }
 .footer_guide_left p:nth-of-type(2){
-    margin-left:16px;
+    margin-left:26px;
     color:#ff0000
 }
 .footer_guide_right {
@@ -565,6 +582,21 @@ span {
 margin-top:15px;
   background: url("../images/choose_car.png") no-repeat top;
   background-size: 100% 100%;
+  position: relative;
+  .num{
+    width: 0.29rem;
+    height: 0.29rem;
+    border-radius: 50%;
+    background: #F5A41A;
+    position: absolute;
+    z-index: 100;
+    top: -0.1rem;
+    right: -0.08rem;
+    font-size: 0.12rem;
+    text-align: center;
+    color: #fff;
+    line-height: 0.29rem;
+  }
   span {
     color: #ff0000;
     font-size: 26px;

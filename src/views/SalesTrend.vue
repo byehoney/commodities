@@ -116,6 +116,10 @@ export default {
                         title: {
                                 text: ''
                         },
+                        min: 0, 
+                        minPadding: 0, 
+                        minRange: 1,
+                        startOnTick: true, 
                         gridLineColor:'transparent',
                         labels:{
                             enabled:false
@@ -151,6 +155,11 @@ export default {
                         title: {
                                 text: ''
                         },
+                        min: 0, 
+                        minPadding: 0, 
+                        minRange: 1,
+                        startOnTick: true, 
+                        gridLineColor:'transparent',
                         labels:{
                             enabled:false
                         }
@@ -185,6 +194,11 @@ export default {
                         title: {
                                 text: ''
                         },
+                        min: 0, 
+                        minPadding: 0, 
+                        minRange: 1,
+                        startOnTick: true, 
+                        gridLineColor:'transparent',
                         labels:{
                             enabled:false
                         }

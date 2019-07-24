@@ -47,7 +47,8 @@
             <div class="camp_list_right_top">
               <h3>{{item.tyname}}</h3>
               <p>{{item.cj}}</p>
-              <p>{{item.hlgg}}</p>
+              <p>规格：{{item.hlgg}}</p>
+              <p>单位：{{item.danwei}}</p>
             </div>
             <div class="camp_list_right_bottom">
               <div class="camp_list_right_bottom_left">
@@ -139,6 +140,7 @@ export default {
           fullText: this.searchStr
         });
       }
+      this.loading = false;
       if (res.code == 0) {
         if (!res.data.list.length) {
           this.hasMore = false;
@@ -186,14 +188,19 @@ export default {
         this.sort = -1;
       }
       this.loading = false;
+      this.hasMore = true;
       this.list=[];
       this.pageNum = 1;
       this.getCamp(index);
     }
   },
   mounted() {
+    this.loading = true;
     this.getCamp();
-  }
+  },
+  destroyed() {
+    this.loading = false;
+  },
 };
 </script>
 
@@ -370,6 +377,7 @@ export default {
           border: none;
           margin-top: 20px;
           color: #333;
+          font-weight: bold;
         }
       }
       .camp_list_right_bottom_right {

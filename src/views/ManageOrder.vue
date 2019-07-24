@@ -172,7 +172,11 @@ export default {
     ...mapGetters('login',['token','userId','corpCode','companyId','userRole'])
   },
   mounted(){
-    // this.getData();
+    this.loading = true;
+    this.getData();
+  },
+  destroyed() {
+    this.loading = false;
   },
   methods: {
     geDetail(id){
@@ -204,6 +208,7 @@ export default {
       return currentdate;
     },
     doSearch(){
+      this.hasMore = true;
       this.pageNum=1;
       this.list = [];
       this.loadMore();
@@ -227,6 +232,7 @@ export default {
         companyName:this.companyName,
         orderId:this.orderId
       })
+      this.loading = false;
       if(res.code == 0){
           if(!res.data.list.length){
               this.hasMore = false;
@@ -258,8 +264,8 @@ export default {
         if(this.moreLoading||!this.hasMore){
             return;
         }
-        this.getData();
         this.pageNum = this.pageNum+1;
+        this.getData();
     },
     showFirst(){
       this.checked = !this.checked;

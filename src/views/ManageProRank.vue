@@ -91,7 +91,11 @@ export default {
         DrawerLeft
     },
     mounted() {
+        this.loading = true;
         this.getData();
+    },
+    destroyed() {
+        this.loading = false;
     },
     methods: {
         ...mapMutations('mange',['changeDrawLeft']),
@@ -130,6 +134,7 @@ export default {
             e.stopPropagation();
             this.curDateIndex = index;
             this.showDateList = false;
+            this.hasMore = true;
             this.list = [];
             this.pageNum = 1;
             this.getData();
@@ -138,6 +143,7 @@ export default {
             e.stopPropagation();
             this.curTypeIndex = index;
             this.showTypeList = false;
+            this.hasMore = true;
             this.list = [];
             this.pageNum = 1;
             this.getData();
@@ -145,6 +151,7 @@ export default {
         selCurArea(e,index){
             e.stopPropagation();
             this.curAreaIndex = index;
+            this.hasMore = true;
             this.showAreaList = false;
             this.list = [];
             this.pageNum = 1;
@@ -160,6 +167,7 @@ export default {
                 pageNum:this.pageNum
             };
             let res = await getProRankList({...defaulParams,days:this.dateList[this.curDateIndex].days,sort:this.typeList[this.curTypeIndex].sort});
+            this.loading = false;
             if(res.code == 0){
                 if(!res.data.list.length){
                     this.hasMore = false;

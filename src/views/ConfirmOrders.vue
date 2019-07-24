@@ -270,6 +270,7 @@ export default {
           orderText:this.note,
           userName:this.person,
           userMobile:this.tel,
+          fpCode:this.selCode,
           type:this.$route.query.type
         });
         if(res.code==0){
@@ -284,7 +285,7 @@ export default {
             if(this.$route.query.type==0){
               this.$router.go(-1);
             }else{
-              this.$router.replace({name:'newShopCar'});
+              this.$router.replace({name:'home'});
             }
           },2100)
         }
@@ -349,7 +350,7 @@ export default {
         this.$set(this.slots[0],'values',res.data.list);
         this.sel_value = res.data.moren.fptype;
         let index = res.data.list.findIndex(item=>item.fptype==res.data.moren.fptype);
-        this.selCode = res.data.list[index].code;
+        this.selCode = res.data.moren.fptype=='请选择'?'':res.data.list[index].code;
       }
     },
     selTicket() {
@@ -374,7 +375,7 @@ export default {
       this.$router.go(-1);
     },
     chooseAddr() {
-      this.$router.push({ name: "address" });
+      this.$router.push({ name: "address",query:{from:'confirm',money:this.$route.query.money,canSelMz:this.$route.query.canSelMz,type:this.$route.query.type} });
     },
     chooseGift() {
       this.giftVisible = true;

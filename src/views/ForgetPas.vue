@@ -7,7 +7,8 @@
                     手机号
                 </div>
                 <div class="right">
-                    <input type="text" placeholder="请输入您的手机号" class="input" autocomplete="false" v-model="tel">
+                    <input type="text" placeholder="请输入您的手机号" class="input" disabled v-if="$route.query.from!='forget'" autocomplete="false" v-model="tel">
+                    <input type="text" placeholder="请输入您的手机号" class="input"  v-else autocomplete="false" v-model="tel">
                 </div>
             </div>
             <div class="pasItem">
@@ -43,7 +44,7 @@
 import { Toast } from "mint-ui";
 import TopNav from '@/components/TopNav'
 import {mapGetters} from 'vuex'
-import {getYzCode,checkYzCode,forgetPass} from '@/api/index'
+import {getYzCode,checkYzCode,checkExist,checkForget,forgetPass} from '@/api/index'
 export default {
     data(){
         return{
@@ -57,8 +58,13 @@ export default {
     components:{
         TopNav,
     },
+    mounted() {
+        if(this.$route.query!='forget'){
+            this.tel = this.mobile;
+        }
+    },
     computed:{
-        ...mapGetters('login',['token','userId','corpCode','companyId','userRole'])
+        ...mapGetters('login',['token','userId','corpCode','companyId','userRole','mobile'])
     },
     methods:{
         canSend(){
@@ -77,26 +83,43 @@ export default {
         async reqYzcode(){
             let res = await getYzCode({mobile:this.tel});
         },
-        sendMsg(){
+        async sendMsg(){
             if(!this.canSend()){
                 return;
             }
             if(!this.sending){
-                let timer = null;
-                let step = 60;
-                this.sending = true;
-                this.reqYzcode();
-                timer = setInterval(()=>{
-                    step--;
-                    if(step==0){
-                        this.msgStr = '重新发送' ;
-                        clearInterval(timer);
-                        this.sending = false;
+                if(this.$route.query.from=='forget'){
+                    let res = await checkForget({ywMobile:this.tel});
+                    if(res.code==0&&res.data.ckeckResult=="true"){
+                        this.doSend();
                     }else{
-                        this.msgStr = step+'s后重新发送' ;
+                        Toast({
+                            message: res.data.ckeckResult,
+                            position: "middle",
+                            duration: 2000
+                        });
+                        return;
                     }
-                },1000) 
+                }else{
+                    this.doSend();
+                }
             }
+        },
+        doSend(){
+            let timer = null;
+            let step = 60;
+            this.sending = true;
+            this.reqYzcode();
+            timer = setInterval(()=>{
+                step--;
+                if(step==0){
+                    this.msgStr = '重新发送' ;
+                    clearInterval(timer);
+                    this.sending = false;
+                }else{
+                    this.msgStr = step+'s后重新发送' ;
+                }
+            },1000) 
         },
         async checkCode(){
             if(!this.canSend()){

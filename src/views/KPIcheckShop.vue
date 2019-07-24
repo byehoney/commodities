@@ -110,7 +110,11 @@ export default {
     //    ManageTabBarBotttom,
     },
     mounted() {
+        this.loading = true;
         this.getData();
+    },
+    destroyed() {
+        this.loading = false;
     },
     methods: {
         doSearch(){
@@ -152,6 +156,7 @@ export default {
                 this.zpss = res.data.zpss;
             }else{//品规信息
                 this.moreLoading = false;
+                this.loading = false;
                 if(res.code == 0){
                     if(!res.data.list.length){
                         this.hasMore = false;

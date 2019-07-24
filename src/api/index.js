@@ -27,9 +27,15 @@ function getYzCode(params) {//获取验证码
 function checkYzCode(params) {//验证验证码
     return post('/mobile/check/code.do', params)
 }
-function checkExist(params) {//验证验证码
+function checkExist(params) {//验证手机号
     return post('/login/check/mobile.do', params)
 }
+
+function checkForget(params) {//验证忘记密码手机号
+    return post('/mobile/check/legitimate.do', params)
+}
+
+
 function login(params) {//用户登陆
     return post('/user/login.do', params)
 }
@@ -339,6 +345,7 @@ function reqManageOrderDetail(params){//获取管理页面订单详情
     return post('/manage/get/orderdetail.do',params)
 }
 export {
+    checkForget,
     checkExist,
     getYzCode,
     checkYzCode,

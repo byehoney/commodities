@@ -312,6 +312,7 @@ export default {
   methods: {
     ...mapMutations('login',['saveOrderInfo']),
     async del(){
+      this.remberShopCar();//删除前缓存购物车数据
       let defaulParams = {
         token: this.token,
         userId: this.userId,
@@ -732,7 +733,7 @@ export default {
         })
       })
     },
-    complete(){
+    complete(){//点击编辑  缓存购物车数据
       this.result = !this.result;
     },
     count() {
@@ -970,6 +971,29 @@ export default {
         window.scrollTo(0,this.scrollTop);
       },100)
     },
+    remberShopCar(){//缓存购物车数据
+      let defaulParams = {
+        token:this.token,
+        userId:this.userId,
+        corpCode:this.corpCode,
+        companyId:this.companyId,
+        userRole:this.userRole,
+      };
+      let jsonStr = {ptData:[],hdData:[]};
+      this.list.forEach((item)=>{
+        if(item.promotionflag=='套餐'){
+          jsonStr.hdData.push({id:'',code:item.promotioncode,num:item.quantity});
+        }else{
+          jsonStr.ptData.push({id:item.productcode,num:item.quantity,code:''})
+        }
+      })
+      this.mzList.forEach((item)=>{
+        item.forEach((pterm)=>{
+          jsonStr.hdData.push({id:pterm.productcode,num:pterm.quantity,code:pterm.buyCode});
+        })
+      })
+      recordCartNum({...defaulParams,jsonStr:JSON.stringify(jsonStr)});
+    },
     goDetail(id){
       // this.$router.push({name:'detail',query:{id:id}})
     }
@@ -1002,43 +1026,7 @@ export default {
   },
   destroyed(){
     clearInterval(this.timer);
-    let defaulParams = {
-      token:this.token,
-      userId:this.userId,
-      corpCode:this.corpCode,
-      companyId:this.companyId,
-      userRole:this.userRole,
-    };
-    // let  jsonStr = {zcData:{},tcData:{},mzData:{}};
-    // if(!this.list.length&&!this.mzList.length){
-    //   return;
-    // }
-    // this.list.forEach((item)=>{
-    //   if(item.promotionflag=='套餐'){
-    //     jsonStr.tcData[item.promotioncode]=item.quantity;
-    //   }else{
-    //     jsonStr.zcData[item.productcode]=item.quantity;
-    //   }
-    // })
-    // this.mzList.forEach((item)=>{
-    //   item.forEach((pterm)=>{
-    //     jsonStr.mzData[pterm.productcode]=pterm.quantity;
-    //   })
-    // })
-    let jsonStr = {ptData:[],hdData:[]};
-    this.list.forEach((item)=>{
-      if(item.promotionflag=='套餐'){
-        jsonStr.hdData.push({id:'',code:item.promotioncode,num:item.quantity});
-      }else{
-        jsonStr.ptData.push({id:item.productcode,num:item.quantity,code:''})
-      }
-    })
-    this.mzList.forEach((item)=>{
-      item.forEach((pterm)=>{
-        jsonStr.hdData.push({id:pterm.productcode,num:pterm.quantity,code:pterm.buyCode});
-      })
-    })
-    recordCartNum({...defaulParams,jsonStr:JSON.stringify(jsonStr)});
+    this.remberShopCar();
     this.saveOrderInfo({list:this.list,mzList:this.mzList});
   },  
 };

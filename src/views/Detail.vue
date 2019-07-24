@@ -219,7 +219,8 @@
               <p v-if="shopDetail.hlgg">产品规格：{{shopDetail.bzgg}}</p>
               <p>最小包装：{{shopDetail.xbz}}</p>
               <p>中包装:{{shopDetail.zbz}}</p>
-              <p>立方:{{shopDetail.zbz}}</p>
+              <p>立方:{{shopDetail.lifang}}</p>
+              <p>辅量:{{shopDetail.fuliang}}</p>
               <p>库存：{{shopDetail.dqkc>0?'有':'无'}}</p>
               <p v-if="shopDetail.kczjxq">[最近效期]： {{shopDetail.kczjxq}}</p>
               <p>[限购量]：{{shopDetail.xgl>0?shopDetail.xgl:'不限购'}}</p>

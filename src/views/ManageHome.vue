@@ -102,7 +102,7 @@
             <router-link to="/manageshop" tag="div" class="infoItem">
                 <div class="left">
                     <img class="icon" src="../images/manage/manage_03.png" alt="">
-                    <div class="text">未处理采购门店数</div>
+                    <div class="text">未处理采购门店数/今日未处理门店数</div>
                 </div>
                 <div class="right">{{bData.wclcgmds}}/{{bData.cgmds}}</div>
             </router-link>

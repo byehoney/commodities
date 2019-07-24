@@ -64,10 +64,15 @@ export default {
     ...mapGetters('login',['token','userId','corpCode','companyId','userRole'])
   },
   mounted() {
+    this.loading = true;
     this.getData();
+  },
+  destroyed() {
+    this.loading = false;
   },
   methods: {
     doSearch(){
+      this.hasMore = true;
       this.pageNum = 1;
       this.list = [];
       this.getData();
@@ -75,6 +80,7 @@ export default {
     searchGoods(event){
       if (event.keyCode == 13) {
         event.preventDefault(); //禁止默认事件（默认是换行）
+        this.hasMore = true;
         this.pageNum = 1;
         this.list = [];
         this.getData();
@@ -94,6 +100,7 @@ export default {
           ...defaulParams,
           fullText:this.searchStr
         })
+        this.loading = false;
         this.moreLoading = false;
         if(res.code == 0){
             if(!res.data.list.length){
@@ -216,6 +223,7 @@ export default {
       }
       p:nth-of-type(2){
         font-size: 32px;
+        font-weight: bold;
       }
     }
   }

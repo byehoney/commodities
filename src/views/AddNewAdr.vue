@@ -107,13 +107,21 @@ export default {
         async reqAdd(data){
             let res = await addNewAddr(data);
             if(res.code==0){
-                this.$router.push({name:'address'})
+                if(this.$route.query.from=="confirm"){
+                    this.$router.replace({name:'confirmOrders',query:{money:this.$route.query.money,canSelMz:this.$route.query.canSelMz,type:this.$route.query.type}})
+                }else{
+                    this.$router.replace({name:'address'})
+                }
             }
         },
         async modifyArr(data){
             let res = await upDateAddr(data);
             if(res.code == 0){
-                this.$router.push({name:'address'})
+                if(this.$route.query.from=="confirm"){
+                    this.$router.replace({name:'confirmOrders',query:{money:this.$route.query.money,canSelMz:this.$route.query.canSelMz,type:this.$route.query.type}})
+                }else{
+                    this.$router.replace({name:'address'})
+                }
             }
         },
         async delAdd(){
@@ -135,7 +143,11 @@ export default {
             }
             let res = await upDateAddr(data);
             if(res.code==0){
-                this.$router.push({name:'address'})
+                if(this.$route.query.from=="confirm"){
+                    this.$router.replace({name:'confirmOrders',query:{money:this.$route.query.money,canSelMz:this.$route.query.canSelMz,type:this.$route.query.type}})
+                }else{
+                    this.$router.push({name:'address'})
+                }
             }
         },
         saveAddr(){

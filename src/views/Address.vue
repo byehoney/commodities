@@ -76,12 +76,16 @@ export default {
                 city:city,
                 cvPosition:cvPosition,
                 warehouseAddr:warehouseAddr,
-                positionCode:positionCode
+                positionCode:positionCode,
+                from:this.$route.query.from,
+                money:this.$route.query.money,
+                canSelMz:this.$route.query.canSelMz,
+                type:this.$route.query.type
             }
-            this.$router.push({name:'addNewAdr',query:data});
+            this.$router.replace({name:'addNewAdr',query:data});
         },
         addNew(){
-            this.$router.push({name:'addNewAdr'});
+            this.$router.replace({name:'addNewAdr',query:{from:this.$route.query.from,money:this.$route.query.money,canSelMz:this.$route.query.canSelMz,type:this.$route.query.type}});
         }
     }
 }

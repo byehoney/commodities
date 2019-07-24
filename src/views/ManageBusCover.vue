@@ -50,11 +50,16 @@ export default {
     //    ManageTabBarBotttom,
     },
     mounted() {
+        this.loading = true;
         this.getData();
+    },
+    destroyed() {
+        this.loading = false;
     },
     methods: {
         changeType(index){
             this.actIndex = index;
+            this.hasMore = true;
             this.list = [];
             this.pageNum = 1;
             this.getData();
@@ -73,6 +78,7 @@ export default {
                 ...defaulParams,
                 type:this.actIndex
             })
+            this.loading = false;
             this.moreLoading = false;
             if(res.code == 0){
                 if(!res.data.list.length){

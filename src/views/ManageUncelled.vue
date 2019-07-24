@@ -15,8 +15,11 @@
       </div>
       <div class="top">
         <div class="left">
-          <div class='date long'>
-            天数：30天
+          <div :class="['date long',dateActive?'active':'']" @click="selDate">
+              {{dateList[curDateIndex]}}
+              <div class="dataList" v-if="showDateList">
+                  <p :class="['dataItem',curDateIndex==index?'active':'']" @click="selCurDate($event,index)" v-for="(item,index) in dateList" :key="index">{{item}}</p>
+              </div>
           </div>
           <div :class="['type',typeActive?'active':'']" @click="selType">
               {{typeList[curTypeIndex].text}}
@@ -83,12 +86,16 @@ export default {
   data() {
     return {
       title: "未动销查询",
+      dateActive:true,
       typeActive:false,
       areaActive:false,
+      showDateList:false,
       showTypeList:false,
       showAreaList:false,
+      dateList:['近七天','近三十天','近三个月','近六个月'],
       typeList:[{text:'商品',sort:0},{text:'门店',sort:1}],
       areaList:[{regionCode: "", regionName: "全国"}],
+      curDateIndex:0,
       curTypeIndex:0,
       curAreaIndex:0,
       searchStr:'',
@@ -111,6 +118,7 @@ export default {
     ...mapGetters('login',['token','userId','corpCode','companyId','userRole'])
   },
   async mounted() {
+    this.loading = true;
     let defaulParams = {
       token:this.token,
       userId:this.userId,
@@ -122,6 +130,10 @@ export default {
     // this.areaList = cities.data.list;
     this.getData();
   },
+  destroyed() {
+    console.log(this.pageNum)
+    this.loading = false;
+  },
   methods:{
     // handlerArea(){
     //     this.areaVisible = !this.areaVisible;
@@ -132,6 +144,8 @@ export default {
         this.cCode = cCode;
         this.aCode = aCode;
         this.cityVisible = false;
+        this.loading = false;
+        this.hasMore = true;
         this.list = [];
         this.pageNum = 1;
         this.getData();
@@ -140,6 +154,7 @@ export default {
         this.cityVisible = false;
     },
     doSearch(){
+      this.hasMore = true;
       this.pageNum = 1;
       this.list = [];
       this.getData();
@@ -147,6 +162,7 @@ export default {
     searchGoods(event){
       if (event.keyCode == 13) {
         event.preventDefault(); //禁止默认事件（默认是换行）
+        this.hasMore = true;
         this.pageNum = 1;
         this.list = [];
         this.getData();
@@ -176,6 +192,7 @@ export default {
           })
         }     
         this.moreLoading = false;
+        this.loading = false;
         if(res.code == 0){
             if(!res.data.list.length){
                 this.hasMore = false;
@@ -206,9 +223,19 @@ export default {
         if(this.moreLoading||!this.hasMore){
             return;
         }
-       
-        this.getData();
+        console.log(this.pageNum)
         this.pageNum = this.pageNum+1;
+        this.getData();
+
+    },
+    selDate(){
+        this.typeActive = false;
+        this.dateActive = true;
+        this.showTypeList = false;
+        this.showDateList = true;
+        this.showAreaList = false;
+        this.areaActive = false;
+        this.cityVisible = false;
     },
     selType(){
         this.typeActive = true;
@@ -228,11 +255,26 @@ export default {
         this.areaActive = true;
         this.cityVisible = !this.cityVisible;
     },
+    selCurDate(e,index){
+      e.stopPropagation();
+      if(this.moreLoading){
+          return;
+      }
+      this.loading = false;
+      this.hasMore = true;
+      this.curDateIndex = index;
+      this.showDateList = false;
+      this.list = [];
+      this.pageNum = 1;
+      this.getData();
+    },
     selCurType(e,index){
         e.stopPropagation();
         if(this.moreLoading){
             return;
         }
+        this.loading = false;
+        this.hasMore = true;
         this.curTypeIndex = index;
         this.showTypeList = false;
         this.list = [];
@@ -240,15 +282,17 @@ export default {
         this.getData();
     },
     selCurArea(e,index){
-        e.stopPropagation();
-        if(this.moreLoading){
-            return;
-        }
-        this.curAreaIndex = index;
-        this.showAreaList = false;
-        this.list = [];
-        this.pageNum = 1;
-        this.getData();
+      e.stopPropagation();
+      if(this.moreLoading){
+          return;
+      }
+      this.loading = false;
+      this.hasMore = true;
+      this.curAreaIndex = index;
+      this.showAreaList = false;
+      this.list = [];
+      this.pageNum = 1;
+      this.getData();
     },
   }
 };
@@ -301,6 +345,7 @@ export default {
       }
       p:nth-of-type(2){
         font-size: 32px;
+        font-weight: bold;
       }
     }
   }
@@ -328,11 +373,11 @@ export default {
       line-height:26px;
       letter-spacing:2px;
     }
-    .type,.area{
+    .date,.type,.area{
         position: relative;
         width: 115px;
         font-size:22px;
-        color:#F5A623;;
+        color:#F5A623;
         letter-spacing:2px;
         padding-left: 26px;
         &.long{
@@ -378,7 +423,7 @@ export default {
             line-height: 75px;
             border-bottom: 2px solid #ebebeb;
             &.active{
-                background-color: #007AFF;
+                background-color: #F5A623;
                 color:#fff;   
             }
             &:last-child{

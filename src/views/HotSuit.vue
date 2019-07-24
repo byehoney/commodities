@@ -34,26 +34,30 @@
                 </div>
             </div>
         </div>
-        <!-- <div class="bottom">
+        <div class="bottom">
             <div class="left">
-                <img src="../images/choose_car.png" alt="">
-                <span>￥0</span>
+                <div class="badge" @click="goShopCar">
+                    <!-- <img src="../images/choose_car.png" alt=""> -->
+                    <span class="num" v-if="buyNum>0">{{buyNum}}</span>
+                </div>   
+                <!-- <span>￥0</span> -->
             </div>
-            <div class="right">
+            <!-- <div class="right">
                 确定
-            </div>
-        </div> -->
+            </div> -->
+        </div>
     </div>
 </template>
 <script>
 import { Toast } from "mint-ui";
 import { mapGetters,mapState } from 'vuex'
-import { getSuitList ,addToCar} from '@/api/index'
+import { getSuitList ,addToCar,getCartNum} from '@/api/index'
 import TopNav from '@/components/TopNav'
 export default {
     data(){
         return{
-            list:[]
+            list:[],
+            buyNum:0
         }
     },
     computed:{
@@ -65,8 +69,12 @@ export default {
     },
     mounted(){
         this.getData();
+        this.getShopCarNum();
     },
     methods: {
+        goShopCar(){
+            this.$router.push({name:'newShopCar'})
+        },
         async addShopCar(e,index){
             e.stopPropagation();
             let defaulParams = {
@@ -108,6 +116,19 @@ export default {
         goDetail(id,tcyj,tchdj,kbtcms){
             this.$router.push({name:'suitDetail',query:{id:id,tcyj:tcyj,tchdj:tchdj,kbtcms:kbtcms}})
         },
+        async getShopCarNum(){
+            let defaulParams = {
+                token: this.token,
+                userId: this.userId,
+                corpCode: this.corpCode,
+                companyId: this.companyId,
+                userRole: this.userRole,
+            };
+            let res = await getCartNum(defaulParams);
+            if(res.code==0){
+                this.buyNum = res.data.countitem;
+            }
+        },  
         async getData(){
             let defaulParams = {
                 token:this.token,
@@ -144,6 +165,32 @@ export default {
         .left{
             display: flex;
             align-items: center;
+            .badge{
+                width: 62px;
+                height: 62px;
+                font-size: 26px;
+                text-align: center;
+                color: #666;
+                // margin-top:15px;
+                background: url("../images/choose_car.png") no-repeat top;
+                background-size: 100% 100%;
+                position: relative;
+                margin-left: 49px;
+                .num{
+                    width: 0.29rem;
+                    height: 0.29rem;
+                    border-radius: 50%;
+                    background: #F5A41A;
+                    position: absolute;
+                    z-index: 100;
+                    top: -0.1rem;
+                    right: -0.08rem;
+                    font-size: 0.12rem;
+                    text-align: center;
+                    color: #fff;
+                    line-height: 0.29rem;
+                }
+            }
             img{
                 width: 62px;
                 height: 62px;
