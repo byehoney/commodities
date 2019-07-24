@@ -220,7 +220,7 @@ export default {
                 }
                 .stateText{
                     font-size:22px;
-                    color:rgba(255,0,0,1);
+                    color:#E32323;
                     line-height:29px;
                     &.grey{
                         color: #999;

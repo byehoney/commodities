@@ -474,7 +474,7 @@ export default {
                 letter-spacing:2px;
             }
             .sure{
-                color:#FF0000;
+                color:#E32323;
             }
             .tip{
                 font-size:30px;

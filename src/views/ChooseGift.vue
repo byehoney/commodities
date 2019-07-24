@@ -268,7 +268,7 @@ span {
   color: #666;
   line-height: 95px;
   span {
-    color: #ff0000;
+    color: #E32323;
     font-size: 26px;
   }
 }

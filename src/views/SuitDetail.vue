@@ -200,7 +200,7 @@ export default {
                             margin-top: 10px;
                             .nPrice{
                                 font-size:26px;
-                                color:rgba(255,25,0,1);
+                                color:#E32323;
                                 line-height:35px;
                             }
                             .oPrice{
@@ -226,8 +226,8 @@ export default {
                 align-items: center;
                 margin-bottom: 25px;
                 img{
-                    width: 39px;
-                    height: 23px;
+                    width: 54px;
+                    height: 30px;
                     margin-right: 8px;
                 }
                 span{
@@ -245,7 +245,7 @@ export default {
                     align-items: flex-end;
                     .nPrice{
                         font-size:30px;
-                        color:rgba(255,0,0,1);
+                        color:#E32323;
                         line-height:40px;
                     }
                     .oPrice{
@@ -261,7 +261,7 @@ export default {
                     width: 125px;
                     height: 51px;
                     line-height: 51px;
-                    background-color: #FF423B;
+                    background-color: #E32323;
                     color: #fff;
                     font-size: 20px;
                     text-align: center;

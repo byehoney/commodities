@@ -198,9 +198,9 @@ export default {
             .right{
                 width: 516px;
                 height: 94px;
-                border: 2px solid #FF001F;
+                border: 2px solid #E32323;
                 font-size:28px;
-                color:rgba(255,0,0,1);
+                color:#E32323;
                 line-height:94px;
                 letter-spacing:2px;
                 border-radius: 10px;

@@ -75,7 +75,7 @@ export default {
             width:116px;
             height:35px;
             font-size:26px;
-            color:rgba(255,0,0,1);
+            color:#E32323;
             line-height:35px;
             letter-spacing:3px;
             position: absolute;

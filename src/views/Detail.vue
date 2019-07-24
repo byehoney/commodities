@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="detail_header">
-      <img class="detail_back" @click="$router.go(-1)" src="../images/publicback.png">
+      <img class="detail_back" @click="goBack" src="../images/publicback.png">
       <div class="detail_title">商品详情</div>
     </div>
     <div class="detail_loop">
@@ -359,6 +359,9 @@ export default {
     ])
   },
   methods: {
+    goBack(){
+      this.$router.go(-1);
+    },
     goShopCar(){
       this.$router.push({name:'newShopCar'})
     },
@@ -651,17 +654,17 @@ export default {
   .markIcon{
     height: 30px;
     font-size:18px;
-    color:rgba(255,3,4,1);
+    color:#E32323;
     line-height:30px;
     box-sizing: border-box;
-    border: 2px solid #FF0304;
+    border: 2px solid #E32323;
     padding: 0 10px;
     margin-right: 8px;
     border-radius:4px
   }
   .limitIcon{
     height:30px;
-    background:rgba(255,3,4,1);
+    background:#E32323;
     border-radius:4px;
     line-height: 30px;
     font-size:18px;
@@ -672,10 +675,10 @@ export default {
   .stock{
     height: 30px;
     font-size:18px;
-    color:rgba(255,3,4,1);
+    color:#E32323;
     line-height:30px;
     box-sizing: border-box;
-    border: 2px solid #FF0304;
+    border: 2px solid #E32323;
     padding: 0 10px;
     border-radius:4px
   }
@@ -697,7 +700,7 @@ a {
 .detail_header {
   width: 750px;
   min-height: 100px;
-  background: #FF0304;
+  background: #E32323;
   font-size: 30px;
   line-height: 100px;
   position: fixed;
@@ -853,8 +856,8 @@ a {
     height: 28px;
     line-height: 30px;
     text-align: center;
-    border: 2px solid #FF0304;
-    color:#FF0304;
+    border: 2px solid #E32323;
+    color:#E32323;
     border-radius: 5px;
     position: relative;
     top: -5px;
@@ -873,7 +876,7 @@ a {
   .saleNum{
     text-decoration: none!important;
     .num{
-      color:#FF0304;
+      color:#E32323;
       font-size:22px;
     }
   }
@@ -890,7 +893,7 @@ a {
 }
 .detail_content_price ul li:nth-of-type(2) {
   font-size: 28px;
-  color: #FF0304;
+  color: #E32323;
   float: right;
 }
 /* 库存 */
@@ -899,7 +902,7 @@ a {
   min-height: 70px;
   background: #ffefef;
   line-height: 70px;
-  color: #FF0304;
+  color: #E32323;
   padding: 0 47px;
   font-size: 24px;
 }
@@ -942,7 +945,7 @@ a {
   margin-left: 49px;
 }
 .storesave_list ul li:nth-of-type(1) {
-  color: #FF0304;
+  color: #E32323;
 }
 .detail_content_two_left {
   width: 610px;
@@ -958,14 +961,14 @@ a {
   float: right;
 }
 .detail_content_two_left span:nth-of-type(2) {
-  color: #FF0304;
+  color: #E32323;
 }
 .detail_content_add ul li {
   line-height: 30px;
   color: #666;
 }
 .detail_content_add ul li span:nth-of-type(1) {
-  color: #FF0304;
+  color: #E32323;
   margin-right: 25px;
 }
 .detail_content_two_right {
@@ -1057,11 +1060,11 @@ a {
   line-height: 50px;
   float: left;
   background: url("../images/resultgray.png") no-repeat top;
-  background-size: 100%;
+  background-size: 100% 100%;
 }
 .footer_guide_right ul li:nth-of-type(2) {
   background: url("../images/result.png") no-repeat top;
-  background-size: 100%;
+  background-size: 100% 100%;
 }
 .on {
   color: #02a774;
@@ -1120,7 +1123,7 @@ span {
 .newprice {
   float: right;
   font-size: 50px;
-  color: #FF0304;
+  color: #E32323;
   margin-top: 30px;
   // font-weight: bold;
   .unit{
@@ -1144,7 +1147,7 @@ span {
   text-align: center;
   line-height: 100px;
   color: #fff;
-  background: #FF0304;
+  background: #E32323;
   width: 750px;
   font-size: 30px;
 }
@@ -1202,7 +1205,7 @@ span {
           line-height: 80px;
           font-size: 26px;
           &.confirm{
-            background-color: #FF0304;
+            background-color: #E32323;
             color: #fff;
             padding-right: 2px;
           }

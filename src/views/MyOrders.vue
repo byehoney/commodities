@@ -313,7 +313,7 @@ export default {
                 letter-spacing:2px;
                 &.active{
                     font-size:28px;
-                    color: #FF0304;
+                    color: #E32323;
                     letter-spacing:2px;
                 }
             }
@@ -587,7 +587,7 @@ export default {
                             }
                             .num{
                                 font-size:24px;
-                                color: #FF0304;
+                                color: #E32323;
                                 line-height:31px;
                                 letter-spacing:3px;
                             }
@@ -603,7 +603,7 @@ export default {
                             display: flex;
                             justify-content: center;
                             align-items: center;
-                            background:  #FF0304;
+                            background:  #E32323;
                             margin-right: 20px;
                             border-radius: 5px;
                             img{
@@ -650,7 +650,7 @@ export default {
                             border-radius: 8px;
                             text-align: center;
                             font-size:26px;
-                            color: #FF0304;
+                            color: #E32323;
                             letter-spacing:1px;
                             display: block;
                             text-align: center;

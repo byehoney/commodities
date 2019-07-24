@@ -61,7 +61,7 @@ export default {
         opacity: 1;
         width: 100vw;
         min-height: 100vh;
-        background-color:#e4393c; 
+        background-color:#E32323; 
         display: flex;
         flex-direction: column;
         align-items: center;

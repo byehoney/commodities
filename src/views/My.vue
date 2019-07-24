@@ -155,7 +155,7 @@ export default {
         display: flex;
         flex-direction: column;
         padding-top: 50px;
-        background-color:  #FF0304;
+        background-color:  #E32323;
         font-family:'MicrosoftYaHei';
         height: 340px;
         .topArea{
@@ -328,7 +328,7 @@ export default {
                 .line{
                     width: 10px;
                     height: 25px;
-                    background-color: #ff4b3a;
+                    background-color: #E32323;
                     margin-right: 17px;
                 }
                 .list_text{
@@ -350,7 +350,7 @@ export default {
         height: 98px;
         line-height: 98px;
         text-align: center;
-        background-color: #9b9b9b;
+        background-color: #666;
         margin: 43px auto 200px;
         border-radius: 8px;
         font-size:30px;

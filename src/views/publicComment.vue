@@ -36,6 +36,7 @@
 </template>
 
 <script>
+import { Toast } from "mint-ui";
 import Headbar from '../components/headerBar'
 import uploadImages from '../components/uploadImages'
 var starOffImg = '../../static/Images/star02@2x.png'

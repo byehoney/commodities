@@ -84,7 +84,7 @@ export default {
             font-size:36px;
             color:rgba(255,255,255,1);
             letter-spacing:3px;
-            background-color: #FF553A;
+            background-color: #E32323;
         }
         .noLogin{
             font-size:30px;

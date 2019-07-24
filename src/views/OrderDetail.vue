@@ -319,7 +319,7 @@ export default {
                     text-align: center;
                     .desState{
                         font-size:24px;
-                        color:#FF0304;
+                        color:#E32323;
                         line-height:31px;
                         letter-spacing:1px;
                     }
@@ -375,7 +375,7 @@ export default {
                     line-height:31px;
                     letter-spacing:1px;
                     &.red{
-                        color:#FF0304;
+                        color:#E32323;
                     }
                 }
             }
@@ -400,7 +400,7 @@ export default {
             }
             span{
                 font-size:26px;
-                color:#FF0304;
+                color:#E32323;
                 line-height:35px;
                 letter-spacing:2px;
                 position: relative;

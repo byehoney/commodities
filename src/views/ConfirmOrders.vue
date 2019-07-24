@@ -485,7 +485,7 @@ export default {
       }
       .price {
         font-size: 26px;
-        color: rgba(255, 0, 0, 1);
+        color: #E32323;
         line-height: 35px;
         letter-spacing: 2px;
         margin-right: 61px;
@@ -525,7 +525,7 @@ export default {
         }
         .priceRight {
           font-size: 24px;
-          color: rgba(255, 0, 0, 1);
+          color: #E32323;
           line-height: 31px;
           letter-spacing: 1px;
         }
@@ -616,7 +616,7 @@ export default {
       align-items: center;
       background-color: #fff;
       padding: 29px 46px 34px 45px;
-      border-bottom: 4px solid #ff3b3c;
+      border-bottom: 4px solid #E32323;
       margin-bottom: 8px;
       .localIcon {
         width: 44px;
@@ -720,7 +720,7 @@ export default {
       letter-spacing: 2px;
     }
     .sure {
-      color: #ff0000;
+      color: #E32323;
     }
     .tip {
       font-size: 30px;
@@ -926,7 +926,7 @@ export default {
         color: #666;
         line-height: 95px;
         span {
-          color: #ff0000;
+          color: #E32323;
           font-size: 26px;
         }
       }

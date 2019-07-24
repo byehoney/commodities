@@ -249,7 +249,7 @@ export default {
 .header {
   width: 708px;
   height: 58px;
-  background: #ff0304;
+  background: #E32323;
   font-size: 25px;
   padding: 15px 21px;
   position: fixed;

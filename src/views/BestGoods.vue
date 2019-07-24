@@ -340,7 +340,7 @@ export default {
           line-height: 80px;
           font-size: 26px;
           &.confirm{
-            background-color: #ff1900;
+            background-color: #E32323;
             color: #fff;
             padding-right: 2px;
           }
@@ -455,7 +455,7 @@ export default {
               align-items: center;
               .nPrice {
                 font-size: 26px;
-                color: rgba(255, 25, 0, 1);
+                color: #E32323;
                 line-height: 35px;
               }
               .counter {
@@ -518,7 +518,7 @@ export default {
   }
 }
 .shop_gift_left h3 {
-  color: #ff1900;
+  color: #E32323;
   font-weight: 400;
   margin-right: 26px;
 }
@@ -547,7 +547,7 @@ export default {
 }
 .footer_guide_left p:nth-of-type(2){
     margin-left:26px;
-    color:#ff0000
+    color:#E32323
 }
 .footer_guide_right {
   width: 488px;
@@ -598,7 +598,7 @@ margin-top:15px;
     line-height: 0.29rem;
   }
   span {
-    color: #ff0000;
+    color: #E32323;
     font-size: 26px;
   }
 }

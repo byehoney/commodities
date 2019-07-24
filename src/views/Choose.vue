@@ -450,7 +450,7 @@ export default {
             letter-spacing:2px;
             text-align: center;
              &.active{
-                color: #FF0304;
+                color: #E32323;
             }
         }
     }
@@ -541,9 +541,9 @@ export default {
                         width: 60px;
                         height: 30px;
                         line-height: 26px;
-                        color: #FF0304;
+                        color: #E32323;
                         font-size: 18px;
-                        border: 2px solid  #FF0304;
+                        border: 2px solid  #E32323;
                         text-align: center;
                         border-radius: .05rem;
                         margin-right: 10px;
@@ -555,7 +555,7 @@ export default {
                         font-size:18px;
                         color:rgba(255,255,255,1);
                         line-height:30px;
-                        background:rgba(255,3,4,1);
+                        background:#E32323;
                         border-radius:4px;
                         text-align: center;
                         padding: 0 8px;
@@ -566,10 +566,10 @@ export default {
                     .stock{
                         height: 30px;
                         font-size:18px;
-                        color:rgba(255,3,4,1);
+                        color:#E32323;
                         line-height:26px;
                         border-radius:4px;
-                        border:2px solid rgba(255,3,4,1);
+                        border:2px solid #E32323;
                         text-align: center;
                         padding: 0 8px;
                         margin-bottom: 10px;
@@ -582,7 +582,7 @@ export default {
                         font-size: 18px;
                         line-height: 30px;
                         text-align: center;
-                        color: #FF0304;
+                        color: #E32323;
                         border-radius: .05rem;
                         border: 2px solid #F8E71C;
                         margin-bottom: 10px;
@@ -593,9 +593,9 @@ export default {
                     width: 68px;
                     height: 30px;
                     line-height: 30px;
-                    color: #FF0304;
+                    color: #E32323;
                     font-size: 18px;
-                    border: 2px solid  #FF0304;
+                    border: 2px solid  #E32323;
                     text-align: center;
                     border-radius: .05rem;
                     margin-right: 10px;
@@ -621,7 +621,7 @@ export default {
                                 font-size: 18px;
                                 line-height: 30px;
                                 text-align: center;
-                                color:  #FF0304;
+                                color:  #E32323;
                                 border-radius: .05rem;
                                 margin-right: 10px;
                                 border: 2px solid #F8E71C;
@@ -632,9 +632,9 @@ export default {
                             width: 68px;
                             height: 30px;
                             line-height: 30px;
-                            color:  #FF0304;
+                            color:  #E32323;
                             font-size: 18px;
-                            border: 2px solid  #FF0304;
+                            border: 2px solid  #E32323;
                             text-align: center;
                             border-radius: .05rem;
                             box-sizing: border-box
@@ -649,7 +649,7 @@ export default {
                                 font-size:32px;
                                 font-family:'MicrosoftYaHei-Bold';
                                 font-weight:bold;
-                                color: #FF0304;
+                                color: #E32323;
                                 line-height:42px;
                                 margin-right: 18px;
                             }
@@ -665,7 +665,7 @@ export default {
                                 font-size:32px;
                                 font-family:'MicrosoftYaHeiLight';
                                 font-weight:bold;
-                                color: #FF0304;
+                                color: #E32323;
                                 line-height:42px;
                                 letter-spacing:1px;
                                 margin-right: 18px;
@@ -757,13 +757,13 @@ export default {
                         background: url('../images/ms_bd.png') no-repeat 0 0;
                         background-size: cover;
                         .time{
-                            color: #FF0304;
+                            color: #E32323;
                             font-family:'MicrosoftYaHei-Bold';
                             font-weight: bold;
                             
                         }
                         .state{
-                            color:  #FF0304;
+                            color:  #E32323;
                             font-family:'MicrosoftYaHei-Bold';
                             font-weight: bold;
                         }
@@ -773,7 +773,7 @@ export default {
                             height:0;
                             border-width:0 15px 25px;
                             border-style:solid;
-                            border-color:transparent transparent #FF0304;/*透明 透明  灰*/
+                            border-color:transparent transparent #E32323;/*透明 透明  灰*/
                             margin:40px auto;
                             position:absolute;
                             bottom: -39px;
@@ -787,7 +787,7 @@ export default {
                     .limt{
                         font-size:20px;
                         font-family:'MicrosoftYaHei';
-                        color: #FF0304;
+                        color: #E32323;
                         line-height:26px;
                     }
                 }
@@ -799,8 +799,8 @@ export default {
                 position: relative;
                 .ms_icon{
                     position: absolute;
-                    width: 28px;
-                    height: 30px;
+                    width: 45px;
+                    height: 47px;
                     top: 0;
                     right: 5px;
                 }
@@ -808,7 +808,7 @@ export default {
             .limt{
                 font-size:20px;
                 font-family:'MicrosoftYaHei';
-                color: #FF0304;
+                color: #E32323;
                 line-height:43px;
                 position: absolute;
                 bottom: 8px;
@@ -877,7 +877,7 @@ export default {
                             font-size:32px;
                             font-family:'MicrosoftYaHei-Bold';
                             font-weight:bold;
-                            color: #FF0304;
+                            color: #E32323;
                             line-height:42px;
                             margin-right: 18px;
                         }
@@ -893,7 +893,7 @@ export default {
                             font-size:32px;
                             font-family:'MicrosoftYaHeiLight';
                             font-weight:bold;
-                            color: #FF0304;
+                            color: #E32323;
                             line-height:42px;
                             letter-spacing:1px;
                             margin-right: 18px;

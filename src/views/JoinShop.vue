@@ -302,7 +302,7 @@ export default {
       letter-spacing: 2px;
     }
     .sure {
-      color: #FF0304;
+      color: #E32323;
     }
     .tip {
       font-size: 30px;
@@ -326,10 +326,10 @@ export default {
     line-height: 82px;
     background: rgba(255, 255, 255, 1);
     border-radius: 4px;
-    border: 1px solid #FF0304;
+    border: 1px solid #E32323;
     margin: 62px auto 46px;
     font-size: 26px;
-    color: #FF0304;
+    color: #E32323;
     letter-spacing: 3px;
     text-align: center;
   }

@@ -199,7 +199,7 @@ export default {
             span{
                 font-size:32px;
                 font-weight:bold;
-                color:rgba(255,25,0,1);
+                color:#E32323;
                 line-height:42px;
                 margin-left: 16px;
             }
@@ -271,8 +271,8 @@ export default {
                     display: flex;
                     align-items: center;
                     img{
-                        width: 28px;
-                        height: 19px;
+                        width: 54px;
+                        height: 30px;
                         margin-right: 12px;
                     }
                     span{
@@ -302,7 +302,7 @@ export default {
                         display: flex;
                         .nPrice{
                             font-size:26px;
-                            color:rgba(255,25,0,1);
+                            color:#E32323;
                             line-height:35px;
                             margin-right: 30px;
                         }
@@ -318,7 +318,7 @@ export default {
                     .btn{
                         width: 125px;
                         height: 51px;
-                        background-color: #FF413B;
+                        background-color: #E32323;
                         border-radius: 5px;
                         line-height: 51px;
                         text-align: center;

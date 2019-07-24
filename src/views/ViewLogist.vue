@@ -263,7 +263,7 @@ export default {
                     color:rgba(51,51,51,1);
                     line-height:31px;
                     letter-spacing:1px;
-                    border-left: 10px solid #FF1240;
+                    border-left: 10px solid #E32323;
                     padding-left: 10px;
                     margin-bottom: 46px;
                 }
@@ -310,7 +310,7 @@ export default {
             }
             span{
                 font-size:26px;
-                color:rgba(255,0,0,1);
+                color:#E32323;
                 line-height:35px;
                 letter-spacing:2px;
                 position: relative;

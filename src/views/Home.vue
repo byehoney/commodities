@@ -342,7 +342,7 @@ export default {
     width: 228px;
     height: 259px;
     position: relative;
-    border: 2px solid #FF0304;
+    border: 2px solid #E32323;
     border-radius:6px;
     .tip_bg{
       width: 228px;
@@ -487,7 +487,7 @@ export default {
   background: #fff;
 }
 .special_header span:nth-of-type(3) {
-  color: #FF0304;
+  color: #E32323;
   margin-left: 8px;
 }
 .special_header span:nth-of-type(3) div {
@@ -495,7 +495,7 @@ export default {
   width: 33px;
   height: 33px;
   color: #fff;
-  background: #FF0304;
+  background: #E32323;
   text-align: center;
   line-height: 34px;
   font-size: 18px;
@@ -515,7 +515,7 @@ export default {
   height: 229px;
   background: #fff;
   margin-right: 12px;
-  border: 2px solid #FF0304;
+  border: 2px solid #E32323;
   border-radius: 8px;
   font-size: 18px;
   position: relative;
@@ -534,8 +534,8 @@ export default {
   object-fit: scale-down;
 }
 .special_content_left .ms_icon{
-  width: 28px;
-  height: 30px;
+  width: 45px;
+  height: 47px;
   position: absolute;
   top: 0;
   left: 14px;

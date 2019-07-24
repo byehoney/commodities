@@ -140,7 +140,7 @@ export default {
 .backHome{
   float: right;
   margin-right: 38px;
-  color: #ff0304;
+  color: #E32323;
 }
 .class {
   background: #e5e5e5;
