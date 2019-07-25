@@ -44,6 +44,7 @@ import { Toast } from "mint-ui";
 import LocalHeader from "../components/Header";
 import { mapGetters ,mapMutations} from "vuex";
 import { getHotSearchList } from '@/api/index';
+import { setTimeout } from 'timers';
 export default {
   data() {
     return {
@@ -85,6 +86,9 @@ export default {
   mounted() {
     this.result()
     this.getHostList();
+    setTimeout(()=>{
+      document.getElementById("input").focus();
+    },500)
   },
   methods: {
      ...mapMutations('login',['savePzTerm']),

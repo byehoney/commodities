@@ -154,7 +154,7 @@ export default {
         }
     },
     computed:{
-        ...mapState('login',['user','flTermS','cjTermS','pzTermS']),
+        ...mapState('login',['user','flTermS','cjTermS','pzTermS','lastFilterInfo']),
         ...mapGetters('login',['token','userId','corpCode','companyId','userRole'])
     },
     filters:{
@@ -177,8 +177,8 @@ export default {
             // let flTerm = this.$route.query.flTerm?this.$route.query.flTerm:'';
             // let cjTerm = this.$route.query.cjTerm?this.$route.query.cjTerm:'';
             // let pzTerm = this.$route.query.pzTerm?this.$route.query.pzTerm:'';
-            let flTerm = this.flTermS;
-            let cjTerm = this.cjTermS;
+            let flTerm = this.lastFilterInfo.flTermS;
+            let cjTerm = this.lastFilterInfo.cjTermS;
             let pzTerm = this.pzTermS;
             if(showTab!=''&&showTab!=undefined){
                 this.curType = showTab;

@@ -150,7 +150,7 @@ export default {
         userRole: this.userRole
       };
       this.$emit("closelist", this.showlist);
-      this.$router.push({name:'search',query:{backPath:this.$route.path}});
+      this.$router.replace({name:'search',query:{backPath:this.$route.path}});
       if (this.searchStr.length == 0) {
         this.$emit("closehistory", this.oldHistory);
         return;

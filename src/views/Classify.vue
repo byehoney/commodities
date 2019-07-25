@@ -28,7 +28,7 @@
             </div> -->
           </li>
         </ul>
-        <div class="right">
+        <div class="right" :style="styleObj">
           <!-- <div class="factoryList" v-if="isActive==0">
             <div class="listItem">
               造型烟花
@@ -41,9 +41,13 @@
             </div>
           </div> -->
           <div class="typeList">
-            <div :class="['typeItem',isFact?'factItem':'']" @click="setClass(item.kindCode)" v-for="(item,index) in branchList" :key="index">
+            <div :class="['typeItem',isFact?'factItem':'',cjItem==item.kindCode||flItem==item.kindCode?'active':'']" @click="setClass(item.kindCode)" v-for="(item,index) in branchList" :key="index">
               {{item.kindName}}
             </div>
+          </div>
+          <div class="btnGroup">
+            <img @click="resetFilter" src="../images/sel_cancel.png" alt="">
+            <img @click="confirmFilter" src="../images/sel_confirm.png" alt="">
           </div>
         </div>
       </div>
@@ -62,6 +66,8 @@ export default {
   data() {
     return {
       mainCode:'',
+      cjItem:'',
+      flItem:'',
       isFact:false,
       styleObj:{},
       isActive:0,
@@ -72,15 +78,17 @@ export default {
     };
   },
   computed:{
-    ...mapState('login',['cjTermS','flTermS']),
+    ...mapState('login',['cjTermS','flTermS','mainCodeC','mainCodeS','lastFilterInfo']),
     ...mapGetters('login',['token','userId','corpCode','companyId','userRole'])
   },
   created(){
     this.styleObj = {
-      height:(window.screen.height-98)+'px',
+      height:(window.screen.height-93)+'px',
     }
   },
   mounted(){
+    this.cjItem = this.lastFilterInfo.cjTermS;
+    this.flItem = this.lastFilterInfo.flTermS;
     this.getMainClass();
     if(this.$route.query.code){
       this.changeClass(this.$route.query.index,this.$route.query.code)
@@ -88,7 +96,7 @@ export default {
     // console.log(this.$route)
   },
   methods:{
-    ...mapMutations('login',['saveFlTerm','saveCjTerm']),
+    ...mapMutations('login',['saveFlTerm','saveCjTerm','saveLastFilterInfo','resetTerm']),
     changeClass(index,code){
       if(code == 'Factory'){
         this.isFact = true;
@@ -114,8 +122,18 @@ export default {
       }else{
         this.isFact = false;
       }
-      if(!this.$route.query.code){
+      if(!this.$route.query.code&&!this.cjTermS&&!this.flTermS){
         this.getBranch(this.list[0].kindCode);
+      }else if(!this.$route.query.code&&this.flTermS){
+        // this.getBranch(this.mainCodeS);
+        let index = this.list.findIndex((item)=>item.kindCode==this.mainCodeS);
+        console.log(index)
+        this.changeClass(index,this.mainCodeS)
+      }else if(!this.$route.query.code&&this.cjTermS){
+        this.isFact = true;
+        let index = this.list.findIndex((item)=>item.kindCode==this.mainCodeC);
+        this.changeClass(index,this.mainCodeC)
+        // this.getBranch(this.mainCodeC);
       }
     },
     async getBranch(code){
@@ -131,12 +149,28 @@ export default {
     },
     setClass(code){
       if(this.isFact){
-        this.saveCjTerm(code);
-        this.$router.push({name:'choose',query:{cjTerm:code}})
+        this.cjItem = code;
+        this.saveCjTerm({cjTermS:code,mainCodeC:this.mainCode});
+        // this.$router.push({name:'choose',query:{cjTerm:code}})
       }else{
-        this.saveFlTerm({flTermS:code,mainCode:this.mainCode});
-        this.$router.push({name:'choose',query:{flTerm:code}})
+        this.flItem = code;
+        this.saveFlTerm({flTermS:code,mainCodeS:this.mainCode});
+        // this.$router.push({name:'choose',query:{flTerm:code}})
       }
+    },
+    confirmFilter(){
+      this.saveLastFilterInfo({
+        flTermS:this.flTermS,
+        cjTermS:this.cjTermS,
+        mainCodeC:this.mainCodeC,
+        mainCodeS:this.mainCodeS,
+      })
+      this.$router.push({name:'choose'})
+    },
+    resetFilter(){
+      this.cjItem = '';
+      this.flItem = '';
+      this.resetTerm();
     }
   }
 };
@@ -147,6 +181,7 @@ export default {
   float: right;
   margin-right: 38px;
   color: #E32323;
+  position: relative;
 }
 .class {
   background: #e5e5e5;
@@ -184,6 +219,19 @@ export default {
   .right{
     flex: 1;
     background-color: #fff;
+    position: relative;
+    overflow-y: scroll;
+    .btnGroup{
+      position: fixed;
+      width: 524px;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      img{
+        width: 50%;
+        height: 98px;
+      }
+    }
     .factoryList{
       width: 100%;
       .listItem{
@@ -198,7 +246,7 @@ export default {
       }
     }
     .typeList{
-      padding: 0 20px;
+      padding: 0 20px 150px;
       display: flex;
       justify-content: space-between;
       flex-wrap: wrap;
@@ -213,6 +261,9 @@ export default {
           border-bottom: 2px solid #ebebeb;
           padding-top: 30px;
           padding-bottom: 30px;
+        }
+        &.active{
+          color: #E32323;
         }
       }
     }

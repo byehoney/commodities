@@ -11,7 +11,14 @@ export default {
         flTermS:'',//商品搜索分类
         cjTermS:'',//商品搜索厂家
         pzTermS:'',//商品搜索品种
-        mainCode:'',//商品搜索 分类查询mainCode
+        mainCodeC:'',//商品搜索 厂家 mainCode
+        mainCodeS:'',//商品搜索 分类查询mainCode
+        lastFilterInfo:{
+            flTermS:'',
+            cjTermS:'',
+            mainCodeC:'',
+            mainCodeS:'',
+        }
     },
     mutations: {
         [type.LOGIN](state, data) {
@@ -60,19 +67,29 @@ export default {
         },
         saveFlTerm(state,data){
             state.flTermS = data.flTermS;
-            state.mainCode = data.mainCode;
+            state.mainCodeS = data.mainCodeS;
         },
         saveCjTerm(state,data){
-            state.cjTermS = data;
+            state.cjTermS = data.cjTermS;
+            state.mainCodeC = data.mainCodeC;
         },
         savePzTerm(state,data){
             state.pzTermS = data;
         },
+        saveLastFilterInfo(state,data){
+            state.lastFilterInfo = data;
+        },
         resetTerm(state){
-            state.mainCode='';
+            state.mainCodeC='';
+            state.mainCodeS='';
             state.flTermS='';//商品搜索分类
             state.cjTermS='';//商品搜索厂家
-            state.pzTermS='';//商品搜索品种
+            state.lastFilterInfo ={
+                flTermS:'',
+                cjTermS:'',
+                mainCodeC:'',
+                mainCodeS:'',
+            }
         }
     },
     actions: {
