@@ -7,7 +7,11 @@ export default {
         token: localStorage.getItem('token') || '',
         user: JSON.parse(localStorage.getItem('userData')) || {},
         orderInfo:{list:[],mzList:[]},//购物车信息
-        mzInfo:[],//确认订单的满赠赠品
+        mzInfo:[],//确认订单的满赠赠品,
+        flTermS:'',//商品搜索分类
+        cjTermS:'',//商品搜索厂家
+        pzTermS:'',//商品搜索品种
+        mainCode:'',//商品搜索 分类查询mainCode
     },
     mutations: {
         [type.LOGIN](state, data) {
@@ -53,6 +57,22 @@ export default {
         restOrderInfo(state){
             state.orderInfo={list:[],mzList:[]};
             state.mzInfo=[];
+        },
+        saveFlTerm(state,data){
+            state.flTermS = data.flTermS;
+            state.mainCode = data.mainCode;
+        },
+        saveCjTerm(state,data){
+            state.cjTermS = data;
+        },
+        savePzTerm(state,data){
+            state.pzTermS = data;
+        },
+        resetTerm(state){
+            state.mainCode='';
+            state.flTermS='';//商品搜索分类
+            state.cjTermS='';//商品搜索厂家
+            state.pzTermS='';//商品搜索品种
         }
     },
     actions: {

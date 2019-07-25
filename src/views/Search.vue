@@ -42,7 +42,7 @@
 <script>
 import { Toast } from "mint-ui";
 import LocalHeader from "../components/Header";
-import { mapGetters } from "vuex";
+import { mapGetters ,mapMutations} from "vuex";
 import { getHotSearchList } from '@/api/index';
 export default {
   data() {
@@ -87,6 +87,7 @@ export default {
     this.getHostList();
   },
   methods: {
+     ...mapMutations('login',['savePzTerm']),
     async getHostList(){
       let defaulParams = {
         token: this.token,
@@ -194,6 +195,7 @@ export default {
     },
     // 点击历史记录跳到choose列表
     listSearch(item){
+      this.savePzTerm(item);
       this.$router.push("/choose?pzTerm="+item)
     },
     getSearchStr(val){

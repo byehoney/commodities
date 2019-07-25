@@ -54,13 +54,14 @@
 <script>
 import LocalHeader from "../components/Header";
 import {getMoreKindsMain,getMoreKindsBranch} from '@/api/index'
-import { mapGetters } from 'vuex'
+import { mapGetters,mapMutations,mapState } from 'vuex'
 export default {
   components: {
     LocalHeader
   },
   data() {
     return {
+      mainCode:'',
       isFact:false,
       styleObj:{},
       isActive:0,
@@ -71,6 +72,7 @@ export default {
     };
   },
   computed:{
+    ...mapState('login',['cjTermS','flTermS']),
     ...mapGetters('login',['token','userId','corpCode','companyId','userRole'])
   },
   created(){
@@ -83,15 +85,17 @@ export default {
     if(this.$route.query.code){
       this.changeClass(this.$route.query.index,this.$route.query.code)
     }
-    console.log(this.$route)
+    // console.log(this.$route)
   },
   methods:{
+    ...mapMutations('login',['saveFlTerm','saveCjTerm']),
     changeClass(index,code){
       if(code == 'Factory'){
         this.isFact = true;
       }else{
         this.isFact = false;
       }
+      this.mainCode = code;
       this.isActive=index;
       this.getBranch(code);
     },
@@ -127,8 +131,10 @@ export default {
     },
     setClass(code){
       if(this.isFact){
+        this.saveCjTerm(code);
         this.$router.push({name:'choose',query:{cjTerm:code}})
       }else{
+        this.saveFlTerm({flTermS:code,mainCode:this.mainCode});
         this.$router.push({name:'choose',query:{flTerm:code}})
       }
     }

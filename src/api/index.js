@@ -34,8 +34,9 @@ function checkExist(params) {//验证手机号
 function checkForget(params) {//验证忘记密码手机号
     return post('/mobile/check/legitimate.do', params)
 }
-
-
+function getBannerVideo(params){//获取首页banner 和 视频
+    return post('/index/get/operation.do', params)  
+}
 function login(params) {//用户登陆
     return post('/user/login.do', params)
 }
@@ -345,6 +346,7 @@ function reqManageOrderDetail(params){//获取管理页面订单详情
     return post('/manage/get/orderdetail.do',params)
 }
 export {
+    getBannerVideo,
     checkForget,
     checkExist,
     getYzCode,

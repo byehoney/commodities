@@ -7,18 +7,15 @@
     <div class="loop_pic">
       <!-- <div> -->
       <mt-swipe :auto="4000" :show-indicators="true">
+        <mt-swipe-item class="item" v-for="(item,index) in bannerList" :key="index">
+          <img :src="item" alt="">
+        </mt-swipe-item>
         <!-- <mt-swipe-item class="item">
-          <img src="../images/banner_01.jpg" alt="">
+          <img src="../images/banner_02.png" alt="">
+        </mt-swipe-item>
+        <mt-swipe-item class="item">
+          <img src="../images/banner_02.png" alt="">
         </mt-swipe-item> -->
-        <mt-swipe-item class="item">
-          <img src="../images/banner_02.png" alt="">
-        </mt-swipe-item>
-        <mt-swipe-item class="item">
-          <img src="../images/banner_02.png" alt="">
-        </mt-swipe-item>
-        <mt-swipe-item class="item">
-          <img src="../images/banner_02.png" alt="">
-        </mt-swipe-item>
       </mt-swipe>
       <!-- </div> -->
       <!-- 轮播图 -->
@@ -104,15 +101,16 @@
     </div>
     <!-- special 结束 -->
     <div class="home_video" style="display:no-ne">
-      <div class="home_video_list">
+      <div class="home_video_list" v-for="(item,index) in videoList" :key="index">
         <div class="home_video_list_header">
-          <h3>标题</h3>
+          <h3>{{item.description}}</h3>
         </div>
         <div class="home_video_list_content detail_loop">
           <video-player   class="video-player vjs-custom-skin"
                 ref="videoPlayer"
                 :playsinline="true"
-                :options="playerOptions"
+                :options="item.source"
+                @play="onPlayerPlay($event,index)"
             >
           </video-player>
           <!-- <video
@@ -136,6 +134,7 @@
 </template>
 <script>
 // @ is an alias to /src
+import axios from 'axios'
 import DrawerLeft from "@/components/DrawerLeft";
 import TabBarBottom from "@/components/TabBarBottom";
 import LocalHeader from "@/components/Header";
@@ -148,13 +147,15 @@ import 'video.js/dist/video-js.css'
 // //引入hls.js
 // import "videojs-contrib-hls.js/src/videojs.hlsjs";
 
-import { getHeatList,getIndexInfo, getSpecialList, secKill ,getActivityInfo} from "@/api/index";
+import { getHeatList,getIndexInfo, getSpecialList, secKill ,getActivityInfo,getBannerVideo} from "@/api/index";
 import { mapState,mapGetters } from "vuex";
-import { setInterval } from "timers";
+import { setInterval, setTimeout } from "timers";
 export default {
   name: "home",
   data() {
     return {
+      bannerList:[],
+      videoList:[],
       showTc:false,//显示套餐活动入口
       showMz:false,//显示买赠活动入口
       timer: null,
@@ -166,35 +167,6 @@ export default {
       boutique: [],
       secKillList: [],
       cx: 0, //限时特价促销的判断条件
-      playerOptions: {
-        //        playbackRates: [0.7, 1.0, 1.5, 2.0], //播放速度
-        autoplay: false, //如果true,浏览器准备好时开始回放。
-        muted: false, // 默认情况下将会消除任何音频。
-        loop: false, // 导致视频一结束就重新开始。
-        preload: "auto", // 建议浏览器在<video>加载元素后是否应该开始下载视频数据。auto浏览器选择最佳行为,立即开始加载视频（如果浏览器支持）
-        language: "zh-CN",
-        aspectRatio: "16:9", // 将播放器置于流畅模式，并在计算播放器的动态大小时使用该值。值应该代表一个比例 - 用冒号分隔的两个数字（例如"16:9"或"4:3"）
-        fluid: true, // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
-        sources: [
-          {
-            type: "",
-            src: "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4" //你的视频地址（必填）
-          },
-          {
-            type: "",
-            src: "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4" //你的视频地址（必填）
-          }
-        ],
-        // poster: "poster.jpg", //你的封面地址
-        width: document.documentElement.clientWidth,
-        notSupportedMessage: "此视频暂无法播放，请稍后再试", //允许覆盖Video.js无法播放媒体源时显示的默认信息。
-        controlBar: {
-          timeDivider: true,
-          durationDisplay: true,
-          remainingTimeDisplay: false,
-          fullscreenToggle: true //全屏按钮
-        }
-      }
     };
   },
 
@@ -208,6 +180,42 @@ export default {
     if(this.userRole&&this.userRole!='06'&&this.userRole!='07'){
       this.$router.replace('/manageHome')
     }
+    let data = {};
+    axios.post('/index/get/operation.do',data).then((res)=>{
+      console.log(res)
+      let banners = [];
+      let videoList = [];
+      res.data.data.pictures.forEach((item,index)=>{
+        banners.push('http://119.3.219.52:8080/platform/getImageStream.do?urlPath='+item);
+      })
+      res.data.data.videos.forEach((item,index)=>{
+        let infos ={
+          description:item.description,
+          poster:'http://119.3.219.52:8080/platform/getImageStream.do?urlPath='+item.imageUrl,
+          source:{
+            playbackRates: [0.7, 1.0, 1.5, 2.0], //播放速度
+            autoplay: false, //如果true,浏览器准备好时开始回放。
+            muted: false, // 默认情况下将会消除任何音频。
+            loop: false, // 导致视频一结束就重新开始。
+            preload: 'auto', // 建议浏览器在<video>加载元素后是否应该开始下载视频数据。auto浏览器选择最佳行为,立即开始加载视频（如果浏览器支持）
+            language: 'zh-CN',
+            aspectRatio: '16:9', // 将播放器置于流畅模式，并在计算播放器的动态大小时使用该值。值应该代表一个比例 - 用冒号分隔的两个数字（例如"16:9"或"4:3"）
+            fluid: true, // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
+            sources: [{
+              src: item.videoUrl,  // 路径
+            }],
+            poster: 'http://119.3.219.52:8080/platform/getImageStream.do?urlPath='+item.imageUrl, //你的封面地址
+            notSupportedMessage: '此视频暂无法播放，请稍后再试', //允许覆盖Video.js无法播放媒体源时显示的默认信息。
+            controlBar: {
+              fullscreenToggle: true  //全屏按钮
+            }
+          }
+        }
+        videoList.push(infos);
+      })
+      this.bannerList = banners;
+      this.videoList = videoList;
+    })
     let defaulParams = {
         token:this.token,
         userId:this.userId,
@@ -240,6 +248,16 @@ export default {
     // this.showMz = actInfo.data.mzCount>0?true:false;
   },
   methods: {
+    onPlayerPlay(player,index){
+      if(document.getElementsByClassName('vjs-play-control vjs-control vjs-button vjs-playing').length>1){
+        this.videoList.forEach((item,jIndex)=>{
+          if(index!=jIndex){
+            document.getElementsByClassName('vjs-play-control vjs-control vjs-button vjs-playing')[jIndex].click();
+          }
+        })
+      }
+      // this.player[1].$listeners.play(false)
+    },
     goChoose(index){
       this.$router.push({name:'choose',query:{showTab:index}})
     },
@@ -285,15 +303,13 @@ export default {
         }
       }, 1000);
     },
-    onPlayerPlay(player) {},
-    onPlayerPause(player) {}
   },
 
   computed: {
     ...mapState("login", ["user"]),
     ...mapGetters('login',['token','userId','corpCode','companyId','userRole']),
     player() {
-      return this.$refs.videoPlayer.player;
+      return this.$refs.videoPlayer;
     }
   }
 };
@@ -550,6 +566,7 @@ export default {
   width: 750px;
   height: 420px;
   font-size: 24px;
+  margin-bottom: 100px;
 }
 .home_video_list_header h3 {
   color: #666;

@@ -4,10 +4,13 @@
     <div class="header_logo" v-if="showlogo" @click="goShop"></div>
     <!-- 头部input输入框 -->
     <div class="header_input" v-if="showlogo">
-      <span>
-        <img src="../images/smallsousuo.png">
+      <span v-if="!showScan">
+        <img  src="../images/smallsousuo.png">
       </span>
-      <input type="text" v-model="searchStr" @focus="search" placeholder="请输入烟花名称">
+      <span class="pScan" v-else @click="scan('buy')">
+        <img  src="../images/pScan.png">
+      </span>
+      <input id="common" type="text" v-model="searchStr" @focus="doSearch" placeholder="请输入烟花名称">
     </div>
     <!-- 头部切换的输入框 -->
     <div class="header_input newheader" v-else ref="sel">
@@ -40,7 +43,7 @@
             </span>
             <span>门店切换</span>
           </li>
-          <li @click="scan">
+          <li @click="scan('login')">
             <span>
               <img src="../images/saoma.png">
             </span>
@@ -57,13 +60,15 @@
 <script>
 import DrawRight from "./DrawerRight";
 import { autoSearch } from "@/api/index";
-import { mapGetters } from "vuex";
+import { mapGetters,mapState,mapMutations } from "vuex";
 import { setTimeout } from 'timers';
 let scan = null;
 export default {
-  props: ["data", "showHistory"],
+  props: ["data", "showHistory","pScan"],
   data() {
     return {
+      // showScan:false,
+      scanType:'',
       showlogo: true,
       searchStr: "",
       hide: "",
@@ -76,6 +81,7 @@ export default {
     };
   },
   computed: {
+    ...mapState('login',['flTermS','cjTermS','pzTermS']),
     ...mapGetters("login", [
       "token",
       "userId",
@@ -85,6 +91,7 @@ export default {
     ])
   },
   methods: {
+    ...mapMutations('login',['savePzTerm']),
     // 判断是否是安卓设备
     isAndroid() {
       var browser = {
@@ -112,6 +119,9 @@ export default {
       };
       return browser.versions.android;
     },
+    doSearch(){
+      this.$router.push({name:'search'})
+    },
     // 跳转到商家公告
     goShop() {
       this.$router.push("/public");
@@ -125,8 +135,9 @@ export default {
     // 查询input中输入的值
     SearchVal() {
       if (this.searchStr.trim()) {
+        this.savePzTerm(this.searchStr.trim());
         this.$emit("receve", this.searchStr.trim());
-        this.searchStr = "";
+        // this.searchStr = "";
       }
     },
     async search() {
@@ -156,6 +167,7 @@ export default {
       }
     },
     cancelSearch() {
+      this.savePzTerm('');
       this.$router.push(this.$route.query.backPath?this.$route.query.backPath:'/')
     },
     showcode() {
@@ -182,37 +194,45 @@ export default {
     goMore() {
       this.$router.push({ name: "classify" });
     },
-    scan() {
+    scan(type) {
+      if(type=='login'){
+        this.scanType = 'login';
+      }else{
+        this.scanType = 'buy';
+      }
       var u_agent = navigator.userAgent;
       if (!this.isAndroid()) {
         window.webkit.messageHandlers.scanQRCode.postMessage({});
       } else {
         window.android.scanQRCode();
       }
-      // if(this.isAndroid()){
-      //   window.android.scanQRCode();
-      // }else{
-      //   window.webkit.messageHandlers.scanQRCode.postMessage();
-      // }
     },
     scanResult(str) {
-      this.$router.push({ name: "pcLogin", query: { code: str } });
-    }
-  },
-  watch: {
-    '$route' (val, old) { 
-      if(val.query.pzTerm){
-        this.searchStr = val.query.pzTerm;
+      if(this.scanType=='login'){
+        this.$router.push({ name: "pcLogin", query: { code: str } });
+      }else{
+        this.$router.push({name:'detail',query:{id:str}});
       }
     }
   },
+  watch: {
+    'pzTermS' (val, old) { 
+      this.searchStr = this.pzTermS
+    }
+  },
   async mounted() {
-    console.log(this.$route)
+    console.log(this.pzTermS)
+    this.searchStr = this.pzTermS;
     window.scanResult = this.scanResult;
     if (this.data == "search") {
       this.showlogo = false;
     } else {
       this.showlogo = true;
+    }
+    if(this.pScan=='scan'){
+      this.showScan = true;
+    }else{
+      this.showScan = false;
     }
     this.remove();
   },
@@ -275,6 +295,15 @@ export default {
   float: left;
   margin: 0 0 0 21px;
   background: #fff;
+  display: flex;
+  align-items: center;
+  .pScan{
+    display: inline-block;
+    width: 36px;
+    height: 36px;
+    margin-left: 21px;
+    // vertical-align: sub;
+  }
 }
 .form{
   width: 80%;

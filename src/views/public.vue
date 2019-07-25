@@ -165,7 +165,7 @@ export default {
       }
     },
     goHome() {
-      this.$router.push("/");
+      this.$router.go(-1);
     },
     change() {
       this.rightWinShow = !this.rightWinShow;

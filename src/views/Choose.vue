@@ -7,7 +7,7 @@
                 <img class="selIcon" src="../images/sel_ld_icon.png" alt="">
                 <div class="header_search"></div>
             </div> -->
-            <LocalHeader/>
+            <LocalHeader pScan="scan"/>
             <div class="selBar">
                 <div :class="['selBar_item',{'active':curType==index}]" 
                      @click="changeType(index)"
@@ -154,7 +154,7 @@ export default {
         }
     },
     computed:{
-        ...mapState('login',['user']),
+        ...mapState('login',['user','flTermS','cjTermS','pzTermS']),
         ...mapGetters('login',['token','userId','corpCode','companyId','userRole'])
     },
     filters:{
@@ -170,12 +170,16 @@ export default {
         TabBarBottom
     },
     activated(){
+        console.log(this)
         this.loading = false;
         if (!this.$route.meta.canKeep) {
             let showTab = this.$route.query.showTab?this.$route.query.showTab:'';
-            let flTerm = this.$route.query.flTerm?this.$route.query.flTerm:'';
-            let cjTerm = this.$route.query.cjTerm?this.$route.query.cjTerm:'';
-            let pzTerm = this.$route.query.pzTerm?this.$route.query.pzTerm:'';
+            // let flTerm = this.$route.query.flTerm?this.$route.query.flTerm:'';
+            // let cjTerm = this.$route.query.cjTerm?this.$route.query.cjTerm:'';
+            // let pzTerm = this.$route.query.pzTerm?this.$route.query.pzTerm:'';
+            let flTerm = this.flTermS;
+            let cjTerm = this.cjTermS;
+            let pzTerm = this.pzTermS;
             if(showTab!=''&&showTab!=undefined){
                 this.curType = showTab;
             }else{
@@ -225,13 +229,13 @@ export default {
         next()
     },
     beforeRouteEnter (to, from, next) {
-        if(from.name == 'detail'){
+        if(from.name == 'detail'||from.name=='public'){
             to.meta.canKeep = true;
             next(vm => {
                 // 通过 `vm` 访问组件实例
                 vm.$nextTick(function(){
                     let position = sessionStorage.getItem('top') //返回页面取出来
-                    console.log("beforeRouteEnter moments update: ", position);
+                    // console.log("beforeRouteEnter moments update: ", position);
                     // document.getElementsByClassName('scrollBox')[0].scroll(0, position)
                     window.scrollTo({ 
                         top: position, 
@@ -307,7 +311,7 @@ export default {
             }
             this.list = [...this.list,...res.data.list];
           
-            console.log(this.loading)
+            // console.log(this.loading)
         },
         loadMore() {
             if(this.moreLoading||!this.hasMore){
