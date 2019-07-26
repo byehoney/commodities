@@ -494,7 +494,7 @@ a {
   line-height: 50px;
   float: left;
   background: url("../images/resultgray.png") no-repeat top;
-  background-size: 100%;
+  background-size: 100% 100%; 
 }
 span {
   display: inline-block;

@@ -15,12 +15,18 @@
       </div>
       <div class="top">
         <div class="left">
-          <div :class="['date long',dateActive?'active':'']" @click="selDate">
+          <div class="inputArea">
+            <span>天数</span>
+            <form @submit.prevent @keypress="searchGoods" class="form">
+              <input v-model="days" type="Number">
+            </form>
+          </div>
+          <!-- <div :class="['date long',dateActive?'active':'']" @click="selDate">
               {{dateList[curDateIndex]}}
               <div class="dataList" v-if="showDateList">
                   <p :class="['dataItem',curDateIndex==index?'active':'']" @click="selCurDate($event,index)" v-for="(item,index) in dateList" :key="index">{{item}}</p>
               </div>
-          </div>
+          </div> -->
           <div :class="['type',typeActive?'active':'']" @click="selType">
               {{typeList[curTypeIndex].text}}
               <div class="typeList" v-if="showTypeList">
@@ -92,6 +98,7 @@ export default {
       showDateList:false,
       showTypeList:false,
       showAreaList:false,
+      days:30,
       dateList:['近七天','近三十天','近三个月','近六个月'],
       typeList:[{text:'商品',sort:0},{text:'门店',sort:1}],
       areaList:[{regionCode: "", regionName: "全国"}],
@@ -135,6 +142,12 @@ export default {
     this.loading = false;
   },
   methods:{
+    searchGoods(event){
+      if (event.keyCode == 13) {
+        event.preventDefault(); //禁止默认事件（默认是换行）
+        this.getData();
+      }
+    },
     // handlerArea(){
     //     this.areaVisible = !this.areaVisible;
     // },
@@ -176,7 +189,8 @@ export default {
             companyId:this.companyId,
             userRole:this.userRole,
             pageSize:this.pageSize,
-            pageNum:this.pageNum
+            pageNum:this.pageNum,
+            day:this.days,
         }; 
         let res = '';
         if(this.curTypeIndex==0){
@@ -299,6 +313,25 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.inputArea{
+  width: 150px;
+  font-size:22px;
+  color:#F5A623;
+  letter-spacing:2px;
+  display: flex;
+  align-items: center;
+  span{
+    flex-shrink: 0;
+  }
+  input{
+    width: 100px;
+    border: none;
+    outline: none;
+    font-size:22px;
+    color:#F5A623;
+    padding-left: 20px;
+  }
+}
 .fixed{
   position: fixed;
   width: 100%;

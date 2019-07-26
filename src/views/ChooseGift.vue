@@ -249,7 +249,7 @@ export default {
   line-height: 50px;
   float: left;
   background: url("../images/resultgray.png") no-repeat top;
-  background-size: 100%;
+  background-size: 100% 100%;
 }
 .footer_guide_right ul li:nth-of-type(2) {
   background: url("../images/result.png") no-repeat top;

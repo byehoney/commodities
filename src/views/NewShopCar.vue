@@ -148,7 +148,7 @@
           </div>
           <div class="shop_gift" v-if="mzList[index][0].canSelGift&&jIndex==mzList[index].length-1">
             <div class="shop_gift_bottom">
-              <span @click="chooseGift(index,mzList[index][0].productcode,mzList[index][0].numberormny,mzList[index][0].userBuyNum,mzList[index][0].userBuyMoney)">{{mzList[index][0].selGifts==''?'选择赠品':'已选择'}}</span>
+              <span @click="chooseGift(index,mzList[index][0].productcode,mzList[index][0].numberormny,mzList[index][0].userBuyNum,mzList[index][0].userBuyMoney)">{{mzList[index][0].selGifts.length==0?'选择赠品':'已选择'}}</span>
             </div>
           </div>
         </div>
@@ -722,7 +722,7 @@ export default {
             this.$set(this.mzList[index][0],'canSelGift',true);
           }else{
             this.$set(this.mzList[index][0],'canSelGift',false);
-            this.$set(this.mzList[index][0],'selGifts',[]);
+            this.$set(this.mzList[index][0],'selGifts',this.mzList[index][0].selGifts);
           }
           this.$set(this.mzList[index][0],'userBuyNum',totalNum);
           this.$set(this.mzList[index][0],'userBuyMoney',totalMoney);
@@ -805,14 +805,15 @@ export default {
             pterm.userBuyMoney = 0; 
             this.orderInfo.mzList.forEach((jTtem,jIndex)=>{
               jTtem.forEach((hterm,hIndex)=>{
-                if(hterm.productcode == pterm.productcode){
+                if(hterm.productcode == pterm.productcode&&hterm.buyCode==pterm.buyCode){
                   pterm.checked = hterm.checked;
                   pterm.allChecked = hterm.allChecked;
                   pterm.showAct = hterm.showAct;
                   pterm.canSelGift = hterm.canSelGift;
                   pterm.showTip = hterm.showTip;
                   pterm.errTip = hterm.errTip;
-                  pterm.selGifts=hterm.selGifts;
+                  console.log(hterm.selGifts)
+                  pterm.selGifts = hterm.selGifts;
                   pterm.userBuyNum = hterm.userBuyNum;
                   pterm.userBuyMoney = hterm.userBuyMoney; 
                 }
@@ -820,9 +821,15 @@ export default {
             })
           })
         })
+        
+
+
         this.head = res.data.head;
         this.list = res.data.list;
         this.mzList = res.data.mzList;
+
+        console.log('2222.....');
+        console.log(this.mzList)
         if(this.list.length){
           this.count();
         }
@@ -850,7 +857,9 @@ export default {
           }
         })
       })
-      this.$set(this.mzList[this.curGiftIndex][0],'selGifts',selGift);
+      this.mzList[this.curGiftIndex].forEach((item,index)=>{
+        this.$set(this.mzList[this.curGiftIndex][index],'selGifts',selGift);
+      })
       setTimeout(()=>{
         window.scrollTo(0,this.scrollTop);
       },100)
@@ -876,7 +885,7 @@ export default {
             item.forEach((pterm,pIndex)=>{
               selGifts.forEach((sterm,sIndex)=>{
                 if(sterm.zpbm==pterm.zpbm){
-                  this.$set(this.giftList[index][pIndex],'checked',true)
+                  this.$set(this.giftList[index][pIndex],'checked',true);
                 }
               })
             })
@@ -886,6 +895,7 @@ export default {
           //   this.$set(this.giftList[gIndex],'checked',true)
           // })
         }
+        this.countGiftNum();
         // if(type=='数量满足'){
         //   this.$set(this.giftList[0],'userGiftNum',parseInt(parseInt(userBuyNum)/parseInt(this.giftList[0].mzsl)));
         // }else if(type=='金额满足'){
@@ -1707,11 +1717,11 @@ export default {
     line-height: 50px;
     float: left;
     background: url("../images/resultgray.png") no-repeat top;
-    background-size: 100%;
+    background-size: 100% 100%;
   }
   .footer_guide_right ul li:nth-of-type(2) {
     background: url("../images/result.png") no-repeat top;
-    background-size: 100%;
+    background-size: 100% 100%;
   }
   .on {
     color: #02a774;

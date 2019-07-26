@@ -525,7 +525,7 @@ const router = new Router({
             meta: {
                 auth: true,
                 keepAlive: false,
-                title: 'xx店铺'
+                title: '店铺'
             }
         },
         {
@@ -603,7 +603,7 @@ const router = new Router({
             meta: {
                 auth: true,
                 keepAlive: false,
-                title: 'xx店铺3'
+                title: '店铺'
             }
         },
         {
@@ -614,7 +614,7 @@ const router = new Router({
             meta: {
                 auth: true,
                 keepAlive: false,
-                title: 'xx店铺3'
+                title: '店铺'
             }
         },
         {
@@ -625,7 +625,7 @@ const router = new Router({
             meta: {
                 auth: true,
                 keepAlive: false,
-                title: 'xx店铺3'
+                title: '店铺'
             }
         },
         {
@@ -658,7 +658,7 @@ const router = new Router({
             meta: {
                 auth: true,
                 keepAlive: false,
-                title: 'xx店铺3'
+                title: '店铺'
             }
         },
         {
@@ -680,7 +680,7 @@ const router = new Router({
             meta: {
                 auth: true,
                 keepAlive: false,
-                title: 'xx店铺3'
+                title: '店铺'
             }
         },
         {
@@ -691,7 +691,7 @@ const router = new Router({
             meta: {
                 auth: true,
                 keepAlive: false,
-                title: 'xx店铺3'
+                title: '店铺'
             }
         },
         {
@@ -713,7 +713,7 @@ const router = new Router({
             meta: {
                 auth: true,
                 keepAlive: false,
-                title: 'xx店铺1'
+                title: '店铺'
             }
         },
         {
@@ -723,7 +723,7 @@ const router = new Router({
             meta: {
                 auth: true,
                 keepAlive: false,
-                title: 'xx店铺2'
+                title: '店铺'
             }
         },
         {
@@ -734,7 +734,7 @@ const router = new Router({
             meta: {
                 auth: true,
                 keepAlive: false,
-                title: 'xx店铺3'
+                title: '店铺'
             }
         },
         {
@@ -745,7 +745,7 @@ const router = new Router({
             meta: {
                 auth: true,
                 keepAlive: false,
-                title: 'xx店铺3'
+                title: '店铺'
             }
         },
         {
