@@ -345,6 +345,10 @@ function reqManagePassWaite(params){//通过审核
 function reqManageOrderDetail(params){//获取管理页面订单详情
     return post('/manage/get/orderdetail.do',params)
 }
+
+function getAllCitys(params){//获取管理页面全部省市区
+    return post('/manger/all/city.do',params)
+}
 export {
     getBannerVideo,
     checkForget,
@@ -440,4 +444,5 @@ export {
     reqManageWaitePassDetail,//管理页面获取待审核详情
     reqManagePassWaite,//管理页面通过审核
     reqManageOrderDetail,//管理页面获取订单详情
+    getAllCitys,//管理页面获取全部省市区
 }

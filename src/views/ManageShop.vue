@@ -29,6 +29,7 @@
               <p>门店名称：{{item.companyname}}</p>
               <p>注册地址：{{item.address}}</p>
             </div>
+            <img class="today_icon" v-if="item.sfjrwcl=='是'" src="../images/manage/today_icon.png" alt="">
           </li>
         </ul>
        
@@ -218,7 +219,8 @@ export default {
   ul li {
     display: flex;
     // height: 100px;
-    margin-bottom: 20px;
+    // margin-bottom: 20px;
+    padding: 10px 0;
     border-bottom: 1px solid #dcdcdc;
     .manageChoose_pic {
       width: 40px;
@@ -230,9 +232,15 @@ export default {
       }
     }
     .manageChoose_name {
+      width: 500px;
       p {
         line-height: 40px;
       }
+    }
+    .today_icon{
+      width: 100px;
+      height: 34px;
+
     }
   }
 }

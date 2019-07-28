@@ -121,7 +121,7 @@
       @cancel="handlePickerCancel"
       @confirm="handlePickerConfirm"
     ></awesome-picker>
-    <CityPicker :areaVisible="areaVisible" :setArea="handleSetArea" :cancel="handleCancel"></CityPicker>
+    <CityPicker global="manage" :areaVisible="areaVisible" :setArea="handleSetArea" :cancel="handleCancel"></CityPicker>
   </div>
 </template>
 
@@ -211,7 +211,7 @@ export default {
       this.hasMore = true;
       this.pageNum=1;
       this.list = [];
-      this.loadMore();
+      this.getData();
     },
     async getData(){
       let defaulParams = {
@@ -336,7 +336,7 @@ export default {
       input {
         width: 100%;
         border: none;
-        line-height: 90px;
+        line-height: 80px;
       }
     }
     .check {

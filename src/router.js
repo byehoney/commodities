@@ -771,6 +771,127 @@ const router = new Router({
             }
         },
         {
+            path: "/driverHome",
+            name: "driverHome",
+            component: () =>
+                import(/* webpackChunkName: "driverHome" */"./views/DriverHome.vue"),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title: '司机端首页'
+            }
+        },
+        {
+            path: "/driverMoneyCheck",
+            name: "driverMoneyCheck",
+            component: () =>
+                import(/* webpackChunkName: "driverMoneyCheck" */"./views/DriverMoneyCheck.vue"),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title: '费用查询'
+            }
+        },
+        {//含待接单  待发货 未送达  已完成  已撤销
+            path: "/driverWaiteAcept",
+            name: "driverWaiteAcept",
+            component: () =>
+                import(/* webpackChunkName: "driverWaiteAcept" */"./views/DriverWaiteAcept.vue"),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title: '待接单'
+            }
+        },
+        {//待收货详情
+            path: "/driverWaiteAceptDetail",
+            name: "driverWaiteAceptDetail",
+            component: () =>
+                import(/* webpackChunkName: "driverWaiteAcept" */"./views/DriverWaiteAceptDetail.vue"),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title: '查看详情'
+            }
+        },
+        {//待收货商品详情
+            path: "/driverWaiteAceptGoods",
+            name: "driverWaiteAceptGoods",
+            component: () =>
+                import(/* webpackChunkName: "driverWaiteAceptGoods" */"./views/DriverWaiteAceptGoods.vue"),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title: '商品详情'
+            }
+        },
+        {//待发货商品详情
+            path: "/driverWaiteSendDetail",
+            name: "driverWaiteSendDetail",
+            component: () =>
+                import(/* webpackChunkName: "driverWaiteSendDetail" */"./views/DriverWaiteSendDetail.vue"),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title: '商品详情'
+            }
+        },
+        {//待发货商品详情
+            path: "/driverWaiteSendGoods",
+            name: "driverWaiteSendGoods",
+            component: () =>
+                import(/* webpackChunkName: "driverWaiteSendGoods" */"./views/DriverWaiteSendGoods.vue"),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title: '商品详情'
+            }
+        },
+        {//已完成详情
+            path: "/driverFinishDetail",
+            name: "driverFinishDetail",
+            component: () =>
+                import(/* webpackChunkName: "driverFinishDetail" */"./views/DriverFinishDetail.vue"),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title: '商品详情'
+            }
+        },
+        {//已撤销详情
+            path: "/driverRovokeDetail",
+            name: "driverRovokeDetail",
+            component: () =>
+                import(/* webpackChunkName: "driverRovokeDetail" */"./views/DriverRovokeDetail.vue"),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title: '商品详情'
+            }
+        },
+        {//未送达详情
+            path: "/driverNoAriveDetail",
+            name: "driverNoAriveDetail",
+            component: () =>
+                import(/* webpackChunkName: "driverNoAriveDetail" */"./views/DriverNoAriveDetail.vue"),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title: '商品详情'
+            }
+        },
+        {//商品撤销
+            path: "/driverGoodsRovoke",
+            name: "driverGoodsRovoke",
+            component: () =>
+                import(/* webpackChunkName: "driverGoodsRovoke" */"./views/DriverGoodsRovoke.vue"),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title: '商品撤销'
+            }
+        },
+        {
             path: '*', // 未匹配到路由时重定向
             redirect: '/',
             meta: {

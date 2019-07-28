@@ -11,7 +11,7 @@
           </div>
         </div>
       </div> -->
-      <mt-popup v-model="areaVisible" class="area-class" position="bottom">
+      <mt-popup :closeOnClickModal="false" v-model="areaVisible" class="area-class" position="bottom">
         <mt-picker
           :slots="slots"
           :showToolbar="true"
@@ -47,7 +47,7 @@
 // let area = data[index].children[index2].children.map(res => {
 //   return res.name;
 // });
-import {getCityList} from '@/api/index';
+import {getCityList,getAllCitys} from '@/api/index';
 let pCode = '';
 let cCode = '';
 let aCode = '';
@@ -99,12 +99,18 @@ export default {
   },
   props:['areaVisible','setArea','cancel','global'],
   async mounted() {
-    let res = await getCityList();
+    let res = '';
     if(this.global=='manage'){
-      this.data = [{regionCode:'',regionName:'全国',children:[{regionCode:'',regionName:'全国',children:[{regionCode:'',regionName:'全国'}]}]}].concat(res.data.list);
+      res = await getAllCitys();
     }else{
-      this.data = res.data.list;
+      res = await getCityList();
     }
+    
+    // if(this.global=='manage'){
+    //   // this.data = [{regionCode:'',regionName:'全国',children:[{regionCode:'',regionName:'全国',children:[{regionCode:'',regionName:'全国'}]}]}].concat(res.data.list);
+    // }else{
+      this.data = res.data.list;
+    // }
     this.province = this.data.map(res => {
         return res.regionName;
     });
@@ -126,6 +132,9 @@ export default {
         this.$refs.picker.getValues()[1] +
         "," +
         this.$refs.picker.getValues()[2];
+      if(this.$refs.picker.getValues()[0]=='全国'){
+        this.areaString = '全国'
+      }
       this.setArea(this.areaString,pCode,cCode,aCode)
     },
     handleCancel() {

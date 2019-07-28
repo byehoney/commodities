@@ -43,7 +43,7 @@
             </div>
         </div>
         <!-- <ManageTabBarBotttom></ManageTabBarBotttom> -->
-        <CityPicker :areaVisible="areaVisible" :setArea="handleSetArea" :cancel="handleCancel"></CityPicker>
+        <CityPicker global="manage" :areaVisible="areaVisible" :setArea="handleSetArea" :cancel="handleCancel"></CityPicker>
     </div>
 </template>
 <script>

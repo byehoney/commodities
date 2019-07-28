@@ -11,7 +11,7 @@
             <input v-model="searchStr" @keypress="searchGoods" type="text" placeholder="商品名称">
           </form>
         </span>
-        <span>搜索</span>
+        <span @click="doSearch">搜索</span>
       </div>
       <div class="manageStock_tips">库存不足30天销量</div>
       <div class="manageStock_content"
