@@ -379,6 +379,7 @@ export default {
     },
     chooseGift() {
       this.giftVisible = true;
+      this.countGiftNum();
     //   this.getGiftData();
     },
     confirmGift() {
