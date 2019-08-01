@@ -152,7 +152,7 @@ export default {
         height: 98px;
         line-height: 98px;
         text-align: center;
-        background-color: #666;
+        background-color: #FFC004;
         font-size:30px;
         color:rgba(255,255,255,1);
         letter-spacing:3px;

@@ -235,7 +235,7 @@ export default {
             font-size:30px;
             color:rgba(255,255,255,1);
             letter-spacing:3px;
-            background-color: #666;
+            background-color: #FFC004;
         }
     }
 </style>

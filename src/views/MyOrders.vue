@@ -626,7 +626,7 @@ export default {
                             font-size:24px;
                             color:rgba(255,255,255,1);
                             letter-spacing:3px;
-                            background-color: #9b9b9b;
+                            background-color: #FFC004;
                             text-align: center;
                             border-radius: 5px;
                         }

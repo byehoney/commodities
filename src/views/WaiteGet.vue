@@ -363,7 +363,7 @@ export default {
           line-height: 98px;
           text-align: center;
           &.left{
-              background-color: #666;
+              background-color: #FFC004;
           }
           &.right{
               background-color: #E32323;

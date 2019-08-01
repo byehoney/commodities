@@ -350,7 +350,7 @@ export default {
         height: 98px;
         line-height: 98px;
         text-align: center;
-        background-color: #666;
+        background-color: #FFC004;
         margin: 43px auto 200px;
         border-radius: 8px;
         font-size:30px;

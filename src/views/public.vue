@@ -413,6 +413,11 @@ export default {
   padding: 43px 46px;
   border-bottom: 10px solid #dddd;
 }
+.public_nav ul{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
 .public_nav ul li {
   width: 100px;
   margin-right: 38px;
