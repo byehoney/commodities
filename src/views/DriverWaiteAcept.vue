@@ -90,11 +90,11 @@
                 </div>
                 <div class="btnArea" v-if="actIndex==0">
                     <div class="aceptBtn">接单</div>
-                    <div class="detailBtn">查看详情</div>
+                    <div class="detailBtn" @click="goWaiteAceptDetail(0)">查看详情</div>
                 </div>
                 <div class="btnArea" v-if="actIndex==1">
                     <div class="aceptBtn">送货</div>
-                    <div class="detailBtn">查看详情</div>
+                    <div class="detailBtn" @click="goWaiteSendDetail(0)">查看详情</div>
                 </div>
             </div>
             <!-- 未送达 -->
@@ -110,7 +110,7 @@
                     </div>
                 </div>
                 <div class="detailBox">
-                    <div class="detailInfo">
+                    <div class="detailInfo" @click="goNoAriveDetail(0)">
                         <div class="detailInfos title">
                             <div class="left">客户：</div>
                             <div class="right">张三</div>
@@ -160,7 +160,7 @@
             <!-- 已完成 -->
             <div class="noArive" v-if="actIndex==3">
                 <div class="detailBox">
-                    <div class="detailInfo">
+                    <div class="detailInfo" @click="goFinishDetail(0)">
                         <div class="mainTitle">
                            <div class="infos">
                                 <div class="left">调度单号：</div>
@@ -216,7 +216,7 @@
             <!-- 已撤销 -->
             <div class="noArive hasReturn" v-if="actIndex==4">
                 <div class="detailBox">
-                    <div class="detailInfo">
+                    <div class="detailInfo" @click="goRovokeDetail(id)">
                         <div class="mainTitle">
                            <div class="infos">
                                 <div class="left">调度单号：</div>
@@ -325,10 +325,68 @@ export default {
     components:{
         // TopNav
     },
+    mounted() {
+        this.loading = true;
+        this.actIndex = this.$route.query.actIndex?this.$route.query.actIndex:0;
+        this.getData();
+    },
+    activated() {/**  */
+        if (!this.$route.meta.canKeep) {
+            this.loading = true;
+            this.hasMore = true;
+            this.pageNum = 1;
+            this.noData = false;
+            this.list = [];
+            this.getData();
+        }
+    },
+    beforeRouteLeave(to, from, next){
+        let position = document.getElementsByClassName('checkList')[0].scrollTop
+        sessionStorage.setItem('dTop',position);
+        next()
+    },
+    beforeRouteEnter (to, from, next) {/**  */
+        if(from.name == 'driverWaiteAceptDetail'||from.name == 'driverWaiteSendDetail'||from.name == 'driverFinishDetail'||from.name == 'driverRovokeDetail'||from.name == 'driverNoAriveDetail'){
+            to.meta.canKeep = true;
+            next(vm => {
+                // 通过 `vm` 访问组件实例
+                vm.$nextTick(function(){
+                    let position = sessionStorage.getItem('dTop') //返回页面取出来
+                    document.getElementsByClassName('scrollBox')[0].scrollTo({ 
+                        top: position, 
+                        behavior: "instant" 
+                    });
+                })
+            })   
+        }else{
+            to.meta.canKeep = false;
+            next();
+        }
+    },
     methods:{
+        goWaiteAceptDetail(id){
+            this.$router.push({name:'driverWaiteAceptDetail',query:{id:id}});
+        },
+        goWaiteSendDetail(id){
+            this.$router.push({name:'driverWaiteSendDetail',query:{id:id}});
+        },
+        goNoAriveDetail(id){
+            this.$router.push({name:'driverNoAriveDetail',query:{id:id}});
+        },
+        goFinishDetail(id){
+            this.$router.push({name:'driverFinishDetail',query:{id:id}});
+        },
+        goRovokeDetail(id){
+            this.$router.push({name:'driverRovokeDetail',query:{id:id}});
+        },
         changeTab(index){
             this.actIndex = index;
-            this.title = this.tabs[index]
+            this.title = this.tabs[index];
+            this.loading = true;
+            this.hasMore = true;
+            this.pageNum = 1;
+            this.noData = false;
+            this.list = [];
         },
         goBack(){
             this.$router.go(-1);

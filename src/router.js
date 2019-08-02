@@ -799,7 +799,8 @@ const router = new Router({
                 import(/* webpackChunkName: "driverWaiteAcept" */"./views/DriverWaiteAcept.vue"),
             meta: {
                 auth: true,
-                keepAlive: false,
+                keepAlive: true,
+                canKeep:false,
                 title: '待接单'
             }
         },
@@ -889,6 +890,61 @@ const router = new Router({
                 auth: true,
                 keepAlive: false,
                 title: '商品撤销'
+            }
+        },
+        {//保管员首页
+            path: "/keeperHome",
+            name: "keeperHome",
+            component: () =>
+                import(/* webpackChunkName: "keeperHome" */"./views/KeeperHome.vue"),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title: '首页'
+            }
+        },
+        {//保管员待备货
+            path: "/keeperWaitReady",
+            name: "keeperWaitReady",
+            component: () =>
+                import(/* webpackChunkName: "keeperWaitReady" */"./views/KeeperWaitReady.vue"),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title: '待备货'
+            }
+        },
+        {//保管员待备货详情
+            path: "/keeperWaitReadyGoods",
+            name: "keeperWaitReadyGoods",
+            component: () =>
+                import(/* webpackChunkName: "keeperWaitReadyGoods" */"./views/KeeperWaitReadyGoods.vue"),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title: '待备货详情'
+            }
+        },
+        {//保管员已备货
+            path: "/keeperHasReady",
+            name: "keeperHasReady",
+            component: () =>
+                import(/* webpackChunkName: "keeperHasReady" */"./views/KeeperHasReady.vue"),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title: '已备货'
+            }
+        },
+        {//保管员已备货
+            path: "/keeperHasReadyGoods",
+            name: "keeperHasReadyGoods",
+            component: () =>
+                import(/* webpackChunkName: "keeperHasReadyGoods" */"./views/KeeperHasReadyGoods.vue"),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title: '已备货详情'
             }
         },
         {

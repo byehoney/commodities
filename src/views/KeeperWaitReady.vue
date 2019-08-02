@@ -3,18 +3,6 @@
         <TopNav/>
         <div class="inputArea">
             <div class="inputItem">
-                <div class="left">调度单号：</div>
-                <div class="right">
-                    <input type="text" placeholder="请输入调度单号">    
-                </div>    
-            </div>
-            <div class="inputItem">
-                <div class="left">客户信息：</div>
-                <div class="right">
-                    <input type="text" placeholder="请输入客户信息">    
-                </div>    
-            </div>
-            <div class="inputItem">
                 <div class="left">开始时间：</div>
                 <div class="right" v-if="start" id="start"  @click="show('S')">
                     <span>{{start}}</span>
@@ -29,6 +17,18 @@
                 </div>    
             </div>
             <div class="inputItem">
+                <div class="left">客户信息：</div>
+                <div class="right">
+                    <input type="text" placeholder="请输入客户信息">    
+                </div>    
+            </div>
+            <div class="inputItem">
+                <div class="left">司机信息：</div>
+                <div class="right">
+                    <input type="text" placeholder="请输入司机信息">    
+                </div>    
+            </div>
+            <div class="inputItem">
                 <div class="left">支付状态：</div>
                 <div class="right" @click="selState">
                     <span>{{sel_value}}</span>
@@ -38,11 +38,11 @@
             <div class="btn">查询</div>
         </div>
         <div class="infoArea">
-            <div class="title">费用查询统计</div>
+            <div class="title">数据汇总</div>
             <div class="details">
-                <div class="infoDetail">总应收（元）：10000.00</div>
-                <div class="infoDetail">总已收（元）：10000.00</div>
-                <div class="infoDetail">运费总额（元）：10000.00</div>
+                <div class="infoDetail">客户总数：200</div>
+                <div class="infoDetail">货值合计（元）：10000.00</div>
+                <div class="infoDetail">总体积（立方米）：100</div>
             </div>
         </div>
         <div class="checkList"
@@ -51,49 +51,70 @@
             infinite-scroll-distance="10"
         >
             <div class="list">
-                <div class="title">
-                    <div class="left">调度单号：</div>
-                    <div class="right">JJHKLIGGHK987666</div>
-                </div>
-                <div class="infoItem">
-                    <div class="left">送达日期：</div>
-                    <div class="right">2019-02-01</div>
-                </div>
-                <div class="infoItem">
-                    <div class="left">配送日期：</div>
-                    <div class="right">2019-02-01</div>
-                </div>
-                <div class="infoItem">
-                    <div class="left">客户数：</div>
-                    <div class="right">33</div>
-                </div>
-                <div class="infoItem">
-                    <div class="left">货值（元）：</div>
-                    <div class="right">33</div>
-                </div>
-                <div class="infoItem">
-                    <div class="left">体积（立方米）：</div>
-                    <div class="right">33</div>
-                </div>
-                <div class="infoItem">
-                    <div class="left">载重（公斤）：</div>
-                    <div class="right">33</div>
-                </div>
-                <div class="infoItem">
-                    <div class="left">品种数：</div>
-                    <div class="right">33</div>
-                </div>
-                <div class="infoItem">
-                    <div class="left">库位数：</div>
-                    <div class="right">33</div>
-                </div>
-                <div class="infoItem">
-                    <div class="left">运费（元）：</div>
-                    <div class="right">33</div>
-                </div>
-                <div class="infoItem">
-                    <div class="left">下单日期：</div>
-                    <div class="right">2019-02-01</div>
+                <div class="noArive">
+                    <div class="listOuter">
+                        <div class="innerTile">
+                            库位名称：库位一
+                        </div>
+                        <div class="detailBox" @click="goDetail(0)">
+                            <div class="detailInfo">
+                                <div class="mainTitle">
+                                    <div class="infos">
+                                        <div class="left">调度单号：</div>
+                                        <div class="right">JJHKLIGGHK987666</div>
+                                    </div>
+                                    <div class="infos">
+                                        <div class="left">状态：</div>
+                                        <div class="right state">待备货</div>
+                                    </div>
+                                </div>
+                                <div class="detailInfos">
+                                    <div class="left">客户名称：</div>
+                                    <div class="right">张三</div>
+                                </div>
+                                <div class="detailInfos">
+                                    <div class="left">司机姓名：</div>
+                                    <div class="right">司机1</div>
+                                </div>
+                                <div class="detailInfos">
+                                    <div class="left">司机电话：</div>
+                                    <div class="right">13333333333</div>
+                                </div>
+                                <div class="detailInfos">
+                                    <div class="left">业务员名称：</div>
+                                    <div class="right">张三</div>
+                                </div>
+                                <div class="detailInfos">
+                                    <div class="left">业务员电话：</div>
+                                    <div class="right">13333333333</div>
+                                </div>
+                                <div class="detailInfos">
+                                    <div class="left">配送日期：</div>
+                                    <div class="right">2019-02-01</div>
+                                </div>
+                                <div class="detailInfos">
+                                    <div class="left">货值（元）：</div>
+                                    <div class="right">200</div>
+                                </div>
+                                <div class="detailInfos">
+                                    <div class="left">体积（立方米）：</div>
+                                    <div class="right">200</div>
+                                </div>
+                                <div class="detailInfos">
+                                    <div class="left">载重（公斤）：</div>
+                                    <div class="right">200</div>
+                                </div>
+                                <div class="detailInfos">
+                                    <div class="left">品种数：</div>
+                                    <div class="right">200</div>
+                                </div>
+                                <div class="detailInfos">
+                                    <div class="left">备注：</div>
+                                    <div class="right">快点备货，客户着急</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -166,6 +187,9 @@ export default {
         TopNav
     },
     methods:{
+        goDetail(id){
+            this.$router.push({name:'keeperWaitReadyGoods',query:{id:id}})
+        },
         selState() {
             this.popupVisible = !this.popupVisible;
         },
@@ -235,42 +259,127 @@ export default {
     .driverContainer{
         padding-top: 94px;
         background-color: #DFDFDF;
-        .list{
-            background-color: #fff;
-            margin-top: 6px;
-            .title{
-                height: 110px;
-                line-height: 110px;
-                padding-left: 87px;
-                font-size:28px;
-                font-family:PingFangSC-Semibold;
-                font-weight:600;
-                color:rgba(102,102,102,1);
-                display: flex;
-                border-bottom: 2px solid #dfdfdf;
-                .left{
-                    width: 224px;
-                }
-            }
-            .infoItem{
+        .listOuter{
+            .innerTile{
+                height:110px;
+                background:rgba(255,255,255,1);
                 display: flex;
                 align-items: center;
+                font-size:28px;
+                font-family:PingFangSC-Light;
+                font-weight:300;
+                color:rgba(211,63,63,1);
+                line-height:40px;
+                margin: 1px auto;
                 padding-left: 87px;
-                height: 50px;
                 border-bottom: 1px solid #dfdfdf;
-                margin-bottom: 6px;
+            }
+        }
+        .noArive{
+            background-color: #fff;
+            &.hasReturn{
                 .left{
-                    width: 224px;
-                    font-size:28px;
-                    font-family:PingFangSC-Light;
-                    font-weight:300;
-                    color:rgba(102,102,102,1);
+                    width: 280px!important;
                 }
-                .right{
+            }
+            .detailBox{
+                padding: 23px 38px 36px;
+            }
+            .detailInfo{
+                border: 1px solid #EBEBEB;
+                .mainTitle{
+                    border-bottom: 1px solid #EBEBEB;
+                    .infos{
+                        display: flex;
+                        align-items: center;
+                        padding: 10px 38px;
+                        font-size:28px;
+                        font-family:PingFangSC-Light;
+                        font-weight:300;
+                        color:rgba(102,102,102,1);
+                        line-height:40px;
+                        display: flex;
+                        align-items: center;
+                        font-weight:600;
+                        .state{
+                            font-size:28px;
+                            font-family:PingFangSC-Semibold;
+                            font-weight:600;
+                            color:rgba(255,132,62,1);
+                            line-height:40px;
+                        }
+                        .left{
+                            width: 230px;
+                            flex-shrink: 0;
+                        }
+                    }
+                }
+                .btnArea{
+                    display: flex;
+                    justify-content: flex-end;
+                    padding: 36px 16px;
+                }
+                .ariveBtn{
+                    width:200px;
+                    height:80px;
+                    background:rgba(211,63,63,1);
+                    border-radius:10px;
+                    font-size:28px;
+                    font-family:PingFangSC-Light;
+                    font-weight:300;
+                    color:rgba(255,255,255,1);
+                    line-height:80px;
+                    text-align: center;
+                }
+                .detailInfos{
+                    padding: 10px 38px;
                     font-size:28px;
                     font-family:PingFangSC-Light;
                     font-weight:300;
                     color:rgba(102,102,102,1);
+                    line-height:40px;
+                    display: flex;
+                    align-items: center;
+                    border-bottom: 1px solid #ebebeb;
+                    &.title{
+                        height: 85px;
+                    }
+                    &:last-child{
+                        border: none;
+                    }
+                    .left{
+                        width: 230px;
+                        flex-shrink: 0;
+                    }
+
+                }
+            }
+            .mainInfo{
+                height: 160px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                padding-left: 38px;
+                border-top: 1px solid #dfdfdf;
+                border-bottom: 1px solid #dfdfdf;
+                .infos{
+                    display: flex;
+                    align-items: center;
+                    .left{
+                        width: 230px;
+                        font-size:28px;
+                        font-family:PingFangSC-Semibold;
+                        font-weight:600;
+                        color:rgba(102,102,102,1);
+                        line-height:40px;
+                    }
+                    .right{
+                        font-size:28px;
+                        font-family:PingFangSC-Semibold;
+                        font-weight:600;
+                        color:rgba(102,102,102,1);
+                        line-height:40px;
+                    }
                 }
             }
         }

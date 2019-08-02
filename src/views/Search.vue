@@ -190,6 +190,7 @@ export default {
     },
     // 点击查询到的列表进行跳转
     goChoose(item){
+      this.savePzTerm(item.name);
       this.$router.push("/choose?pzTerm="+item.name)
       var name=item.name
       this.getval(name)

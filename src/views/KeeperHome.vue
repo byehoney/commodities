@@ -12,44 +12,35 @@
                 </div>
                 <p class="userNmae">马里奥</p>
                 <p class="tel">13900866666</p>
-                <p class="carNum">京A88888</p>
+                <p class="carNum">所属仓库：仓库一</p>
             </div>
             <div class="right">
                 <img src="../images/driver/tel_icon.png" alt="">
             </div>
         </div>
         <div class="tabs">
-            <router-link :to="{name:'driverWaiteAcept',query:{actIndex:0}}" tag="div" class="tabItem">
-                <img src="../images/driver/driver_icon_01.png" alt="">
-                <span>待接单</span>
+            <router-link to="/keeperWaitReady" tag="div" class="tabItem">
+                <img src="../images/driver/keeper_icon_01.png" alt="">
+                <span>待备货</span>
             </router-link>
-            <router-link :to="{name:'driverWaiteAcept',query:{actIndex:1}}" tag="div" class="tabItem">
-                <img src="../images/driver/driver_icon_02.png" alt="">
-                <span>待发货</span>
-            </router-link>
-            <router-link :to="{name:'driverWaiteAcept',query:{actIndex:2}}" tag="div" class="tabItem">
-                <img src="../images/driver/driver_icon_03.png" alt="">
-                <span>未送达</span>
-            </router-link>
-            <router-link :to="{name:'driverWaiteAcept',query:{actIndex:3}}" tag="div" class="tabItem">
-                <img src="../images/driver/driver_icon_04.png" alt="">
-                <span>已完成</span>
-            </router-link>
-            <router-link :to="{name:'driverWaiteAcept',query:{actIndex:4}}" tag="div" class="tabItem">
-                <img src="../images/driver/driver_icon_05.png" alt="">
-                <span>已撤销</span>
+            <router-link to="/keeperHasReady" tag="div" class="tabItem">
+                <img src="../images/driver/keeper_icon_02.png" alt="">
+                <span>已备货</span>
             </router-link>
         </div>
         <div class="title">汇总运输数据</div>
         <div class="infoItem">
-            总结单体积（立方米）/重量（公斤）：100/300
+            未备货总单数：100
         </div>
         <div class="infoItem">
-            总接单次数：300
+            已备货总单数：300
         </div>
-        <router-link :to="{name:'driverMoneyCheck'}" tag="div" class="infoItem details">
-            总运费已收（元）/未收（元）：5000/10000
-        </router-link>
+        <div class="infoItem">
+            已出货总单数：10000
+        </div>
+        <div class="infoItem">
+            已出货总品数：1000
+        </div>
         <div class="infoItem" @click="modifyPas">
             <img class="keys" src="../images/driver/driver_key_icon.png" alt="">
             密码修改
@@ -63,12 +54,12 @@ import { mapState ,mapActions,mapGetters, mapMutations} from 'vuex';
 export default {
     data(){
         return{
-          imgStr: '',
-          file:'',
-          tokenUp:'',
-          file_key:'',
-          key:'',
-          domain:'http://yanhuawang.rydltech.com/',
+            imgStr: '',
+            file:'',
+            tokenUp:'',
+            file_key:'',
+            key:'',
+            domain:'http://yanhuawang.rydltech.com/',
         }
     },
     computed:{
@@ -194,7 +185,7 @@ export default {
     }
     .tabs{
         display: flex;
-        padding: 31px 38px 25px;
+        // padding: 31px 38px 25px;
         background-color: #fff;
         justify-content: space-between;
         margin-top:6px; 
@@ -202,6 +193,12 @@ export default {
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
+            width: 50%;
+            height: 195px;
+            &:first-child{
+                border-right: 1px solid #dfdfdf;
+            }
             img{
                 width:87px;
                 height:87px;
