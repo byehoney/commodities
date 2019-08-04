@@ -10,8 +10,8 @@
                     <input @change="fileChange($event)" type="file" id="upload_file" class="upload_file"  accept="image/*"/>
                     <img :src="imgStr?imgStr:''" class="atv" alt="">   
                 </div>
-                <p class="userNmae">马里奥</p>
-                <p class="tel">13900866666</p>
+                <p class="userNmae">{{user.userName}}</p>
+                <p class="tel">{{user.mobile}}</p>
                 <p class="carNum">京A88888</p>
             </div>
             <div class="right">
@@ -58,7 +58,7 @@
     </div>
 </template>
 <script>
-import {uploadImage,getUploadToken,updateUserInfo} from '@/api/index'
+import {uploadImage,getUploadToken,updateUserInfo,getDriverHomeData} from '@/api/index'
 import { mapState ,mapActions,mapGetters, mapMutations} from 'vuex';
 export default {
     data(){
@@ -82,6 +82,18 @@ export default {
     async mounted() {
       this.imgStr = this.user.userHp;
       this.getToken();
+      let defaulParams = {
+        token:this.token,
+        userId:this.userId,
+        corpCode:this.corpCode,
+        companyId:this.companyId,
+        userRole:this.userRole,
+        sqlpwd:this.user.sqlpwd,
+        url:this.user.url,
+        user:this.user.user,
+        mobile:this.user.mobile
+      };
+      let res = await getDriverHomeData(defaulParams);
     },
     methods: {
         ...mapMutations('login',['LOGOUT']),
@@ -229,6 +241,7 @@ export default {
                 height:35px;
                 flex-shrink: 0;
                 margin-right: 10px;
+                margin-top: 3px;
             }
             span{
                 font-size:30px;

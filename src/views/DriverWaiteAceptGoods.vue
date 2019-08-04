@@ -12,6 +12,10 @@
                     <div class="right">旅顺某某经销商</div>
                 </div>
                 <div class="infoItem">
+                    <div class="left">联系电话：</div>
+                    <div class="right">1390008888</div>
+                </div>
+                <div class="infoItem">
                     <div class="left">库位名称：</div>
                     <div class="right">库位一</div>
                 </div>
@@ -24,6 +28,7 @@
                             <img src="" alt="">
                         </div>
                         <div class="right">
+                            <p>商品编码：037300</p>
                             <p>规格：10/1</p>
                             <p>单位：箱</p>
                             <p>厂家：测试厂家</p>

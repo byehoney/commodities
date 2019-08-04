@@ -22,7 +22,7 @@
             </div>
             <div class="detailCompany" @click="goGoodsDetail">
                 <div class="top">
-                    <img src="" alt="">
+                    <img src="../images/driver/shop_icon.png" alt="">
                     <span>旅顺某某经销商</span>
                 </div>
                 <div class="bottom">
@@ -103,7 +103,7 @@ export default {
         .detailCompany{
             border: 1px solid #BEBEBE;
             padding: 26px 56px 30px 26px;
-           
+            margin-top: 20px;
             .top{
                 display: flex;
                 align-items: center;

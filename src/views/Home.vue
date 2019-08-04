@@ -177,8 +177,13 @@ export default {
     videoPlayer
   },
   async mounted() {
-    if(this.userRole&&this.userRole!='06'&&this.userRole!='07'){
-      this.$router.replace('/manageHome')
+    console.log(this.userRole)
+    if(this.userRole&&this.userRole!='06'&&this.userRole!='07'&&this.userRole!='09'&&this.userRole!='10'){
+      this.$router.replace('/manageHome');
+    }else if(this.userRole&&this.userRole=='10'){
+      this.$router.replace('/driverHome');
+    }else if(this.userRole&&this.userRole=='09'){
+      this.$router.replace('/keeperHome');
     }
     let data = {};
     axios.post('/index/get/operation.do',data).then((res)=>{

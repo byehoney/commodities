@@ -226,6 +226,7 @@ export default {
                 height:35px;
                 flex-shrink: 0;
                 margin-right: 10px;
+                margin-top: 3px;
             }
             span{
                 font-size:30px;

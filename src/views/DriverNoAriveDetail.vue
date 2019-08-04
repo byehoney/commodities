@@ -28,12 +28,13 @@
                             <img src="" alt="">
                         </div>
                         <div class="right">
+                            <p>商品编码：0382992</p>
                             <p>规格：10/1</p>
                             <p>单位：箱</p>
                             <p>厂家：测试厂家</p>
                             <p>数量：10</p>
                             <p>辅量：10件2个</p>
-                            <div class="btn">拒收</div>
+                            <div class="btn" @click="goRovokePage(0)">拒收</div>
                         </div>
                     </div>
                 </div>
@@ -59,6 +60,9 @@ export default {
         TopNav
     },
     methods:{
+        goRovokePage(id){
+            this.$router.push({name:'driverGoodsRovoke',query:{id:id}})
+        },
         async getData(){
             
         },

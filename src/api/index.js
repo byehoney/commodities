@@ -349,6 +349,10 @@ function reqManageOrderDetail(params){//获取管理页面订单详情
 function getAllCitys(params){//获取管理页面全部省市区
     return post('/manger/all/city.do',params)
 }
+
+function getDriverHomeData(params){//获取司机端首页数据
+    return post('/siji/get/index.do',params)
+}
 export {
     getBannerVideo,
     checkForget,
@@ -445,4 +449,5 @@ export {
     reqManagePassWaite,//管理页面通过审核
     reqManageOrderDetail,//管理页面获取订单详情
     getAllCitys,//管理页面获取全部省市区
+    getDriverHomeData,//司机端首页接口数据
 }

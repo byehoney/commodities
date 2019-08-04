@@ -109,6 +109,10 @@ export default {
                     let redirect = '/';
                     if(res.data.userRole =='06'||res.data.userRole =='07'){
                         redirect = '/';
+                    }else if(res.data.userRole =='09'){
+                        redirect = '/keeperHome';
+                    }else if(res.data.userRole =='10'){
+                        redirect = '/driverHome';
                     }else{
                         redirect = '/manageHome'
                     }

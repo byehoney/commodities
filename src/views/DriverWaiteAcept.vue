@@ -93,7 +93,7 @@
                     <div class="detailBtn" @click="goWaiteAceptDetail(0)">查看详情</div>
                 </div>
                 <div class="btnArea" v-if="actIndex==1">
-                    <div class="aceptBtn">送货</div>
+                    <div class="aceptBtn" @click="doSendGoods(0)">送货</div>
                     <div class="detailBtn" @click="goWaiteSendDetail(0)">查看详情</div>
                 </div>
             </div>
@@ -152,7 +152,7 @@
                             <div class="right">200</div>
                         </div>
                         <div class="btnArea">
-                            <div class="ariveBtn">送达</div>
+                            <div class="ariveBtn" @click="doArive($event,0)">送达</div>
                         </div>
                     </div>
                 </div>
@@ -216,7 +216,7 @@
             <!-- 已撤销 -->
             <div class="noArive hasReturn" v-if="actIndex==4">
                 <div class="detailBox">
-                    <div class="detailInfo" @click="goRovokeDetail(id)">
+                    <div class="detailInfo" @click="goRovokeDetail(0)">
                         <div class="mainTitle">
                            <div class="infos">
                                 <div class="left">调度单号：</div>
@@ -291,6 +291,16 @@
             @cancel="handlePickerCancel"
             @confirm="handlePickerConfirm"
         ></awesome-picker>
+        <div class="mask" v-show="showTip">
+            <div class="modal">
+                <div class="top" v-if="sendOrArrive==0">您是否确认已完成装车并开始送货？</div>
+                <div class="top" v-else>您是否确认客户已确认送达？</div>
+                <div class="bottom">
+                    <div class="left" @click="handleHideTip">取消</div>
+                    <div class="right">确定</div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 <script>
@@ -313,6 +323,8 @@ export default {
                 type: "date",
                 colorConfirm:"#007AFF"
             },
+            showTip:false,//是否显示弹窗
+            sendOrArrive:0,//发货 0 还是 送达 1
             loading:false,
             list:[],
             moreLoading:false,
@@ -320,25 +332,28 @@ export default {
             pageNum:1,
             noData:false,//是否有数据
             hasMore:true,
+
         }
     },
     components:{
         // TopNav
     },
     mounted() {
-        this.loading = true;
-        this.actIndex = this.$route.query.actIndex?this.$route.query.actIndex:0;
-        this.getData();
+       
     },
     activated() {/**  */
+        this.loading = false;
         if (!this.$route.meta.canKeep) {
-            this.loading = true;
+            this.actIndex = this.$route.query.actIndex?this.$route.query.actIndex:0;
             this.hasMore = true;
             this.pageNum = 1;
             this.noData = false;
             this.list = [];
             this.getData();
         }
+    },
+    deactivated(){
+        this.loading = true;
     },
     beforeRouteLeave(to, from, next){
         let position = document.getElementsByClassName('checkList')[0].scrollTop
@@ -352,7 +367,7 @@ export default {
                 // 通过 `vm` 访问组件实例
                 vm.$nextTick(function(){
                     let position = sessionStorage.getItem('dTop') //返回页面取出来
-                    document.getElementsByClassName('scrollBox')[0].scrollTo({ 
+                    document.getElementsByClassName('checkList')[0].scrollTo({ 
                         top: position, 
                         behavior: "instant" 
                     });
@@ -378,6 +393,18 @@ export default {
         },
         goRovokeDetail(id){
             this.$router.push({name:'driverRovokeDetail',query:{id:id}});
+        },
+        doSendGoods(id){//点击送货按钮
+            this.showTip = true;
+            this.sendOrArrive = 0;
+        },
+        doArive(e,id){//点击送达按钮
+            e.stopPropagation();
+            this.showTip = true;
+            this.sendOrArrive = 1;
+        },
+        handleHideTip(){
+            this.showTip = false;
         },
         changeTab(index){
             this.actIndex = index;
@@ -444,6 +471,56 @@ export default {
 <style lang="scss" scoped>
     .driverContainer{
         padding-top: 94px;
+        .mask{
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:rgba(0,0,0,0.5);
+            z-index: 1000;
+            .modal{
+                width:600px;
+                height:350px;
+                background-color: #fff;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                margin-top: -175px;
+                margin-left: -300px;
+                .top{
+                    height: 270px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size:30px;
+                    font-family:PingFangSC-Light;
+                    font-weight:300;
+                    color:rgba(51,51,51,1);
+                    line-height:42px;
+                }
+                .bottom{
+                    height: 80px;
+                    display: flex;
+                    justify-content: space-between;
+                    font-size:28px;
+                    font-family:PingFangSC-Light;
+                    font-weight:300;
+                    color:rgba(255,255,255,1);
+                    line-height:80px;
+                    .left{
+                        background-color: #BEBEBE;
+                        width: 50%;
+                        text-align: center;
+                    }
+                    .right{
+                        background-color: #D33F3F;
+                        width: 50%;
+                        text-align: center;
+                    }
+                }
+            }
+        }
         .noArive{
             background-color: #fff;
             &.hasReturn{

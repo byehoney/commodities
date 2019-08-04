@@ -8,6 +8,7 @@
                     <img src="" alt="">
                 </div>
                 <div class="right">
+                    <p>商品编码：037400</p>
                     <p>规格：10/1</p>
                     <p>单位：箱</p>
                     <p>厂家：测试厂家</p>
@@ -115,6 +116,7 @@ export default {
                 font-weight:500;
                 color:rgba(102,102,102,1);
                 line-height:40px;
+                margin-bottom: 32px;
             }
             .bottom{
                 display: flex;
