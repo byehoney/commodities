@@ -12,7 +12,7 @@
                 </div>
                 <p class="userNmae">{{user.userName}}</p>
                 <p class="tel">{{user.mobile}}</p>
-                <p class="carNum">京A88888</p>
+                <p class="carNum">{{numberPlate}}</p>
             </div>
             <div class="right">
                 <img src="../images/driver/tel_icon.png" alt="">
@@ -22,33 +22,38 @@
             <router-link :to="{name:'driverWaiteAcept',query:{actIndex:0}}" tag="div" class="tabItem">
                 <img src="../images/driver/driver_icon_01.png" alt="">
                 <span>待接单</span>
+                <span class="badage" v-if="djd>0">{{djd}}</span>
             </router-link>
             <router-link :to="{name:'driverWaiteAcept',query:{actIndex:1}}" tag="div" class="tabItem">
                 <img src="../images/driver/driver_icon_02.png" alt="">
                 <span>待发货</span>
+                <span class="badage" v-if="dfh>0">{{dfh}}</span>
             </router-link>
             <router-link :to="{name:'driverWaiteAcept',query:{actIndex:2}}" tag="div" class="tabItem">
                 <img src="../images/driver/driver_icon_03.png" alt="">
                 <span>未送达</span>
+                <span class="badage" v-if="wsd>0">{{wsd}}</span>
             </router-link>
             <router-link :to="{name:'driverWaiteAcept',query:{actIndex:3}}" tag="div" class="tabItem">
                 <img src="../images/driver/driver_icon_04.png" alt="">
                 <span>已完成</span>
+                <span class="badage" v-if="ywc>0">{{ywc}}</span>
             </router-link>
             <router-link :to="{name:'driverWaiteAcept',query:{actIndex:4}}" tag="div" class="tabItem">
                 <img src="../images/driver/driver_icon_05.png" alt="">
                 <span>已撤销</span>
+                <span class="badage" v-if="yzx>0">{{yzx}}</span>
             </router-link>
         </div>
         <div class="title">汇总运输数据</div>
         <div class="infoItem">
-            总结单体积（立方米）/重量（公斤）：100/300
+            总结单体积（立方米）/重量（公斤）：{{zjdtj}}/{{zjdzl}}
         </div>
         <div class="infoItem">
-            总接单次数：300
+            总接单次数：{{zjdcs}}
         </div>
         <router-link :to="{name:'driverMoneyCheck'}" tag="div" class="infoItem details">
-            总运费已收（元）/未收（元）：5000/10000
+            总运费已收（元）/未收（元）：{{zyfys}}/{{zyfws}}
         </router-link>
         <div class="infoItem" @click="modifyPas">
             <img class="keys" src="../images/driver/driver_key_icon.png" alt="">
@@ -69,6 +74,17 @@ export default {
           file_key:'',
           key:'',
           domain:'http://yanhuawang.rydltech.com/',
+          numberPlate:'',
+          zjdtj:0,
+          zjdzl:0,
+          zjdcs:0,
+          zyfys:0,
+          zyfws:0,
+          djd:0,
+          dfh:0,
+          wsd:0,
+          ywc:0,
+          yzx:0
         }
     },
     computed:{
@@ -94,6 +110,17 @@ export default {
         mobile:this.user.mobile
       };
       let res = await getDriverHomeData(defaulParams);
+      this.numberPlate = res.data.numberPlate;
+      this.zjdtj = res.data.zjdtj;
+      this.zjdzl = res.data.zjdzl;
+      this.zjdcs = res.data.zjdcs;
+      this.zyfys = res.data.zyfys;
+      this.zyfws = res.data.zyfws;
+      this.djd = res.data.djd;
+      this.dfh = res.data.dfh;
+      this.wsd = res.data.wsd;
+      this.ywc = res.data.ywc;
+      this.yzx = res.data.yzx;
     },
     methods: {
         ...mapMutations('login',['LOGOUT']),
@@ -214,6 +241,21 @@ export default {
             display: flex;
             flex-direction: column;
             align-items: center;
+            position: relative;
+            .badage{
+                display: none;
+                position: absolute;
+                top: 0;
+                right: -8px;
+                width: 30px;
+                height: 30px;
+                border-radius: 50%;
+                background: #F5A41A;
+                line-height: 30px;
+                text-align: center;
+                color: #fff;
+                font-size: 0.12rem;
+            }
             img{
                 width:87px;
                 height:87px;

@@ -305,6 +305,8 @@
 </template>
 <script>
 import TopNav from '../components/DriverTopNav';
+import {getDriverStatusData} from '@/api/index';
+import { mapState ,mapActions,mapGetters, mapMutations} from 'vuex';
 export default {
     data(){
         return{
@@ -335,6 +337,14 @@ export default {
 
         }
     },
+    computed:{
+        // ...mapState('login',['user','token']),
+        ...mapState({
+          user:state=>state.login.user,
+          token:state=>state.login.token,
+        }),
+        ...mapGetters('login',['token','userId','corpCode','companyId','userRole'])
+    },
     components:{
         // TopNav
     },
@@ -342,8 +352,8 @@ export default {
        
     },
     activated() {/**  */
-        this.loading = false;
         if (!this.$route.meta.canKeep) {
+            this.loading = true;
             this.actIndex = this.$route.query.actIndex?this.$route.query.actIndex:0;
             this.hasMore = true;
             this.pageNum = 1;
@@ -414,6 +424,7 @@ export default {
             this.pageNum = 1;
             this.noData = false;
             this.list = [];
+            this.getData();
         },
         goBack(){
             this.$router.go(-1);
@@ -456,7 +467,45 @@ export default {
             return currentdate;
         },
         async getData(){
-            
+            let res ;
+            let defaulParams = {
+                token:this.token,
+                userId:this.userId,
+                corpCode:this.corpCode,
+                companyId:this.companyId,
+                userRole:this.userRole,
+                sqlpwd:this.user.sqlpwd,
+                url:this.user.url,
+                user:this.user.user,
+                mobile:this.user.mobile,
+                pageSize:this.pageSize,
+                pageNum:this.pageNum
+            };
+            res = await getDriverStatusData({...defaulParams,type:parseInt(this.actIndex)+1});
+            if(res.code == 0){
+                if(!res.data.list.length){
+                    this.hasMore = false;
+                    this.moreLoading = false;
+                    if(this.pageNum!=1){
+                        Toast({
+                            message: "已经到底了~",
+                            position: "middle",
+                            duration: 2000
+                        });
+                    }else{
+                        Toast({
+                            message: "暂无数据",
+                            position: "middle",
+                            duration: 2000
+                        });
+                    }
+                    return;
+                }else{
+                    this.hasMore = true;
+                    this.moreLoading = false;
+                }
+                this.list = [...this.list,...res.data.list];
+            }
         },
         loadMore(){
             if(this.moreLoading||!this.hasMore){

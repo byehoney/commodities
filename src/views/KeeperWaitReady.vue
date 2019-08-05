@@ -51,13 +51,13 @@
             infinite-scroll-distance="10"
         >
             <div class="list">
-                <div class="noArive">
+                <div class="noArive" v-for="(item,index) in [1,2,3]" :key="index">
                     <div class="listOuter">
                         <div class="innerTile">
                             库位名称：库位一
                         </div>
-                        <div class="detailBox" @click="goDetail(0)">
-                            <div class="detailInfo">
+                        <div class="detailBox">
+                            <div class="detailInfo" v-for="(item,index) in [1,2]" :key="index">
                                 <div class="mainTitle">
                                     <div class="infos">
                                         <div class="left">调度单号：</div>
@@ -68,49 +68,51 @@
                                         <div class="right state">待备货</div>
                                     </div>
                                 </div>
-                                <div class="detailInfos">
-                                    <div class="left">客户名称：</div>
-                                    <div class="right">张三</div>
-                                </div>
-                                <div class="detailInfos">
-                                    <div class="left">司机姓名：</div>
-                                    <div class="right">司机1</div>
-                                </div>
-                                <div class="detailInfos">
-                                    <div class="left">司机电话：</div>
-                                    <div class="right">13333333333</div>
-                                </div>
-                                <div class="detailInfos">
-                                    <div class="left">业务员名称：</div>
-                                    <div class="right">张三</div>
-                                </div>
-                                <div class="detailInfos">
-                                    <div class="left">业务员电话：</div>
-                                    <div class="right">13333333333</div>
-                                </div>
-                                <div class="detailInfos">
-                                    <div class="left">配送日期：</div>
-                                    <div class="right">2019-02-01</div>
-                                </div>
-                                <div class="detailInfos">
-                                    <div class="left">货值（元）：</div>
-                                    <div class="right">200</div>
-                                </div>
-                                <div class="detailInfos">
-                                    <div class="left">体积（立方米）：</div>
-                                    <div class="right">200</div>
-                                </div>
-                                <div class="detailInfos">
-                                    <div class="left">载重（公斤）：</div>
-                                    <div class="right">200</div>
-                                </div>
-                                <div class="detailInfos">
-                                    <div class="left">品种数：</div>
-                                    <div class="right">200</div>
-                                </div>
-                                <div class="detailInfos">
-                                    <div class="left">备注：</div>
-                                    <div class="right">快点备货，客户着急</div>
+                                <div class="mainInfos" v-for="(item,index) in [1,2]" :key="index" @click="goDetail(0)">
+                                    <div class="detailInfos">
+                                        <div class="left">客户名称：</div>
+                                        <div class="right">张三</div>
+                                    </div>
+                                    <div class="detailInfos">
+                                        <div class="left">司机姓名：</div>
+                                        <div class="right">司机1</div>
+                                    </div>
+                                    <div class="detailInfos">
+                                        <div class="left">司机电话：</div>
+                                        <div class="right">13333333333</div>
+                                    </div>
+                                    <div class="detailInfos">
+                                        <div class="left">业务员名称：</div>
+                                        <div class="right">张三</div>
+                                    </div>
+                                    <div class="detailInfos">
+                                        <div class="left">业务员电话：</div>
+                                        <div class="right">13333333333</div>
+                                    </div>
+                                    <div class="detailInfos">
+                                        <div class="left">配送日期：</div>
+                                        <div class="right">2019-02-01</div>
+                                    </div>
+                                    <div class="detailInfos">
+                                        <div class="left">货值（元）：</div>
+                                        <div class="right">200</div>
+                                    </div>
+                                    <div class="detailInfos">
+                                        <div class="left">体积（立方米）：</div>
+                                        <div class="right">200</div>
+                                    </div>
+                                    <div class="detailInfos">
+                                        <div class="left">载重（公斤）：</div>
+                                        <div class="right">200</div>
+                                    </div>
+                                    <div class="detailInfos">
+                                        <div class="left">品种数：</div>
+                                        <div class="right">200</div>
+                                    </div>
+                                    <div class="detailInfos">
+                                        <div class="left">备注：</div>
+                                        <div class="right">快点备货，客户着急</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -146,6 +148,8 @@
 </template>
 <script>
 import TopNav from '../components/DriverTopNav';
+import { getKeeperWaitReadyData } from '@/api/index';
+import { mapState ,mapGetters, mapMutations} from 'vuex';
 export default {
     data(){
         return{
@@ -183,8 +187,52 @@ export default {
             hasMore:true,
         }
     },
+    computed:{
+        // ...mapState('login',['user','token']),
+        ...mapState({
+          user:state=>state.login.user,
+          token:state=>state.login.token,
+        }),
+        ...mapGetters('login',['token','userId','corpCode','companyId','userRole'])
+    },
     components:{
         TopNav
+    },
+    activated() {/**  */
+        if (!this.$route.meta.canKeep) {
+            this.loading = true;
+            this.hasMore = true;
+            this.pageNum = 1;
+            this.noData = false;
+            this.list = [];
+            this.getData();
+        }
+    },
+    deactivated(){
+        this.loading = true;
+    },
+    beforeRouteLeave(to, from, next){
+        let position = document.getElementsByClassName('checkList')[0].scrollTop
+        sessionStorage.setItem('kTopOne',position);
+        next()
+    },
+    beforeRouteEnter (to, from, next) {/**  */
+        if(from.name == 'keeperWaitReadyGoods'){
+            to.meta.canKeep = true;
+            next(vm => {
+                // 通过 `vm` 访问组件实例
+                vm.$nextTick(function(){
+                    let position = sessionStorage.getItem('kTopOne') //返回页面取出来
+                    document.getElementsByClassName('checkList')[0].scrollTo({ 
+                        top: position, 
+                        behavior: "instant" 
+                    });
+                })
+            })   
+        }else{
+            to.meta.canKeep = false;
+            next();
+        }
     },
     methods:{
         goDetail(id){
@@ -243,7 +291,20 @@ export default {
             return currentdate;
         },
         async getData(){
-            
+            let defaulParams = {
+                token:this.token,
+                userId:this.userId,
+                corpCode:this.corpCode,
+                companyId:this.companyId,
+                userRole:this.userRole,
+                sqlpwd:this.user.sqlpwd,
+                url:this.user.url,
+                user:this.user.user,
+                mobile:this.user.mobile,
+                pageSize:this.pageSize,
+                pageNum:this.pageNum
+            };
+            let res = await getKeeperWaitReadyData({...defaulParams});
         },
         loadMore(){
             if(this.moreLoading||!this.hasMore){
@@ -272,6 +333,7 @@ export default {
                 line-height:40px;
                 margin: 1px auto;
                 padding-left: 87px;
+                border-top: 1px solid #dfdfdf;
                 border-bottom: 1px solid #dfdfdf;
             }
         }
@@ -286,7 +348,15 @@ export default {
                 padding: 23px 38px 36px;
             }
             .detailInfo{
-                border: 1px solid #EBEBEB;
+                border-top: 1px solid #EBEBEB;
+                border-left: 1px solid #EBEBEB;
+                border-right: 1px solid #EBEBEB;
+                .mainInfos{
+                    border-bottom: 20px solid #ebebeb;
+                    &:last-child{
+                        border: none;
+                    }
+                }
                 .mainTitle{
                     border-bottom: 1px solid #EBEBEB;
                     .infos{
@@ -345,7 +415,7 @@ export default {
                         height: 85px;
                     }
                     &:last-child{
-                        border: none;
+                        border-bottom:1px solid #ebebeb;
                     }
                     .left{
                         width: 230px;

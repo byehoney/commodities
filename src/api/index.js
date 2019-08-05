@@ -353,6 +353,20 @@ function getAllCitys(params){//获取管理页面全部省市区
 function getDriverHomeData(params){//获取司机端首页数据
     return post('/siji/get/index.do',params)
 }
+function getDriverMoneyData(params){//获取司机端费用列表
+    return post('/siji/fycx/list.do',params)
+}
+function getDriverStatusData(params){//获取司机端待接单 待发货 已送达 已完成  已撤销数据 
+    return post('/siji/get/orders.do',params)
+}
+
+function getKeeperHomeData(params){//获取保管员首页数据
+    return post('/bgy/get/index.do',params)
+}
+function getKeeperWaitReadyData(params){//获取保管员待备货数据
+    return post('/bgy/dbg/list.do',params)
+}
+
 export {
     getBannerVideo,
     checkForget,
@@ -450,4 +464,8 @@ export {
     reqManageOrderDetail,//管理页面获取订单详情
     getAllCitys,//管理页面获取全部省市区
     getDriverHomeData,//司机端首页接口数据
+    getDriverMoneyData,//司机端获取费用列表
+    getDriverStatusData,//司机端获取待接单 待发货 已完成 已送达  已撤销
+    getKeeperHomeData,//保管员首页数
+    getKeeperWaitReadyData,//保管员待备货
 }

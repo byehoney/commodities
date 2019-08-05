@@ -10,9 +10,9 @@
                     <input @change="fileChange($event)" type="file" id="upload_file" class="upload_file"  accept="image/*"/>
                     <img :src="imgStr?imgStr:''" class="atv" alt="">   
                 </div>
-                <p class="userNmae">马里奥</p>
-                <p class="tel">13900866666</p>
-                <p class="carNum">所属仓库：仓库一</p>
+                <p class="userNmae">{{user.userName}}</p>
+                <p class="tel">{{user.mobile}}</p>
+                <p class="carNum">所属仓库：{{ssck}}</p>
             </div>
             <div class="right">
                 <img src="../images/driver/tel_icon.png" alt="">
@@ -30,16 +30,16 @@
         </div>
         <div class="title">汇总运输数据</div>
         <div class="infoItem">
-            未备货总单数：100
+            未备货总单数：{{wbhzds}}
         </div>
         <div class="infoItem">
-            已备货总单数：300
+            已备货总单数：{{ybhzds}}
         </div>
         <div class="infoItem">
-            已出货总单数：10000
+            已出货总单数：{{ychzds}}
         </div>
         <div class="infoItem">
-            已出货总品数：1000
+            已出货总品数：{{ychzps}}
         </div>
         <div class="infoItem" @click="modifyPas">
             <img class="keys" src="../images/driver/driver_key_icon.png" alt="">
@@ -49,7 +49,7 @@
     </div>
 </template>
 <script>
-import {uploadImage,getUploadToken,updateUserInfo} from '@/api/index'
+import {uploadImage,getUploadToken,updateUserInfo,getKeeperHomeData} from '@/api/index'
 import { mapState ,mapActions,mapGetters, mapMutations} from 'vuex';
 export default {
     data(){
@@ -60,6 +60,11 @@ export default {
             file_key:'',
             key:'',
             domain:'http://yanhuawang.rydltech.com/',
+            wbhzds :0,
+            ybhzds : 0,
+            ychzds :0,
+            ychzps :0,
+            ssck:''
         }
     },
     computed:{
@@ -73,6 +78,23 @@ export default {
     async mounted() {
       this.imgStr = this.user.userHp;
       this.getToken();
+      let defaulParams = {
+        token:this.token,
+        userId:this.userId,
+        corpCode:this.corpCode,
+        companyId:this.companyId,
+        userRole:this.userRole,
+        sqlpwd:this.user.sqlpwd,
+        url:this.user.url,
+        user:this.user.user,
+        mobile:this.user.mobile
+      };
+      let res = await getKeeperHomeData(defaulParams);
+      this.wbhzds = res.data.wbhzds;
+      this.ybhzds = res.data.ybhzds;
+      this.ychzds = res.data.ychzds;
+      this.ychzps = res.data.ychzps;
+      this.ssck = res.data.ssck;
     },
     methods: {
         ...mapMutations('login',['LOGOUT']),
