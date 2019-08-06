@@ -2,39 +2,39 @@
     <div class="driverContainer">
         <TopNav/>
         <div class="infos">
-            <div class="infoArea">
+            <div class="infoArea" v-if="list.length">
                 <div class="infoItem title">
                     <div class="left">调度单号：</div>
-                    <div class="right">JJHKLIGGHK987666</div>
+                    <div class="right">{{list[0].dddh}}</div>
                 </div>
                 <div class="infoItem">
                     <div class="left">客户名称：</div>
-                    <div class="right">旅顺某某经销商</div>
+                    <div class="right">{{list[0].khmc}}</div>
                 </div>
                 <div class="infoItem">
                     <div class="left">品种数：</div>
-                    <div class="right">6</div>
+                    <div class="right">{{list[0].pzs}}</div>
                 </div>
                 <div class="infoItem">
                     <div class="left">货值（元）：</div>
-                    <div class="right">2888</div>
+                    <div class="right">{{list[0].hz}}</div>
                 </div>
             </div>
             <div class="goodsArea">
-                <div class="goodsItem">
-                    <div class="top">商品名称：二十五发大地红二十五发大地红二十五</div>
+                <div class="goodsItem" v-for="(item,index) in list" :key="index">
+                    <div class="top">商品名称：{{item.psmc}}</div>
                     <div class="bottom">
                         <div class="left">
-                            <img src="" alt="">
+                            <img :src="item.url?item.url:require('../images/default_logo.jpg')" alt="">
                         </div>
                         <div class="right">
-                            <p>商品编码：0382992</p>
-                            <p>规格：10/1</p>
-                            <p>单位：箱</p>
-                            <p>厂家：测试厂家</p>
-                            <p>数量：10</p>
-                            <p>辅量：10件2个</p>
-                            <div class="btn" @click="goRovokePage(0)">拒收</div>
+                            <p>商品编码：{{item.productcode}}</p>
+                            <p>规格：{{item.guig}}</p>
+                            <p>单位：{{item.dw}}</p>
+                            <p>厂家：{{item.cj}}</p>
+                            <p>数量：{{item.sl}}</p>
+                            <p>辅量：{{item.fl}}</p>
+                            <div class="btn" @click="goRovokePage(item.dddh,item.productcode)">拒收</div>
                         </div>
                     </div>
                 </div>
@@ -43,36 +43,49 @@
     </div>
 </template>
 <script>
+import { Toast } from "mint-ui";
 import TopNav from '../components/DriverTopNav';
+import { getDriverNoAriveDetailData } from '@/api/index';
+import { mapState ,mapActions,mapGetters, mapMutations} from 'vuex';
 export default {
     data(){
         return{
-            loading:false,
-            list:[],
-            moreLoading:false,
-            pageSize:10,
-            pageNum:1,
-            noData:false,//是否有数据
-            hasMore:true,
+           list:[]
         }
     },
     components:{
         TopNav
+    },
+    computed:{
+        // ...mapState('login',['user','token']),
+        ...mapState({
+          user:state=>state.login.user,
+          token:state=>state.login.token,
+        }),
+        ...mapGetters('login',['token','userId','corpCode','companyId','userRole'])
+    },
+    mounted(){
+        this.getData();
     },
     methods:{
         goRovokePage(id){
             this.$router.push({name:'driverGoodsRovoke',query:{id:id}})
         },
         async getData(){
-            
+            let defaulParams = {
+                token:this.token,
+                userId:this.userId,
+                corpCode:this.corpCode,
+                companyId:this.companyId,
+                userRole:this.userRole,
+                sqlpwd:this.user.sqlpwd,
+                url:this.user.url,
+                user:this.user.user,
+                mobile:this.user.mobile,
+            };
+            let res = await getDriverNoAriveDetailData({...defaulParams,dddh:this.$route.query.id,ywCompanyId:this.$route.query.companyId});
+            this.list = res.data.list;
         },
-        loadMore(){
-            if(this.moreLoading||!this.hasMore){
-                return;
-            }
-            this.pageNum = this.pageNum+1;
-            this.getData();
-        }
     }
 }
 </script>
@@ -90,6 +103,7 @@ export default {
                     flex-direction: column;
                     padding: 28px 20px;
                     border-radius:6px;
+                    margin-bottom: 10px;
                     .top{
                         font-size:26px;
                         font-family:PingFang-SC-Medium;

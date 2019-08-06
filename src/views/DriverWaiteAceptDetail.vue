@@ -3,45 +3,45 @@
         <TopNav/>
         <div class="title">
             <div class="left">调度单号：</div>
-            <div class="right">JJHKLIGGHK987666</div>
+            <div class="right">{{$route.query.id}}</div>
         </div>
-        <div class="detailInfos">
+        <div class="detailInfos" v-for="(item,index) in list" :key="index">
             <div class="detailCommon">
                 <div class="commonItem">
                     <div class="left">仓库：</div>
-                    <div class="right">库位一</div>
+                    <div class="right">{{item.ckmc}}</div>
                 </div>
                 <div class="commonItem">
                     <div class="left">保管员名称：</div>
-                    <div class="right">张三</div>
+                    <div class="right">{{item.bgymc}}</div>
                 </div>
                 <div class="commonItem">
                     <div class="left">联系电话：</div>
-                    <div class="right">1390008888</div>
+                    <div class="right">{{item.lxdh}}</div>
                 </div>
             </div>
-            <div class="detailCompany" @click="goGoodsDetail">
+            <div class="detailCompany" @click="goGoodsDetail(ptem.dddh,ptem.companyid,ptem.ckbm)" v-for="(ptem,pIndex) in item.childs" :key="pIndex">
                 <div class="top">
                     <img src="../images/driver/shop_icon.png" alt="">
-                    <span>旅顺某某经销商</span>
+                    <span>{{ptem.khmc}}</span>
                 </div>
                 <div class="bottom">
                     <div class="botLeft">
                         <div class="botItem">
                             <div class="left">送货时间：</div>
-                            <div class="right">2019-7-12</div>
+                            <div class="right">{{ptem.shsj}}</div>
                         </div>
                         <div class="botItem">
                             <div class="left">体积（立方米）：</div>
-                            <div class="right">100</div>
+                            <div class="right">{{ptem.tj}}</div>
                         </div>
                         <div class="botItem">
                             <div class="left">品种数：</div>
-                            <div class="right">100</div>
+                            <div class="right">{{ptem.pzs}}</div>
                         </div>
                         <div class="botItem">
                             <div class="left">货值（元）：</div>
-                            <div class="right">100</div>
+                            <div class="right">{{ptem.hz}}</div>
                         </div>
                     </div>
                     <img src="../images/arrow_right.png" alt="">
@@ -58,7 +58,7 @@ import { mapState ,mapActions,mapGetters, mapMutations} from 'vuex';
 export default {
     data(){
         return{
-            
+            list:[]
         }
     },
     computed:{
@@ -76,8 +76,8 @@ export default {
         this.getData();
     },
     methods:{
-        goGoodsDetail(){
-            this.$router.push({name:'driverWaiteAceptGoods',query:{id:''}})
+        goGoodsDetail(id,companyId,code){
+            this.$router.push({name:'driverWaiteAceptGoods',query:{id:id,companyId:companyId,code:code}})
         },
         async getData(){
             let defaulParams = {
@@ -91,7 +91,8 @@ export default {
                 user:this.user.user,
                 mobile:this.user.mobile,
             };
-            let res = await getDriverWaitAceptDetailData({...defaulParams,dddh:this.$route.query.id,type:1})
+            let res = await getDriverWaitAceptDetailData({...defaulParams,dddh:this.$route.query.id,type:1});
+            this.list = res.data.list;
         },
     }
 }
@@ -115,6 +116,7 @@ export default {
                 img{
                     width:32px;
                     height:30px;
+                    margin-right: 10px;
                 }
                 span{
                     font-size:28px;

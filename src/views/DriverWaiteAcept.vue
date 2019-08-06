@@ -113,7 +113,7 @@
                         </div>
                     </div>
                     <div class="detailBox">
-                        <div class="detailInfo" @click="goNoAriveDetail(0)" v-for="(ptem,pIndex) in item.childs" :key="pIndex">
+                        <div class="detailInfo" @click="goNoAriveDetail(ptem.dddh,ptem.companyid)" v-for="(ptem,pIndex) in item.childs" :key="pIndex">
                             <div class="detailInfos title">
                                 <div class="left">客户：</div>
                                 <div class="right">{{ptem.khmc}}</div>
@@ -155,7 +155,7 @@
                                 <div class="right">{{ptem.yf}}</div>
                             </div>
                             <div class="btnArea">
-                                <div class="ariveBtn" @click="doArive($event,0)">送达</div>
+                                <div class="ariveBtn" @click="doArive($event,ptem.dddh,ptem.companyid,index,pIndex)">送达</div>
                             </div>
                         </div>
                     </div>
@@ -175,7 +175,7 @@
                         </div>
                     </div>
                     <div class="detailBox">
-                        <div class="detailInfo" @click="goFinishDetail(0)" v-for="(ptem,pIndex) in item.childs" :key="pIndex">
+                        <div class="detailInfo" @click="goFinishDetail(ptem.dddh)" v-for="(ptem,pIndex) in item.childs" :key="pIndex">
                             <div class="detailInfos">
                                 <div class="left">配送日期：</div>
                                 <div class="right">{{ptem.psrq}}</div>
@@ -219,9 +219,10 @@
                     </div>
                 </div>
             </div>
-            <!-- <div class="noArive" v-if="actIndex==30">
-                <div class="noAriveBox" v-for="(item,index) in list" :key="index">
-                    <div class="detailInfo" >
+            <!-- 已撤销 -->
+            <div class="noArive hasReturn" v-if="actIndex==4">
+                <div class="detailBox">
+                    <div class="detailInfo" v-for="(item,index) in list" :key="index">
                         <div class="mainTitle">
                            <div class="infos">
                                 <div class="left">调度单号：</div>
@@ -232,7 +233,7 @@
                                 <div class="right">{{item.ysxl}}</div>
                             </div>
                         </div>
-                        <div class="detailBox" @click="goFinishDetail(item.dddh)" v-for="(ptem,pIndex) in item.childs" :key="pIndex">
+                        <div class="cancelBox"  @click="goRovokeDetail(ptem.dddh,ptem.companyid)" v-for="(ptem,pIndex) in item.childs" :key="pIndex">
                             <div class="detailInfos">
                                 <div class="left">客户：</div>
                                 <div class="right">{{ptem.khmc}}</div>
@@ -262,88 +263,28 @@
                                 <div class="right">{{ptem.kws}}</div>
                             </div>
                             <div class="detailInfos">
-                                <div class="left">运费（元）：</div>
-                                <div class="right">{{ptem.yf}}</div>
+                                <div class="left">撤销日期：</div>
+                                <div class="right">{{ptem.csrq}}</div>
                             </div>
                             <div class="detailInfos">
-                                <div class="left">拒收品种数：</div>
-                                <div class="right">{{ptem.jspzs}}</div>
+                                <div class="left">撤销货值（元）：</div>
+                                <div class="right">{{ptem.cshz}}</div>
                             </div>
                             <div class="detailInfos">
-                                <div class="left">拒收货值（元）：</div>
-                                <div class="right">{{ptem.jshz}}</div>
+                                <div class="left">撤销体积（立方米）：</div>
+                                <div class="right">{{ptem.cxtj}}</div>
+                            </div>
+                            <div class="detailInfos">
+                                <div class="left">撤销载重（公斤）：</div>
+                                <div class="right">{{ptem.cxzz}}</div>
+                            </div>
+                            <div class="detailInfos">
+                                <div class="left">撤销品种数：</div>
+                                <div class="right">{{ptem.cxpzs}}</div>
                             </div>
                             <div class="btnArea">
                                 <div class="ariveBtn">查看详情</div>
                             </div>
-                        </div>   
-                    </div>
-                </div>
-            </div> -->
-            <!-- 已撤销 -->
-            <div class="noArive hasReturn" v-if="actIndex==4">
-                <div class="detailBox">
-                    <div class="detailInfo" @click="goRovokeDetail(0)">
-                        <div class="mainTitle">
-                           <div class="infos">
-                                <div class="left">调度单号：</div>
-                                <div class="right">JJHKLIGGHK987666</div>
-                            </div>
-                            <div class="infos">
-                                <div class="left">运输线路：</div>
-                                <div class="right">2号线</div>
-                            </div>
-                        </div>
-                        <div class="detailInfos">
-                            <div class="left">客户：</div>
-                            <div class="right">张三</div>
-                        </div>
-                        <div class="detailInfos">
-                            <div class="left">配送日期：</div>
-                            <div class="right">2019-02-01</div>
-                        </div>
-                        <div class="detailInfos">
-                            <div class="left">货值（元）：</div>
-                            <div class="right">200</div>
-                        </div>
-                        <div class="detailInfos">
-                            <div class="left">体积（立方米）：</div>
-                            <div class="right">200</div>
-                        </div>
-                        <div class="detailInfos">
-                            <div class="left">载重（公斤）：</div>
-                            <div class="right">200</div>
-                        </div>
-                        <div class="detailInfos">
-                            <div class="left">品种数：</div>
-                            <div class="right">200</div>
-                        </div>
-                        <div class="detailInfos">
-                            <div class="left">库位数：</div>
-                            <div class="right">200</div>
-                        </div>
-                        <div class="detailInfos">
-                            <div class="left">撤销日期：</div>
-                            <div class="right">2019-01-02</div>
-                        </div>
-                        <div class="detailInfos">
-                            <div class="left">撤销货值（元）：</div>
-                            <div class="right">200</div>
-                        </div>
-                        <div class="detailInfos">
-                            <div class="left">撤销体积（立方米）：</div>
-                            <div class="right">200</div>
-                        </div>
-                        <div class="detailInfos">
-                            <div class="left">撤销载重（公斤）：</div>
-                            <div class="right">200</div>
-                        </div>
-                        <div class="detailInfos">
-                            <div class="left">撤销品种数：</div>
-                            <div class="right">200</div>
-                        </div>
-                        <div class="btnArea">
-                            <div class="ariveBtn">查看详情</div>
                         </div>
                     </div>
                 </div>
@@ -364,7 +305,8 @@
                 <div class="top" v-else>您是否确认客户已确认送达？</div>
                 <div class="bottom">
                     <div class="left" @click="handleHideTip">取消</div>
-                    <div class="right" @click="handleConfirmSend">确定</div>
+                    <div class="right send" v-if="actIndex==1" @click="handleConfirmSend">确定</div>
+                    <div class="right arive" v-if="actIndex==2" @click="handleConfirmArive">确定</div>
                 </div>
             </div>
         </div>
@@ -383,8 +325,8 @@ export default {
             actIndex:0,//当前激活tab索引
             orderNum:'',//调度单号
             customer:'',//客户信息
-            curSendIndex:'',
-            curSendOrder:'',
+            curSendIndex:'',//当前送货list 中操作index
+            curSendOrder:'',//当前送货list中操作调度单号
             start:this.getNowFormatDate() ,
             end:this.getNowFormatDate(),
             curDate:'',
@@ -467,14 +409,14 @@ export default {
         goWaiteSendDetail(id){
             this.$router.push({name:'driverWaiteSendDetail',query:{id:id}});
         },
-        goNoAriveDetail(id){
-            this.$router.push({name:'driverNoAriveDetail',query:{id:id}});
+        goNoAriveDetail(id,companyId){
+            this.$router.push({name:'driverNoAriveDetail',query:{id:id,companyId:companyId}});
         },
         goFinishDetail(id){
             this.$router.push({name:'driverFinishDetail',query:{id:id}});
         },
-        goRovokeDetail(id){
-            this.$router.push({name:'driverRovokeDetail',query:{id:id}});
+        goRovokeDetail(id,companyId){
+            this.$router.push({name:'driverRovokeDetail',query:{id:id,companyId:companyId}});
         },
         async aceptOrder(id,index){//点击接单按钮
             let defaulParams = {
@@ -549,6 +491,9 @@ export default {
                     duration: 2000
                 });
             }
+        },
+        async handleConfirmArive(){
+
         },
         handleHideTip(){
             this.showTip = false;
@@ -671,7 +616,7 @@ export default {
             }
         },
         loadMore(){
-            if(this.moreLoading||!this.hasMore){
+            if(this.moreLoading||!this.hasMore||this.actIndex==4){
                 return;
             }
             this.pageNum = this.pageNum+1;
@@ -739,9 +684,16 @@ export default {
         .noArive{
             
             &.hasReturn{
+                .detailInfo{
+                    border-bottom: none;
+                }
                 .left{
                     width: 280px!important;
                 }
+                // .cancelBox{
+                //     border-bottom: 1px solid #EBEBEB;
+                //     margin-bottom: 10px;
+                // }
             }
             .detailBox{
                 padding: 23px 38px 36px;
@@ -776,6 +728,7 @@ export default {
                     display: flex;
                     justify-content: flex-end;
                     padding: 36px 16px;
+                    border-bottom: 1px solid #ebebeb;
                 }
                 .ariveBtn{
                     width:200px;

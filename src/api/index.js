@@ -371,6 +371,22 @@ function getDriverWaitAceptDetailData(params){//司机端获取待接单详情 �
 function getDriverNoAriveDetailData(params){//司机端获未送达详情  ywCompanyId  客户编码    dddh  调度单号
     return post('/siji/wsd/info.do',params)
 }
+function getDriverHasFinishDetailData(params){//司机端获已完成详情
+    return post('/siji/ywc/info.do',params)
+}
+function getDriverRovokeDetailData(params){//司机端获已撤销详情
+    return post('/siji/ycx/info.do',params)
+}
+function getDriverWaitAceptGoodsData(params){//司机端待接单商品详情
+    return post('/siji/djd/products.do',params)
+}
+
+function getDriverAriveClickData(params){//司机端送达确定按钮点击
+    return post('/siji/user/songda.do',params)
+}
+
+
+
 
 
 function getKeeperHomeData(params){//获取保管员首页数据
@@ -483,6 +499,10 @@ export {
     getDriverSendClickData,//司机端送货确定 按钮点击
     getDriverWaitAceptDetailData,//司机获取待接单详情  待发货详情
     getDriverNoAriveDetailData,//司机端获取未送达详情
+    getDriverAriveClickData,//司机送达按钮点击
+    getDriverHasFinishDetailData,//司机端已完成详情
+    getDriverRovokeDetailData,//司机端已撤销详情
+    getDriverWaitAceptGoodsData,//司机端待接单商品详情
     getKeeperHomeData,//保管员首页数
     getKeeperWaitReadyData,//保管员待备货
 }

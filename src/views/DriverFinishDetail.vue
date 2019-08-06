@@ -2,31 +2,35 @@
     <div class="driverContainer">
         <TopNav/>
         <div class="infos">
-            <div class="infoArea">
+            <div class="infoArea" v-if="list.length">
                 <div class="infoItem title">
                     <div class="left">调度单号：</div>
-                    <div class="right">JJHKLIGGHK987666</div>
+                    <div class="right">{{list[0].dddh}}</div>
                 </div>
                 <div class="infoItem">
                     <div class="left">客户名称：</div>
-                    <div class="right">旅顺某某经销商</div>
+                    <div class="right">{{list[0].khmc}}</div>
+                </div>
+                <div class="infoItem">
+                    <div class="left">联系电话：</div>
+                    <div class="right">{{list[0].lxdh}}</div>
                 </div>
             </div>
             <div class="goodsArea">
-                <div class="goodsItem">
-                    <div class="top">商品名称：二十五发大地红二十五发大地红二十五</div>
+                <div class="goodsItem" v-for="(item,index) in list" :key="index">
+                    <div class="top">商品名称：{{item.spmc}}</div>
                     <div class="bottom">
                         <div class="left">
-                            <img src="" alt="">
+                            <img :src="item.url?item.url:require('../images/default_logo.jpg')" alt="">
                         </div>
                         <div class="right">
-                            <p>规格：10/1</p>
-                            <p>单位：箱</p>
-                            <p>厂家：测试厂家</p>
-                            <p>数量：10</p>
-                            <p>辅量：10件2个</p>
-                            <p>拒收数量：10</p>
-                            <p>拒收原因：商品损坏</p>
+                            <p>规格：{{item.guig}}</p>
+                            <p>单位：{{item.dw}}</p>
+                            <p>厂家：{{item.cj}}</p>
+                            <p>数量：{{item.sl}}</p>
+                            <p>辅量：{{item.fl}}</p>
+                            <p>拒收数量：{{item.jssl}}</p>
+                            <p>拒收原因：{{item.jsyy}}</p>
                         </div>
                     </div>
                 </div>
@@ -35,32 +39,45 @@
     </div>
 </template>
 <script>
+import { Toast } from "mint-ui";
 import TopNav from '../components/DriverTopNav';
+import { getDriverHasFinishDetailData } from '@/api/index'
+import { mapState ,mapActions,mapGetters, mapMutations} from 'vuex';
 export default {
     data(){
         return{
-            loading:false,
             list:[],
-            moreLoading:false,
-            pageSize:10,
-            pageNum:1,
-            noData:false,//是否有数据
-            hasMore:true,
         }
+    },
+    computed:{
+        // ...mapState('login',['user','token']),
+        ...mapState({
+          user:state=>state.login.user,
+          token:state=>state.login.token,
+        }),
+        ...mapGetters('login',['token','userId','corpCode','companyId','userRole'])
     },
     components:{
         TopNav
     },
+    mounted(){
+        this.getData();
+    },
     methods:{
         async getData(){
-            
-        },
-        loadMore(){
-            if(this.moreLoading||!this.hasMore){
-                return;
-            }
-            this.pageNum = this.pageNum+1;
-            this.getData();
+            let defaulParams = {
+                token:this.token,
+                userId:this.userId,
+                corpCode:this.corpCode,
+                companyId:this.companyId,
+                userRole:this.userRole,
+                sqlpwd:this.user.sqlpwd,
+                url:this.user.url,
+                user:this.user.user,
+                mobile:this.user.mobile,
+            };
+            let res = await getDriverHasFinishDetailData({...defaulParams,dddh:this.$route.query.id});
+            this.list = res.data.list;
         }
     }
 }

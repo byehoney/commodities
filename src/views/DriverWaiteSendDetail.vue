@@ -3,7 +3,7 @@
         <TopNav/>
         <div class="title">
             <div class="left">调度单号：</div>
-            <div class="right">JJHKLIGGHK987666</div>
+            <div class="right">{{$route.query.id}}</div>
         </div>
         <div class="detailInfos" v-for="(item,index) in list" :key="index">
             <div class="detailCommon">
@@ -20,7 +20,7 @@
                     <div class="right">{{item.lxdh}}</div>
                 </div>
             </div>
-            <div class="detailCompany" @click="goGoodsDetail" v-for="(ptem,pIndex) in item.childs" :key="pIndex">
+            <div class="detailCompany" @click="goGoodsDetail(ptem.dddh,ptem.companyid,ptem.ckbm)" v-for="(ptem,pIndex) in item.childs" :key="pIndex">
                 <div class="top">
                     <div class="left">
                         <img src="../images/driver/shop_icon.png" alt="">
@@ -79,9 +79,8 @@ export default {
         this.getData();
     },
     methods:{
-        goGoodsDetail(){
-            
-            this.$router.push({name:'driverWaiteSendGoods',query:{id:''}})
+        goGoodsDetail(id,companyId,code){
+            this.$router.push({name:'driverWaiteSendGoods',query:{id:id,companyId:companyId,code:code}})
         },
         async getData(){
             let defaulParams = {
