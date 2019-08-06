@@ -35,184 +35,255 @@
                 <div class="inputItem">
                     <div class="left">调度单号：</div>
                     <div class="right">
-                        <input type="text" placeholder="请输入调度单号">    
+                        <input type="text" v-model="orderNum" placeholder="请输入调度单号">    
                     </div>    
                 </div>
                 <div class="inputItem">
                     <div class="left">客户信息：</div>
                     <div class="right">
-                        <input type="text" placeholder="请输入客户信息">    
+                        <input type="text" v-model="customer" placeholder="请输入客户信息">    
                     </div>    
                 </div>
-                <div class="btn">查询</div>
+                <div class="btn" @click="doSearch">查询</div>
             </div>
             <!-- 待接单 和 待发货 -->
             <div class="waitAcept" v-if="actIndex==0||actIndex==1">
-                <div class="mainInfo">
-                    <div class="infos">
-                        <div class="left">调度单号：</div>
-                        <div class="right">JJHKLIGGHK987666</div>
+                <div class="waitBox" v-for="(item,index) in list" :key="index">
+                    <div class="mainInfo">
+                        <div class="infos">
+                            <div class="left">调度单号：</div>
+                            <div class="right">{{item.dddh}}</div>
+                        </div>
+                        <div class="infos">
+                            <div class="left">运输线路：</div>
+                            <div class="right">{{item.ysxl}}</div>
+                        </div>
                     </div>
-                    <div class="infos">
-                        <div class="left">运输线路：</div>
-                        <div class="right">2号线</div>
+                    <div class="detailInfo">
+                        <div class="detailInfos">
+                            <div class="left">配送日期：</div>
+                            <div class="right">{{item.psrq}}</div>
+                        </div>
+                        <div class="detailInfos">
+                            <div class="left">货值（元）：</div>
+                            <div class="right">{{item.hz}}</div>
+                        </div>
+                        <div class="detailInfos">
+                            <div class="left">体积（立方米）：</div>
+                            <div class="right">{{item.tj}}</div>
+                        </div>
+                        <div class="detailInfos">
+                            <div class="left">载重（公斤）：</div>
+                            <div class="right">{{item.zz}}</div>
+                        </div>
+                        <div class="detailInfos">
+                            <div class="left">品种数：</div>
+                            <div class="right">{{item.pzs}}</div>
+                        </div>
+                        <div class="detailInfos">
+                            <div class="left">库位数：</div>
+                            <div class="right">{{item.kws}}</div>
+                        </div>
+                        <div class="detailInfos">
+                            <div class="left">运费（元）：</div>
+                            <div class="right">{{item.yf}}</div>
+                        </div>
                     </div>
-                </div>
-                <div class="detailInfo">
-                    <div class="detailInfos">
-                        <div class="left">配送日期：</div>
-                        <div class="right">2019-02-01</div>
+                    <div class="btnArea" v-if="actIndex==0">
+                        <div class="aceptBtn" @click="aceptOrder(item.dddh,index)">接单</div>
+                        <div class="detailBtn" @click="goWaiteAceptDetail(item.dddh)">查看详情</div>
                     </div>
-                    <div class="detailInfos">
-                        <div class="left">货值（元）：</div>
-                        <div class="right">200</div>
+                    <div class="btnArea" v-if="actIndex==1">
+                        <div class="aceptBtn" @click="doSendGoods(item.dddh,index)">送货</div>
+                        <div class="detailBtn" @click="goWaiteSendDetail(item.dddh)">查看详情</div>
                     </div>
-                    <div class="detailInfos">
-                        <div class="left">体积（立方米）：</div>
-                        <div class="right">200</div>
-                    </div>
-                    <div class="detailInfos">
-                        <div class="left">载重（公斤）：</div>
-                        <div class="right">200</div>
-                    </div>
-                    <div class="detailInfos">
-                        <div class="left">品种数：</div>
-                        <div class="right">200</div>
-                    </div>
-                    <div class="detailInfos">
-                        <div class="left">库位数：</div>
-                        <div class="right">200</div>
-                    </div>
-                    <div class="detailInfos">
-                        <div class="left">运费（元）：</div>
-                        <div class="right">200</div>
-                    </div>
-                </div>
-                <div class="btnArea" v-if="actIndex==0">
-                    <div class="aceptBtn">接单</div>
-                    <div class="detailBtn" @click="goWaiteAceptDetail(0)">查看详情</div>
-                </div>
-                <div class="btnArea" v-if="actIndex==1">
-                    <div class="aceptBtn" @click="doSendGoods(0)">送货</div>
-                    <div class="detailBtn" @click="goWaiteSendDetail(0)">查看详情</div>
                 </div>
             </div>
             <!-- 未送达 -->
             <div class="noArive" v-if="actIndex==2">
-                <div class="mainInfo">
-                    <div class="infos">
-                        <div class="left">调度单号：</div>
-                        <div class="right">JJHKLIGGHK987666</div>
+                <div class="noAriveBox" v-for="(item,index) in list" :key="index">
+                    <div class="mainInfo">
+                        <div class="infos">
+                            <div class="left">调度单号：</div>
+                            <div class="right">{{item.dddh}}</div>
+                        </div>
+                        <div class="infos">
+                            <div class="left">运输线路：</div>
+                            <div class="right">{{item.ysxl}}</div>
+                        </div>
                     </div>
-                    <div class="infos">
-                        <div class="left">运输线路：</div>
-                        <div class="right">2号线</div>
-                    </div>
-                </div>
-                <div class="detailBox">
-                    <div class="detailInfo" @click="goNoAriveDetail(0)">
-                        <div class="detailInfos title">
-                            <div class="left">客户：</div>
-                            <div class="right">张三</div>
-                        </div>
-                        <div class="detailInfos">
-                            <div class="left">联系电话：</div>
-                            <div class="right">13988806666</div>
-                        </div>
-                        <div class="detailInfos">
-                            <div class="left">送货地址：</div>
-                            <div class="right">哈尔滨南岗区松花江街15号</div>
-                        </div>
-                        <div class="detailInfos">
-                            <div class="left">配送日期：</div>
-                            <div class="right">2019-02-01</div>
-                        </div>
-                        <div class="detailInfos">
-                            <div class="left">货值（元）：</div>
-                            <div class="right">200</div>
-                        </div>
-                        <div class="detailInfos">
-                            <div class="left">体积（立方米）：</div>
-                            <div class="right">200</div>
-                        </div>
-                        <div class="detailInfos">
-                            <div class="left">载重（公斤）：</div>
-                            <div class="right">200</div>
-                        </div>
-                        <div class="detailInfos">
-                            <div class="left">品种数：</div>
-                            <div class="right">200</div>
-                        </div>
-                        <div class="detailInfos">
-                            <div class="left">库位数：</div>
-                            <div class="right">200</div>
-                        </div>
-                        <div class="detailInfos">
-                            <div class="left">运费（元）：</div>
-                            <div class="right">200</div>
-                        </div>
-                        <div class="btnArea">
-                            <div class="ariveBtn" @click="doArive($event,0)">送达</div>
+                    <div class="detailBox">
+                        <div class="detailInfo" @click="goNoAriveDetail(0)" v-for="(ptem,pIndex) in item.childs" :key="pIndex">
+                            <div class="detailInfos title">
+                                <div class="left">客户：</div>
+                                <div class="right">{{ptem.khmc}}</div>
+                            </div>
+                            <div class="detailInfos">
+                                <div class="left">联系电话：</div>
+                                <div class="right">{{ptem.lxdh}}</div>
+                            </div>
+                            <div class="detailInfos">
+                                <div class="left">送货地址：</div>
+                                <div class="right">{{ptem.address}}</div>
+                            </div>
+                            <div class="detailInfos">
+                                <div class="left">配送日期：</div>
+                                <div class="right">{{ptem.psrq}}</div>
+                            </div>
+                            <div class="detailInfos">
+                                <div class="left">货值（元）：</div>
+                                <div class="right">{{ptem.hz}}</div>
+                            </div>
+                            <div class="detailInfos">
+                                <div class="left">体积（立方米）：</div>
+                                <div class="right">{{ptem.tj}}</div>
+                            </div>
+                            <div class="detailInfos">
+                                <div class="left">载重（公斤）：</div>
+                                <div class="right">{{ptem.zz}}</div>
+                            </div>
+                            <div class="detailInfos">
+                                <div class="left">品种数：</div>
+                                <div class="right">{{ptem.pzs}}</div>
+                            </div>
+                            <div class="detailInfos">
+                                <div class="left">库位数：</div>
+                                <div class="right">{{ptem.kws}}</div>
+                            </div>
+                            <div class="detailInfos">
+                                <div class="left">运费（元）：</div>
+                                <div class="right">{{ptem.yf}}</div>
+                            </div>
+                            <div class="btnArea">
+                                <div class="ariveBtn" @click="doArive($event,0)">送达</div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
             <!-- 已完成 -->
             <div class="noArive" v-if="actIndex==3">
-                <div class="detailBox">
-                    <div class="detailInfo" @click="goFinishDetail(0)">
-                        <div class="mainTitle">
-                           <div class="infos">
-                                <div class="left">调度单号：</div>
-                                <div class="right">JJHKLIGGHK987666</div>
+                <div class="noAriveBox" v-for="(item,index) in list" :key="index">
+                    <div class="mainInfo">
+                        <div class="infos">
+                            <div class="left">调度单号：</div>
+                            <div class="right">{{item.dddh}}</div>
+                        </div>
+                        <div class="infos">
+                            <div class="left">运输线路：</div>
+                            <div class="right">{{item.ysxl}}</div>
+                        </div>
+                    </div>
+                    <div class="detailBox">
+                        <div class="detailInfo" @click="goFinishDetail(0)" v-for="(ptem,pIndex) in item.childs" :key="pIndex">
+                            <div class="detailInfos">
+                                <div class="left">客户：</div>
+                                <div class="right">{{ptem.khmc}}</div>
                             </div>
-                            <div class="infos">
-                                <div class="left">运输线路：</div>
-                                <div class="right">2号线</div>
+                            <div class="detailInfos">
+                                <div class="left">配送日期：</div>
+                                <div class="right">{{ptem.psrq}}</div>
                             </div>
-                        </div>
-                        <div class="detailInfos">
-                            <div class="left">配送日期：</div>
-                            <div class="right">2019-02-01</div>
-                        </div>
-                        <div class="detailInfos">
-                            <div class="left">货值（元）：</div>
-                            <div class="right">200</div>
-                        </div>
-                        <div class="detailInfos">
-                            <div class="left">体积（立方米）：</div>
-                            <div class="right">200</div>
-                        </div>
-                        <div class="detailInfos">
-                            <div class="left">载重（公斤）：</div>
-                            <div class="right">200</div>
-                        </div>
-                        <div class="detailInfos">
-                            <div class="left">品种数：</div>
-                            <div class="right">200</div>
-                        </div>
-                        <div class="detailInfos">
-                            <div class="left">库位数：</div>
-                            <div class="right">200</div>
-                        </div>
-                        <div class="detailInfos">
-                            <div class="left">运费（元）：</div>
-                            <div class="right">200</div>
-                        </div>
-                        <div class="detailInfos">
-                            <div class="left">拒收品种数：</div>
-                            <div class="right">200</div>
-                        </div>
-                        <div class="detailInfos">
-                            <div class="left">拒收货值（元）：</div>
-                            <div class="right">200</div>
-                        </div>
-                        <div class="btnArea">
-                            <div class="ariveBtn">查看详情</div>
+                            <div class="detailInfos">
+                                <div class="left">货值（元）：</div>
+                                <div class="right">{{ptem.hz}}</div>
+                            </div>
+                            <div class="detailInfos">
+                                <div class="left">体积（立方米）：</div>
+                                <div class="right">{{ptem.tj}}</div>
+                            </div>
+                            <div class="detailInfos">
+                                <div class="left">载重（公斤）：</div>
+                                <div class="right">{{ptem.zz}}</div>
+                            </div>
+                            <div class="detailInfos">
+                                <div class="left">品种数：</div>
+                                <div class="right">{{ptem.pzs}}</div>
+                            </div>
+                            <div class="detailInfos">
+                                <div class="left">库位数：</div>
+                                <div class="right">{{ptem.kws}}</div>
+                            </div>
+                            <div class="detailInfos">
+                                <div class="left">运费（元）：</div>
+                                <div class="right">{{ptem.yf}}</div>
+                            </div>
+                            <div class="detailInfos">
+                                <div class="left">拒收品种数：</div>
+                                <div class="right">{{ptem.jspzs}}</div>
+                            </div>
+                            <div class="detailInfos">
+                                <div class="left">拒收货值（元）：</div>
+                                <div class="right">{{ptem.jshz}}</div>
+                            </div>
+                            <div class="btnArea">
+                                <div class="ariveBtn">查看详情</div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <!-- <div class="noArive" v-if="actIndex==30">
+                <div class="noAriveBox" v-for="(item,index) in list" :key="index">
+                    <div class="detailInfo" >
+                        <div class="mainTitle">
+                           <div class="infos">
+                                <div class="left">调度单号：</div>
+                                <div class="right">{{item.dddh}}</div>
+                            </div>
+                            <div class="infos">
+                                <div class="left">运输线路：</div>
+                                <div class="right">{{item.ysxl}}</div>
+                            </div>
+                        </div>
+                        <div class="detailBox" @click="goFinishDetail(item.dddh)" v-for="(ptem,pIndex) in item.childs" :key="pIndex">
+                            <div class="detailInfos">
+                                <div class="left">客户：</div>
+                                <div class="right">{{ptem.khmc}}</div>
+                            </div>
+                            <div class="detailInfos">
+                                <div class="left">配送日期：</div>
+                                <div class="right">{{ptem.psrq}}</div>
+                            </div>
+                            <div class="detailInfos">
+                                <div class="left">货值（元）：</div>
+                                <div class="right">{{ptem.hz}}</div>
+                            </div>
+                            <div class="detailInfos">
+                                <div class="left">体积（立方米）：</div>
+                                <div class="right">{{ptem.tj}}</div>
+                            </div>
+                            <div class="detailInfos">
+                                <div class="left">载重（公斤）：</div>
+                                <div class="right">{{ptem.zz}}</div>
+                            </div>
+                            <div class="detailInfos">
+                                <div class="left">品种数：</div>
+                                <div class="right">{{ptem.pzs}}</div>
+                            </div>
+                            <div class="detailInfos">
+                                <div class="left">库位数：</div>
+                                <div class="right">{{ptem.kws}}</div>
+                            </div>
+                            <div class="detailInfos">
+                                <div class="left">运费（元）：</div>
+                                <div class="right">{{ptem.yf}}</div>
+                            </div>
+                            <div class="detailInfos">
+                                <div class="left">拒收品种数：</div>
+                                <div class="right">{{ptem.jspzs}}</div>
+                            </div>
+                            <div class="detailInfos">
+                                <div class="left">拒收货值（元）：</div>
+                                <div class="right">{{ptem.jshz}}</div>
+                            </div>
+                            <div class="btnArea">
+                                <div class="ariveBtn">查看详情</div>
+                            </div>
+                        </div>   
+                    </div>
+                </div>
+            </div> -->
             <!-- 已撤销 -->
             <div class="noArive hasReturn" v-if="actIndex==4">
                 <div class="detailBox">
@@ -297,15 +368,16 @@
                 <div class="top" v-else>您是否确认客户已确认送达？</div>
                 <div class="bottom">
                     <div class="left" @click="handleHideTip">取消</div>
-                    <div class="right">确定</div>
+                    <div class="right" @click="handleConfirmSend">确定</div>
                 </div>
             </div>
         </div>
     </div>
 </template>
 <script>
+import { Toast } from "mint-ui";
 import TopNav from '../components/DriverTopNav';
-import {getDriverStatusData} from '@/api/index';
+import {getDriverStatusData,getDriverAceptClickData,getDriverSendClickData} from '@/api/index';
 import { mapState ,mapActions,mapGetters, mapMutations} from 'vuex';
 export default {
     data(){
@@ -313,6 +385,10 @@ export default {
             title:'待接单',
             tabs:['待接单','待发货','未送达','已完成','已撤销'],
             actIndex:0,//当前激活tab索引
+            orderNum:'',//调度单号
+            customer:'',//客户信息
+            curSendIndex:'',
+            curSendOrder:'',
             start:this.getNowFormatDate() ,
             end:this.getNowFormatDate(),
             curDate:'',
@@ -404,19 +480,98 @@ export default {
         goRovokeDetail(id){
             this.$router.push({name:'driverRovokeDetail',query:{id:id}});
         },
-        doSendGoods(id){//点击送货按钮
+        async aceptOrder(id,index){//点击接单按钮
+            let defaulParams = {
+                token:this.token,
+                userId:this.userId,
+                corpCode:this.corpCode,
+                companyId:this.companyId,
+                userRole:this.userRole,
+                sqlpwd:this.user.sqlpwd,
+                url:this.user.url,
+                user:this.user.user,
+                mobile:this.user.mobile,
+            };
+            let res = await getDriverAceptClickData({...defaulParams,dddh:id});
+            if(res.code==0){
+                Toast({
+                    message: res.msg,
+                    position: "middle",
+                    duration: 2000
+                });
+                setTimeout(()=>{
+                    this.list.splice(index,1);
+                    this.list = this.list;
+                },2100)
+            }else{
+                Toast({
+                    message: res.msg,
+                    position: "middle",
+                    duration: 2000
+                });
+            }
+        },
+        doSendGoods(id,index){//点击送货按钮
             this.showTip = true;
             this.sendOrArrive = 0;
+            this.curSendIndex = index;
+            this.curSendOrder = id;
         },
         doArive(e,id){//点击送达按钮
             e.stopPropagation();
             this.showTip = true;
             this.sendOrArrive = 1;
         },
+        async handleConfirmSend(){//点击发货确定按钮
+            this.showTip = false;
+            let defaulParams = {
+                token:this.token,
+                userId:this.userId,
+                corpCode:this.corpCode,
+                companyId:this.companyId,
+                userRole:this.userRole,
+                sqlpwd:this.user.sqlpwd,
+                url:this.user.url,
+                user:this.user.user,
+                mobile:this.user.mobile,
+            };
+            let res = await getDriverSendClickData({...defaulParams,dddh:this.curSendOrder});
+            if(res.code==0){
+                Toast({
+                    message: res.msg,
+                    position: "middle",
+                    duration: 2000
+                });
+                setTimeout(()=>{
+                    this.list.splice(this.curSendIndex,1);
+                    this.list = this.list;
+                },2100)
+            }else{
+                Toast({
+                    message: res.msg,
+                    position: "middle",
+                    duration: 2000
+                });
+            }
+        },
         handleHideTip(){
             this.showTip = false;
         },
+        doSearch(){//查询按钮
+            if(this.moreLoading){
+                return;
+            }
+            this.loading = true;
+            this.hasMore = true;
+            this.pageNum = 1;
+            this.noData = false;
+            this.list = [];
+            this.getData();
+        },
         changeTab(index){
+            if(this.moreLoading){
+                return;
+            }
             this.actIndex = index;
             this.title = this.tabs[index];
             this.loading = true;
@@ -479,9 +634,21 @@ export default {
                 user:this.user.user,
                 mobile:this.user.mobile,
                 pageSize:this.pageSize,
-                pageNum:this.pageNum
+                pageNum:this.pageNum,
+                type:parseInt(this.actIndex)+1
             };
-            res = await getDriverStatusData({...defaulParams,type:parseInt(this.actIndex)+1});
+            let uniqueParams = {
+                startTime:this.start,
+                endTime:this.end,
+                orderId:this.orderNum,
+                khInfo:this.customer
+            }
+            if(this.actIndex>1){
+                res = await getDriverStatusData({...defaulParams,...uniqueParams});
+            }else{
+                res = await getDriverStatusData(defaulParams);
+            }
+            this.loading = false;
             if(res.code == 0){
                 if(!res.data.list.length){
                     this.hasMore = false;
@@ -520,6 +687,9 @@ export default {
 <style lang="scss" scoped>
     .driverContainer{
         padding-top: 94px;
+        .checkList{
+            padding-top: 110px;
+        }
         .mask{
             position: fixed;
             top: 0;
@@ -571,7 +741,7 @@ export default {
             }
         }
         .noArive{
-            background-color: #fff;
+            
             &.hasReturn{
                 .left{
                     width: 280px!important;
@@ -579,11 +749,15 @@ export default {
             }
             .detailBox{
                 padding: 23px 38px 36px;
+                margin-bottom: 6px;
+                background-color: #fff;
             }
             .detailInfo{
                 border: 1px solid #EBEBEB;
+                margin-bottom: 10px;
                 .mainTitle{
                     border-bottom: 1px solid #EBEBEB;
+                    background-color: #fff;
                     .infos{
                         display: flex;
                         align-items: center;
@@ -646,6 +820,7 @@ export default {
                 padding-left: 38px;
                 border-top: 1px solid #dfdfdf;
                 border-bottom: 1px solid #dfdfdf;
+                background-color: #fff;
                 .infos{
                     display: flex;
                     align-items: center;
@@ -668,7 +843,11 @@ export default {
             }
         }
         .waitAcept{
-            background-color: #fff;
+            
+            .waitBox{
+                margin-bottom: 6px;
+                background-color: #fff;
+            }
             .btnArea{
                 height: 152px;
                 display: flex;
@@ -752,6 +931,10 @@ export default {
             height: 110px;
             background-color: #fff;
             margin-bottom: 6px;
+            position: fixed;
+            top: 88px;
+            left: 0;
+            width: 100%;
             .tabItem{
                 font-size:28px;
                 font-family:PingFangSC-Light;

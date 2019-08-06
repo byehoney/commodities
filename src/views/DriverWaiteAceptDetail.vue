@@ -48,47 +48,51 @@
                 </div>
             </div>
         </div>
-        <div class="checkList"
-            v-infinite-scroll="loadMore"
-            infinite-scroll-disabled="loading"
-            infinite-scroll-distance="10"
-        >
-            
-        </div>
     </div>
 </template>
 <script>
+import { Toast } from "mint-ui";
 import TopNav from '../components/DriverTopNav';
+import { getDriverWaitAceptDetailData } from '@/api/index'
+import { mapState ,mapActions,mapGetters, mapMutations} from 'vuex';
 export default {
     data(){
         return{
-            loading:false,
-            list:[],
-            moreLoading:false,
-            pageSize:10,
-            pageNum:1,
-            noData:false,//是否有数据
-            hasMore:true,
+            
         }
+    },
+    computed:{
+        // ...mapState('login',['user','token']),
+        ...mapState({
+          user:state=>state.login.user,
+          token:state=>state.login.token,
+        }),
+        ...mapGetters('login',['token','userId','corpCode','companyId','userRole'])
     },
     components:{
         TopNav
     },
+    mounted() {
+        this.getData();
+    },
     methods:{
         goGoodsDetail(){
-            
             this.$router.push({name:'driverWaiteAceptGoods',query:{id:''}})
         },
         async getData(){
-            
+            let defaulParams = {
+                token:this.token,
+                userId:this.userId,
+                corpCode:this.corpCode,
+                companyId:this.companyId,
+                userRole:this.userRole,
+                sqlpwd:this.user.sqlpwd,
+                url:this.user.url,
+                user:this.user.user,
+                mobile:this.user.mobile,
+            };
+            let res = await getDriverWaitAceptDetailData({...defaulParams,dddh:this.$route.query.id,type:1})
         },
-        loadMore(){
-            if(this.moreLoading||!this.hasMore){
-                return;
-            }
-            this.pageNum = this.pageNum+1;
-            this.getData();
-        }
     }
 }
 </script>

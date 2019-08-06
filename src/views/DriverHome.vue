@@ -63,6 +63,7 @@
     </div>
 </template>
 <script>
+import { Toast } from "mint-ui";
 import {uploadImage,getUploadToken,updateUserInfo,getDriverHomeData} from '@/api/index'
 import { mapState ,mapActions,mapGetters, mapMutations} from 'vuex';
 export default {

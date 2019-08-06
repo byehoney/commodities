@@ -5,77 +5,78 @@
             <div class="left">调度单号：</div>
             <div class="right">JJHKLIGGHK987666</div>
         </div>
-        <div class="detailInfos">
+        <div class="detailInfos" v-for="(item,index) in list" :key="index">
             <div class="detailCommon">
                 <div class="commonItem">
                     <div class="left">仓库：</div>
-                    <div class="right">库位一</div>
+                    <div class="right">{{item.ckmc}}</div>
                 </div>
                 <div class="commonItem">
                     <div class="left">保管员名称：</div>
-                    <div class="right">张三</div>
+                    <div class="right">{{item.bgymc}}</div>
                 </div>
                 <div class="commonItem">
                     <div class="left">联系电话：</div>
-                    <div class="right">1390008888</div>
+                    <div class="right">{{item.lxdh}}</div>
                 </div>
             </div>
-            <div class="detailCompany" @click="goGoodsDetail">
+            <div class="detailCompany" @click="goGoodsDetail" v-for="(ptem,pIndex) in item.childs" :key="pIndex">
                 <div class="top">
                     <div class="left">
-                        <img src="" alt="">
-                        <span>旅顺某某经销商</span>
+                        <img src="../images/driver/shop_icon.png" alt="">
+                        <span>{{ptem.khmc}}</span>
                     </div>
-                    <div class="right">已备货</div>
+                    <div class="right">{{ptem.sfbh}}</div>
                 </div>
                 <div class="bottom">
                     <div class="botLeft">
                         <div class="botItem">
                             <div class="left">送货时间：</div>
-                            <div class="right">2019-7-12</div>
+                            <div class="right">{{ptem.shsj}}</div>
                         </div>
                         <div class="botItem">
                             <div class="left">体积（立方米）：</div>
-                            <div class="right">100</div>
+                            <div class="right">{{ptem.tj}}</div>
                         </div>
                         <div class="botItem">
                             <div class="left">品种数：</div>
-                            <div class="right">100</div>
+                            <div class="right">{{ptem.pzs}}</div>
                         </div>
                         <div class="botItem">
                             <div class="left">货值（元）：</div>
-                            <div class="right">100</div>
+                            <div class="right">{{ptem.hz}}</div>
                         </div>
                     </div>
                     <img src="../images/arrow_right.png" alt="">
                 </div>
             </div>
         </div>
-        <div class="checkList"
-            v-infinite-scroll="loadMore"
-            infinite-scroll-disabled="loading"
-            infinite-scroll-distance="10"
-        >
-            
-        </div>
     </div>
 </template>
 <script>
+import { Toast } from "mint-ui";
 import TopNav from '../components/DriverTopNav';
+import { getDriverWaitAceptDetailData } from '@/api/index'
+import { mapState ,mapActions,mapGetters, mapMutations} from 'vuex';
 export default {
     data(){
         return{
-            loading:false,
-            list:[],
-            moreLoading:false,
-            pageSize:10,
-            pageNum:1,
-            noData:false,//是否有数据
-            hasMore:true,
+            list:[]
         }
+    },
+    computed:{
+        // ...mapState('login',['user','token']),
+        ...mapState({
+          user:state=>state.login.user,
+          token:state=>state.login.token,
+        }),
+        ...mapGetters('login',['token','userId','corpCode','companyId','userRole'])
     },
     components:{
         TopNav
+    },
+    mounted() {
+        this.getData();
     },
     methods:{
         goGoodsDetail(){
@@ -83,15 +84,21 @@ export default {
             this.$router.push({name:'driverWaiteSendGoods',query:{id:''}})
         },
         async getData(){
-            
+            let defaulParams = {
+                token:this.token,
+                userId:this.userId,
+                corpCode:this.corpCode,
+                companyId:this.companyId,
+                userRole:this.userRole,
+                sqlpwd:this.user.sqlpwd,
+                url:this.user.url,
+                user:this.user.user,
+                mobile:this.user.mobile,
+            };
+            let res = await getDriverWaitAceptDetailData({...defaulParams,dddh:this.$route.query.id,type:0});
+            this.list = res.data.list;
         },
-        loadMore(){
-            if(this.moreLoading||!this.hasMore){
-                return;
-            }
-            this.pageNum = this.pageNum+1;
-            this.getData();
-        }
+        
     }
 }
 </script>
@@ -106,7 +113,7 @@ export default {
         .detailCompany{
             border: 1px solid #BEBEBE;
             padding: 26px 56px 30px 26px;
-           
+            margin-top: 10px;
             .top{
                 display: flex;
                 align-items: center;
@@ -122,6 +129,8 @@ export default {
                 }
                 .left{
                     display: flex;
+                    align-items: center;
+                    margin-right: 10px;
                 }
                 img{
                     width:32px;
