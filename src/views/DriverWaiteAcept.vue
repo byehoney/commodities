@@ -177,10 +177,6 @@
                     <div class="detailBox">
                         <div class="detailInfo" @click="goFinishDetail(0)" v-for="(ptem,pIndex) in item.childs" :key="pIndex">
                             <div class="detailInfos">
-                                <div class="left">客户：</div>
-                                <div class="right">{{ptem.khmc}}</div>
-                            </div>
-                            <div class="detailInfos">
                                 <div class="left">配送日期：</div>
                                 <div class="right">{{ptem.psrq}}</div>
                             </div>
