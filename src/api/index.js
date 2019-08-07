@@ -384,6 +384,22 @@ function getDriverWaitAceptGoodsData(params){//司机端待接单商品详情
 function getDriverAriveClickData(params){//司机端送达确定按钮点击
     return post('/siji/user/songda.do',params)
 }
+function getDriverAriveCancelClickData(params){//司机端送达商品撤销按钮点击
+    return post('/siji/user/cxpz.do',params)
+}
+
+function getDriverCancelGoodsData(params){//司机端送达商品撤销商品信息
+    return post('/siji/dcxpz/info.do',params)
+}
+function getDriverRefuseGoodsData(params){//司机端拒收商品信息
+    return post('/siji/get/djs.do',params)
+}
+function getDriverRefuseClickData(params){//司机端送达商品拒收 按钮点击
+    return post('/siji/user/jushou.do',params)
+}
+function getDriverPayStateData(params){//司机端获取支付状态
+    return post('/siji/zfzt/list.do',params)
+}
 
 
 
@@ -394,6 +410,15 @@ function getKeeperHomeData(params){//获取保管员首页数据
 }
 function getKeeperWaitReadyData(params){//获取保管员待备货数据
     return post('/bgy/dbg/list.do',params)
+}
+function getKeeperHasReadyData(params){//获取保管员已备货数据
+    return post('/bgy/ybh/list.do',params)
+}
+function getKeepeStockData(params){//获取保管员仓库列表
+    return post('/bgy/get/bgyck.do',params)
+}
+function getKeeperWaitReadyDetailData(params){//获取保管员待备货详情
+    return post('/bgy/dbh/info.do',params)
 }
 
 export {
@@ -503,6 +528,14 @@ export {
     getDriverHasFinishDetailData,//司机端已完成详情
     getDriverRovokeDetailData,//司机端已撤销详情
     getDriverWaitAceptGoodsData,//司机端待接单商品详情
+    getDriverAriveCancelClickData,//司机端 送达商品撤销按钮
+    getDriverCancelGoodsData,//司机端 撤销商品信息
+    getDriverRefuseClickData,//司机端 拒收按钮点击
+    getDriverRefuseGoodsData,//司机端拒收商品信息
+    getDriverPayStateData,//司机端获取支付状态
     getKeeperHomeData,//保管员首页数
     getKeeperWaitReadyData,//保管员待备货
+    getKeepeStockData,//保管员仓库列表
+    getKeeperWaitReadyDetailData,//保管员待备货详情
+    getKeeperHasReadyData,//保管员已备货
 }

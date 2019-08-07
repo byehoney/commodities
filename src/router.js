@@ -933,7 +933,8 @@ const router = new Router({
                 import(/* webpackChunkName: "keeperHasReady" */"./views/KeeperHasReady.vue"),
             meta: {
                 auth: true,
-                keepAlive: false,
+                keepAlive: true,
+                canKeep:false,
                 title: '已备货'
             }
         },

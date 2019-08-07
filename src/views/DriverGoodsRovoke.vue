@@ -2,18 +2,18 @@
     <div class="driverContainer">
         <TopNav/>
         <div class="goodsArea">
-            <div class="top">商品名称：二十五发大地红二十五发大地红二十五</div>
+            <div class="top">商品名称：{{spmc}}</div>
             <div class="bottom">
                 <div class="left">
-                    <img src="" alt="">
+                    <img :src="url?url:require('../images/default_logo.jpg')" alt="">
                 </div>
                 <div class="right">
-                    <p>商品编码：037400</p>
-                    <p>规格：10/1</p>
-                    <p>单位：箱</p>
-                    <p>厂家：测试厂家</p>
-                    <p>数量：10</p>
-                    <p>辅量：10件2个</p>
+                    <p>商品编码：{{productcode}}</p>
+                    <p>规格：{{guig}}</p>
+                    <p>单位：{{dw}}</p>
+                    <p>厂家：{{cj}}</p>
+                    <p>数量：{{sl}}</p>
+                    <p>辅量：{{fl}}</p>
                     <div class="funArea">
                         <div class="funBtn" @click="reduce">-</div>
                         <input type="Number" v-model="num">
@@ -23,25 +23,47 @@
             </div>
         </div>
         <div class="inputArea">
-            <div class="left">拒收原因：</div>
-            <textarea class="area" placeholder="请输入拒收原因" name="" id="" cols="30" rows="10"></textarea>
+            <div class="left">{{$route.query.type=='cx'?'撤销':'拒收'}}原因：</div>
+            <textarea class="area" v-model="note" :placeholder="$route.query.type=='cx'?'请输入撤销原因':'请输入拒收原因'" name="" id="" cols="30" rows="10"></textarea>
         </div>
         <div class="btnArea">
-            <div class="btn">确定</div>
+            <div class="btn" @click="confirm">确定</div>
         </div>
     </div>
 </template>
 <script>
+import { Toast } from "mint-ui";
+import { getDriverAriveCancelClickData,getDriverCancelGoodsData,getDriverRefuseGoodsData,getDriverRefuseClickData } from '@/api/index'
 import TopNav from '../components/DriverTopNav';
+import { mapState ,mapActions,mapGetters, mapMutations} from 'vuex';
 export default {
     data(){
         return{
-            num:0,
+            spmc:'',
+            url:'',
+            productcode:'',
+            guig:'',
+            dw:'',
+            cj:'',
+            sl:'',
+            fl:'',
+            num:1,
             note:''
         }
     },
+    computed:{
+        // ...mapState('login',['user','token']),
+        ...mapState({
+          user:state=>state.login.user,
+          token:state=>state.login.token,
+        }),
+        ...mapGetters('login',['token','userId','corpCode','companyId','userRole'])
+    },
     components:{
         TopNav
+    },
+    mounted() {
+        this.getData();
     },
     methods:{
         reduce(){
@@ -52,6 +74,99 @@ export default {
         },
         add(){
             this.num = this.num+1;
+        },
+        async getData(){
+            let type = this.$route.query.type;
+            let defaulParams = {
+                token:this.token,
+                userId:this.userId,
+                corpCode:this.corpCode,
+                companyId:this.companyId,
+                userRole:this.userRole,
+                sqlpwd:this.user.sqlpwd,
+                url:this.user.url,
+                user:this.user.user,
+                mobile:this.user.mobile,
+            };
+            let res;
+            if(type=='cx'){
+                res = await getDriverCancelGoodsData({
+                    ...defaulParams,
+                    ckbm:this.$route.query.code,
+                    ywCompanyId:this.$route.query.companyId,
+                    dddh:this.$route.query.id,
+                    productcode:this.$route.query.pId,
+                })
+            }else{
+                res = await getDriverRefuseGoodsData({
+                    ...defaulParams,
+                    ywCompanyId:this.$route.query.companyId,
+                    dddh:this.$route.query.id,
+                    productcode:this.$route.query.pId,
+                })
+            }
+            if(res.code==0){
+                this.spmc = this.$route.query.type=='cx'?res.data.spmc:res.data.psmc;
+                this.url = res.data.url;
+                this.productcode = res.data.productcode;
+                this.guig = res.data.guig;
+                this.dw = res.data.dw;
+                this.cj = res.data.cj;
+                this.sl = res.data.sl;
+                this.fl = res.data.fl;
+            }
+        },
+        async confirm(){
+            let type = this.$route.query.type;
+            let defaulParams = {
+                token:this.token,
+                userId:this.userId,
+                corpCode:this.corpCode,
+                companyId:this.companyId,
+                userRole:this.userRole,
+                sqlpwd:this.user.sqlpwd,
+                url:this.user.url,
+                user:this.user.user,
+                mobile:this.user.mobile,
+            };
+            let res ;
+            if(type=='cx'){
+                res = await getDriverAriveCancelClickData({
+                    ...defaulParams,
+                    ckbm:this.$route.query.code,
+                    ywCompanyId:this.$route.query.companyId,
+                    dddh:this.$route.query.id,
+                    productcode:this.$route.query.pId,
+                    cxNum:this.num,
+                    cxyy:this.note
+                })
+            }else{
+                res = await getDriverRefuseClickData({
+                    ...defaulParams,
+                    ckbm:'aaa',
+                    ywCompanyId:this.$route.query.companyId,
+                    dddh:this.$route.query.id,
+                    productcode:this.$route.query.pId,
+                    cxNum:this.num,
+                    cxyy:this.note
+                })
+            }
+            if(res.code==0){
+                Toast({
+                    message: res.msg,
+                    position: "middle",
+                    duration: 2000
+                });
+                setTimeout(()=>{
+                    this.$router.go(-1);
+                },2100)
+            }else{
+                Toast({
+                    message: res.msg,
+                    position: "middle",
+                    duration: 2000
+                });
+            }
         }
     }
 }

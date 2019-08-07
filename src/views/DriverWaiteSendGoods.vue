@@ -34,7 +34,7 @@
                             <p>厂家：{{item.cj}}</p>
                             <p>数量：{{item.sl}}</p>
                             <p>辅量：{{item.fl}}</p>
-                            <div class="btn" @click="goRovokePage(0)">撤销</div>
+                            <div class="btn" @click="goRovokePage(item.dddh,item.companyid,item.ckbm,item.productcode)">撤销</div>
                         </div>
                     </div>
                 </div>
@@ -88,8 +88,8 @@ export default {
             });
             this.list = res.data.list;
         },
-        goRovokePage(){
-            this.$router.push({name:'driverGoodsRovoke'})
+        goRovokePage(id,companyId,code,pId){
+            this.$router.push({name:'driverGoodsRovoke',query:{id:id,companyId:companyId,code:code,pId:pId,type:'cx'}});
         }
     }
 }

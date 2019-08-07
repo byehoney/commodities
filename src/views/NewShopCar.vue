@@ -429,13 +429,13 @@ export default {
           if(item.quantity<item.packnumber){
             // this.showErr = true;
             // this.errText="无效的采集量";
-            this.$set(this.list[index],'errTip','无效的采集量 采集量'+item.packnumber);
+            this.$set(this.list[index],'errTip','无效的采购量 采购量'+item.packnumber);
             this.$set(this.list[index],'showTip',true)
             result++; 
-          }else if(item.quantity%item.minpack!=0){
+          }else if(item.minpack!=0&&(item.quantity%item.minpack!=0)){
             // this.showErr = true;
             // this.errText="无效的采集量";
-            this.$set(this.list[index],'errTip','无效的采集量 采集量应为'+item.minpack+'的整数倍');
+            this.$set(this.list[index],'errTip','无效的采购量 采购量应为'+item.minpack+'的整数倍');
             this.$set(this.list[index],'showTip',true)
             result++; 
           }else if(item.quantity>item.stock&&item.promotionflag=='无'){

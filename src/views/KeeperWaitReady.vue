@@ -19,99 +19,100 @@
             <div class="inputItem">
                 <div class="left">客户信息：</div>
                 <div class="right">
-                    <input type="text" placeholder="请输入客户信息">    
+                    <input type="text" v-model="customer" placeholder="请输入客户信息">    
                 </div>    
             </div>
             <div class="inputItem">
                 <div class="left">司机信息：</div>
                 <div class="right">
-                    <input type="text" placeholder="请输入司机信息">    
+                    <input type="text" v-model="driver" placeholder="请输入司机信息">    
                 </div>    
             </div>
             <div class="inputItem">
-                <div class="left">支付状态：</div>
+                <div class="left">仓库名称：</div>
                 <div class="right" @click="selState">
                     <span>{{sel_value}}</span>
                     <img class="selIcon" src="../images/driver/sel_icon.png" alt="">   
                 </div>    
             </div>
-            <div class="btn">查询</div>
+            <div class="btn" @click="doSearch">查询</div>
         </div>
         <div class="infoArea">
             <div class="title">数据汇总</div>
-            <div class="details">
-                <div class="infoDetail">客户总数：200</div>
-                <div class="infoDetail">货值合计（元）：10000.00</div>
-                <div class="infoDetail">总体积（立方米）：100</div>
+            <div class="details" v-if="list.length">
+                <div class="infoDetail">客户总数：{{list[0].khhz}}</div>
+                <div class="infoDetail">货值合计（元）：{{list[0].hzhj}}</div>
+                <div class="infoDetail">总体积（立方米）：{{list[0].ztj}}</div>
+            </div>
+            <div class="details" v-else>
+                <div class="infoDetail">客户总数：0</div>
+                <div class="infoDetail">货值合计（元）：0</div>
+                <div class="infoDetail">总体积（立方米）：0</div>
             </div>
         </div>
-        <div class="checkList"
-            v-infinite-scroll="loadMore"
-            infinite-scroll-disabled="loading"
-            infinite-scroll-distance="10"
-        >
+        <div class="checkList">
             <div class="list">
-                <div class="noArive" v-for="(item,index) in [1,2,3]" :key="index">
-                    <div class="listOuter">
+                <div class="noArive">
+                    <div class="listOuter" v-for="(item,index) in list" :key="index">
                         <div class="innerTile">
-                            库位名称：库位一
+                            库位名称：{{item.ckmc}}
                         </div>
                         <div class="detailBox">
-                            <div class="detailInfo" v-for="(item,index) in [1,2]" :key="index">
+                            <div class="detailInfo" v-for="(ptem,pIndex) in item.childs" :key="pIndex">
                                 <div class="mainTitle">
                                     <div class="infos">
                                         <div class="left">调度单号：</div>
-                                        <div class="right">JJHKLIGGHK987666</div>
+                                        <div class="right">{{ptem.dddh}}</div>
                                     </div>
                                     <div class="infos">
                                         <div class="left">状态：</div>
-                                        <div class="right state">待备货</div>
+                                        <div class="right state">{{ptem.bhzt}}</div>
                                     </div>
                                 </div>
-                                <div class="mainInfos" v-for="(item,index) in [1,2]" :key="index" @click="goDetail(0)">
+                                <div class="mainInfos"  @click="goDetail(jtem.dddh,jtem.ckbm,jtem.companyid)" v-for="(jtem,jIndex) in ptem.childs" :key="jIndex">
                                     <div class="detailInfos">
                                         <div class="left">客户名称：</div>
-                                        <div class="right">张三</div>
+                                        <div class="right">{{jtem.khmc}}</div>
                                     </div>
                                     <div class="detailInfos">
                                         <div class="left">司机姓名：</div>
-                                        <div class="right">司机1</div>
+                                        <div class="right">{{jtem.cjxm}}</div>
                                     </div>
                                     <div class="detailInfos">
                                         <div class="left">司机电话：</div>
-                                        <div class="right">13333333333</div>
+                                        <div class="right">{{jtem.sjdh}}</div>
                                     </div>
                                     <div class="detailInfos">
                                         <div class="left">业务员名称：</div>
-                                        <div class="right">张三</div>
+                                        <div class="right">{{jtem.ywymc}}</div>
                                     </div>
                                     <div class="detailInfos">
                                         <div class="left">业务员电话：</div>
-                                        <div class="right">13333333333</div>
+                                        <div class="right">{{jtem.ywydh}}</div>
                                     </div>
                                     <div class="detailInfos">
                                         <div class="left">配送日期：</div>
-                                        <div class="right">2019-02-01</div>
+                                        <div class="right">{{jtem.psrq}}</div>
                                     </div>
                                     <div class="detailInfos">
                                         <div class="left">货值（元）：</div>
-                                        <div class="right">200</div>
+                                        <div class="right">{{jtem.hz}}</div>
                                     </div>
                                     <div class="detailInfos">
                                         <div class="left">体积（立方米）：</div>
-                                        <div class="right">200</div>
+                                        <div class="right">{{jtem.tj}}</div>
                                     </div>
                                     <div class="detailInfos">
                                         <div class="left">载重（公斤）：</div>
-                                        <div class="right">200</div>
+                                        <div class="right">{{jtem.zz}}</div>
                                     </div>
                                     <div class="detailInfos">
                                         <div class="left">品种数：</div>
-                                        <div class="right">200</div>
+                                        <div class="right">{{jtem.pzs}}</div>
                                     </div>
                                     <div class="detailInfos">
                                         <div class="left">备注：</div>
-                                        <div class="right">快点备货，客户着急</div>
+                                        <div class="right">{{jtem.bz}}</div>
                                     </div>
                                 </div>
                             </div>
@@ -131,7 +132,7 @@
         ></awesome-picker>
         <mt-popup v-model="popupVisible" position="bottom">
             <mt-picker
-                value-key="fptype"
+                value-key="ckmc"
                 ref="statePicker"
                 :slots="slots"
                 @change="onValuesChange"
@@ -147,12 +148,15 @@
     </div>
 </template>
 <script>
+import { Toast } from "mint-ui";
 import TopNav from '../components/DriverTopNav';
-import { getKeeperWaitReadyData } from '@/api/index';
+import { getKeeperWaitReadyData,getKeepeStockData } from '@/api/index';
 import { mapState ,mapGetters, mapMutations} from 'vuex';
 export default {
     data(){
         return{
+            customer:'',
+            driver:'',
             start:this.getNowFormatDate() ,
             end:this.getNowFormatDate(),
             curDate:'',
@@ -168,7 +172,7 @@ export default {
             popupVisible: false,
             set_value: "",
             setCode: "",
-            sel_value: "",
+            sel_value: "全部",
             selCode: "",
             slots: [
                 {
@@ -197,6 +201,9 @@ export default {
     },
     components:{
         TopNav
+    },
+    mounted() {
+        this.getStockList();
     },
     activated() {/**  */
         if (!this.$route.meta.canKeep) {
@@ -235,8 +242,8 @@ export default {
         }
     },
     methods:{
-        goDetail(id){
-            this.$router.push({name:'keeperWaitReadyGoods',query:{id:id}})
+        goDetail(id,code,companyId){
+            this.$router.push({name:'keeperWaitReadyGoods',query:{id:id,code:code,companyId:companyId}})
         },
         selState() {
             this.popupVisible = !this.popupVisible;
@@ -245,8 +252,8 @@ export default {
             if (!values.length || !values[0]) {
                 return;
             }
-            this.set_value = values[0].fptype;
-            this.setCode = values[0].code;
+            this.set_value = values[0].ckmc;
+            this.setCode = values[0].ckbm;
         },
         handleCancel() {
             this.popupVisible = false;
@@ -290,6 +297,32 @@ export default {
             var currentdate = year + seperator1 + month + seperator1 + strDate;
             return currentdate;
         },
+        async getStockList(){
+            let defaulParams = {
+                token:this.token,
+                userId:this.userId,
+                corpCode:this.corpCode,
+                companyId:this.companyId,
+                userRole:this.userRole,
+                sqlpwd:this.user.sqlpwd,
+                url:this.user.url,
+                user:this.user.user,
+                mobile:this.user.mobile,
+            };
+            let res = await getKeepeStockData(defaulParams);
+            this.$set(this.slots[0],'values',res.data.list);
+        },
+        doSearch(){
+            if(this.moreLoading){
+                return;
+            }
+            this.loading = true;
+            this.hasMore = true;
+            this.pageNum = 1;
+            this.noData = false;
+            this.list = [];
+            this.getData();
+        },
         async getData(){
             let defaulParams = {
                 token:this.token,
@@ -302,9 +335,39 @@ export default {
                 user:this.user.user,
                 mobile:this.user.mobile,
                 pageSize:this.pageSize,
-                pageNum:this.pageNum
+                pageNum:this.pageNum,
+                startTime:this.start,
+                endTime:this.end,
+                khInfo:this.customer,
+                sjInfo:this.driver,
+                ckbm:this.selCode,
             };
             let res = await getKeeperWaitReadyData({...defaulParams});
+            this.loading = false;
+            if(res.code == 0){
+                if(!res.data.list.length){
+                    this.hasMore = false;
+                    this.moreLoading = false;
+                    if(this.pageNum!=1){
+                        Toast({
+                            message: "已经到底了~",
+                            position: "middle",
+                            duration: 2000
+                        });
+                    }else{
+                        Toast({
+                            message: "暂无数据",
+                            position: "middle",
+                            duration: 2000
+                        });
+                    }
+                    return;
+                }else{
+                    this.hasMore = true;
+                    this.moreLoading = false;
+                }
+                this.list = [...this.list,...res.data.list];
+            }
         },
         loadMore(){
             if(this.moreLoading||!this.hasMore){
@@ -351,6 +414,7 @@ export default {
                 border-top: 1px solid #EBEBEB;
                 border-left: 1px solid #EBEBEB;
                 border-right: 1px solid #EBEBEB;
+                margin-bottom: 10px;
                 .mainInfos{
                     border-bottom: 20px solid #ebebeb;
                     &:last-child{

@@ -315,7 +315,7 @@
 <script>
 import { Toast } from "mint-ui";
 import TopNav from '../components/DriverTopNav';
-import {getDriverStatusData,getDriverAceptClickData,getDriverSendClickData} from '@/api/index';
+import {getDriverStatusData,getDriverAceptClickData,getDriverSendClickData,getDriverAriveClickData} from '@/api/index';
 import { mapState ,mapActions,mapGetters, mapMutations} from 'vuex';
 export default {
     data(){
@@ -327,6 +327,10 @@ export default {
             customer:'',//客户信息
             curSendIndex:'',//当前送货list 中操作index
             curSendOrder:'',//当前送货list中操作调度单号
+            curAriveIndex:'',//当前操作送达list索引
+            curAriveCIndex:'',//当前操作送达list childs 索引
+            curAriveOrder:'',//当前操作送达调度单号
+            curCompanyId:'',//当前操作送达公司id
             start:this.getNowFormatDate() ,
             end:this.getNowFormatDate(),
             curDate:'',
@@ -455,10 +459,14 @@ export default {
             this.curSendIndex = index;
             this.curSendOrder = id;
         },
-        doArive(e,id){//点击送达按钮
+        doArive(e,id,companyId,index,pIndex){//点击送达按钮
             e.stopPropagation();
             this.showTip = true;
             this.sendOrArrive = 1;
+            this.curAriveOrder = id;
+            this.curCompanyId = companyId;
+            this.curAriveIndex = index;
+            this.curAriveCIndex = pIndex;
         },
         async handleConfirmSend(){//点击发货确定按钮
             this.showTip = false;
@@ -493,7 +501,41 @@ export default {
             }
         },
         async handleConfirmArive(){
-
+            this.showTip = false;
+            let defaulParams = {
+                token:this.token,
+                userId:this.userId,
+                corpCode:this.corpCode,
+                companyId:this.companyId,
+                userRole:this.userRole,
+                sqlpwd:this.user.sqlpwd,
+                url:this.user.url,
+                user:this.user.user,
+                mobile:this.user.mobile,
+            };
+            let res = await getDriverAriveClickData({
+                ...defaulParams,
+                dddh:this.curAriveOrder,
+                ywCompanyId:this.curCompanyId
+            })
+            if(res.code==0){
+                Toast({
+                    message: res.msg,
+                    position: "middle",
+                    duration: 2000
+                });
+                this.list[this.curAriveIndex].childs.splice(this.curAriveIndex,1);
+                if(!this.list[this.curAriveIndex].childs.length){
+                    this.list.splice(this.curAriveIndex,1);
+                }
+                this.list = this.list;
+            }else{
+                Toast({
+                    message: res.msg,
+                    position: "middle",
+                    duration: 2000
+                });
+            }
         },
         handleHideTip(){
             this.showTip = false;

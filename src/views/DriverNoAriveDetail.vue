@@ -34,7 +34,7 @@
                             <p>厂家：{{item.cj}}</p>
                             <p>数量：{{item.sl}}</p>
                             <p>辅量：{{item.fl}}</p>
-                            <div class="btn" @click="goRovokePage(item.dddh,item.productcode)">拒收</div>
+                            <div class="btn" @click="goRovokePage(item.dddh,item.companyid,item.ckbm,item.productcode)">拒收</div>
                         </div>
                     </div>
                 </div>
@@ -68,8 +68,8 @@ export default {
         this.getData();
     },
     methods:{
-        goRovokePage(id){
-            this.$router.push({name:'driverGoodsRovoke',query:{id:id}})
+        goRovokePage(id,companyId,code,pId){
+            this.$router.push({name:'driverGoodsRovoke',query:{id:id,companyId:companyId,code:code,pId:pId,type:'refuse'}});
         },
         async getData(){
             let defaulParams = {
@@ -119,6 +119,7 @@ export default {
                             width:298px;
                             height:285px;
                             flex-shrink: 0;
+                            margin-right: 10px;
                             img{
                                 width: 100%;
                                 height: 100%;

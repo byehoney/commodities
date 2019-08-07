@@ -5,13 +5,13 @@
             <div class="inputItem">
                 <div class="left">调度单号：</div>
                 <div class="right">
-                    <input type="text" placeholder="请输入调度单号">    
+                    <input v-model="orderNum" type="text" placeholder="请输入调度单号">    
                 </div>    
             </div>
             <div class="inputItem">
                 <div class="left">客户信息：</div>
                 <div class="right">
-                    <input type="text" placeholder="请输入客户信息">    
+                    <input v-model="customer" type="text" placeholder="请输入客户信息">    
                 </div>    
             </div>
             <div class="inputItem">
@@ -35,14 +35,19 @@
                     <img class="selIcon" src="../images/driver/sel_icon.png" alt="">   
                 </div>    
             </div>
-            <div class="btn">查询</div>
+            <div class="btn" @click="doSearch">查询</div>
         </div>
         <div class="infoArea">
             <div class="title">费用查询统计</div>
-            <div class="details">
-                <div class="infoDetail">总应收（元）：10000.00</div>
-                <div class="infoDetail">总已收（元）：10000.00</div>
-                <div class="infoDetail">运费总额（元）：10000.00</div>
+            <div class="details" v-if="list.length">
+                <div class="infoDetail">总应收（元）：{{list[0].zys}}</div>
+                <div class="infoDetail">总已收（元）：{{list[0].zyis}}</div>
+                <div class="infoDetail">运费总额（元）：{{list[0].yfze}}</div>
+            </div>
+            <div class="details" v-else>
+                <div class="infoDetail">总应收（元）：0</div>
+                <div class="infoDetail">总已收（元）：0</div>
+                <div class="infoDetail">运费总额（元）：0</div>
             </div>
         </div>
         <div class="checkList"
@@ -50,50 +55,50 @@
             infinite-scroll-disabled="loading"
             infinite-scroll-distance="10"
         >
-            <div class="list">
+            <div class="list" v-for="(item,index) in list" :key="index">
                 <div class="title">
                     <div class="left">调度单号：</div>
-                    <div class="right">JJHKLIGGHK987666</div>
+                    <div class="right">{{item.dddh}}</div>
                 </div>
                 <div class="infoItem">
                     <div class="left">送达日期：</div>
-                    <div class="right">2019-02-01</div>
+                    <div class="right">{{item.ssrq}}</div>
                 </div>
                 <div class="infoItem">
                     <div class="left">配送日期：</div>
-                    <div class="right">2019-02-01</div>
+                    <div class="right">{{item.psrq}}</div>
                 </div>
                 <div class="infoItem">
                     <div class="left">客户数：</div>
-                    <div class="right">33</div>
+                    <div class="right">{{item.khs}}</div>
                 </div>
                 <div class="infoItem">
                     <div class="left">货值（元）：</div>
-                    <div class="right">33</div>
+                    <div class="right">{{item.hz}}</div>
                 </div>
                 <div class="infoItem">
                     <div class="left">体积（立方米）：</div>
-                    <div class="right">33</div>
+                    <div class="right">{{item.tj}}</div>
                 </div>
                 <div class="infoItem">
                     <div class="left">载重（公斤）：</div>
-                    <div class="right">33</div>
+                    <div class="right">{{item.zz}}</div>
                 </div>
                 <div class="infoItem">
                     <div class="left">品种数：</div>
-                    <div class="right">33</div>
+                    <div class="right">{{item.pzs}}</div>
                 </div>
                 <div class="infoItem">
                     <div class="left">库位数：</div>
-                    <div class="right">33</div>
+                    <div class="right">{{item.kws}}</div>
                 </div>
                 <div class="infoItem">
                     <div class="left">运费（元）：</div>
-                    <div class="right">33</div>
+                    <div class="right">{{item.yf}}</div>
                 </div>
                 <div class="infoItem">
                     <div class="left">下单日期：</div>
-                    <div class="right">2019-02-01</div>
+                    <div class="right">{{item.xdrq}}</div>
                 </div>
             </div>
         </div>
@@ -108,7 +113,7 @@
         ></awesome-picker>
         <mt-popup v-model="popupVisible" position="bottom">
             <mt-picker
-                value-key="fptype"
+                value-key="zfzt"
                 ref="statePicker"
                 :slots="slots"
                 @change="onValuesChange"
@@ -124,7 +129,10 @@
     </div>
 </template>
 <script>
+import { Toast } from "mint-ui";
 import TopNav from '../components/DriverTopNav';
+import { getDriverMoneyData ,getDriverPayStateData} from '@/api/index';
+import { mapState ,mapActions,mapGetters, mapMutations} from 'vuex';
 export default {
     data(){
         return{
@@ -143,7 +151,7 @@ export default {
             popupVisible: false,
             set_value: "",
             setCode: "",
-            sel_value: "",
+            sel_value: "全部",
             selCode: "",
             slots: [
                 {
@@ -153,6 +161,8 @@ export default {
                 textAlign: "center"
                 }
             ],
+            orderNum:'',
+            customer:'',
             loading:false,
             list:[],
             moreLoading:false,
@@ -162,8 +172,21 @@ export default {
             hasMore:true,
         }
     },
+    computed:{
+        // ...mapState('login',['user','token']),
+        ...mapState({
+          user:state=>state.login.user,
+          token:state=>state.login.token,
+        }),
+        ...mapGetters('login',['token','userId','corpCode','companyId','userRole'])
+    },
     components:{
         TopNav
+    },
+    mounted() {
+        this.loading = true;
+        this.getPayStatus();
+        this.getData();
     },
     methods:{
         selState() {
@@ -173,8 +196,8 @@ export default {
             if (!values.length || !values[0]) {
                 return;
             }
-            this.set_value = values[0].fptype;
-            this.setCode = values[0].code;
+            this.set_value = values[0].zfzt;
+            this.setCode = values[0].zfzt=='全部'?'':values[0].zfzt;
         },
         handleCancel() {
             this.popupVisible = false;
@@ -218,8 +241,83 @@ export default {
             var currentdate = year + seperator1 + month + seperator1 + strDate;
             return currentdate;
         },
+        async getPayStatus(){
+            let defaulParams = {
+                token:this.token,
+                userId:this.userId,
+                corpCode:this.corpCode,
+                companyId:this.companyId,
+                userRole:this.userRole,
+                sqlpwd:this.user.sqlpwd,
+                url:this.user.url,
+                user:this.user.user,
+                mobile:this.user.mobile,
+            };
+            let res = await getDriverPayStateData(defaulParams);
+            let newStatusList = [{'zfzt':'全部'}];
+            this.$set(this.slots[0],'values',newStatusList.concat(res.data.list));
+        },
+        doSearch(){
+            if(this.moreLoading){
+                return;
+            }
+            this.loading = true;
+            this.hasMore = true;
+            this.pageNum = 1;
+            this.noData = false;
+            this.list = [];
+            this.getData();
+        },
         async getData(){
-            
+            let defaulParams = {
+                token:this.token,
+                userId:this.userId,
+                corpCode:this.corpCode,
+                companyId:this.companyId,
+                userRole:this.userRole,
+                sqlpwd:this.user.sqlpwd,
+                url:this.user.url,
+                user:this.user.user,
+                mobile:this.user.mobile,
+                pageSize:this.pageSize,
+                pageNum:this.pageNum,
+            };
+            let uniqueParams = {
+                startTime:this.start,
+                endTime:this.end,
+                orderId:this.orderNum,
+                khInfo:this.customer,
+                zfzt:this.selCode
+            }
+            let res = await getDriverMoneyData({
+                ...defaulParams,
+                ...uniqueParams
+            })
+            this.loading = false;
+            if(res.code == 0){
+                if(!res.data.list.length){
+                    this.hasMore = false;
+                    this.moreLoading = false;
+                    if(this.pageNum!=1){
+                        Toast({
+                            message: "已经到底了~",
+                            position: "middle",
+                            duration: 2000
+                        });
+                    }else{
+                        Toast({
+                            message: "暂无数据",
+                            position: "middle",
+                            duration: 2000
+                        });
+                    }
+                    return;
+                }else{
+                    this.hasMore = true;
+                    this.moreLoading = false;
+                }
+                this.list = [...this.list,...res.data.list];
+            }
         },
         loadMore(){
             if(this.moreLoading||!this.hasMore){
