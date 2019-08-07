@@ -1,6 +1,7 @@
 <template>
   <div>
-    <div class="header">
+    <LocalHeader pub="pub"/>
+    <div class="header" style="display:none">
       <!-- 公告的返回 -->
       <div class="public_header_back" @click="goHome">
         <img src="../images/publicback.png">
@@ -139,6 +140,7 @@ import { Toast } from "mint-ui";
 import { mapGetters } from "vuex";
 import { getPub } from "@/api/index";
 import DrawRight from "../components/DrawerRight";
+import LocalHeader from "@/components/Header";
 export default {
   data() {
     return {
@@ -194,7 +196,8 @@ export default {
     ])
   },
   components: {
-    DrawRight
+    DrawRight,
+    LocalHeader
   },
   async mounted() {
     let defaulParams = {

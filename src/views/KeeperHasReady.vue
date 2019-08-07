@@ -138,14 +138,14 @@
                                         <div class="right state">{{ptem.bhzt}}</div>
                                     </div>
                                 </div>
-                                <div class="mainInfos"  @click="goDetail(jtem.dddh,jtem.ckbm)" v-for="(jtem,jIndex) in ptem.childs" :key="jIndex">
+                                <div class="mainInfos"  @click="goDetail(jtem.dddh,jtem.ckbm,jtem.companyid)" v-for="(jtem,jIndex) in ptem.childs" :key="jIndex">
                                     <div class="detailInfos">
                                         <div class="left">客户名称：</div>
                                         <div class="right">{{jtem.khmc}}</div>
                                     </div>
                                     <div class="detailInfos">
                                         <div class="left">司机姓名：</div>
-                                        <div class="right">{{jtem.cjxm}}</div>
+                                        <div class="right">{{jtem.sjxm}}</div>
                                     </div>
                                     <div class="detailInfos">
                                         <div class="left">司机电话：</div>
@@ -311,8 +311,8 @@ export default {
         }
     },
     methods:{
-        goDetail(id,code){
-            this.$router.push({name:'keeperWaitReadyGoods',query:{id:id,code:code}})
+        goDetail(id,code,companyId){
+            this.$router.push({name:'keeperHasReadyGoods',query:{id:id,code:code,companyId:companyId}})
         },
         selState() {
             this.popupVisible = !this.popupVisible;

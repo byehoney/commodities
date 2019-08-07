@@ -1,7 +1,8 @@
 <template>
   <div class="header">
     <!-- 头部logo -->
-    <div class="header_logo" v-if="showlogo" @click="goShop"></div>
+    <img class="back_icon" v-if="pub" @click="goBack" src="../images/publicback.png">
+    <div class="header_logo" v-if="showlogo&&!pub" @click="goShop"></div>
     <!-- 头部input输入框 -->
     <div class="header_input" v-if="showlogo">
       <span v-if="!showScan">
@@ -21,7 +22,7 @@
         <input  type="text" v-model="searchStr" id="input" autofocus @keyup="search" @keypress="searchGoods" placeholder="请输入烟花名称">
       </form>
     </div>
-    <div class="selIcon_box" v-if="showlogo" @click="goMore">
+    <div class="selIcon_box" v-if="showlogo&&!pub" @click="goMore">
       <img class="selIcon" src="../images/sel_ld_icon.png" alt>
     </div>
     <div class="header_search" v-if="showlogo" @click="showcode">
@@ -64,7 +65,7 @@ import { mapGetters,mapState,mapMutations } from "vuex";
 import { setTimeout } from 'timers';
 let scan = null;
 export default {
-  props: ["data", "showHistory","pScan"],
+  props: ["data", "showHistory","pScan","pub"],
   data() {
     return {
       // showScan:false,
@@ -213,6 +214,9 @@ export default {
       }else{
         this.$router.push({name:'detail',query:{id:str}});
       }
+    },
+    goBack(){
+      this.$router.go(-1)
     }
   },
   watch: {
@@ -243,6 +247,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.back_icon{
+  width: 17px;
+  height: 30px;
+  float: left;
+}
 .scan {
   width: 100vw;
   height: 100vh;
@@ -276,6 +285,9 @@ export default {
   top: 0;
   left: 0;
   z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 .newheader {
   width: 505px !important;

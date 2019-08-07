@@ -420,6 +420,9 @@ function getKeepeStockData(params){//获取保管员仓库列表
 function getKeeperWaitReadyDetailData(params){//获取保管员待备货详情
     return post('/bgy/dbh/info.do',params)
 }
+function getKeeperHasReadyDetailData(params){//获取保管员已备货详情
+    return post('/bgy/get/ybh.do',params)
+}
 
 export {
     getBannerVideo,
@@ -538,4 +541,5 @@ export {
     getKeepeStockData,//保管员仓库列表
     getKeeperWaitReadyDetailData,//保管员待备货详情
     getKeeperHasReadyData,//保管员已备货
+    getKeeperHasReadyDetailData,//保管员已备货详情
 }

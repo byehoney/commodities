@@ -2,55 +2,55 @@
     <div class="driverContainer">
         <TopNav/>
         <div class="infos">
-            <div class="infoArea">
+            <div class="infoArea" v-if="list.length">
                 <div class="infoItem title">
                     <div class="left">调度单号：</div>
-                    <div class="right">JJHKLIGGHK987666</div>
+                    <div class="right">{{list[0].dddh}}</div>
                 </div>
                 <div class="infoItem">
                     <div class="left">客户名称：</div>
-                    <div class="right">旅顺某某经销商</div>
+                    <div class="right">{{list[0].khmc}}</div>
                 </div>
                 <div class="infoItem">
                     <div class="left">联系电话：</div>
-                    <div class="right">133333333</div>
+                    <div class="right">{{list[0].khdh}}</div>
                 </div>
                 <div class="infoItem">
                     <div class="left">库位名称：</div>
-                    <div class="right">库位1</div>
+                    <div class="right">{{list[0].ckmc}}</div>
                 </div>
                 <div class="infoItem">
                     <div class="left">业务员名称：</div>
-                    <div class="right">张业武</div>
+                    <div class="right">{{list[0].ywymc}}</div>
                 </div>
                 <div class="infoItem">
                     <div class="left">业务员电话：</div>
-                    <div class="right">133333333</div>
+                    <div class="right">{{list[0].ywydh}}</div>
                 </div>
                 <div class="infoItem">
                     <div class="left">司机姓名：</div>
-                    <div class="right">李四</div>
+                    <div class="right">{{list[0].sjxm}}</div>
                 </div>
                 <div class="infoItem">
                     <div class="left">司机电话：</div>
-                    <div class="right">133333333</div>
+                    <div class="right">{{list[0].sjdh}}</div>
                 </div>
             </div>
             <div class="finishBtn">备货完成</div>
             <div class="goodsArea">
-                <div class="goodsItem">
-                    <div class="top">商品名称：二十五发大地红二十五发大地红二十五</div>
+                <div class="goodsItem" v-for="(item,index) in list" :key="index">
+                    <div class="top">商品名称：{{item.spmc}}</div>
                     <div class="bottom">
                         <div class="left">
-                            <img src="" alt="">
+                            <img :src="item.url?item.url:require('../images/default_logo.jpg')" alt="">
                         </div>
                         <div class="right">
-                            <p>商品编码：0374000</p>
-                            <p>规格：10/1</p>
-                            <p>单位：箱</p>
-                            <p>厂家：测试厂家</p>
-                            <p>数量：10</p>
-                            <p>辅量：10件2个</p>
+                            <p>商品编码：{{item.productcode}}</p>
+                            <p>规格：{{item.guig}}</p>
+                            <p>单位：{{item.dw}}</p>
+                            <p>厂家：{{item.cj}}</p>
+                            <p>数量：{{item.sl}}</p>
+                            <p>辅量：{{item.fl}}</p>
                         </div>
                     </div>
                 </div>
@@ -102,6 +102,7 @@ export default {
                 ckbm:this.$route.query.code,
                 ywCompanyId:this.$route.query.companyId
             });
+            this.list = res.data.list;
         },
     }
 }
@@ -133,6 +134,7 @@ export default {
                     flex-direction: column;
                     padding: 28px 20px;
                     border-radius:6px;
+                    margin-bottom: 10px;
                     .top{
                         font-size:26px;
                         font-family:PingFang-SC-Medium;
