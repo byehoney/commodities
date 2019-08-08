@@ -63,6 +63,7 @@
     </div>
 </template>
 <script>
+import loadBMap from '@/utils/loadMap.js'
 import { Toast } from "mint-ui";
 import {uploadImage,getUploadToken,updateUserInfo,getDriverHomeData} from '@/api/index'
 import { mapState ,mapActions,mapGetters, mapMutations} from 'vuex';
@@ -122,10 +123,28 @@ export default {
       this.wsd = res.data.wsd;
       this.ywc = res.data.ywc;
       this.yzx = res.data.yzx;
+    //   this.initMap();
     },
     methods: {
         ...mapMutations('login',['LOGOUT']),
         ...mapActions('login',['setAtv']),
+        initMap(){
+            loadBMap()
+                .then(() => {
+                    var geolocation = new BMap.Geolocation();
+                    geolocation.getCurrentPosition(function(r){
+                        if(this.getStatus() == BMAP_STATUS_SUCCESS){
+                            // alert('您的位置：'+r.point.lng+','+r.point.lat);
+                        }
+                        else {
+                            // alert('failed'+this.getStatus());
+                        }        
+                    });
+                })
+                .catch(err => {
+                    console.log('地图加载失败')
+                })
+        },
         modifyPas(){
             this.$router.push({name:'forgetPas'})
         },
@@ -299,6 +318,7 @@ export default {
             flex-direction: column;
             align-items: center;
             margin-top: 10px;
+            margin-left: -20px;
             .atv{
                 width:160px;
                 height:160px;

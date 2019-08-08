@@ -124,7 +124,7 @@ export default {
                             width:298px;
                             height:285px;
                             flex-shrink: 0;
-                            margin-left: 10px;
+                            margin-right: 10px;
                             img{
                                 width: 100%;
                                 height: 100%;

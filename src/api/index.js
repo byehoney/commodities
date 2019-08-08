@@ -424,6 +424,10 @@ function getKeeperHasReadyDetailData(params){//获取保管员已备货详情
     return post('/bgy/get/ybh.do',params)
 }
 
+function getKeeperReadyClickData(params){//获取保管员备货完成按钮点击
+    return post('/bgy/user/bhwc.do',params)
+}
+
 export {
     getBannerVideo,
     checkForget,
@@ -542,4 +546,5 @@ export {
     getKeeperWaitReadyDetailData,//保管员待备货详情
     getKeeperHasReadyData,//保管员已备货
     getKeeperHasReadyDetailData,//保管员已备货详情
+    getKeeperReadyClickData,//保管员备货完成按钮点击
 }

@@ -225,7 +225,7 @@ export default {
     },
     beforeRouteEnter (to, from, next) {/**  */
         if(from.name == 'keeperWaitReadyGoods'){
-            to.meta.canKeep = true;
+            to.meta.canKeep = false;
             next(vm => {
                 // 通过 `vm` 访问组件实例
                 vm.$nextTick(function(){

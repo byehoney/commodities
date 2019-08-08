@@ -36,7 +36,7 @@
                     <div class="right">{{list[0].sjdh}}</div>
                 </div>
             </div>
-            <div class="finishBtn">备货完成</div>
+            <div class="finishBtn" @click="finishReady">备货完成</div>
             <div class="goodsArea">
                 <div class="goodsItem" v-for="(item,index) in list" :key="index">
                     <div class="top">商品名称：{{item.spmc}}</div>
@@ -61,7 +61,7 @@
 <script>
 import { Toast } from "mint-ui";
 import TopNav from '../components/DriverTopNav';
-import { getKeeperWaitReadyDetailData } from '@/api/index';
+import { getKeeperWaitReadyDetailData,getKeeperReadyClickData } from '@/api/index';
 import { mapState ,mapActions,mapGetters, mapMutations} from 'vuex';
 export default {
     data(){
@@ -84,6 +84,41 @@ export default {
         this.getData();
     },
     methods:{
+        async finishReady(){
+            let defaulParams = {
+                token:this.token,
+                userId:this.userId,
+                corpCode:this.corpCode,
+                companyId:this.companyId,
+                userRole:this.userRole,
+                sqlpwd:this.user.sqlpwd,
+                url:this.user.url,
+                user:this.user.user,
+                mobile:this.user.mobile,
+            };
+            let res = await getKeeperReadyClickData({
+                ...defaulParams,
+                dddh:this.$route.query.id,
+                ckbm:this.$route.query.code,
+                ywCompanyId:this.$route.query.companyId
+            })
+            if(res.code==0){
+                Toast({
+                    message: res.msg,
+                    position: "middle",
+                    duration: 2000
+                });
+                setTimeout(()=>{
+                    this.$router.go(-1)
+                },2100)
+            }else{
+                Toast({
+                    message: res.msg,
+                    position: "middle",
+                    duration: 2000
+                });
+            }
+        },
         async getData(){
             let defaulParams = {
                 token:this.token,

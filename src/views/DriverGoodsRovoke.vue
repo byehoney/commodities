@@ -76,6 +76,7 @@ export default {
             this.num = this.num+1;
         },
         async getData(){
+
             let type = this.$route.query.type;
             let defaulParams = {
                 token:this.token,
@@ -117,6 +118,15 @@ export default {
             }
         },
         async confirm(){
+            let reg = /^[0-9]*[1-9][0-9]*$/;
+            if(!reg.test(this.num)){
+                Toast({
+                    message: '数量必须为正整数',
+                    position: "middle",
+                    duration: 2000
+                });
+                return;
+            }
             let type = this.$route.query.type;
             let defaulParams = {
                 token:this.token,

@@ -263,6 +263,7 @@ export default {
             flex-direction: column;
             align-items: center;
             margin-top: 10px;
+            margin-left: -20px;
             .atv{
                 width:160px;
                 height:160px;

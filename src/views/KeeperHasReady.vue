@@ -29,7 +29,7 @@
                 </div>    
             </div>
             <div class="inputItem">
-                <div class="left">支付状态：</div>
+                <div class="left">仓库名称：</div>
                 <div class="right" @click="selState">
                     <span>{{sel_value}}</span>
                     <img class="selIcon" src="../images/driver/sel_icon.png" alt="">   
