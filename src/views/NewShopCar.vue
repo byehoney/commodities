@@ -42,7 +42,7 @@
                     <div class="list_shopcar_com_top_title">
                       <p>{{list.promotionflag=='套餐'?list.cartproductsuitename:list.formalname}}</p>
                       <p>{{list.promotionflag=='套餐'?'&nbsp;':list.factory}}</p>
-                      <p>{{list.promotionflag=='套餐'?'&nbsp;':list.specification}}</p>
+                      <p>{{list.promotionflag=='套餐'?'&nbsp;':'规格：'+list.specification}}</p>
                       <p class="oPrice">原价:¥ {{list.platformprice}}</p>
                     </div>
                   </div>
@@ -111,7 +111,7 @@
                     <div class="list_shopcar_com_top_title">
                       <p>{{pmlist.formalname}}</p>
                       <p>{{pmlist.factory}}</p>
-                      <p>{{pmlist.specification}}</p>
+                      <p>规格：{{pmlist.specification}}</p>
                       <p class="oPrice">原价:¥ {{pmlist.platformprice}}</p>
                     </div>
                   </div>
@@ -469,6 +469,10 @@ export default {
             this.$set(this.list[index],'showTip',false);
             result = 0;
           }
+        }else{
+          result--;
+          this.showErr = false;
+          this.$set(this.list[index],'showTip',false);
         }
       })
 
@@ -478,13 +482,13 @@ export default {
             if(item.quantity<item.packnumber){
               // this.showErr = true;
               // this.errText = '无效的采集量';
-              this.$set(this.mzList[jIndex][index],'errTip','无效的采集量 采集量'+item.packnumber);
+              this.$set(this.mzList[jIndex][index],'errTip','无效的采购量 采购量'+item.packnumber);
               this.$set(this.mzList[jIndex][index],'showTip',true)
               result++; 
-            }else if(item.quantity%item.minpack!=0){
+            }else if(item.minpack!=0&&(item.quantity%item.minpack!=0)){
               // this.showErr = true;
               // this.errText = '无效的采集量';
-              this.$set(this.mzList[jIndex][index],'errTip','无效的采集量 采集量应为'+item.minpack+'的整数倍');
+              this.$set(this.mzList[jIndex][index],'errTip','无效的采购量 采购量应为'+item.minpack+'的整数倍');
               this.$set(this.mzList[jIndex][index],'showTip',true)
               result++; 
             }else if(item.quantity>item.stock){
@@ -504,6 +508,10 @@ export default {
               this.$set(this.mzList[jIndex][index],'showTip',false);
               result = 0;
             }
+          }else{
+            result--;
+            this.showErr = false;
+            this.$set(this.mzList[jIndex][index],'showTip',false);
           }
         })
       })

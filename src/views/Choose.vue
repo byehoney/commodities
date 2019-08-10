@@ -65,7 +65,8 @@
                                     <div class="discount" v-if="item.hdlx=='打折'&&item.cxj!=0&&item.ptxj!=0">{{item.cxj|formatDis(item.ptsj)}}折</div>
                                     <div class="starIcon" v-if="item.hdlx=='星选'">星选</div>
                                     <div class="limitIcon" v-if="item.hdlx=='秒杀'">{{item.xlg?'限购'+item.xlg+'件':'不限购'}}</div>
-                                    <div class="stock" v-if="item.hdlx=='秒杀'">仅剩{{item.stock}}件</div>
+                                    <div class="stock" v-if="item.hdlx=='秒杀'&&item.stovk>0">仅剩{{item.stock}}件</div>
+                                    <img src="../images/noStock.png" v-if="item.stock<=0" class="noStockIcon" alt="">
                                 </div>
                                 <div class="price">
                                     <span class="nPrice" v-if="item.hdlx&&item.hdlx!='无'">￥{{item.cxj}}</span>
@@ -102,7 +103,8 @@
                                 <div class="discount" v-if="item.hdlx=='打折'&&item.cxj!=0&&item.ptsj!=0">{{item.cxj|formatDis(item.ptsj)}}折</div>
                                 <div class="starIcon" v-if="item.hdlx=='星选'">星选</div>
                                 <div class="limitIcon" v-if="item.hdlx=='秒杀'">{{item.xlg?'限购'+item.xlg+'件':'不限购'}}</div>
-                                <div class="stock" v-if="item.hdlx=='秒杀'">仅剩{{item.stock}}件</div>
+                                <div class="stock" v-if="item.hdlx=='秒杀'&&item.stock>0">仅剩{{item.stock}}件</div>
+                                <img src="../images/noStock.png" v-if="item.stock<=0" class="noStockIcon" alt="">
                             </div>
                             <div class="Info">
                                 <div class="infoLeft">
@@ -467,6 +469,10 @@ export default {
             align-items: center;
             padding: 27px 24px 26px 46px;
             border-bottom: 2px solid #eee;
+            .noStockIcon{
+                width: 97px;
+                height: 30px;
+            }
             &.ms_item .Info{
                 margin-top: 21px;
                 position: relative;
@@ -577,7 +583,8 @@ export default {
                         text-align: center;
                         padding: 0 8px;
                         margin-bottom: 10px;
-                        box-sizing: border-box
+                        box-sizing: border-box;
+                        margin-right: 6px;
                     }
                     .starIcon{
                         width: 60px;

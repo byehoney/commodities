@@ -127,9 +127,9 @@ export default {
     },
     handlePickerConfirm(v) {
       console.log(v)
-      this.Y = parseInt(v[0].value)>10?parseInt(v[0].value):'0'+parseInt(v[0].value);
-      this.M = parseInt(v[1].value)>10?parseInt(v[1].value):'0'+parseInt(v[1].value);
-      this.D = parseInt(v[2].value)>10?parseInt(v[2].value):'0'+parseInt(v[2].value);
+      this.Y = parseInt(v[0].value)>9?parseInt(v[0].value):'0'+parseInt(v[0].value);
+      this.M = parseInt(v[1].value)>9?parseInt(v[1].value):'0'+parseInt(v[1].value);
+      this.D = parseInt(v[2].value)>9?parseInt(v[2].value):'0'+parseInt(v[2].value);
       this.picker.anchor = v;
       this.$refs.picker.display=false;
       if(this.curDate == 'S'){
