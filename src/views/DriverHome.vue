@@ -263,7 +263,6 @@ export default {
             align-items: center;
             position: relative;
             .badage{
-                display: none;
                 position: absolute;
                 top: 0;
                 right: -8px;

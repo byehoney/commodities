@@ -22,10 +22,12 @@
             <router-link to="/keeperWaitReady" tag="div" class="tabItem">
                 <img src="../images/driver/keeper_icon_01.png" alt="">
                 <span>待备货</span>
+                <span class="badage" v-if="wbhs>0">{{wbhs}}</span>
             </router-link>
             <router-link to="/keeperHasReady" tag="div" class="tabItem">
                 <img src="../images/driver/keeper_icon_02.png" alt="">
                 <span>已备货</span>
+                <span class="badage" v-if="ybhs>0">{{ybhs}}</span>
             </router-link>
         </div>
         <div class="title">汇总运输数据</div>
@@ -64,6 +66,8 @@ export default {
             ybhzds : 0,
             ychzds :0,
             ychzps :0,
+            wbhs:0,
+            ybhs:0,
             ssck:''
         }
     },
@@ -95,6 +99,8 @@ export default {
       this.ychzds = res.data.ychzds;
       this.ychzps = res.data.ychzps;
       this.ssck = res.data.ssck;
+      this.wbhs = res.data.wbhs;
+      this.ybhs = res.data.ybhs;
     },
     methods: {
         ...mapMutations('login',['LOGOUT']),
@@ -218,6 +224,20 @@ export default {
             justify-content: center;
             width: 50%;
             height: 195px;
+            position: relative;
+            .badage{
+                position: absolute;
+                top: 12%;
+                right: 34%;
+                width: 30px;
+                height: 30px;
+                border-radius: 50%;
+                background: #F5A41A;
+                line-height: 30px;
+                text-align: center;
+                color: #fff;
+                font-size: 0.12rem;
+            }
             &:first-child{
                 border-right: 1px solid #dfdfdf;
             }
