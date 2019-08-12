@@ -177,18 +177,19 @@ export default {
                 position: relative;
                 margin-left: 49px;
                 .num{
-                    width: 0.29rem;
-                    height: 0.29rem;
+                    width: 40px;
+                    height: 40px;
                     border-radius: 50%;
                     background: #F5A41A;
                     position: absolute;
                     z-index: 100;
-                    top: -0.1rem;
-                    right: -0.08rem;
-                    font-size: 0.12rem;
+                    top: -10px;
+                    right: -20px;
+                    font-size: 20px;
+                    font-weight: bold;
                     text-align: center;
                     color: #fff;
-                    line-height: 0.29rem;
+                    line-height: 40px;
                 }
             }
             img{

@@ -264,16 +264,17 @@ export default {
             position: relative;
             .badage{
                 position: absolute;
-                top: 0;
-                right: -8px;
-                width: 30px;
-                height: 30px;
+                top: -10px;
+                right: -20px;
+                width: 40px;
+                height: 40px;
                 border-radius: 50%;
                 background: #F5A41A;
-                line-height: 30px;
+                line-height: 40px;
                 text-align: center;
                 color: #fff;
-                font-size: 0.12rem;
+                font-size: 20px;
+                font-weight: 500;
             }
             img{
                 width:87px;

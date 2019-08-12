@@ -1074,19 +1074,19 @@ span {
   font-size: 22px;
 }
 .badge {
-  width: 29px;
-  height: 29px;
-  line-height: 30px;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  font-weight: 500;
   border-radius: 50%;
   background: #F5A41A;
   position: absolute;
   z-index: 100;
   top: 10px;
-  right: -8px;
-  font-size: 12px;
+  right: -20px;
+  font-size: 20px;
   text-align: center;
   color: #fff;
-  line-height: 29px;
 }
 .iconfont {
   font-size: 22px;

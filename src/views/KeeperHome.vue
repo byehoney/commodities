@@ -227,16 +227,17 @@ export default {
             position: relative;
             .badage{
                 position: absolute;
-                top: 12%;
-                right: 34%;
-                width: 30px;
-                height: 30px;
+                top: 8%;
+                right: 32%;
+                width: 40px;
+                height: 40px;
                 border-radius: 50%;
                 background: #F5A41A;
-                line-height: 30px;
+                line-height: 40px;
                 text-align: center;
                 color: #fff;
-                font-size: 0.12rem;
+                font-size: 20px;
+                font-weight: 500;
             }
             &:first-child{
                 border-right: 1px solid #dfdfdf;

@@ -291,17 +291,18 @@ export default {
             }
             .op_num{
                 position: absolute;
-                width:29px;
-                height:29px;
-                font-size:18px;
+                width:40px;
+                height:40px;
+                font-size:20px;
+                font-weight: 500;
                 color:rgba(255,255,255,1);
                 letter-spacing:3px;
                 border-radius: 50%;
                 background-color: #f5a41a;
                 text-align: center;
-                line-height: 29px;
-                top: 55px;
-                right: 0;
+                line-height: 40px;
+                top: 40px;
+                right: -20px;
             }
         }
     }
