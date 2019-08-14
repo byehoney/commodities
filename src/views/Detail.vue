@@ -225,6 +225,7 @@
               <p v-if="shopDetail.kczjxq">[最近效期]： {{shopDetail.kczjxq}}</p>
               <p>[限购量]：{{shopDetail.xgl>0?shopDetail.xgl:'不限购'}}</p>
               <p>[集采量]：{{shopDetail.cjl}}</p>
+              <p v-if="shopDetail.pzwh">[国药准字]： {{shopDetail.pzwh}}</p>
             </li>
             <!-- <li>
               <p v-if="shopDetail.bzgg">[规格]： {{shopDetail.bzgg}}</p>
