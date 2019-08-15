@@ -59,6 +59,7 @@
 </template>
 
 <script>
+import { Toast } from "mint-ui";
 import DrawRight from "./DrawerRight";
 import { autoSearch } from "@/api/index";
 import { mapGetters,mapState,mapMutations } from "vuex";
@@ -212,6 +213,14 @@ export default {
       if(this.scanType=='login'){
         this.$router.push({ name: "pcLogin", query: { code: str } });
       }else{
+        if(!str){
+          Toast({
+            message: "品种不存在", //弹窗内容
+            position: "middle", //弹窗位置
+            duration: 1000 //弹窗时间毫秒,如果值为-1，则不会消失
+          });
+          return;
+        }
         this.$router.push({name:'detail',query:{id:str}});
       }
     },
