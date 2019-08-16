@@ -1103,9 +1103,10 @@ export default {
 }
 .errTip{
   font-size:20px;
-  color:rgba(74,144,226,1);
+  color:#E32323;
   line-height:26px;
   padding-bottom: 31px;
+  font-weight: 500;
 }
 .area{
   margin-bottom: 10px;

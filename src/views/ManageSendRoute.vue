@@ -1,0 +1,137 @@
+<template>
+    <div class="logistContainer">
+       <TopNav></TopNav>
+       <div class="map" id="map"></div>
+    </div>
+</template>
+<script>
+import { Toast } from "mint-ui";
+import TopNav from "@/components/TopNav";
+import {getViewLogist} from '@/api/index'
+import {mapGetters} from 'vuex'
+import loadBMap from '@/utils/loadMap.js'
+export default {
+    data(){
+        return{
+            center: {lng: 0, lat: 0},
+            zoom: 15,
+            myMap:''
+        }
+    },
+    computed:{
+        ...mapGetters('login',['token','userId','corpCode','companyId','userRole'])
+    },
+    components: {
+        TopNav,
+        // BaiduMap,
+        // BmDriving,
+        // BmGeolocation
+    },
+    mounted() {
+        this.getData();
+        this.initMap()
+    },
+    methods: {
+        async getData(){
+        
+            this.initMap();
+        },
+        //固定写法
+        handler ({BMap, map}) {
+            this.center.lng = 116.404
+            this.center.lat = 39.915    //天安门经纬度
+            this.zoom = 15
+        },
+        getLocation(e){
+            console.log(e)
+        },
+        initMap() {
+            loadBMap()
+                .then(() => {
+
+                    this.myMap = new BMap.Map("map");
+                    var p1 = new BMap.Point(116.310791, 40.003419);//(后期改为 起点物流位置)
+                    var p2 = new BMap.Point(116.408328,39.919141);//(后期改为 当前物流位置)
+                    var p3 = new BMap.Point(116.486419, 39.877282);//(后期改为 终点物流位置)
+                    const points = [p1,p3]; //一组坐标点
+                    const view = this.myMap.getViewport(points); //获取最佳视角
+                    const zoom = view.zoom; //获取最佳视角的缩放层级
+                    const centerPoint = view.center; //获取最佳视角的中心点
+                    this.myMap.centerAndZoom(centerPoint, zoom);  // 编写自定义函数，创建标注 
+                    let myIcon1 = new BMap.Icon(require("../images/start_point.png"), new BMap.Size(25, 30));      
+                    let myIcon2 = new BMap.Icon(require("../images/end_point.png"), new BMap.Size(25, 30));      
+                    let myIcon3 = new BMap.Icon(require("../images/mid_point.png"), new BMap.Size(25, 30));      
+                    let marker1 = new BMap.Marker(p1, {icon: myIcon1});
+                    let marker2 = new BMap.Marker(p2, {icon: myIcon3});        
+                    let marker3 = new BMap.Marker(p3, {icon: myIcon2});        
+                    this.myMap.addOverlay(marker1);   
+                    this.myMap.addOverlay(marker2);   
+                    this.myMap.addOverlay(marker3);    
+
+                    // 路线规划
+                    var that = this;
+                    // var wayPointIconHtml='<img style="width:16px;height:16px;position:absolute;top:20px" src="'+icon+'">'
+                    var driving = new BMap.DrivingRoute(this.myMap, { 
+                        renderOptions: { 
+                            map: this.myMap, 
+                            autoViewport: true 
+                        },
+                        onMarkersSet:function(res) {    //标注点完成回调
+                            // console.info(res);
+                            var myStart = new BMap.Marker(p1,{icon:myIcon1}); 
+                            that.myMap.removeOverlay(res[0].marker); //删除起点
+                            that.myMap.addOverlay(myStart); 
+                            
+                            // var myP1 = new BMap.Marker(p1,{icon:myIcon1}); 
+                            // console.log(res[1].Lm.Zc.innerHTML); //删除途经点
+                            // console.log(wayPointIconHtml);
+                            // res[1].Lm.Zc.innerHTML=wayPointIconHtml;
+                            // that.myMap.addOverlay(myP1); 
+                            
+                            var myEnd = new BMap.Marker(p3,{icon:myIcon2}); 
+                            that.myMap.removeOverlay(res[res.length-1].marker);//删除终点
+                            that.myMap.addOverlay(myEnd); 
+                        }
+                    });
+                    driving.search(p1, p3);
+                })
+                .catch(err => {
+                    console.log('地图加载失败')
+                })
+        }
+    }
+}
+</script>
+<style lang="scss" scoped>
+    #map >>> a img{
+        display: none!important;
+    }
+    #map  .anchorBL{
+        display: none!important;
+    }
+    .logistContainer{
+        width: 100vw;
+        height: 100vh;
+        background: rgba(235, 235, 235, 1);
+        .nav{
+            border-bottom: 2px solid #ebebeb;
+        }
+        .map{
+            width: 100%;
+            height: 100vh;
+            margin-top: 88px;
+            a{
+                display: none!important;
+            }
+            a[title="到百度地图查看此区域"]{
+                display: none !important;
+            }
+            .BMap_noprint.anchorBL{
+                display: none;
+            }
+            .driving{
+                display: none;
+            }
+        }
+    }
+</style>

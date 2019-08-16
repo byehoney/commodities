@@ -749,6 +749,17 @@ const router = new Router({
             }
         },
         {
+            path: '/manageSendRoute',//配送中  运输路线
+            name: 'manageSendRoute',
+            component: () =>
+                import(/* webpackChunkName: "manageSendRoute" */ './views/ManageSendRoute.vue'),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title: '配送详情'
+            }
+        },
+        {
             path: '/agreement',
             name: 'agreement',
             component: () =>

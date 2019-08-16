@@ -100,4 +100,7 @@ html{
 //         line-height:40px;
 //     }
 // }
+ #map  .anchorBL{
+    display: none!important;
+}
 </style>
