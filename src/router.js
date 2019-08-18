@@ -749,6 +749,18 @@ const router = new Router({
             }
         },
         {
+            path: '/manageSending',//配送中  
+            name: 'manageSending',
+            component: () =>
+                import(/* webpackChunkName: "manageSending" */ './views/ManageSending.vue'),
+            meta: {
+                auth: true,
+                keepAlive: true,
+                canKeep:false,
+                title: '配送中'
+            }
+        },
+        {
             path: '/manageSendRoute',//配送中  运输路线
             name: 'manageSendRoute',
             component: () =>

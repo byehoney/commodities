@@ -349,6 +349,10 @@ function reqManageCustomerType(params){//获取管理页面审核客户类型
     return post('/manage/get/usertype.do',params)
 }
 
+function reqManageSendingList(params){//获取管理页面配送中列表
+    return post('/manage/order/pszlist.do',params)
+}
+
 
 function getAllCitys(params){//获取管理页面全部省市区
     return post('/manger/all/city.do',params)
@@ -403,6 +407,9 @@ function getDriverRefuseClickData(params){//司机端送达商品拒收 按钮�
 }
 function getDriverPayStateData(params){//司机端获取支付状态
     return post('/siji/zfzt/list.do',params)
+}
+function getDriverPositionData(params){//司机端获取司机定位
+    return post('/siji/set/dswz.do',params)
 }
 
 
@@ -528,6 +535,7 @@ export {
     reqManageWaitePassDetail,//管理页面获取待审核详情
     reqManagePassWaite,//管理页面通过审核
     reqManageOrderDetail,//管理页面获取订单详情
+    reqManageSendingList,//管理页面获取配送中列表
     getAllCitys,//管理页面获取全部省市区
     getDriverHomeData,//司机端首页接口数据
     getDriverMoneyData,//司机端获取费用列表
@@ -545,6 +553,7 @@ export {
     getDriverRefuseClickData,//司机端 拒收按钮点击
     getDriverRefuseGoodsData,//司机端拒收商品信息
     getDriverPayStateData,//司机端获取支付状态
+    getDriverPositionData,//司机端上传司机位置信息
     getKeeperHomeData,//保管员首页数
     getKeeperWaitReadyData,//保管员待备货
     getKeepeStockData,//保管员仓库列表

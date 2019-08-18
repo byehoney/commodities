@@ -4,20 +4,12 @@
             <img @click="goBack" src="../images/arrow_left_white.png" class="leftIcon" alt="">
             <span class="title">{{title}}</span>
         </div>
-        <div class="tabs">
-            <div :class="['tabItem',actIndex==index?'active':'']" 
-                v-for="(item,index) in tabs" 
-                :key="index" 
-                @click="changeTab(index)">
-                {{item}}
-            </div>
-        </div>
         <div class="checkList"
             v-infinite-scroll="loadMore"
             infinite-scroll-disabled="loading"
             infinite-scroll-distance="10"
         >
-            <div class="inputArea" v-if="actIndex==2||actIndex==3||actIndex==4">
+            <div class="inputArea">
                 <div class="inputItem">
                     <div class="left">开始时间：</div>
                     <div class="right" v-if="start" id="start"  @click="show('S')">
@@ -46,61 +38,8 @@
                 </div>
                 <div class="btn" @click="doSearch">查询</div>
             </div>
-            <!-- 待接单 和 待发货 -->
-            <div class="waitAcept" v-if="actIndex==0||actIndex==1">
-                <div class="waitBox" v-for="(item,index) in list" :key="index">
-                    <div class="mainInfo">
-                        <div class="infos">
-                            <div class="left">调度单号：</div>
-                            <div class="right">{{item.dddh}}</div>
-                        </div>
-                        <div class="infos">
-                            <div class="left">运输线路：</div>
-                            <div class="right">{{item.ysxl}}</div>
-                        </div>
-                    </div>
-                    <div class="detailInfo">
-                        <div class="detailInfos">
-                            <div class="left">配送日期：</div>
-                            <div class="right">{{item.psrq}}</div>
-                        </div>
-                        <div class="detailInfos">
-                            <div class="left">货值（元）：</div>
-                            <div class="right">{{item.hz}}</div>
-                        </div>
-                        <div class="detailInfos">
-                            <div class="left">体积（立方米）：</div>
-                            <div class="right">{{item.tj}}</div>
-                        </div>
-                        <div class="detailInfos">
-                            <div class="left">载重（公斤）：</div>
-                            <div class="right">{{item.zz}}</div>
-                        </div>
-                        <div class="detailInfos">
-                            <div class="left">品种数：</div>
-                            <div class="right">{{item.pzs}}</div>
-                        </div>
-                        <div class="detailInfos">
-                            <div class="left">库位数：</div>
-                            <div class="right">{{item.kws}}</div>
-                        </div>
-                        <div class="detailInfos">
-                            <div class="left">运费（元）：</div>
-                            <div class="right">{{item.yf}}</div>
-                        </div>
-                    </div>
-                    <div class="btnArea" v-if="actIndex==0">
-                        <div class="aceptBtn" @click="aceptOrder(item.dddh,index)">接单</div>
-                        <div class="detailBtn" @click="goWaiteAceptDetail(item.dddh)">查看详情</div>
-                    </div>
-                    <div class="btnArea" v-if="actIndex==1">
-                        <div class="aceptBtn" @click="doSendGoods(item.dddh,index)">送货</div>
-                        <div class="detailBtn" @click="goWaiteSendDetail(item.dddh)">查看详情</div>
-                    </div>
-                </div>
-            </div>
             <!-- 未送达 -->
-            <div class="noArive" v-if="actIndex==2">
+            <div class="noArive">
                 <div class="noAriveBox" v-for="(item,index) in list" :key="index">
                     <div class="mainInfo">
                         <div class="infos">
@@ -161,134 +100,6 @@
                     </div>
                 </div>
             </div>
-            <!-- 已完成 -->
-            <div class="noArive" v-if="actIndex==3">
-                <div class="noAriveBox" v-for="(item,index) in list" :key="index">
-                    <div class="mainInfo">
-                        <div class="infos">
-                            <div class="left">调度单号：</div>
-                            <div class="right">{{item.dddh}}</div>
-                        </div>
-                        <div class="infos">
-                            <div class="left">运输线路：</div>
-                            <div class="right">{{item.ysxl}}</div>
-                        </div>
-                    </div>
-                    <div class="detailBox">
-                        <div class="detailInfo" @click="goFinishDetail(ptem.dddh)" v-for="(ptem,pIndex) in item.childs" :key="pIndex">
-                            <div class="detailInfos">
-                                <div class="left">配送日期：</div>
-                                <div class="right">{{ptem.psrq}}</div>
-                            </div>
-                            <div class="detailInfos">
-                                <div class="left">货值（元）：</div>
-                                <div class="right">{{ptem.hz}}</div>
-                            </div>
-                            <div class="detailInfos">
-                                <div class="left">体积（立方米）：</div>
-                                <div class="right">{{ptem.tj}}</div>
-                            </div>
-                            <div class="detailInfos">
-                                <div class="left">载重（公斤）：</div>
-                                <div class="right">{{ptem.zz}}</div>
-                            </div>
-                            <div class="detailInfos">
-                                <div class="left">品种数：</div>
-                                <div class="right">{{ptem.pzs}}</div>
-                            </div>
-                            <div class="detailInfos">
-                                <div class="left">库位数：</div>
-                                <div class="right">{{ptem.kws}}</div>
-                            </div>
-                            <div class="detailInfos">
-                                <div class="left">运费（元）：</div>
-                                <div class="right">{{ptem.yf}}</div>
-                            </div>
-                            <div class="detailInfos">
-                                <div class="left">拒收品种数：</div>
-                                <div class="right">{{ptem.jspzs}}</div>
-                            </div>
-                            <div class="detailInfos">
-                                <div class="left">拒收货值（元）：</div>
-                                <div class="right">{{ptem.jshz}}</div>
-                            </div>
-                            <div class="btnArea">
-                                <div class="ariveBtn">查看详情</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- 已撤销 -->
-            <div class="noArive hasReturn" v-if="actIndex==4">
-                <div class="detailBox">
-                    <div class="detailInfo" v-for="(item,index) in list" :key="index">
-                        <div class="mainTitle">
-                           <div class="infos">
-                                <div class="left">调度单号：</div>
-                                <div class="right">{{item.dddh}}</div>
-                            </div>
-                            <div class="infos">
-                                <div class="left">运输线路：</div>
-                                <div class="right">{{item.ysxl}}</div>
-                            </div>
-                        </div>
-                        <div class="cancelBox"  @click="goRovokeDetail(ptem.dddh,ptem.companyid)" v-for="(ptem,pIndex) in item.childs" :key="pIndex">
-                            <div class="detailInfos">
-                                <div class="left">客户：</div>
-                                <div class="right">{{ptem.khmc}}</div>
-                            </div>
-                            <div class="detailInfos">
-                                <div class="left">配送日期：</div>
-                                <div class="right">{{ptem.psrq}}</div>
-                            </div>
-                            <div class="detailInfos">
-                                <div class="left">货值（元）：</div>
-                                <div class="right">{{ptem.hz}}</div>
-                            </div>
-                            <div class="detailInfos">
-                                <div class="left">体积（立方米）：</div>
-                                <div class="right">{{ptem.tj}}</div>
-                            </div>
-                            <div class="detailInfos">
-                                <div class="left">载重（公斤）：</div>
-                                <div class="right">{{ptem.zz}}</div>
-                            </div>
-                            <div class="detailInfos">
-                                <div class="left">品种数：</div>
-                                <div class="right">{{ptem.pzs}}</div>
-                            </div>
-                            <div class="detailInfos">
-                                <div class="left">库位数：</div>
-                                <div class="right">{{ptem.kws}}</div>
-                            </div>
-                            <div class="detailInfos">
-                                <div class="left">撤销日期：</div>
-                                <div class="right">{{ptem.csrq}}</div>
-                            </div>
-                            <div class="detailInfos">
-                                <div class="left">撤销货值（元）：</div>
-                                <div class="right">{{ptem.cshz}}</div>
-                            </div>
-                            <div class="detailInfos">
-                                <div class="left">撤销体积（立方米）：</div>
-                                <div class="right">{{ptem.cxtj}}</div>
-                            </div>
-                            <div class="detailInfos">
-                                <div class="left">撤销载重（公斤）：</div>
-                                <div class="right">{{ptem.cxzz}}</div>
-                            </div>
-                            <div class="detailInfos">
-                                <div class="left">撤销品种数：</div>
-                                <div class="right">{{ptem.cxpzs}}</div>
-                            </div>
-                            <div class="btnArea">
-                                <div class="ariveBtn">查看详情</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
         <awesome-picker
             ref="picker"
@@ -299,33 +110,19 @@
             @cancel="handlePickerCancel"
             @confirm="handlePickerConfirm"
         ></awesome-picker>
-        <div class="mask" v-show="showTip">
-            <div class="modal">
-                <div class="top" v-if="sendOrArrive==0">您是否确认已完成装车并开始送货？</div>
-                <div class="top" v-else>您是否确认客户已确认送达？</div>
-                <div class="bottom">
-                    <div class="left" @click="handleHideTip">取消</div>
-                    <div class="right send" v-if="actIndex==1" @click="handleConfirmSend">确定</div>
-                    <div class="right arive" v-if="actIndex==2" @click="handleConfirmArive">确定</div>
-                </div>
-            </div>
-        </div>
     </div>
 </template>
 <script>
 import { Toast } from "mint-ui";
 import TopNav from '../components/DriverTopNav';
-import {getDriverStatusData,getDriverAceptClickData,getDriverSendClickData,getDriverAriveClickData} from '@/api/index';
+import {reqManageSendingList} from '@/api/index';
 import { mapState ,mapActions,mapGetters, mapMutations} from 'vuex';
-import loadBMap from '@/utils/loadMap.js'
 export default {
     data(){
         return{
             lng:'',
             lat:'',
-            title:'待接单',
-            tabs:['待接单','待发货','未送达','已完成','已撤销'],
-            actIndex:0,//当前激活tab索引
+            title:'配送中',
             orderNum:'',//调度单号
             customer:'',//客户信息
             curSendIndex:'',//当前送货list 中操作index
@@ -374,9 +171,7 @@ export default {
     },
     activated() {/**  */
         if (!this.$route.meta.canKeep) {
-            this.initMap();
             this.loading = true;
-            this.actIndex = this.$route.query.actIndex?this.$route.query.actIndex:0;
             this.hasMore = true;
             this.pageNum = 1;
             this.noData = false;
@@ -389,16 +184,16 @@ export default {
     },
     beforeRouteLeave(to, from, next){
         let position = document.getElementsByClassName('checkList')[0].scrollTop
-        sessionStorage.setItem('dTop',position);
+        sessionStorage.setItem('SendingTop',position);
         next()
     },
     beforeRouteEnter (to, from, next) {/**  */
-        if(from.name == 'driverWaiteAceptDetail'||from.name == 'driverWaiteSendDetail'||from.name == 'driverFinishDetail'||from.name == 'driverRovokeDetail'||from.name == 'driverNoAriveDetail'){
+        if(from.name == 'manageSendRoute'){
             to.meta.canKeep = true;
             next(vm => {
                 // 通过 `vm` 访问组件实例
                 vm.$nextTick(function(){
-                    let position = sessionStorage.getItem('dTop') //返回页面取出来
+                    let position = sessionStorage.getItem('SendingTop') //返回页面取出来
                     document.getElementsByClassName('checkList')[0].scrollTo({ 
                         top: position, 
                         behavior: "instant" 
@@ -411,166 +206,9 @@ export default {
         }
     },
     methods:{
-        initMap(){
-            this.$nextTick(()=>{
-                loadBMap()
-                .then(() => {
-                    var geolocation = new BMap.Geolocation();
-                    let that = this;
-                    geolocation.getCurrentPosition(function(r){
-                        if(this.getStatus() == BMAP_STATUS_SUCCESS){
-                            console.log('您的位置：'+r.point.lng+','+r.point.lat);
-                            that.lng = r.point.lng;
-                            that.lat = r.point.lat;
-                            // alert('您的位置：'+r.point.lng+','+r.point.lat);
-                        }
-                        else {
-                            // alert('failed'+this.getStatus());
-                        }        
-                    });
-                })
-                .catch(err => {
-                    console.log('地图加载失败')
-                })
-            })
-            
-        },
-        goWaiteAceptDetail(id){
-            this.$router.push({name:'driverWaiteAceptDetail',query:{id:id}});
-        },
-        goWaiteSendDetail(id){
-            this.$router.push({name:'driverWaiteSendDetail',query:{id:id}});
-        },
+        
         goNoAriveDetail(id,companyId){
             this.$router.push({name:'driverNoAriveDetail',query:{id:id,companyId:companyId}});
-        },
-        goFinishDetail(id){
-            this.$router.push({name:'driverFinishDetail',query:{id:id}});
-        },
-        goRovokeDetail(id,companyId){
-            this.$router.push({name:'driverRovokeDetail',query:{id:id,companyId:companyId}});
-        },
-        async aceptOrder(id,index){//点击接单按钮
-            let defaulParams = {
-                token:this.token,
-                userId:this.userId,
-                corpCode:this.corpCode,
-                companyId:this.companyId,
-                userRole:this.userRole,
-                sqlpwd:this.user.sqlpwd,
-                url:this.user.url,
-                user:this.user.user,
-                mobile:this.user.mobile,
-            };
-            let res = await getDriverAceptClickData({...defaulParams,dddh:id});
-            if(res.code==0){
-                Toast({
-                    message: res.msg,
-                    position: "middle",
-                    duration: 2000
-                });
-                setTimeout(()=>{
-                    this.list.splice(index,1);
-                    this.list = this.list;
-                },2100)
-            }else{
-                Toast({
-                    message: res.msg,
-                    position: "middle",
-                    duration: 2000
-                });
-            }
-        },
-        doSendGoods(id,index){//点击送货按钮
-            this.showTip = true;
-            this.sendOrArrive = 0;
-            this.curSendIndex = index;
-            this.curSendOrder = id;
-        },
-        doArive(e,id,companyId,index,pIndex){//点击送达按钮
-            e.stopPropagation();
-            this.showTip = true;
-            this.sendOrArrive = 1;
-            this.curAriveOrder = id;
-            this.curCompanyId = companyId;
-            this.curAriveIndex = index;
-            this.curAriveCIndex = pIndex;
-        },
-        async handleConfirmSend(){//点击发货确定按钮
-            this.showTip = false;
-            let defaulParams = {
-                token:this.token,
-                userId:this.userId,
-                corpCode:this.corpCode,
-                companyId:this.companyId,
-                userRole:this.userRole,
-                sqlpwd:this.user.sqlpwd,
-                url:this.user.url,
-                user:this.user.user,
-                mobile:this.user.mobile,
-                jd:this.lng,
-                wd:this.lat
-            };
-            let res = await getDriverSendClickData({...defaulParams,dddh:this.curSendOrder});
-            if(res.code==0){
-                Toast({
-                    message: res.msg,
-                    position: "middle",
-                    duration: 2000
-                });
-                setTimeout(()=>{
-                    this.list.splice(this.curSendIndex,1);
-                    this.list = this.list;
-                },2100)
-            }else{
-                Toast({
-                    message: res.msg,
-                    position: "middle",
-                    duration: 2000
-                });
-            }
-        },
-        async handleConfirmArive(){
-            this.showTip = false;
-            let defaulParams = {
-                token:this.token,
-                userId:this.userId,
-                corpCode:this.corpCode,
-                companyId:this.companyId,
-                userRole:this.userRole,
-                sqlpwd:this.user.sqlpwd,
-                url:this.user.url,
-                user:this.user.user,
-                mobile:this.user.mobile,
-                jd:this.lng,
-                wd:this.lat
-            };
-            let res = await getDriverAriveClickData({
-                ...defaulParams,
-                dddh:this.curAriveOrder,
-                ywCompanyId:this.curCompanyId
-            })
-            if(res.code==0){
-                Toast({
-                    message: res.msg,
-                    position: "middle",
-                    duration: 2000
-                });
-                this.list[this.curAriveIndex].childs.splice(this.curAriveIndex,1);
-                if(!this.list[this.curAriveIndex].childs.length){
-                    this.list.splice(this.curAriveIndex,1);
-                }
-                this.list = this.list;
-            }else{
-                Toast({
-                    message: res.msg,
-                    position: "middle",
-                    duration: 2000
-                });
-            }
-        },
-        handleHideTip(){
-            this.showTip = false;
         },
         doSearch(){//查询按钮
             if(this.moreLoading){
@@ -583,24 +221,8 @@ export default {
             this.list = [];
             this.getData();
         },
-        changeTab(index){
-            if(this.moreLoading){
-                return;
-            }
-            this.actIndex = index;
-            this.title = this.tabs[index];
-            this.loading = true;
-            this.hasMore = true;
-            this.pageNum = 1;
-            this.noData = false;
-            this.list = [];
-            this.getData();
-        },
         goBack(){
             this.$router.go(-1);
-        },
-        selState() {
-            this.popupVisible = !this.popupVisible;
         },
         show(type) {
             this.curDate = type;
@@ -644,13 +266,8 @@ export default {
                 corpCode:this.corpCode,
                 companyId:this.companyId,
                 userRole:this.userRole,
-                sqlpwd:this.user.sqlpwd,
-                url:this.user.url,
-                user:this.user.user,
-                mobile:this.user.mobile,
                 pageSize:this.pageSize,
                 pageNum:this.pageNum,
-                type:parseInt(this.actIndex)+1
             };
             let uniqueParams = {
                 startTime:this.start,
@@ -658,11 +275,9 @@ export default {
                 orderId:this.orderNum,
                 khInfo:this.customer
             }
-            if(this.actIndex>1){
-                res = await getDriverStatusData({...defaulParams,...uniqueParams});
-            }else{
-                res = await getDriverStatusData(defaulParams);
-            }
+           
+            res = await reqManageSendingList({...defaulParams,...uniqueParams});
+           
             this.loading = false;
             if(res.code == 0){
                 if(!res.data.list.length){
@@ -690,7 +305,7 @@ export default {
             }
         },
         loadMore(){
-            if(this.moreLoading||!this.hasMore||this.actIndex==4){
+            if(this.moreLoading||!this.hasMore){
                 return;
             }
             this.pageNum = this.pageNum+1;
@@ -703,7 +318,7 @@ export default {
     .driverContainer{
         padding-top: 94px;
         .checkList{
-            padding-top: 110px;
+            // padding-top: 110px;
         }
         .mask{
             position: fixed;
@@ -947,27 +562,6 @@ export default {
                 }
             }
         }
-        .tabs{
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            height: 110px;
-            background-color: #fff;
-            margin-bottom: 6px;
-            position: fixed;
-            top: 88px;
-            left: 0;
-            width: 100%;
-            .tabItem{
-                font-size:28px;
-                font-family:PingFangSC-Light;
-                font-weight:300;
-                color:rgba(153,153,153,1);
-                &.active{
-                    color: #E32323;
-                }
-            }
-        }
     }
     .nav{
         width: 100%;
@@ -976,7 +570,7 @@ export default {
         display: flex;
         justify-content: center;
         align-items: center;
-        background-color: #D33F3F;
+        background-color: #007AFF;
         position: fixed;
         top: 0;
         left: 0;
@@ -1000,7 +594,7 @@ export default {
         .btn{
             width:340px;
             height:80px;
-            background:rgba(211,63,63,1);
+            background:#007AFF;
             border-radius:40px;
             line-height: 80px;
             text-align: center;
