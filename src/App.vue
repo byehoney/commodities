@@ -103,4 +103,10 @@ html{
  #map  .anchorBL{
     display: none!important;
 }
+#map .BMapLabel{
+    border:1px solid #f6f6f6!important;
+    padding: 5px 8px!important;
+    border-radius: 10px;
+    color: #888;
+}
 </style>

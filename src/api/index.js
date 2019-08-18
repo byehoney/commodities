@@ -345,6 +345,10 @@ function reqManagePassWaite(params){//通过审核
 function reqManageOrderDetail(params){//获取管理页面订单详情
     return post('/manage/get/orderdetail.do',params)
 }
+function reqManageCustomerType(params){//获取管理页面审核客户类型
+    return post('/manage/get/usertype.do',params)
+}
+
 
 function getAllCitys(params){//获取管理页面全部省市区
     return post('/manger/all/city.do',params)
@@ -500,6 +504,7 @@ export {
     getHeatList,
     getSpecialList,
     secKill,
+    reqManageCustomerType,//管理页面获取客户类型
     getManageMerchandise,//在营商品
     getManageOrderStatus,//管理页面的订单状态
     reqManageIndex,//管理页面首页

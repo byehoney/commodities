@@ -9,7 +9,8 @@ const externals = {
     'vue-router': 'VueRouter',
     vuex: 'Vuex',
     'mint-ui': 'MINT',
-    axios: 'axios'
+    axios: 'axios',
+    'BaiduMap': 'BMap'
 
 }
 const cdn = {

@@ -317,6 +317,7 @@ import { Toast } from "mint-ui";
 import TopNav from '../components/DriverTopNav';
 import {getDriverStatusData,getDriverAceptClickData,getDriverSendClickData,getDriverAriveClickData} from '@/api/index';
 import { mapState ,mapActions,mapGetters, mapMutations} from 'vuex';
+import loadBMap from '@/utils/loadMap.js'
 export default {
     data(){
         return{
@@ -371,6 +372,7 @@ export default {
     },
     activated() {/**  */
         if (!this.$route.meta.canKeep) {
+            this.initMap();
             this.loading = true;
             this.actIndex = this.$route.query.actIndex?this.$route.query.actIndex:0;
             this.hasMore = true;
@@ -407,6 +409,27 @@ export default {
         }
     },
     methods:{
+        initMap(){
+            this.$nextTick(()=>{
+                loadBMap()
+                .then(() => {
+                    var geolocation = new BMap.Geolocation();
+                    geolocation.getCurrentPosition(function(r){
+                        if(this.getStatus() == BMAP_STATUS_SUCCESS){
+                            console.log('您的位置：'+r.point.lng+','+r.point.lat)
+                            // alert('您的位置：'+r.point.lng+','+r.point.lat);
+                        }
+                        else {
+                            // alert('failed'+this.getStatus());
+                        }        
+                    });
+                })
+                .catch(err => {
+                    console.log('地图加载失败')
+                })
+            })
+            
+        },
         goWaiteAceptDetail(id){
             this.$router.push({name:'driverWaiteAceptDetail',query:{id:id}});
         },

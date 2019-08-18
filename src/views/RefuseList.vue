@@ -10,12 +10,15 @@
             <li v-for="(item,index) in list" :key="index" class="listItem">
                 <div class="left">
                     <img :src="item.url?item.url:require('../images/default_logo.jpg')" alt="">
+                    <img src="../images/gift_icon.png" v-if="item.mzbj=='true'" class="giftIcon" alt="">
                 </div>
                 <div class="right">
                     <div class="top">
                         <div class="bName">{{item.productname}}</div>
                         <div class="fName">{{item.cj}}</div>
                         <div class="size">规格：{{item.hlgg}}</div>
+                        <div class="size">买赠活动类型：{{item.mzhdlx}}</div>
+                        <div class="size">价格活动类型：{{item.jghdlx}}</div>
                         <!-- <div class="saled">已销：700件</div> -->
                     </div>
                     <div class="bottom">
@@ -121,6 +124,14 @@ export default {
                     width: 200px;
                     height: 210px;
                     background:rgba(255,255,255,1);
+                    position: relative;
+                    .giftIcon{
+                        position: absolute;
+                        top: 0;
+                        left: 20px;
+                        width: 45px;
+                        height: 45px;
+                    }
                     img{
                         width: 100%;
                         height: 100%;

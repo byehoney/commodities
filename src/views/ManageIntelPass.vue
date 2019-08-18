@@ -21,6 +21,9 @@
             <div class="infoItem">
                 类型：{{userData.type}}
             </div>
+            <div class="infoItem" @click="selState">
+                客户类型：{{sel_value}}
+            </div>
             <div class="card">
                 <img :src="userData.idCardUrl" alt="">
             </div>
@@ -29,18 +32,46 @@
             </div>
             <div class="btn" @click="passIt">通过</div>
         </div>
+        <mt-popup v-model="popupVisible" position="bottom">
+            <mt-picker
+                value-key="cvTypeName"
+                ref="statePicker"
+                :slots="slots"
+                @change="onValuesChange"
+                showToolbar
+            >
+                <div class="barContent">
+                    <div @click="handleCancel" class="cancel">取消</div>
+                    <div class="tip">请选择</div>
+                    <div @click="handleConfirm" class="sure">确认</div>
+                </div>
+            </mt-picker>
+        </mt-popup>
     </div>
 </template>
 <script>
 import { Toast } from "mint-ui";
 import { mapGetters } from 'vuex'
 import TopNav from '@/components/TopNav'
-import { reqManageWaitePassDetail,reqManagePassWaite} from '@/api/index'
+import { reqManageWaitePassDetail,reqManagePassWaite,reqManageCustomerType} from '@/api/index'
 // import ManageTabBarBotttom from '@/components/ManageTabBarBottom';
 
 export default {
     data(){
         return{
+            popupVisible: false,
+            set_value: "",
+            setCode: "",
+            sel_value: "全部",
+            selCode: "",
+            slots: [
+                {
+                flex: 1,
+                values: [],
+                className: "slot1",
+                textAlign: "center"
+                }
+            ],
            userData:{
                 userName:'',
                 userPhone:'',
@@ -65,7 +96,11 @@ export default {
             corpCode:this.corpCode,
             companyId:this.companyId,
             userRole:this.userRole,
-        };      
+        };
+        let typeList = await reqManageCustomerType(defaulParams);
+        this.$set(this.slots[0],'values',typeList.data.list);  
+        this.sel_value = typeList.data.list[0].cvTypeName;
+        this.selCode =  typeList.data.list[0].cvTypeCode;
         let res = await reqManageWaitePassDetail({
             ...defaulParams,
             shmobile:this.$route.query.id
@@ -73,6 +108,24 @@ export default {
         this.userData = res.data;
     },
     methods: {
+        selState() {
+            this.popupVisible = !this.popupVisible;
+        },
+        onValuesChange(picker, values) {
+            if (!values.length || !values[0]) {
+                return;
+            }
+            this.set_value = values[0].cvTypeName;
+            this.setCode = values[0].cvTypeCode;
+        },
+        handleCancel() {
+            this.popupVisible = false;
+        },
+        handleConfirm() {
+            this.popupVisible = false;
+            this.sel_value = this.set_value;
+            this.selCode = this.setCode;
+        },
         async passIt(){
             let defaulParams = {
                 token:this.token,
@@ -80,6 +133,7 @@ export default {
                 corpCode:this.corpCode,
                 companyId:this.companyId,
                 userRole:this.userRole,
+                cvType:this.selCode,
             };   
             let res = await reqManagePassWaite({
                 ...defaulParams,
@@ -186,4 +240,51 @@ export default {
         }
         
     }
+    .mint-popup-bottom {
+    width: 100%;
+  }
+  .picker-toolbar {
+    width: 100%;
+    height: 96px;
+    border-bottom: 2px solid #ebebeb;
+  }
+  .barContent {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 38px;
+    color: #666;
+    .cancel,
+    .sure {
+      height: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 0 30px;
+      font-size: 26px;
+      color: rgba(102, 102, 102, 1);
+      letter-spacing: 2px;
+    }
+    .sure {
+      color: #E32323;
+    }
+    .tip {
+      font-size: 30px;
+      color: rgba(51, 51, 51, 1);
+      letter-spacing: 3px;
+    }
+  }
+  .slot1 {
+    width: 100vw;
+    .picker-item {
+      font-size: 30px;
+      color: rgba(51, 51, 51, 1);
+      height: 78px;
+      line-height: 78px;
+      letter-spacing: 3px;
+    }
+  }
 </style>

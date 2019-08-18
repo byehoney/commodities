@@ -4,7 +4,7 @@ import store from 'store/index'
 import router from '../router'
 import { Indicator, Toast } from 'mint-ui'
 axios.defaults.timeout = 100000 // 请求超时时间
-axios.defaults.baseURL = process.env.VUE_APP_BASE_API
+axios.defaults.baseURL = process.env.VUE_APP_BASE_API9
 // axios.defaults.baseURL = 'http://119.3.219.52:8080/firework'
 // axios.defaults.headers.post['Content-Type'] =
     'application/x-www-form-urlencoded;charset=UTF-8' // post请求头的设置
