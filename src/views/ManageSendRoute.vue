@@ -7,7 +7,7 @@
 <script>
 import { Toast } from "mint-ui";
 import TopNav from "@/components/TopNav";
-import {getViewLogist} from '@/api/index'
+import {reqManageSendingRoute} from '@/api/index'
 import {mapGetters} from 'vuex'
 import loadBMap from '@/utils/loadMap.js'
 export default {
@@ -29,10 +29,18 @@ export default {
     },
     mounted() {
         this.getData();
-        this.initMap()
+        // this.initMap()
     },
     methods: {
         async getData(){
+            let defaulParams = {
+                token:this.token,
+                userId:this.userId,
+                corpCode:this.corpCode,
+                companyId:this.companyId,
+                userRole:this.userRole,
+            };
+            let res = await reqManageSendingRoute({...defaulParams,dddh:this.$route.query.id});
             this.$nextTick(function() {
                 this.initMap();
             })
@@ -49,7 +57,6 @@ export default {
         initMap() {
             loadBMap()
                 .then(() => {
-                    console.log(22)
                     setTimeout(()=>{
                         this.myMap = new BMap.Map("map");
                         var p1 = new BMap.Point(116.310791, 40.003419);//(后期改为 起点物流位置)

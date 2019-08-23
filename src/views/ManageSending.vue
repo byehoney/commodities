@@ -93,9 +93,9 @@
                                 <div class="left">运费（元）：</div>
                                 <div class="right">{{ptem.yf}}</div>
                             </div>
-                            <div class="btnArea">
+                            <!-- <div class="btnArea">
                                 <div class="ariveBtn" @click="doArive($event,ptem.dddh,ptem.companyid,index,pIndex)">送达</div>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>
@@ -208,7 +208,7 @@ export default {
     methods:{
         
         goNoAriveDetail(id,companyId){
-            this.$router.push({name:'driverNoAriveDetail',query:{id:id,companyId:companyId}});
+            this.$router.push({name:'manageSendRoute',query:{id:id,companyId:companyId}});
         },
         doSearch(){//查询按钮
             if(this.moreLoading){
