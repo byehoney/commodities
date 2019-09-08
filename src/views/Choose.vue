@@ -57,6 +57,7 @@
                         <div class="name">{{item.spmc}}</div>
                         <div class="factory">{{item.cj}}</div>
                         <div class="size">规格：{{item.hlgg}}</div>
+                         <div class="factory">团购数量：{{item.tgsl}}</div>
                         <div class="item_bot">
                             <div class="bot_left">
                                 <!-- <div class="discount" v-if="curType==0||curType==1">{{item.cxj|formatDis(item.ptsj)}}折</div> -->
@@ -145,7 +146,7 @@ export default {
             sort:0,//按价格排序是  0  正序  1  倒序
             scrollTop:0,
             now:new Date().getHours(),
-            typeList:['销量','价格','主推','秒杀'],
+            typeList:['销量','价格','团购','秒杀'],
             curType:0,
             list:[],
             loading:false,//是否开启下拉加载

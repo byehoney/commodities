@@ -60,9 +60,11 @@ import { Toast } from "mint-ui";
 import TopNav from '@/components/TopNav'
 import {uploadImage,getUploadToken,joinRegister,creatRegister,} from '@/api/index'
 import {mapState,mapMutations} from 'vuex'
+import { setTimeout } from 'timers';
 export default {
     data(){
         return{
+            loading:false,//是否在发送请求  开关 控制多次请求
             more:false,//是否显示引导项
             unique:false,
             showTip:false,
@@ -95,7 +97,12 @@ export default {
             console.log(res);
         },
         async registerJoin(data){
+            if(this.loading){
+                return;
+            }
+            this.loading = true;
             let res = await joinRegister(data);
+            this.loading = false;
             // alert(JSON.stringify(res))
             if(res.code==0){
                 this.showTip = true;
@@ -103,7 +110,12 @@ export default {
             }
         },
         async registerCreat(data){
+            if(this.loading){
+                return;
+            }
+            this.loading = true;
             let res = await creatRegister(data);
+            this.loading = false;
             if(res.code==0){
                 this.showTip = true;
                 this.$router.replace({name:'login'})

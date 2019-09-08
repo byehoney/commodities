@@ -31,6 +31,10 @@ function checkExist(params) {//验证手机号
     return post('/login/check/mobile.do', params)
 }
 
+function checkExistClient(params) {//验证门店
+    return post('/register/check/clientname.do', params)
+}
+
 function checkForget(params) {//验证忘记密码手机号
     return post('/mobile/check/legitimate.do', params)
 }
@@ -443,6 +447,7 @@ export {
     getBannerVideo,
     checkForget,
     checkExist,
+    checkExistClient,
     getYzCode,
     checkYzCode,
     login,

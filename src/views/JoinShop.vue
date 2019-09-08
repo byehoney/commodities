@@ -55,6 +55,7 @@ import {getRegShopList,addRelativeCompany} from '@/api/index';
 export default {
   data() {
     return {
+      loading:false,
       showTip:false,
       is_add_relative:false,//页面来源是否是  我的 --  添加关联门店
       popupVisible: false,//门店选择开关
@@ -182,6 +183,10 @@ export default {
       this.$router.push({name:'salerInfo'})
     },
     async addEffectShop(){
+      if(this.loading){
+        return;
+      }
+      this.loading = true;
       if(!this.sel_shop||!this.sel_shopCode||!this.sel_value||this.sel_value=='请选择地区'||this.sel_shop=='请选择门店'){
         return;
       }
@@ -193,6 +198,7 @@ export default {
           userRole:this.userRole,
       }; 
       let res = await addRelativeCompany({...defaulParams,companyCode:this.sel_shopCode})
+      this.loading = false;
       if(res.code==0){
         this.showTip = true;
       }

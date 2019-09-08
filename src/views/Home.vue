@@ -49,21 +49,21 @@
     <div class="recommond" v-if="boutique.length>0">
       <div class="recommond_header">
         <span></span>
-        <span>精品推荐</span>
+        <span>团购新品</span>
       </div>
       <div class="recommond_content" @click="goChoose(2)">
-        <div class="recommond_item">
-          <img :src="boutique[0].url?boutique[0].url:require('../images/default_logo.jpg')" alt="">
+        <div class="recommond_item" v-for="(item,index) in boutique" :key="index">
+          <img :src="item.url?item.url:require('../images/default_logo.jpg')" alt="">
           <p class="tip_bg"></p>
         </div>
-        <div class="recommond_item">
+        <!-- <div class="recommond_item">
           <img :src="boutique[1].url?boutique[1].url:require('../images/default_logo.jpg')" alt="">
           <p class="tip_bg"></p>
         </div>
         <div class="recommond_item">
           <img :src="boutique[2].url?boutique[2].url:require('../images/default_logo.jpg')" alt="">
           <p class="tip_bg"></p>
-        </div>
+        </div> -->
       </div>
     </div>
     <div class="act_area" v-if="showTc||showMz">

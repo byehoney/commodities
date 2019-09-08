@@ -81,6 +81,7 @@ import { setTimeout } from 'timers';
 export default {
     data(){
         return{
+            loading:false,
             is_add_relative:false, //是否来源   我的  ---添加关联门店
             dIndex:0,//默认选中的经营性质
             itelList:[],//资质列表
@@ -232,7 +233,12 @@ export default {
             return full
         },
         async addRelative(data){
+            if(this.loading){
+                return;
+            }
+            this.loading = true;
             let res = await addRelativeCreate(data);
+            this.loading = false;
             if(res.code==0){
                 this.showTip = true;
                 this.$router.push({name:'my'})

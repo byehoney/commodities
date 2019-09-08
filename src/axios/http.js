@@ -93,6 +93,7 @@ function post (url, params) {
         axios
             .post(url, qs.stringify(params))
             .then(res => {
+                // console.log(res)
                 if(res.data.code==100){
                     store.commit('login/LOGOUT',{
                         $router:router,
@@ -101,7 +102,7 @@ function post (url, params) {
                 resolve(res.data)
             })
             .catch(err => {
-                reject(err.data)
+                resolve(err.data)
             })
     })
     //  或者return axios.post();

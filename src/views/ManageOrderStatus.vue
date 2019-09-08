@@ -88,7 +88,7 @@
           </span>
         </div>
       </div>
-      <router-link to="/manageSending" tag="div" class="manageListContent">
+      <div to="/manageSending" tag="div" class="manageListContent">
         <div class="manageList_left">
           <span>
             <img src="../images/distribing.png">
@@ -107,7 +107,7 @@
             <img src="../images/arrow_right.png">
           </span>
         </div>
-      </router-link>
+      </div>
       <div class="manageListContent">
         <div class="manageList_left">
           <span>

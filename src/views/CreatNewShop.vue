@@ -50,7 +50,7 @@ import { Toast } from "mint-ui";
 import TopNav from '@/components/TopNav'
 import CityPicker from '@/components/CityPicker'
 import {mapState,mapMutations} from 'vuex';
-import {checkTcode} from '@/api/index'
+import {checkTcode,checkExistClient} from '@/api/index'
 export default {
     data(){
         return{
@@ -154,7 +154,16 @@ export default {
             // }
             else{
                 let res = await checkTcode({code:this.code.trim()});
+                let result =  await checkExistClient({clientName:this.shop});
                 if(res.code!=0){
+                    return;
+                }
+                if(result.data.ckeck_result!="true"&&result.data.ckeck_result!=true){
+                    Toast({
+                        message: result.data.ckeck_result,
+                        position: "middle",
+                        duration: 2000
+                    });
                     return;
                 }
                 let data = {
@@ -172,6 +181,7 @@ export default {
                 }else{
                     this.$router.push({name:'intelInfo',query:{creatNew:true}})
                 }
+                
             }
         }
     }
