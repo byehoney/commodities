@@ -356,6 +356,11 @@ function reqManageCustomerType(params){//获取管理页面审核客户类型
 function reqManageSendingList(params){//获取管理页面配送中列表
     return post('/manage/order/pszlist.do',params)
 }
+function reqManageSendingRoute(params){//获取管理页面配送路线
+    return post('/manage/get/wlxx.do',params)
+}
+
+
 
 
 function getAllCitys(params){//获取管理页面全部省市区
@@ -541,6 +546,7 @@ export {
     reqManagePassWaite,//管理页面通过审核
     reqManageOrderDetail,//管理页面获取订单详情
     reqManageSendingList,//管理页面获取配送中列表
+    reqManageSendingRoute,//管理页面获取配送路线
     getAllCitys,//管理页面获取全部省市区
     getDriverHomeData,//司机端首页接口数据
     getDriverMoneyData,//司机端获取费用列表
