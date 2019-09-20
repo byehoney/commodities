@@ -52,6 +52,7 @@
                     <div class="left">
                         <img :src="item.url?item.url:require('../images/default_logo.jpg')" alt="">
                         <img v-if="item.hdlx=='秒杀'" class="ms_icon" src="../images/ms_icon.png" alt="">
+                        <img v-if="item.tgsl>0" class="ms_icon" src="../images/group_icon.png" alt="">
                     </div>
                     <div class="right">
                         <div class="name">{{item.spmc}}</div>

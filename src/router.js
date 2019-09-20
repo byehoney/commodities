@@ -972,6 +972,17 @@ const router = new Router({
                 title: '已备货详情'
             }
         },
+        {//批发公司选择
+            path: "/wholeSelCompany",
+            name: "wholeSelCompany",
+            component: () =>
+                import(/* webpackChunkName: "wholeSelCompany" */"./views/WholeSelCompany.vue"),
+            meta: {
+                auth: false,
+                keepAlive: false,
+                title: '公司岗位'
+            }
+        },
         {
             path: '*', // 未匹配到路由时重定向
             redirect: '/',
