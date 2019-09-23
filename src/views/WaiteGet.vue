@@ -13,7 +13,7 @@
                 <div class="left">
                     <img :src="item.url?item.url:require('../images/default_logo.jpg')" alt="">
                     <img src="../images/gift_icon.png" v-if="item.mzbj=='true'" class="giftIcon" alt="">
-                    <img src="../images/group_icon.png" class="giftIcon" alt="">
+                    <img src="../images/group_icon.png"  v-if="item.tgsl>0" class="giftIcon" alt="">
                 </div>
                 <div class="right">
                     <div class="top">
